@@ -69,7 +69,66 @@
 
 ## 確定事項
 
-（まだ無い。決まり次第ここへ移す）
+### A-1 Biome のルール厳格度
+
+`recommended` を土台にし、必要なものだけ名指しで追加する。グループ単位の一括有効化はしない。
+
+追加したルール:
+
+| ルール | 重大度 | 理由 |
+| --- | --- | --- |
+| `nursery/useSortedClasses` | warn | Tailwind のクラスを自動整列する。クラスが長くなるため、順序が揺れると差分が読みにくくなる |
+| `suspicious/noConsole` | warn | `console.log` の消し忘れを防ぐ。`console.error` と `console.warn` は許可する |
+
+追加しなかったもの:
+
+- `any` の禁止（`noExplicitAny`）、非 null 断言の禁止（`noNonNullAssertion`）、型 import の強制（`useImportType`）、Hooks の依存配列（`useExhaustiveDependencies`）は `recommended` に含まれており、既に有効。追加設定は不要
+- `style/noDefaultExport` は入れない。App Router が `page.tsx` / `layout.tsx` で default export を要求するため適用できない
+- `style/useFilenamingConvention` と `performance/noBarrelFile` は保留。B（ディレクトリ構成）の結論に依存する
+
+インポート順は `assist.actions.source.organizeImports` の既定順（node 組み込み -> 外部パッケージ -> エイリアス -> 相対パス）をそのまま使う。
+`options.groups` によるカスタム順は定義しない。順序自体に意思決定の価値が薄く、構成変更のたびに保守対象が増えるため。
+
+### A-2 Biome のフォーマット規約
+
+`lineWidth: 80` のみ明示し、残りは Biome の既定に従う。
+
+- `indentStyle: "space"` は既定が tab のため明示が必要。`indentWidth: 2` は既定と同じだが、意図を示すため残す
+- クォート `"`、セミコロンあり、末尾カンマあり、改行 LF はいずれも既定。Prettier とも一致するため変更しない
+
+### A-3 tsconfig の強化
+
+`strict: true` に加えて3つを有効化する。
+
+| オプション | 理由 |
+| --- | --- |
+| `noUncheckedIndexedAccess` | 添字アクセスの結果に `undefined` を含める。API レスポンスの配列を扱う箇所で実際に落ちるコードを型で捕まえられる |
+| `noFallthroughCasesInSwitch` | switch の break 漏れを防ぐ。副作用がない |
+| `verbatimModuleSyntax` | 型の import を明示させる。Biome の `useImportType` と方向が揃う |
+
+入れなかったもの:
+
+- `exactOptionalPropertyTypes` は入れない。React の props と相性が悪く、警告の量に対して得るものが少ない。厳格設定の基準である `@tsconfig/strictest` には含まれるが、そこから1つ外す構成を選んだ
+- `noImplicitOverride` は入れない。クラスを使わないため出番がない
+
+### A-4' 自動修正の実行方法
+
+エディタの保存時自動修正は導入しない。特定の IDE に依存したくないため、コマンドで実行する。
+
+`package.json` の scripts:
+
+| スクリプト | コマンド | 用途 |
+| --- | --- | --- |
+| `lint` | `biome check` | 検査のみ。書き換えない |
+| `fix` | `biome check --write` | 整形・インポート整列・安全な自動修正をまとめて適用。普段はこれを使う |
+| `format` | `biome format --write` | 整形のみ。`fix` に包含されるが残してある |
+| `typecheck` | `tsc --noEmit` | 型検査。`next build` より軽く、CI や Git hook で使える |
+
+`biome format --write` ではインポート整列が適用されない（あれは assist であり formatter ではない）ため、
+普段使いは `fix` とする。
+
+`useSortedClasses` と `noConsole` の自動修正は unsafe に分類されており、`--write` では適用されない。
+適用するには `--unsafe` を明示的に付ける必要がある。
 
 ---
 
@@ -77,13 +136,13 @@
 
 ### A. 開発ツール
 
+A-1・A-2・A-3 と、自動修正の実行方法は決定済み。「確定事項」を参照。
+
 | 論点 | 状態 | 選択肢・メモ |
 | --- | --- | --- |
-| A-1 Biome のルール厳格度 | 未決 | 現状は `recommended` のみ。`complexity` / `suspicious` / `nursery` の追加、`noExplicitAny` などの個別強化をどこまでやるか |
-| A-2 Biome のフォーマット規約 | 未決 | 現状は space / 幅2 のみ指定。行幅、クォート、セミコロン、trailing comma を明示するか |
-| A-3 tsconfig の強化 | 未決 | `noUncheckedIndexedAccess` / `exactOptionalPropertyTypes` / `noImplicitOverride` / `verbatimModuleSyntax` を入れるか。`target` を ES2017 から上げるか |
+| A-3b `target` の引き上げ | 未決 | 現状 ES2017。上げるかどうかは未決のまま |
 | A-4 テスト | 未決 | 単体（Vitest + Testing Library）と E2E（Playwright）をどこまで導入するか。学習目的としてどこに時間を使うか |
-| A-5 Git hooks / CI | 未決 | commit 前の lint・型チェック（lefthook / husky）、GitHub Actions の要否 |
+| A-5 Git hooks / CI | 未決 | commit 前に `lint` と `typecheck` を走らせるか（lefthook / husky）、GitHub Actions の要否 |
 | A-6 環境変数 | 未決 | API のベース URL の持ち方。`NEXT_PUBLIC_` を使うか（=クライアントに露出させるか）は E の結論に依存 |
 
 ### B. ディレクトリ構成
@@ -156,9 +215,15 @@ B・C・D の形を規定するため、ここから決める。
 
 ---
 
-## 次のステップ
+## 進める順序（合意済み）
 
-1. E（認証と通信経路）を決める
-2. E の結論を踏まえて B・C・D を決める
-3. A・F を決める
-4. 確定したものを「確定事項」へ移し、実装に着手する
+依存関係の上流から決める。E（認証と通信経路）が C・D の前提になるため、
+独立している A-1 〜 A-5 を先に片付けたうえで E に入る。
+
+1. A-1 〜 A-5（独立。ツール設定を固める）
+2. E（最上流。CORS 問題もここで決着する）
+3. A-6・C・D（E の結論に従う）
+4. B（C・D で必要なファイル種別が出そろってから）
+5. F（デザインの進捗に合わせる。F-2 〜 F-5 は先に決めてもよい）
+
+確定したものは「確定事項」へ移し、決定の理由も残す。
