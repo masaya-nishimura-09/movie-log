@@ -106,6 +106,10 @@
 | `noFallthroughCasesInSwitch` | switch の break 漏れを防ぐ。副作用がない |
 | `verbatimModuleSyntax` | 型の import を明示させる。Biome の `useImportType` と方向が揃う |
 
+`target` は ES2017 から **ES2022** へ引き上げる。`create-next-app` の既定値 ES2017 は古いブラウザ向けの名残で、
+Next.js 16 / React 19 の対象環境とずれているため。Next.js の出力は SWC が担当し対応ブラウザは browserslist で決まるので、
+この設定がビルド成果物に影響することはない。副次的に `useDefineForClassFields` が既定で有効になるが、クラスを使わないため影響しない。
+
 入れなかったもの:
 
 - `exactOptionalPropertyTypes` は入れない。React の props と相性が悪く、警告の量に対して得るものが少ない。厳格設定の基準である `@tsconfig/strictest` には含まれるが、そこから1つ外す構成を選んだ
@@ -140,7 +144,6 @@ A-1・A-2・A-3 と、自動修正の実行方法は決定済み。「確定事�
 
 | 論点 | 状態 | 選択肢・メモ |
 | --- | --- | --- |
-| A-3b `target` の引き上げ | 未決 | 現状 ES2017。上げるかどうかは未決のまま |
 | A-4 テスト | 未決 | 単体（Vitest + Testing Library）と E2E（Playwright）をどこまで導入するか。学習目的としてどこに時間を使うか |
 | A-5 Git hooks / CI | 未決 | commit 前に `lint` と `typecheck` を走らせるか（lefthook / husky）、GitHub Actions の要否 |
 | A-6 環境変数 | 未決 | API のベース URL の持ち方。`NEXT_PUBLIC_` を使うか（=クライアントに露出させるか）は E の結論に依存 |
@@ -178,6 +181,7 @@ A-1・A-2・A-3 と、自動修正の実行方法は決定済み。「確定事�
 | D-4 変更操作の方式 | 未決 | Server Actions を使うか、Route Handler + fetch にするか |
 | D-5 フォーム | 未決 | 記録の作成・編集は項目が多い（映画情報 + 視聴情報 + クレジットの可変長リスト）。React Hook Form 等を使うか、`useActionState` で素朴に組むか |
 | D-6 クライアント状態管理 | 未決 | サーバ状態が主体で、クライアント固有の状態は少ない見込み。ライブラリ（TanStack Query / Zustand 等）が要るかどうか |
+| D-7 TMDBによる入力補助 | 未決 | 映画情報を自分で入力するのは面倒なのでTMDBのデータで検索して入力を補助するか。フロントで呼ぶかバックエンドで呼ぶか。言語の選択をどうするか。 |
 
 ### E. 認証と通信経路（最上流）
 
@@ -201,6 +205,12 @@ B・C・D の形を規定するため、ここから決める。
 | F-4 フォント | 未決 | 現状は Geist（`create-next-app` の既定）。日本語フォントの扱いを決める必要がある |
 | F-5 ダークモード | 未決 | 現状 `globals.css` は `prefers-color-scheme` のみ。手動切り替えを持たせるか |
 | F-6 レスポンシブ方針 | 未決 | 将来 Flutter でスマホアプリを作る計画があるため、Web をどこまでモバイル対応させるか |
+
+### G. その他
+
+| 論点 | 状態 | 選択肢・メモ |
+| --- | --- | --- |
+| G-1 言語 | 未決 | 言語対応をどうするか。英語と日本語のみにしたいが、切り替え方法や拡張性などを考える必要あり。 |
 
 ---
 
