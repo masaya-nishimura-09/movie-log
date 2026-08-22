@@ -156,6 +156,27 @@
 - ポスター画像は自分でアップロードできるようにする。TMDB に無い作品や、自分で用意した画像を登録するため。
   TMDB から選んだ場合は TMDB の URL をそのまま保存し、画像を自分のストレージへコピーはしない（再配布にあたるため）。
   どちらの場合も記録に入るのは完全な URL で、出所が違うだけ。記録側の仕様は変わらない。
+- ディレクトリは種類で分けてから、その中をドメインで分ける。
+
+  ```
+  src/
+    app/          ルーティング
+    components/   atoms / molecules / organisms
+    actions/      Server Action。中をドメインで分割
+    api/          Go API との通信。中をドメインで分割
+    schemas/      zod スキーマと導出した型。中をドメインで分割
+    lib/          純粋な関数。中を用途で分割
+    i18n/         辞書
+    styles/
+  ```
+
+- コンポーネントは Atomic Design を3層（atoms / molecules / organisms）で使う。
+  templates と pages は App Router の `layout.tsx` と `page.tsx` が担うため作らない。
+  Atomic Design を選んだのは、分類の基準が「粒度」の一つだけで済むため。
+  FSD は規則が多いものの層への分類自体が主観的で、かえって無秩序になると判断した。
+- `types/` は作らない。型は zod スキーマから導出するため `schemas/` に同居させる。
+- `lib/` の直下にファイルを置かない。必ず用途名のフォルダを作り、その中に置く。
+  kitchen-log では `lib/` 直下に雑多なファイルが置かれ、他に置き場が無いものの受け皿になっていたため。
 
 ---
 
@@ -171,9 +192,6 @@
 
 | 論点 | 内容・選択肢 |
 | --- | --- |
-| B-1 Atomic Design を採用するか | atoms / molecules / organisms / templates / pages の5層。App Router の `app/` が pages・templates の役割を持つため、そのまま当てると層が重複する |
-| B-2 採用する場合の App Router との噛み合わせ | `app/` はルーティングとデータ取得のみに限定し、UI は `components/` 配下に Atomic 層を置く、など |
-| B-3 機能単位で切るか | Atomic Design（見た目の粒度）と feature 単位（`features/record/` など、関心事の単位）は排他ではない。併用するか片方にするか |
 | B-4 命名規則 | ファイル名（kebab-case / PascalCase）、ディレクトリ名、コンポーネントの export 形式（named / default） |
 | B-5 import パス | `@/*` エイリアスは設定済み。相対パスとの使い分けを決めるか |
 | B-6 ファイル名・再エクスポートの規約 | 構成が決まったら Biome の `style/useFilenamingConvention` と `performance/noBarrelFile` を設定する |
