@@ -74,6 +74,8 @@
 - 認証は BFF 方式。ブラウザは Next.js としか通信せず、Next.js のサーバが Go API を中継する。
   トークンは httpOnly Cookie に入れ、`refresh_token` は `path` を `/api/auth` に限定する。
   Cookie をセットするのはログインと再発行の Route Handler。
+- ログアウトは Next.js 側で Cookie から `refresh_token` を読んで Go の `/auth/logout` に渡し、両方の Cookie を削除する。
+  削除時はセット時と同じ `path` を指定しないと消えない（`refresh_token` は `/api/auth`）。
 
 ---
 
@@ -130,7 +132,6 @@ B・C・D の形を規定するため、ここから決める。
 | --- | --- |
 | E-3 ルート保護 | middleware で未認証を弾くか、レイアウトやページ側で判定するか |
 | E-4 リフレッシュ戦略 | 401 を受けてから再発行するか、期限を見て先回りするか。同時多発リクエスト時の重複リフレッシュをどう防ぐか |
-| E-5 ログアウト | `/auth/logout` にリフレッシュトークンを渡す必要がある。保管場所の決定に従って経路が決まる |
 
 ### F. UI 基盤
 
