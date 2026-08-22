@@ -131,6 +131,10 @@
   トークンが httpOnly Cookie にありサーバでしか読めないため、取得はサーバ側で行い、結果を props で下へ渡す。
   `page.tsx` が認証確認とデータ取得を担い、表示コンポーネントは props を受け取るだけにする。
   同じ構成が kitchen-log でも採られている（`page.tsx` は Server、`recipe-menu.tsx` のような操作部だけ `"use client"`）。
+- データ取得は Server Component（`page.tsx`）から行う。取得関数をどのファイルに置くかは B で決める。
+- キャッシュ対策は何もしない。`revalidatePath` も入れない。Next.js 16 では `fetch` が既定でキャッシュされず、
+  クライアント側の動的セグメントのキャッシュも既定 0 秒（v15.0.0 で 30 秒から変更）のため、古い内容が残らない。
+  例外は `<Link prefetch={true}>` を明示した場合（5分）と、ブラウザの戻る・進む操作のみ。必要になったら1行足せば済む。
 
 ---
 
@@ -157,8 +161,6 @@
 
 | 論点 | 内容・選択肢 |
 | --- | --- |
-| D-2 データ取得の置き場 | Server Components から直接取得、Route Handler 経由、Client からの取得。混在させる場合の基準 |
-| D-3 キャッシュと再検証 | Next.js のキャッシュをどう使うか。作成・更新・削除後の再検証手段（`revalidatePath` / `revalidateTag` / クライアント側の再取得） |
 | D-4 変更操作の方式 | Server Actions を使うか、Route Handler + fetch にするか |
 | D-5 フォーム | 記録の作成・編集は項目が多い（映画情報 + 視聴情報 + クレジットの可変長リスト）。React Hook Form 等を使うか、`useActionState` で素朴に組むか |
 | D-6 クライアント状態管理 | サーバ状態が主体で、クライアント固有の状態は少ない見込み。ライブラリ（TanStack Query / Zustand 等）が要るかどうか |
