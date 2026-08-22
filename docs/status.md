@@ -80,6 +80,9 @@
   Cookie は Server Component では書き換えられず、Proxy なら書けるため。未認証は `/login` へリダイレクトする。
   Go API を呼ぶラッパ関数は Cookie を読んで `Authorization` ヘッダを付けるだけで、認証の判定はしない。
   実際の認可は Go API の JWT ミドルウェアが持つので、Proxy が唯一の防御にはならない。
+- Go API のベース URL は環境変数 `API_BASE_URL` で持つ。`NEXT_PUBLIC_` は付けない。
+  BFF なのでブラウザから呼ぶことがなく、公開するとクライアントから直接叩く実装を誘発するため。
+  実値は `.env.local`、雛形は `.env.example` としてコミットする。
 
 ---
 
@@ -90,7 +93,6 @@
 | 論点 | 内容・選択肢 |
 | --- | --- |
 | A-5 Git hooks / CI | commit 前に `lint` と `typecheck` を走らせるか（lefthook / husky）、GitHub Actions の要否 |
-| A-6 環境変数 | API のベース URL の持ち方。`NEXT_PUBLIC_` を使うか（=クライアントに露出させるか）は E の結論に依存 |
 
 ### B. ディレクトリ構成
 
