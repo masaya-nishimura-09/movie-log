@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "@/styles/globals.css";
+import { cn } from "@/lib/style/cn";
 
 const poppins = Poppins({
   variable: "--font-poppins",
@@ -22,7 +23,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${poppins.variable} ${notoSansJP.variable} h-full antialiased`}
+      className={cn(
+        "h-full",
+        "antialiased",
+        "font-sans",
+        poppins.variable,
+        notoSansJP.variable,
+      )}
     >
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
