@@ -127,6 +127,10 @@
   必要になったら省略可能な引数を足すだけで済むため。
   `server-only` も入れない。正しく書けば起きない誤りを早期検出するだけで、呼ぶ場所が限られるため。
   ジェネリクスはラッパ内部に閉じ、画面からは `getRecords()` のような素朴な関数を呼ぶ形にする。
+- コンポーネントは既定を Server Component にし、`"use client"` は対話が必要な葉にだけ付ける。
+  トークンが httpOnly Cookie にありサーバでしか読めないため、取得はサーバ側で行い、結果を props で下へ渡す。
+  `page.tsx` が認証確認とデータ取得を担い、表示コンポーネントは props を受け取るだけにする。
+  同じ構成が kitchen-log でも採られている（`page.tsx` は Server、`recipe-menu.tsx` のような操作部だけ `"use client"`）。
 
 ---
 
@@ -153,7 +157,6 @@
 
 | 論点 | 内容・選択肢 |
 | --- | --- |
-| D-1 Server / Client Components の使い分け方針 | 既定を Server にして、対話が必要な葉だけ Client にする方針を取るか。E の結論（トークンの置き場所）に強く依存する |
 | D-2 データ取得の置き場 | Server Components から直接取得、Route Handler 経由、Client からの取得。混在させる場合の基準 |
 | D-3 キャッシュと再検証 | Next.js のキャッシュをどう使うか。作成・更新・削除後の再検証手段（`revalidatePath` / `revalidateTag` / クライアント側の再取得） |
 | D-4 変更操作の方式 | Server Actions を使うか、Route Handler + fetch にするか |
