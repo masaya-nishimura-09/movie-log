@@ -72,10 +72,10 @@
 ## 決定済み・未実装
 
 - 認証は BFF 方式。ブラウザは Next.js としか通信せず、Next.js のサーバが Go API を中継する。
-  トークンは httpOnly Cookie に入れ、`refresh_token` は `path` を `/api/auth` に限定する。
-  Cookie をセットするのはログインと再発行の Route Handler。
+  トークンは httpOnly Cookie に入れる。`httpOnly` / `Secure` / `SameSite` を両方の Cookie に付ける。
+  `refresh_token` の `path` は限定せず `/` にする。当初は `/api/auth` に絞る案だったが、
+  それだと通常のページ遷移で Cookie が送られず、Proxy がトークンを読めないため成立しない。
 - ログアウトは Next.js 側で Cookie から `refresh_token` を読んで Go の `/auth/logout` に渡し、両方の Cookie を削除する。
-  削除時はセット時と同じ `path` を指定しないと消えない（`refresh_token` は `/api/auth`）。
 - ルート保護とトークンの再発行は `src/proxy.ts` に一本化する（Next.js 16 では middleware は proxy に改称）。
   Cookie は Server Component では書き換えられず、Proxy なら書けるため。未認証は `/login` へリダイレクトする。
   Go API を呼ぶラッパ関数は Cookie を読んで `Authorization` ヘッダを付けるだけで、認証の判定はしない。
