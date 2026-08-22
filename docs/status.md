@@ -101,6 +101,20 @@
   ロケールを取る `next/root-params` は Server Component でしか使えないので、Client Component へは props で渡す。
 - `record_id` は API が返す文字列のまま扱い、数値に変換しない。
   ID は計算に使わず、JavaScript の数値は 2^53 までしか正確に扱えないため。Go 側が文字列化しているのもその配慮と見られる。
+- API のエラーは、取得系（一覧・詳細）では throw して `error.tsx` に拾わせ、`RECORD_NOT_FOUND` は `notFound()` で 404 画面へ送る。
+  変更系（フォーム送信）は throw せず戻り値として返す。入力内容を保ったまま、該当の入力欄にエラーを出すため。
+  `INVALID_ACCESS_TOKEN` はエラー画面ではなくログイン画面へリダイレクトする（Proxy をすり抜けた場合の受け皿）。
+- エラーの `code` は Go 側の9種類だけを許すユニオン型にする。綴りの誤りや対応漏れをコンパイラが検出できるため。
+- 変更系の戻り値は判別可能ユニオンにする。`success` と `data` が独立した形だと、成功時でも `data` の有無を
+  毎回確認することになるため（kitchen-log の `AppActionResult` がその形になっている）。
+  入力エラーは zod の `error.flatten().fieldErrors` をそのまま載せ、入力欄ごとに表示する。
+  メッセージ本文は載せず辞書のキーで持つ（多言語対応のため）。
+
+  ```ts
+  type ActionResult<T> =
+    | { success: true; data: T }
+    | { success: false; messageKey: string; errors?: Record<string, string[]> };
+  ```
 
 ---
 
@@ -129,7 +143,6 @@
 | --- | --- |
 | C-5 入力バリデーション | 入力ルールはバックエンドが持つ（タイトル255文字、公開年1888〜現在+5、スコア1〜5 など）。フロントで再実装するか、サーバのエラーに任せるか、どこまで二重化するか |
 | C-6 fetch ラッパ | 素の `fetch` を薄く包むか、ライブラリを使うか。ベース URL・認証ヘッダ・エラー正規化・リトライの責務をどこに置くか |
-| C-7 エラーの型と扱い | `{ code, message }` を型付きの例外にするか、Result 型で返すか。UI へどう伝えるか |
 
 ### D. 状態とデータ取得
 
