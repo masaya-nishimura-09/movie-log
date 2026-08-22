@@ -27,6 +27,17 @@
       "nursery": {
         "useSortedClasses": "warn"
       },
+      "performance": {
+        "noBarrelFile": "warn"
+      },
+      "style": {
+        "useFilenamingConvention": {
+          "level": "warn",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        }
+      },
       "suspicious": {
         "noConsole": {
           "level": "warn",

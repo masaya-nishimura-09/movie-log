@@ -177,6 +177,15 @@
 - `types/` は作らない。型は zod スキーマから導出するため `schemas/` に同居させる。
 - `lib/` の直下にファイルを置かない。必ず用途名のフォルダを作り、その中に置く。
   kitchen-log では `lib/` 直下に雑多なファイルが置かれ、他に置き場が無いものの受け皿になっていたため。
+- ファイル名とディレクトリ名は kebab-case。Biome の `style/useFilenamingConvention` で強制する。
+  `app/` 配下に Next.js が定める小文字のファイルが必ず混ざるため、そちらに揃える。
+  Next.js の動的セグメント（`[lang]`、`[...slug]`）はルールが既定で許容するので除外設定は不要。
+- export は named export を使う。名前が一意に決まり、別名で読み込まれないため。
+  ただし `app/` の規約ファイル（`page.tsx`、`layout.tsx`、`error.tsx` など）は Next.js の仕様で default export になる。
+  例外はこの範囲に限られ、境界が明確なので規則として成立する。
+- import は常に `@/` エイリアスを使い、相対パスは使わない。書き方が一つに決まり、ファイル移動時の修正も不要になるため。
+- `index.ts` による再エクスポート（バレルファイル）は作らない。`performance/noBarrelFile` で強制する。
+  import 元が実体のファイルを指さなくなること、不要なコードが読み込まれること、循環参照を招きやすいことが理由。
 
 ---
 
@@ -187,14 +196,6 @@
 | 論点 | 内容・選択肢 |
 | --- | --- |
 | A-5 Git hooks / CI | commit 前に `lint` と `typecheck` を走らせるか（lefthook / husky）、GitHub Actions の要否 |
-
-### B. ディレクトリ構成
-
-| 論点 | 内容・選択肢 |
-| --- | --- |
-| B-4 命名規則 | ファイル名（kebab-case / PascalCase）、ディレクトリ名、コンポーネントの export 形式（named / default） |
-| B-5 import パス | `@/*` エイリアスは設定済み。相対パスとの使い分けを決めるか |
-| B-6 ファイル名・再エクスポートの規約 | 構成が決まったら Biome の `style/useFilenamingConvention` と `performance/noBarrelFile` を設定する |
 
 ### F. UI 基盤
 
@@ -223,10 +224,9 @@
 
 ## 進める順序（合意済み）
 
-C・D・E・G は決着した。残っているのは以下。
+B・C・D・E・G は決着した。残っているのは以下。
 
-1. B（ディレクトリ構成）
-2. F（デザインの進捗に合わせる。F-2 〜 F-5 は先に決めてもよい）
-3. A-5（Git hooks / CI。実装が始まってからの方が決めやすい）
+1. F（デザインの進捗に合わせる。F-2 〜 F-5 は先に決めてもよい）
+2. A-5（Git hooks / CI。実装が始まってからの方が決めやすい）
 
 Vitest と Cypress の導入は、テスト対象のコードができてから行う。
