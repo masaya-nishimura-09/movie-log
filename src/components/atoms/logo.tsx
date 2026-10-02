@@ -1,3 +1,4 @@
+import { Clapperboard } from "lucide-react";
 import { cn } from "@/lib/style/cn";
 
 export function Logo({
@@ -10,10 +11,11 @@ export function Logo({
   return (
     <span
       className={cn(
-        "font-bold font-heading text-[19px] text-foreground leading-none",
+        "inline-flex items-center gap-2 font-bold font-heading text-[19px] text-foreground leading-none",
         className,
       )}
     >
+      <Clapperboard className="size-5.5 text-primary" aria-hidden />
       {name}
     </span>
   );
