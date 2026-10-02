@@ -73,10 +73,10 @@ export function SiteHeader({
 
   return (
     <header className="sticky top-0 z-40 border-input border-b bg-header">
-      <div className="flex h-15 items-center gap-5 px-4 md:px-6">
+      <div className="flex h-15 items-center gap-5 px-4 md:grid md:grid-cols-[1fr_auto_1fr] md:px-6">
         <Link
           href={`/${lang}/records`}
-          className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+          className="justify-self-start rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
           <Logo name={brandName} />
         </Link>
@@ -85,10 +85,10 @@ export function SiteHeader({
           lang={lang}
           keyword={keyword}
           dict={dict}
-          className="hidden max-w-105 flex-1 md:flex"
+          className="hidden w-105 md:flex"
         />
 
-        <div className="ml-auto flex items-center gap-2.5">
+        <div className="ml-auto flex items-center gap-2.5 md:justify-self-end">
           <div className="flex items-center gap-2.5 md:hidden">
             <Sheet>
               <SheetTrigger aria-label={dict.openSearch} className={roundIcon}>
