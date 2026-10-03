@@ -1,3 +1,4 @@
+import { registerAction } from "@/actions/user/register";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -16,6 +17,7 @@ export default async function RegisterPage() {
       </div>
       <RegisterForm
         lang={lang}
+        action={registerAction.bind(null, lang)}
         dict={dict.register}
         passwordDict={dict.passwordInput}
         counterTemplate={dict.characterCount}

@@ -1,8 +1,10 @@
+import type { ActionResult } from "@/actions/action-result";
 import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { Input } from "@/components/atoms/input";
 import { CountryInput } from "@/components/molecules/country-input";
 import { CreditRows } from "@/components/molecules/credit-rows";
 import { FormField } from "@/components/molecules/form-field";
+import { PosterUrlField } from "@/components/molecules/poster-url-field";
 import {
   Select,
   SelectContent,
@@ -12,6 +14,7 @@ import {
 } from "@/components/molecules/select";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { interpolate } from "@/lib/text/interpolate";
 import { genreSchema } from "@/schemas/record/enums";
 import type {
@@ -22,8 +25,10 @@ import type {
 type RecordMovieFieldsProps = {
   lang: Locale;
   values: RecordFormValues;
+  errors?: RecordFieldErrors;
   languageOptions: SelectOption[];
   maxReleaseYear: number;
+  uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
 };
@@ -31,8 +36,10 @@ type RecordMovieFieldsProps = {
 export function RecordMovieFields({
   lang,
   values,
+  errors,
   languageOptions,
   maxReleaseYear,
+  uploadPoster,
   dict,
   enums,
 }: RecordMovieFieldsProps) {
@@ -41,7 +48,10 @@ export function RecordMovieFields({
       <div className="grid grid-cols-2 gap-4">
         <FormField
           label={dict.releaseYear}
+          error={fieldError(errors, dict, "releaseYear")}
           htmlFor="releaseYear"
+          required
+          requiredLabel={dict.required}
           hint={interpolate(dict.releaseYearHint, { max: maxReleaseYear })}
         >
           <Input
@@ -49,6 +59,7 @@ export function RecordMovieFields({
             name="releaseYear"
             type="number"
             inputMode="numeric"
+            required
             min={1888}
             max={maxReleaseYear}
             defaultValue={values.releaseYear}
@@ -57,6 +68,7 @@ export function RecordMovieFields({
         </FormField>
         <FormField
           label={dict.runtime}
+          error={fieldError(errors, dict, "runtime")}
           htmlFor="runtime"
           hint={dict.runtimeHint}
         >
@@ -81,6 +93,7 @@ export function RecordMovieFields({
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField
           label={dict.language}
+          error={fieldError(errors, dict, "language")}
           required
           requiredLabel={dict.required}
           hint={dict.languageHint}
@@ -102,7 +115,11 @@ export function RecordMovieFields({
             </SelectContent>
           </Select>
         </FormField>
-        <FormField label={dict.countries} htmlFor="countries">
+        <FormField
+          label={dict.countries}
+          error={fieldError(errors, dict, "countries")}
+          htmlFor="countries"
+        >
           <CountryInput
             id="countries"
             name="countries"
@@ -114,7 +131,11 @@ export function RecordMovieFields({
         </FormField>
       </div>
 
-      <FormField label={dict.genres} hint={dict.genresHint}>
+      <FormField
+        label={dict.genres}
+        error={fieldError(errors, dict, "genres")}
+        hint={dict.genresHint}
+      >
         <div className="flex flex-wrap gap-1.75">
           {genreSchema.options.map((genre) => (
             <ChoiceChip
@@ -134,7 +155,11 @@ export function RecordMovieFields({
         </div>
       </FormField>
 
-      <FormField label={dict.credits} hint={dict.creditsHint}>
+      <FormField
+        label={dict.credits}
+        error={fieldError(errors, dict, "credits")}
+        hint={dict.creditsHint}
+      >
         <CreditRows
           defaultValue={values.credits}
           roleLabels={enums.creditRole}
@@ -145,13 +170,20 @@ export function RecordMovieFields({
         />
       </FormField>
 
-      <FormField label={dict.posterUrl} htmlFor="posterUrl">
-        <Input
+      <FormField
+        label={dict.posterUrl}
+        error={fieldError(errors, dict, "posterUrl")}
+        htmlFor="posterUrl"
+      >
+        <PosterUrlField
           id="posterUrl"
           name="posterUrl"
-          type="url"
-          placeholder={dict.posterUrlPlaceholder}
           defaultValue={values.posterUrl}
+          placeholder={dict.posterUrlPlaceholder}
+          upload={uploadPoster}
+          uploadLabel={dict.uploadPoster}
+          uploadingLabel={dict.uploadingPoster}
+          errorLabel={dict.posterUploadError}
         />
       </FormField>
     </div>

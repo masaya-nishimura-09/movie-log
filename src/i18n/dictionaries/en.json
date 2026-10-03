@@ -10,12 +10,12 @@
   "header": {
     "searchPlaceholder": "Search by title",
     "searchLabel": "Search by title",
-    "newRecord": "Log a film",
     "themeToggle": "Toggle theme",
     "accountMenu": "Account menu",
     "account": "Account settings",
     "logout": "Log out",
-    "openSearch": "Search"
+    "openSearch": "Search",
+    "toggleSidebar": "Toggle sidebar"
   },
   "bottomNav": {
     "records": "Films",
@@ -28,7 +28,12 @@
     "passwordHint": "8-72 characters",
     "submit": "Log in",
     "toRegisterPrompt": "New here?",
-    "toRegister": "Create an account"
+    "toRegister": "Create an account",
+    "invalidEmail": "Enter a valid email address",
+    "invalidPassword": "Use 8 to 72 half-width letters, digits, or symbols",
+    "invalidCredentials": "Incorrect email or password",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "unexpectedError": "Couldn't log in. Please try again later"
   },
   "register": {
     "title": "Create an account",
@@ -39,7 +44,14 @@
     "passwordHint": "8-72 characters",
     "submit": "Sign up and start",
     "toLoginPrompt": "Already registered?",
-    "toLogin": "Log in"
+    "toLogin": "Log in",
+    "usernameError": "Enter 1 to 100 characters",
+    "emailError": "Enter a valid email address",
+    "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
+    "invalidInput": "Please check your input",
+    "userAlreadyExists": "This email address is already in use",
+    "unexpectedError": "Couldn't sign up. Please try again later",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again"
   },
   "passwordInput": {
     "show": "Show password",
@@ -49,13 +61,11 @@
     "heading": "Watched films",
     "summary": "Showing {shown} of {total}",
     "activeFilters": "{count} filters",
-    "monthCount": "{count} films",
     "noMatch": "No records match these filters",
     "clearFilters": "Clear filters",
     "previousPage": "Previous page",
     "nextPage": "Next page",
-    "pageStatus": "{current} / {total}",
-    "summaryShort": "{shown} of {total}"
+    "pageStatus": "{current} / {total}"
   },
   "recordFilter": {
     "open": "Filters",
@@ -66,7 +76,6 @@
     "moodTag": "Mood",
     "genre": "Genre",
     "showAllPlatforms": "Show all ({count})",
-    "showFewerPlatforms": "Show only used platforms",
     "remove": "Remove {label}",
     "showResults": "Show {count} results"
   },
@@ -101,15 +110,14 @@
     "platform": "Platform",
     "createdAt": "Logged",
     "updatedAt": "Last updated",
-    "adjacentItem": "{title} ({date})",
-    "adjacent": "Previous and next",
     "weekday": " ({weekday})"
   },
   "deleteRecord": {
     "title": "Delete this record?",
     "description": "\"{title}\" ({date}) and its memo will be deleted. This cannot be undone.",
     "cancel": "Cancel",
-    "confirm": "Delete"
+    "confirm": "Delete",
+    "unexpectedError": "Couldn't delete. Please try again later"
   },
   "recordForm": {
     "createTitle": "Log a film",
@@ -127,15 +135,9 @@
     "score": "Score",
     "scoreHint": "1-5, by your own standard",
     "platform": "Platform",
-    "platformHint": "Frequently used platforms come first",
-    "morePlatforms": "More platforms ({count})",
-    "fewerPlatforms": "Show frequent only",
-    "canSaveHere": "You can save at this point",
-    "saveAndFinish": "Save and finish",
     "next": "Continue",
     "back": "Back",
-    "skip": "Skip",
-    "movieInfoHint": "All optional (language has a default)",
+    "movieInfoHint": "Release year and language are required",
     "releaseYear": "Release year",
     "releaseYearHint": "1888-{max}",
     "runtime": "Runtime",
@@ -166,25 +168,55 @@
     "movieSection": "Film info",
     "cancel": "Discard",
     "saveChanges": "Save changes",
-    "saveShort": "Save",
-    "languageUnknown": "Unknown"
+    "languageUnknown": "Unknown",
+    "invalidInput": "Please check your input",
+    "notFound": "This record has been deleted",
+    "unexpectedError": "Couldn't save. Please try again later",
+    "errors": {
+      "title": "Enter 1 to 255 characters",
+      "watchedAt": "Enter today or an earlier date",
+      "score": "Choose a score",
+      "platform": "Choose a platform",
+      "releaseYear": "Enter a year from 1888 to 5 years from now",
+      "runtime": "Enter 0 to 1440 minutes",
+      "language": "Choose a language",
+      "countries": "Invalid country code",
+      "genres": "Invalid genre",
+      "credits": "Names must be 100 characters or fewer",
+      "posterUrl": "Enter a URL starting with http or https",
+      "moodTags": "Invalid mood tag",
+      "memo": "Enter 1000 characters or fewer"
+    },
+    "movieSuggestions": "Film suggestions",
+    "titleHint": "Type 2+ characters to see TMDB suggestions. Picking one fills in the film info",
+    "uploadPoster": "Upload image",
+    "uploadingPoster": "Uploading",
+    "posterUploadError": "Couldn't upload. Use a JPEG, PNG, or WebP up to 5 MB"
   },
   "account": {
     "back": "Back",
     "title": "Account settings",
-    "notice": "This form updates your display name, email, and password together. Unchanged fields are sent as they are. Changing your password logs out your other devices.",
+    "notice": "This form updates your display name, email, and password together. Enter your password even if you are not changing it. Changing your password signs out your other devices.",
     "username": "Display name",
     "email": "Email",
     "password": "Password",
-    "passwordHint": "Leave as is to keep it. New passwords need 8-72 characters.",
+    "passwordHint": "8 to 72 characters. Enter your current one to keep it",
     "cancel": "Discard",
     "save": "Save changes",
     "withdrawTitle": "Delete account",
-    "withdrawDescription": "All {count} records and memos will be deleted. This cannot be undone.",
+    "withdrawDescription": "All your records and memos will be deleted. This cannot be undone.",
     "withdrawAction": "Delete account",
     "withdrawConfirmTitle": "Delete your account?",
     "withdrawConfirm": "Delete",
-    "withdrawCancel": "Cancel"
+    "withdrawCancel": "Cancel",
+    "usernameError": "Enter 1 to 100 characters",
+    "emailError": "Enter a valid email address",
+    "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
+    "invalidInput": "Please check your input",
+    "userAlreadyExists": "This email address is already in use",
+    "unexpectedError": "Couldn't save. Please try again later",
+    "saved": "Saved",
+    "withdrawFailed": "Couldn't delete your account. Please try again later"
   },
   "characterCount": "{current} / {max}",
   "enums": {
@@ -273,5 +305,10 @@
     "title": "Page not found",
     "description": "The record may have been deleted, or the URL may be wrong.",
     "action": "Back to list"
+  },
+  "errorPage": {
+    "title": "Couldn't load this page",
+    "description": "Please try again in a moment.",
+    "retry": "Try again"
   }
 }

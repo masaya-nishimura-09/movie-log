@@ -13,7 +13,7 @@ export function EmptyState({ title, description, action }: EmptyStateProps) {
       <span className="mb-1 grid size-22 place-items-center rounded-[22px] bg-secondary text-muted-foreground">
         <Clapperboard className="size-7" aria-hidden />
       </span>
-      <p className="font-bold font-heading text-foreground text-lg">{title}</p>
+      <p className="font-bold text-foreground text-lg">{title}</p>
       {description && (
         <p className="text-[13px] text-foreground-sub leading-relaxed">
           {description}

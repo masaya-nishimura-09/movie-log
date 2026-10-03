@@ -1,3 +1,4 @@
+import { loginAction } from "@/actions/auth/login";
 import { LoginForm } from "@/components/organisms/login-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -14,6 +15,7 @@ export default async function LoginPage() {
       </div>
       <LoginForm
         lang={lang}
+        action={loginAction.bind(null, lang)}
         dict={dict.login}
         passwordDict={dict.passwordInput}
       />

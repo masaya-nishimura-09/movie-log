@@ -1,14 +1,14 @@
 import type { Metadata } from "next";
-import { Noto_Sans_JP, Zen_Maru_Gothic } from "next/font/google";
+import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 
-const zenMaruGothic = Zen_Maru_Gothic({
-  variable: "--font-zen-maru-gothic",
+const poppins = Poppins({
+  variable: "--font-poppins",
   subsets: ["latin"],
-  weight: ["500", "700"],
+  weight: ["400", "500", "700"],
 });
 
 const notoSansJP = Noto_Sans_JP({
@@ -32,9 +32,8 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       className={cn(
         "h-full",
         "antialiased",
-        "font-sans",
-        zenMaruGothic.variable,
         notoSansJP.variable,
+        poppins.variable,
       )}
     >
       <body className="flex min-h-full flex-col">

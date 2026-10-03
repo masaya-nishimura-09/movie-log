@@ -16,7 +16,7 @@ export function PageTopBar({
   actions,
 }: PageTopBarProps) {
   return (
-    <header className="sticky top-0 z-40 border-input border-b bg-header">
+    <header className="sticky top-0 z-20 rounded-t-2xl border-border border-b bg-background">
       <div className="flex h-14 items-center gap-3.5 px-4 md:h-15 md:px-6">
         <Link
           href={backHref}

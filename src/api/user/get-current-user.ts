@@ -1,10 +1,7 @@
-import { mockRecords } from "@/api/record/mock-records";
-import type { User } from "@/schemas/user/user";
+import { cache } from "react";
+import { apiFetch } from "@/api/client/api-fetch";
+import { type User, userResponseSchema } from "@/schemas/user/user";
 
-export async function getCurrentUser(): Promise<User> {
-  return {
-    username: "まさや",
-    email: "m.nishimura@example.com",
-    recordCount: mockRecords.length,
-  };
-}
+export const getCurrentUser = cache(async (): Promise<User> => {
+  return apiFetch("/users/", userResponseSchema);
+});

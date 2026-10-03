@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500;700&family=Zen+Maru+Gothic:wght@500;700&family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">
+<style>
+  body { margin: 0; background: #EFE6D6; font-family: "Noto Sans JP", system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  a { color: #96663A; text-decoration: none; }
+  a:hover { color: #6E4930; text-decoration: underline; }
+  .ms { font-family: "Material Symbols Rounded"; font-weight: normal; font-style: normal; line-height: 1; letter-spacing: normal; text-transform: none; display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-feature-settings: 'liga'; -webkit-font-smoothing: antialiased; }
+</style>
+</helmet>
+
+<section style="padding: 56px 56px 28px; display: flex; flex-direction: column; gap: 14px; max-width: 900px">
+  <div style="display: flex; align-items: center; gap: 12px">
+    <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 13px; letter-spacing: 0.14em; color: #96663A">スマホアプリ版 ・ 390 × 844</span>
+    <span style="height: 1px; flex: 1; background: #D3D4C0"></span>
+  </div>
+  <h1 style="margin: 0; font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 34px; color: #0A2947">アプリとして開いたとき</h1>
+  <p style="margin: 0; font-size: 15px; line-height: 1.85; color: #3D4B5A; text-wrap: pretty">ブラウザ枠の88pxが返ってくるぶんを、<strong style="color:#0A2947">下部タブの常時表示に使えます</strong>（本文の高さはウェブ版とほぼ同じ642px。実測して分かったことで、当初「1行多く入る」と書いていたのは誤りでした）。加えてアプリでしか成立しないものを2つ入れました：詳細の<strong style="color:#0A2947">ポスター全面ヘッダー</strong>（スクロールで畳む）と、一覧の<strong style="color:#0A2947">下スワイプで更新</strong>。</p>
+</section>
+
+<section style="padding: 0 56px 40px; display: flex; flex-wrap: wrap; gap: 26px; align-items: flex-start">
+  <sc-for list="{{ screens }}" as="s" hint-placeholder-count="5">
+    <div style="display: flex; flex-direction: column; gap: 11px">
+      <div style="display: flex; align-items: center; gap: 9px">
+        <span style="display: inline-flex; align-items: center; justify-content: center; min-width: 24px; height: 22px; padding: 0 8px; border-radius: 999px; background: #0A2947; color: #F3E4C9; font-size: 11.5px; font-weight: 700">{{ s.no }}</span>
+        <span style="font-size: 13.5px; font-weight: 700; color: #0A2947">{{ s.name }}</span>
+      </div>
+
+      <div style="width: 390px; height: 844px; border-radius: 40px; border: 1px solid #DDD3C2; background: {{ s.shellBg }}; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 20px 44px -30px rgba(10,41,71,0.4)">
+        <div style="flex: none; height: 54px; padding: 0 26px; display: flex; align-items: center; justify-content: space-between; background: {{ s.statusBg }}">
+          <span style="font-size: 14px; font-weight: 700; color: {{ s.statusFg }}">9:41</span>
+          <div style="display: flex; align-items: center; gap: 6px">
+            <span class="ms" style="font-size: 17px; color: {{ s.statusFg }}">signal_cellular_alt</span>
+            <span class="ms" style="font-size: 17px; color: {{ s.statusFg }}">wifi</span>
+            <span class="ms" style="font-size: 17px; color: {{ s.statusFg }}">battery_full</span>
+          </div>
+        </div>
+
+        <div style="flex: 1; min-height: 0; display: flex; flex-direction: column; overflow: hidden">
+          <sc-if value="{{ s.isList }}" hint-placeholder-val="{{ true }}">
+            <div style="flex: none; height: 52px; padding: 0 16px; display: flex; align-items: center; gap: 10px; background: #F7F0E3; border-bottom: 1px solid #E8DFCC">
+              <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 17px; color: #0A2947">Cinelog</span>
+              <div style="flex: 1"></div>
+              <span class="ms" style="font-size: 21px; color: #3D4B5A; width: 34px; height: 34px; border-radius: 999px; background: #FFFFFF; display: grid; place-items: center">search</span>
+              <div style="height: 34px; padding: 0 11px; border-radius: 999px; background: #F7EBDD; border: 1.5px solid #A2703F; display: flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; color: #6E4930"><span class="ms" style="font-size: 17px">tune</span>2</div>
+            </div>
+            <div style="flex: 1; min-height: 0; padding: 12px 16px 8px; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+              <div style="display: flex; align-items: flex-end; justify-content: space-between">
+                <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 21px; color: #0A2947">みた映画</span>
+                <span style="font-size: 12.5px; color: #3D4B5A">128件中 12件</span>
+              </div>
+              <sc-for list="{{ months }}" as="mo" hint-placeholder-count="2">
+                <div style="display: flex; flex-direction: column; gap: 11px">
+                  <div style="display: flex; align-items: center; gap: 10px">
+                    <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 14px; color: #0A2947">{{ mo.label }}</span>
+                    <span style="font-size: 12px; color: #6B7885">{{ mo.count }}本</span>
+                    <span style="height: 1px; flex: 1; background: #E8DFCC"></span>
+                  </div>
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px">
+                    <sc-for list="{{ mo.records }}" as="r" hint-placeholder-count="2">
+                      <dc-import name="ポスターカード" variant="stacked" record="{{ r }}" has-poster="{{ r.hasPoster }}" style="min-width: 0" hint-size="100%,290px"></dc-import>
+                    </sc-for>
+                  </div>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ s.isDetail }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: none; position: relative; height: 300px; background: #2E4A63; display: flex; flex-direction: column; justify-content: space-between">
+              <div style="position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(6,20,34,0.55) 0%, rgba(6,20,34,0) 32%, rgba(6,20,34,0.9) 100%)"></div>
+              <div style="position: relative; padding: 6px 12px 0; display: flex; align-items: center">
+                <span class="ms" style="font-size: 22px; color: #FFFFFF; width: 40px; height: 40px; display: grid; place-items: center">arrow_back</span>
+                <div style="flex: 1"></div>
+                <span class="ms" style="font-size: 21px; color: #FFFFFF; width: 40px; height: 40px; display: grid; place-items: center">edit</span>
+                <span class="ms" style="font-size: 21px; color: #FFFFFF; width: 40px; height: 40px; display: grid; place-items: center">more_horiz</span>
+              </div>
+              <div style="position: relative; padding: 0 18px 16px; display: flex; align-items: flex-end; gap: 13px">
+                <div style="flex: none; width: 54px; height: 54px; border-radius: 15px; background: #FFFFFF; color: #6E4930; display: flex; flex-direction: column; align-items: center; justify-content: center">
+                  <span style="font-size: 23px; font-weight: 700; line-height: 1">5</span>
+                  <span style="font-size: 9.5px; letter-spacing: 0.06em; opacity: 0.75">SCORE</span>
+                </div>
+                <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 5px">
+                  <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 21px; line-height: 1.35; color: #FFFFFF; text-wrap: pretty">ドライブ・マイ・カー</span>
+                  <span style="font-size: 12.5px; color: rgba(255,255,255,0.82)">2021年 ・ 179分 ・ 日本語</span>
+                </div>
+              </div>
+            </div>
+            <div style="flex: 1; min-height: 0; padding: 16px 18px 8px; display: flex; flex-direction: column; gap: 16px; overflow: hidden">
+              <div style="display: flex; flex-wrap: wrap; gap: 6px">
+                <span style="padding: 5px 10px; border-radius: 6px; border: 1px solid #B9BCA6; font-size: 12px; color: #4A5340">ドラマ</span>
+                <span style="padding: 6px 11px; border-radius: 999px; background: #DCE4EC; font-size: 12px; color: #24435E">切ない系</span>
+                <span style="padding: 6px 11px; border-radius: 999px; background: #DCE4EC; font-size: 12px; color: #24435E">ミニマル系</span>
+              </div>
+              <div style="padding: 14px 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EEE7DA; display: flex; gap: 24px">
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #6B7885">視聴日</span><span style="font-size: 14px; font-weight: 700; color: #0A2947">2026/08/16</span></div>
+                <div style="display: flex; flex-direction: column; gap: 3px"><span style="font-size: 12px; color: #6B7885">プラットフォーム</span><span style="font-size: 14px; color: #0A2947">Netflix</span></div>
+              </div>
+              <div style="padding: 16px; border-radius: 14px; background: #FFFFFF; border: 1px solid #EEE7DA; font-size: 13.5px; line-height: 1.95; color: #0A2947; text-wrap: pretty">車内の会話だけで関係が変わっていくのがよかった。長さは気にならない。終盤の雪の場面で、ずっと黙っていた人がやっと喋る、その順番が正しく感じられた。</div>
+              <div style="display: flex; flex-direction: column; gap: 9px">
+                <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #6B7885">クレジット</span>
+                <sc-for list="{{ shortCredits }}" as="c" hint-placeholder-count="3">
+                  <div style="display: flex; gap: 12px; font-size: 13px; padding-bottom: 7px; border-bottom: 1px dashed #EEE7DA"><span style="width: 58px; flex: none; color: #6B7885; font-size: 12px">{{ c.role }}</span><span style="color: #0A2947">{{ c.name }}</span></div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ s.isForm }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: none; padding: 6px 18px 12px; display: flex; flex-direction: column; gap: 11px; background: #FFFFFF; border-bottom: 1px solid #EEE7DA">
+              <div style="display: flex; align-items: center; justify-content: space-between">
+                <span class="ms" style="font-size: 22px; color: #6B7885">close</span>
+                <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 16px; color: #0A2947">記録する</span>
+                <span style="font-size: 13px; color: #6B7885">1 / 3</span>
+              </div>
+              <div style="display: flex; gap: 6px">
+                <span style="flex: 1; height: 4px; border-radius: 999px; background: #A2703F"></span>
+                <span style="flex: 1; height: 4px; border-radius: 999px; background: #E8DFCC"></span>
+                <span style="flex: 1; height: 4px; border-radius: 999px; background: #E8DFCC"></span>
+              </div>
+            </div>
+            <div style="flex: 1; min-height: 0; padding: 18px; display: flex; flex-direction: column; gap: 18px; background: #FFFFFF; overflow: hidden">
+              <div style="display: flex; flex-direction: column; gap: 5px">
+                <label style="font-size: 13px; font-weight: 500; color: #0A2947">タイトル<span style="color: #A2432F"> *</span></label>
+                <div style="height: 50px; border-radius: 12px; border: 1.5px solid #A2703F; display: flex; align-items: center; padding: 0 14px; font-size: 16px; color: #0A2947">ドライブ・マイ・カー</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px">
+                <label style="font-size: 13px; font-weight: 500; color: #0A2947">視聴日<span style="color: #A2432F"> *</span></label>
+                <div style="display: flex; gap: 7px">
+                  <span style="padding: 11px 15px; border-radius: 999px; border: 1.5px solid #A2703F; background: #F7EBDD; font-size: 13.5px; font-weight: 700; color: #6E4930">今日</span>
+                  <span style="padding: 11px 15px; border-radius: 999px; border: 1px solid #E8DFCC; background: #FDF9F2; font-size: 13.5px; color: #3D4B5A">昨日</span>
+                  <span style="flex: 1; height: 44px; border-radius: 999px; border: 1px solid #E8DFCC; background: #FDF9F2; display: flex; align-items: center; justify-content: center; gap: 5px; font-size: 13px; color: #3D4B5A"><span class="ms" style="font-size: 18px">calendar_today</span>選ぶ</span>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 7px">
+                <label style="font-size: 13px; font-weight: 500; color: #0A2947">スコア<span style="color: #A2432F"> *</span></label>
+                <div style="display: flex; gap: 8px">
+                  <sc-for list="{{ scorePicker }}" as="sc" hint-placeholder-count="5">
+                    <span style="flex: 1; height: 56px; display: grid; place-items: center; border-radius: 14px; border: {{ sc.border }}; background: {{ sc.bg }}; color: {{ sc.fg }}; font-size: 19px; font-weight: 700">{{ sc.n }}</span>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 7px">
+                <label style="font-size: 13px; font-weight: 500; color: #0A2947">プラットフォーム<span style="color: #A2432F"> *</span></label>
+                <div style="display: flex; flex-wrap: wrap; gap: 7px">
+                  <sc-for list="{{ platformRecent }}" as="p" hint-placeholder-count="6">
+                    <span style="padding: 12px 15px; border-radius: 999px; border: {{ p.border }}; background: {{ p.bg }}; color: {{ p.fg }}; font-size: 13.5px; font-weight: 500">{{ p.name }}</span>
+                  </sc-for>
+                  <span style="padding: 12px 15px; border-radius: 999px; border: 1px dashed #D3D4C0; font-size: 13.5px; color: #3D4B5A">ほかから探す</span>
+                </div>
+              </div>
+            </div>
+            <div style="flex: none; padding: 12px 18px; background: #FFFFFF; border-top: 1px solid #EEE7DA; display: flex; gap: 10px">
+              <div style="flex: none; height: 52px; padding: 0 18px; border-radius: 12px; border: 1px solid #E8DFCC; display: grid; place-items: center; font-size: 14px; color: #0A2947">保存</div>
+              <div style="flex: 1; height: 52px; border-radius: 12px; background: #96663A; color: #FFFFFF; display: flex; align-items: center; justify-content: center; gap: 6px; font-size: 15px; font-weight: 700">つづける<span class="ms" style="font-size: 19px">arrow_forward</span></div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ s.isSheet }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: 1; min-height: 0; position: relative; display: flex; flex-direction: column">
+              <div style="flex: none; padding: 4px 16px 12px; display: flex; flex-direction: column; gap: 12px; background: #F7F0E3; border-bottom: 1px solid #E8DFCC; opacity: 0.5">
+                <div style="display: flex; align-items: center; gap: 10px">
+                  <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 18px; color: #0A2947">Cinelog</span>
+                  <div style="flex: 1"></div>
+                  <span class="ms" style="font-size: 22px; color: #3D4B5A; width: 38px; height: 38px; border-radius: 999px; background: #FFFFFF; display: grid; place-items: center">search</span>
+                </div>
+                <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 22px; color: #0A2947">みた映画</span>
+              </div>
+              <div style="flex: 1; min-height: 0; background: rgba(10,41,71,0.34)"></div>
+              <div style="position: absolute; left: 0; right: 0; bottom: 0; max-height: 78%; border-radius: 22px 22px 0 0; background: #FFFFFF; border-top: 1px solid #EEE7DA; display: flex; flex-direction: column; overflow: hidden; box-shadow: 0 -12px 32px -18px rgba(10,41,71,0.5)">
+                <div style="flex: none; padding: 10px 0 0; display: flex; justify-content: center"><span style="width: 40px; height: 4px; border-radius: 999px; background: #DDD3C2"></span></div>
+                <div style="flex: none; padding: 12px 18px 12px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #F5EEE0">
+                  <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 17px; color: #0A2947">絞り込み</span>
+                  <span style="font-size: 13px; color: #96663A; text-decoration: underline">すべて解除</span>
+                </div>
+                <div style="flex: 1; min-height: 0; padding: 16px 18px; display: flex; flex-direction: column; gap: 18px; overflow: hidden">
+                  <div style="display: flex; flex-direction: column; gap: 8px">
+                    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #6B7885">並び替え</span>
+                    <div style="display: flex; align-items: center; justify-content: space-between; height: 46px; padding: 0 14px; border-radius: 12px; border: 1px solid #E8DFCC; font-size: 14px; color: #0A2947">視聴日が新しい順<span class="ms" style="font-size: 19px; color: #6B7885">expand_more</span></div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 8px">
+                    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #6B7885">スコア</span>
+                    <div style="display: flex; gap: 8px">
+                      <sc-for list="{{ scoreFilter }}" as="sf" hint-placeholder-count="5">
+                        <span style="flex: 1; height: 46px; display: grid; place-items: center; border-radius: 12px; border: {{ sf.border }}; background: {{ sf.bg }}; color: {{ sf.fg }}; font-size: 15px; font-weight: 700">{{ sf.n }}</span>
+                      </sc-for>
+                    </div>
+                  </div>
+                  <div style="display: flex; flex-direction: column; gap: 9px">
+                    <span style="font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #6B7885">雰囲気タグ</span>
+                    <div style="display: flex; flex-wrap: wrap; gap: 7px">
+                      <sc-for list="{{ moodFilter }}" as="mf" hint-placeholder-count="8">
+                        <span style="padding: 10px 13px; border-radius: 999px; border: {{ mf.border }}; background: {{ mf.bg }}; color: {{ mf.fg }}; font-size: 13px">{{ mf.name }}</span>
+                      </sc-for>
+                    </div>
+                  </div>
+                </div>
+                <div style="flex: none; padding: 12px 18px 20px; border-top: 1px solid #F5EEE0">
+                  <div style="height: 52px; border-radius: 12px; background: #96663A; color: #FFFFFF; display: grid; place-items: center; font-size: 15px; font-weight: 700">12件を表示</div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+
+          <sc-if value="{{ s.isAccount }}" hint-placeholder-val="{{ false }}">
+            <div style="flex: none; height: 52px; padding: 0 12px; display: flex; align-items: center; gap: 10px; background: #F7F0E3; border-bottom: 1px solid #E8DFCC">
+              <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 17px; color: #0A2947; padding-left: 6px">アカウント</span>
+            </div>
+            <div style="flex: 1; min-height: 0; padding: 16px 16px 8px; display: flex; flex-direction: column; gap: 14px; overflow: hidden">
+              <div style="display: flex; align-items: center; gap: 13px; padding: 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EEE7DA">
+                <div style="width: 48px; height: 48px; border-radius: 999px; background: #DCE4EC; display: grid; place-items: center; font-size: 18px; font-weight: 700; color: #24435E">M</div>
+                <div style="flex: 1; display: flex; flex-direction: column; gap: 3px">
+                  <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 16px; color: #0A2947">まさや</span>
+                  <span style="font-size: 12.5px; color: #3D4B5A">128本の記録 ・ 今年41本</span>
+                </div>
+              </div>
+              <div style="padding: 18px 16px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EEE7DA; display: flex; flex-direction: column; gap: 16px">
+                <div style="display: flex; flex-direction: column; gap: 5px">
+                  <label style="font-size: 13px; font-weight: 500; color: #0A2947">表示名</label>
+                  <div style="height: 48px; border-radius: 12px; border: 1px solid #E8DFCC; background: #FDF9F2; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 16px; color: #0A2947">まさや<span style="font-size: 12px; color: #6B7885">3 / 100</span></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px">
+                  <label style="font-size: 13px; font-weight: 500; color: #0A2947">メールアドレス</label>
+                  <div style="height: 48px; border-radius: 12px; border: 1.5px solid #A2703F; display: flex; align-items: center; padding: 0 14px; font-size: 15px; color: #0A2947">m.nishimura@example.com</div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 5px">
+                  <label style="font-size: 13px; font-weight: 500; color: #0A2947">パスワード</label>
+                  <div style="height: 48px; border-radius: 12px; border: 1px solid #E8DFCC; background: #FDF9F2; display: flex; align-items: center; justify-content: space-between; padding: 0 14px; font-size: 16px; color: #0A2947">••••••••<span class="ms" style="font-size: 20px; color: #6B7885">visibility</span></div>
+                  <span style="font-size: 12px; color: #6B7885">3項目まとめて更新されます</span>
+                </div>
+                <div style="height: 50px; border-radius: 12px; background: #96663A; color: #FFFFFF; display: grid; place-items: center; font-size: 15px; font-weight: 700">変更を保存</div>
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 2px; border-radius: 16px; background: #FFFFFF; border: 1px solid #EEE7DA; overflow: hidden">
+                <sc-for list="{{ accountRows }}" as="a" hint-placeholder-count="3">
+                  <div style="height: 50px; padding: 0 16px; display: flex; align-items: center; gap: 12px; border-bottom: 1px solid #F5EEE0">
+                    <span class="ms" style="font-size: 20px; color: {{ a.color }}">{{ a.icon }}</span>
+                    <span style="flex: 1; font-size: 14px; color: {{ a.color }}">{{ a.label }}</span>
+                    <span class="ms" style="font-size: 18px; color: #B9BCA6">chevron_right</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+
+        <sc-if value="{{ s.showBar }}" hint-placeholder-val="{{ true }}">
+          <div style="flex: none; height: 72px; padding: 0 6px; background: #FFFFFF; border-top: 1px solid #EEE7DA; display: flex; align-items: stretch">
+            <sc-for list="{{ s.tabs }}" as="t" hint-placeholder-count="3">
+              <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px">
+                <sc-if value="{{ t.isAction }}" hint-placeholder-val="{{ false }}">
+                  <div style="height: 48px; padding: 0 17px; border-radius: 999px; background: #96663A; color: #FFFFFF; display: flex; align-items: center; gap: 5px; font-size: 13px; font-weight: 700; white-space: nowrap; box-shadow: 0 6px 14px -8px rgba(110,73,48,0.8)"><span class="ms" style="font-size: 21px">add</span>記録する</div>
+                </sc-if>
+                <sc-if value="{{ t.isTab }}" hint-placeholder-val="{{ true }}">
+                  <span class="ms" style="font-size: 25px; color: {{ t.color }}">{{ t.icon }}</span>
+                  <span style="font-size: 12px; font-weight: {{ t.weight }}; color: {{ t.color }}; white-space: nowrap">{{ t.label }}</span>
+                </sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <div style="flex: none; height: 24px; background: {{ s.homeBg }}; display: grid; place-items: center">
+          <span style="width: 134px; height: 5px; border-radius: 999px; background: {{ s.homeFg }}"></span>
+        </div>
+      </div>
+
+      <span style="width: 390px; font-size: 12px; line-height: 1.8; color: #3D4B5A">{{ s.note }}</span>
+    </div>
+  </sc-for>
+</section>
+
+<section style="padding: 0 56px 88px; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-start">
+  <div style="width: 620px; padding: 24px; border-radius: 18px; background: #FFFFFF; border: 1px solid #EEE7DA; display: flex; flex-direction: column; gap: 14px">
+    <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 17px; color: #0A2947">アプリ版だけの決めごと</span>
+    <sc-for list="{{ appRules }}" as="r" hint-placeholder-count="6">
+      <div style="display: flex; gap: 12px; align-items: flex-start; padding-bottom: 10px; border-bottom: 1px dashed #EEE7DA">
+        <span style="flex: none; width: 112px; font-size: 12px; font-weight: 700; color: #6E4930">{{ r.key }}</span>
+        <span style="flex: 1; font-size: 12.5px; line-height: 1.8; color: #3D4B5A">{{ r.desc }}</span>
+      </div>
+    </sc-for>
+  </div>
+  <div style="width: 340px; display: flex; flex-direction: column; gap: 16px">
+    <div style="padding: 22px; border-radius: 18px; background: #F7F0E3; border: 1px solid #E8DFCC; display: flex; flex-direction: column; gap: 11px">
+      <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 16px; color: #0A2947">3パターンの違い（まとめ）</span>
+      <sc-for list="{{ compare }}" as="c" hint-placeholder-count="5">
+        <div style="display: flex; flex-direction: column; gap: 3px; padding-bottom: 9px; border-bottom: 1px dashed #E8DFCC">
+          <span style="font-size: 12.5px; font-weight: 700; color: #0A2947">{{ c.item }}</span>
+          <span style="font-size: 12px; line-height: 1.7; color: #3D4B5A">{{ c.desc }}</span>
+        </div>
+      </sc-for>
+    </div>
+    <div style="padding: 22px; border-radius: 18px; background: #FFFFFF; border: 1px solid #EEE7DA; display: flex; flex-direction: column; gap: 9px">
+      <span style="font-family: 'Zen Maru Gothic', sans-serif; font-weight: 700; font-size: 16px; color: #0A2947">共通しているもの</span>
+      <span style="font-size: 12.5px; line-height: 1.85; color: #3D4B5A">配色・タイポ・角丸・カード（6a）・ポスター172px・入力欄の状態・スコアの見せ方は3パターンで完全に同じです。作り分けているのは<strong style="color:#0A2947">ナビゲーションと画面の高さの使い方だけ</strong>なので、実装は1つのコードで足ります。</span>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  chip(name, on) {
+    return on
+      ? { name: name, border: "1.5px solid #A2703F", bg: "#F7EBDD", fg: "#6E4930" }
+      : { name: name, border: "1px solid #E8DFCC", bg: "#FFFFFF", fg: "#0A2947" };
+  }
+
+  tab(icon, label, on) {
+    return { isTab: true, isAction: false, icon: icon, label: label, color: on ? "#96663A" : "#5A6675", weight: on ? "700" : "400" };
+  }
+
+  renderVals() {
+    const recs = [
+      { title: "ドライブ・マイ・カー", year: 2021, platform: "Netflix", watchedShort: "8/16", score: 5, hasPoster: true, posterBg: "#2E4A63" },
+      { title: "パターソン", year: 2016, platform: "mubi", watchedShort: "8/14", score: 4, hasPoster: false },
+      { title: "セブン", year: 1995, platform: "Blu-ray", watchedShort: "8/11", score: 4, hasPoster: true, posterBg: "#3A4A52" },
+      { title: "東京物語", year: 1953, platform: "Criterion", watchedShort: "8/9", score: 5, hasPoster: false },
+      { title: "マッドマックス", year: 2015, platform: "映画館", watchedShort: "7/28", score: 5, hasPoster: true, posterBg: "#6B4630" },
+      { title: "千と千尋の神隠し", year: 2001, platform: "BS放送", watchedShort: "7/25", score: 4, hasPoster: false }
+    ];
+
+    const tabsList = [this.tab("grid_view", "みた映画", true), { isAction: true, isTab: false }, this.tab("person", "アカウント", false)];
+    const tabsAccount = [this.tab("grid_view", "みた映画", false), { isAction: true, isTab: false }, this.tab("person", "アカウント", true)];
+
+    const light = { shellBg: "#FDF9F2", statusBg: "#F7F0E3", statusFg: "#0A2947", homeBg: "#FFFFFF", homeFg: "#C9C0B2" };
+    const form = { shellBg: "#FFFFFF", statusBg: "#FFFFFF", statusFg: "#0A2947", homeBg: "#FFFFFF", homeFg: "#C9C0B2" };
+    const dark = { shellBg: "#FDF9F2", statusBg: "#1B3247", statusFg: "#FFFFFF", homeBg: "#FFFFFF", homeFg: "#C9C0B2" };
+
+    return {
+      months: [
+        { label: "2026年8月", count: 4, records: recs.slice(0, 4) },
+        { label: "2026年7月", count: 2, records: recs.slice(4, 6) }
+      ],
+      screens: [
+        Object.assign({ no: "③", name: "記録一覧（トップ）", isList: true, isDetail: false, isForm: false, isSheet: false, isAccount: false, showBar: true, tabs: tabsList,
+          note: "本文640px。ファーストビューでは月見出し1つ＋カード2枚が完全に見え、3枚目からがフォールドで切れます（カード1枚312px）。下端でカードが途中から見えているのは実機の正常な姿で、続きがあることの合図でもあります。アプリ版の利点は「多く入る」ことではなく、ステータスバー54pxだけで済む＝タブを常時出したままでもウェブ版と同じ枚数が見えることでした。" }, light),
+        Object.assign({ no: "④", name: "記録の詳細（ポスター全面ヘッダー）", isDetail: true, isList: false, isForm: false, isSheet: false, isAccount: false, showBar: false, tabs: tabsList,
+          note: "アプリだけポスターを300pxの全面ヘッダーにし、スクロールで畳みます。6c を却下した理由（画質）はここでは当てはまりません。1件だけを大きく見せる画面なので、粗ければユーザー自身がそう感じるだけで、グリッド全体がまだらになる問題は起きません。画像が無い記録ではウェブ版と同じ左右分割に切り替えます。" }, dark),
+        Object.assign({ no: "⑤", name: "作成フォーム（ステップ1）", isForm: true, isList: false, isDetail: false, isSheet: false, isAccount: false, showBar: false, tabs: tabsList,
+          note: "全画面シートで開き、下部に保存を固定。視聴日は「今日／昨日」を先に置いてカレンダーを開かせません。入力文字は16px、スコアは56px、チップは44px以上。" }, form),
+        Object.assign({ no: "③-2", name: "絞り込みシート（1b のサイドの代わり）", isSheet: true, isList: false, isDetail: false, isForm: false, isAccount: false, showBar: false, tabs: tabsList,
+          note: "PCの左サイドはここに畳まれます。ウェブ版も同じシート。最下部の主ボタンに結果件数を出すので、適用前に効果が分かります。" }, light),
+        Object.assign({ no: "⑦", name: "アカウント", isAccount: true, isList: false, isDetail: false, isForm: false, isSheet: false, showBar: true, tabs: tabsAccount,
+          note: "アプリではタブの行き先なので、上部に本人の情報と記録数を置きます。退会は下のリストから別画面へ。" }, light)
+      ],
+      shortCredits: [
+        { role: "監督", name: "濱口竜介" },
+        { role: "キャスト", name: "西島秀俊" },
+        { role: "キャスト", name: "三浦透子" }
+      ],
+      scorePicker: [1, 2, 3, 4, 5].map(n => n === 5
+        ? { n: n, border: "1.5px solid #A2703F", bg: "#F7EBDD", fg: "#6E4930" }
+        : { n: n, border: "1px solid #E8DFCC", bg: "#FDF9F2", fg: "#3D4B5A" }),
+      scoreFilter: [1, 2, 3, 4, 5].map(n => (n === 4 || n === 5)
+        ? { n: n, border: "1.5px solid #A2703F", bg: "#F7EBDD", fg: "#6E4930" }
+        : { n: n, border: "1px solid #E8DFCC", bg: "#FFFFFF", fg: "#3D4B5A" }),
+      moodFilter: ["切ない系", "ノスタルジック系", "ダーク系", "爽快系", "ミニマル系", "壮大系", "ほのぼの系", "感動系"]
+        .map(n => this.chip(n, n === "切ない系" || n === "ノスタルジック系")),
+      platformRecent: ["Netflix", "映画館", "mubi", "U-NEXT", "Disney+"].map(n => this.chip(n, n === "Netflix")),
+      accountRows: [
+        { icon: "dark_mode", label: "ダークモード", color: "#0A2947" },
+        { icon: "logout", label: "ログアウト", color: "#0A2947" },
+        { icon: "person_remove", label: "退会する", color: "#8A3423" }
+      ],
+      appRules: [
+        { key: "下部タブ", desc: "常時表示。72px＋ホームバー24px。ブラウザのツールバー88pxが無いので、タブを出したままでもウェブ版と同じ枚数が見えます。" },
+        { key: "高さの内訳", desc: "844 −ステータス54 −ヘッダー52 −タブ72 −ホームバー24 ＝ 本文642px。ウェブ版は636pxなので、両者はほぼ同じ。差はタブを隠すかどうかに出ます。" },
+        { key: "詳細ヘッダー", desc: "ポスターを300pxの全面表示にし、スクロールで52pxのバーに畳みます。画像が無い記録は左右分割に切り替え。" },
+        { key: "引いて更新", desc: "一覧の最上部で下に引くと再取得。ブラウザ版は標準の再読込があるので入れません。" },
+        { key: "戻る", desc: "iOSは左端スワイプ、Androidは戻るジェスチャに対応。詳細・フォームではタブを出さず、階層を明確にします。" },
+        { key: "入力文字", desc: "16px以上（ウェブ版と同じ規則を継承）。ラベルは13px、補助は12pxが下限。" },
+        { key: "ステータスバー", desc: "画面によって明暗が変わるため、文字色を明示的に切り替えます（詳細のポスターヘッダーだけ白文字）。" }
+      ],
+      compare: [
+        { item: "下部バー", desc: "PC：なし（ヘッダーのみ）／ウェブ：スクロールで隠れる／アプリ：常時表示" },
+        { item: "一覧の絞り込み", desc: "PC：左サイド常時（1b）／ウェブ・アプリ：ボタンからシート" },
+        { item: "カードの列数", desc: "PC：5列／ウェブ・アプリ：2列。ポスターはどれも約172px" },
+        { item: "ファーストビュー", desc: "PC：月見出し2つ＋10枚／ウェブ・アプリ：月見出し1つ＋2枚が完全に見え、3枚目から下は切れる（本文636〜640px、カード1枚312px）" },
+        { item: "詳細のポスター", desc: "PC：左に232px／ウェブ：116pxの横並び／アプリ：300pxの全面ヘッダー" },
+        { item: "作成フォーム", desc: "PC：640pxのモーダル／ウェブ・アプリ：全画面シート。どれも3ステップ" }
+      ]
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,20 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { Input } from "@/components/atoms/input";
-import { CountedInput } from "@/components/molecules/counted-input";
 import { FormField } from "@/components/molecules/form-field";
+import { MovieTitleField } from "@/components/molecules/movie-title-field";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { toDateInputValue } from "@/lib/date/format-date";
+import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { cn } from "@/lib/style/cn";
-import { interpolate } from "@/lib/text/interpolate";
-import { type Platform, platformSchema, scores } from "@/schemas/record/enums";
+import type { MovieSuggestion } from "@/schemas/movie/movie";
+import { platformSchema, scores } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordBasicsFieldsProps = {
   values: RecordFormValues;
-  frequentPlatforms: Platform[];
+  title: string;
+  onTitleChange: (title: string) => void;
+  searchMovies: (title: string) => Promise<MovieSuggestion[]>;
+  onMovieSelect: (movieId: string) => void;
+  errors?: RecordFieldErrors;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   counterTemplate: string;
@@ -28,20 +33,23 @@ function daysAgo(days: number) {
 
 export function RecordBasicsFields({
   values,
-  frequentPlatforms,
+  title,
+  onTitleChange,
+  searchMovies,
+  onMovieSelect,
+  errors,
   dict,
   enums,
   counterTemplate,
 }: RecordBasicsFieldsProps) {
-  const [watchedAt, setWatchedAt] = useState(values.watchedAt);
-  const [showAllPlatforms, setShowAllPlatforms] = useState(false);
-  const pinned =
-    values.platform && !frequentPlatforms.includes(values.platform)
-      ? [...frequentPlatforms, values.platform]
-      : frequentPlatforms;
-  const platforms = showAllPlatforms
-    ? [...pinned, ...platformSchema.options.filter((p) => !pinned.includes(p))]
-    : pinned;
+  const [watchedAt, setWatchedAt] = useState("");
+  useEffect(() => {
+    setWatchedAt(
+      values.watchedAt === ""
+        ? daysAgo(0)
+        : toDateInputValue(new Date(values.watchedAt)),
+    );
+  }, [values.watchedAt]);
   const quickDates = [
     { label: dict.today, value: daysAgo(0) },
     { label: dict.yesterday, value: daysAgo(1) },
@@ -51,23 +59,30 @@ export function RecordBasicsFields({
     <div className="flex flex-col gap-4.5">
       <FormField
         label={dict.title}
+        error={fieldError(errors, dict, "title")}
+        hint={dict.titleHint}
         htmlFor="title"
         required
         requiredLabel={dict.required}
       >
-        <CountedInput
+        <MovieTitleField
           id="title"
           name="title"
           required
           maxLength={255}
-          defaultValue={values.title}
+          value={title}
+          onValueChange={onTitleChange}
+          search={searchMovies}
+          onSelect={onMovieSelect}
           counterTemplate={counterTemplate}
+          listLabel={dict.movieSuggestions}
         />
       </FormField>
 
       <div className="grid gap-4.5 md:grid-cols-2 md:gap-4">
         <FormField
           label={dict.watchedAt}
+          error={fieldError(errors, dict, "watchedAt")}
           htmlFor="watchedAt"
           required
           requiredLabel={dict.required}
@@ -102,6 +117,7 @@ export function RecordBasicsFields({
 
         <FormField
           label={dict.score}
+          error={fieldError(errors, dict, "score")}
           required
           requiredLabel={dict.required}
           hint={dict.scoreHint}
@@ -133,16 +149,16 @@ export function RecordBasicsFields({
 
       <FormField
         label={dict.platform}
+        error={fieldError(errors, dict, "platform")}
         required
         requiredLabel={dict.required}
-        hint={dict.platformHint}
       >
         <div
           className="flex flex-wrap gap-1.75"
           role="radiogroup"
           aria-label={dict.platform}
         >
-          {platforms.map((platform) => (
+          {platformSchema.options.map((platform) => (
             <ChoiceChip
               key={platform}
               type="radio"
@@ -155,17 +171,6 @@ export function RecordBasicsFields({
               {enums.platform[platform]}
             </ChoiceChip>
           ))}
-          <button
-            type="button"
-            onClick={() => setShowAllPlatforms(!showAllPlatforms)}
-            className="h-10 rounded-full border border-dash-line border-dashed px-3.25 text-[13px] text-foreground-sub hover:text-foreground md:h-9.5"
-          >
-            {showAllPlatforms
-              ? dict.fewerPlatforms
-              : interpolate(dict.morePlatforms, {
-                  count: platformSchema.options.length,
-                })}
-          </button>
         </div>
       </FormField>
     </div>

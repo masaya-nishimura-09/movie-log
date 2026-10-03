@@ -2,16 +2,27 @@
 
 import { ArrowLeft, ArrowRight, X } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import {
+  type FormEvent,
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
+import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { useMovieAssist } from "@/components/molecules/movie-title-field";
 import { RecordBasicsFields } from "@/components/organisms/record-basics-fields";
 import { RecordImpressionFields } from "@/components/organisms/record-impression-fields";
 import { RecordMovieFields } from "@/components/organisms/record-movie-fields";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { startOfLocalDay } from "@/lib/date/start-of-local-day";
+import { buildLanguageOptions } from "@/lib/record/language-options";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
-import type { Platform } from "@/schemas/record/enums";
+import type { MovieSuggestion, MovieValues } from "@/schemas/movie/movie";
 import type {
   RecordFormValues,
   SelectOption,
@@ -19,8 +30,14 @@ import type {
 
 type RecordCreateFormProps = {
   lang: Locale;
+  action: (
+    previous: ActionResult<never> | undefined,
+    formData: FormData,
+  ) => Promise<ActionResult<never>>;
+  searchMovies: (title: string) => Promise<MovieSuggestion[]>;
+  getMovie: (movieId: string) => Promise<MovieValues | undefined>;
+  uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
   values: RecordFormValues;
-  frequentPlatforms: Platform[];
   languageOptions: SelectOption[];
   maxReleaseYear: number;
   dict: Dictionary["recordForm"];
@@ -28,10 +45,29 @@ type RecordCreateFormProps = {
   counterTemplate: string;
 };
 
+const fieldSteps: Record<string, number> = {
+  title: 0,
+  watchedAt: 0,
+  score: 0,
+  platform: 0,
+  releaseYear: 1,
+  runtime: 1,
+  language: 1,
+  countries: 1,
+  genres: 1,
+  credits: 1,
+  posterUrl: 1,
+  moodTags: 2,
+  memo: 2,
+};
+
 export function RecordCreateForm({
   lang,
+  action,
+  searchMovies,
+  getMovie,
+  uploadPoster,
   values,
-  frequentPlatforms,
   languageOptions,
   maxReleaseYear,
   dict,
@@ -40,9 +76,48 @@ export function RecordCreateForm({
 }: RecordCreateFormProps) {
   const [step, setStep] = useState(0);
   const steps = [dict.stepBasics, dict.stepMovieInfo, dict.stepImpression];
+  const [state, formAction, pending] = useActionState(action, undefined);
+  const movie = useMovieAssist(values, getMovie);
+  const movieLanguageOptions =
+    movie.version === 0
+      ? languageOptions
+      : buildLanguageOptions(lang, movie.values.language, dict.languageUnknown);
+  const failure = state?.success === false ? state : undefined;
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const fields = Object.keys(failure?.errors ?? {});
+    const steps = fields.map((field) => fieldSteps[field] ?? 0);
+    if (steps.length > 0) setStep(Math.min(...steps));
+  }, [failure]);
+
+  const goNext = () => {
+    const invalid = stepRefs.current[step]?.querySelector<HTMLInputElement>(
+      "input:invalid, textarea:invalid",
+    );
+    if (invalid) {
+      invalid.reportValidity();
+      return;
+    }
+    setStep(step + 1);
+  };
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    formData.set(
+      "watchedAt",
+      startOfLocalDay(String(formData.get("watchedAt") ?? "")),
+    );
+    startTransition(() => formAction(formData));
+  };
 
   return (
-    <form className="flex min-h-dvh flex-col bg-card md:mx-auto md:my-10 md:min-h-0 md:w-160 md:overflow-hidden md:rounded-[18px] md:border">
+    <form
+      onSubmit={submit}
+      noValidate
+      className="flex min-h-dvh flex-col bg-card md:mx-auto md:my-10 md:min-h-0 md:w-160 md:overflow-hidden md:rounded-[18px] md:border"
+    >
       <header className="sticky top-0 z-10 flex flex-col gap-3.5 border-b bg-card px-4.5 pt-4 pb-3.5 md:static md:border-none md:px-6.5 md:pt-5.5 md:pb-0">
         <div className="flex items-center justify-between">
           <h1 className="font-bold text-[19px] text-foreground">
@@ -92,16 +167,43 @@ export function RecordCreateForm({
       </header>
 
       <div className="flex-1 px-4.5 py-5.5 md:px-6.5 md:pb-2">
-        <div hidden={step !== 0}>
+        {failure && (
+          <p
+            role="alert"
+            className="mb-4.5 rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
+          >
+            {failure.messageKey === "notFound"
+              ? dict.notFound
+              : failure.messageKey === "invalidInput"
+                ? dict.invalidInput
+                : dict.unexpectedError}
+          </p>
+        )}
+        <div
+          hidden={step !== 0}
+          ref={(el) => {
+            stepRefs.current[0] = el;
+          }}
+        >
           <RecordBasicsFields
+            errors={failure?.errors}
+            title={movie.title}
+            onTitleChange={movie.setTitle}
+            searchMovies={searchMovies}
+            onMovieSelect={movie.select}
             values={values}
-            frequentPlatforms={frequentPlatforms}
             dict={dict}
             enums={enums}
             counterTemplate={counterTemplate}
           />
         </div>
-        <div hidden={step !== 1} className="flex flex-col gap-4.5">
+        <div
+          hidden={step !== 1}
+          ref={(el) => {
+            stepRefs.current[1] = el;
+          }}
+          className="flex flex-col gap-4.5"
+        >
           <div className="flex items-baseline gap-2">
             <h2 className="font-bold text-base text-foreground">
               {dict.stepMovieInfo}
@@ -111,15 +213,24 @@ export function RecordCreateForm({
             </span>
           </div>
           <RecordMovieFields
+            errors={failure?.errors}
+            key={movie.version}
             lang={lang}
-            values={values}
-            languageOptions={languageOptions}
+            values={movie.values}
+            languageOptions={movieLanguageOptions}
             maxReleaseYear={maxReleaseYear}
+            uploadPoster={uploadPoster}
             dict={dict}
             enums={enums}
           />
         </div>
-        <div hidden={step !== 2} className="flex flex-col gap-4.5">
+        <div
+          hidden={step !== 2}
+          ref={(el) => {
+            stepRefs.current[2] = el;
+          }}
+          className="flex flex-col gap-4.5"
+        >
           <div className="flex items-baseline gap-2">
             <h2 className="font-bold text-base text-foreground">
               {dict.impressionHeading}
@@ -129,6 +240,7 @@ export function RecordCreateForm({
             </span>
           </div>
           <RecordImpressionFields
+            errors={failure?.errors}
             values={values}
             dict={dict}
             enums={enums}
@@ -138,62 +250,35 @@ export function RecordCreateForm({
       </div>
 
       <footer className="sticky bottom-0 flex items-center gap-2 border-t bg-card px-4.5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:static md:mx-6.5 md:mb-6.5 md:border-secondary md:px-0 md:pt-2 md:pb-0">
-        {step === 0 && (
-          <>
-            <span className="mr-auto hidden text-[12.5px] text-foreground-sub md:inline">
-              {dict.canSaveHere}
-            </span>
-            <Button type="button" variant="outline" className="md:px-4">
-              <span className="md:hidden">{dict.saveShort}</span>
-              <span className="hidden md:inline">{dict.saveAndFinish}</span>
-            </Button>
-            <Button
-              type="button"
-              onClick={() => setStep(1)}
-              className="h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
-            >
-              {dict.next}
-              <ArrowRight className="size-4.5" aria-hidden />
-            </Button>
-          </>
+        {step > 0 && (
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={() => setStep(step - 1)}
+          >
+            <ArrowLeft className="size-4.5" aria-hidden />
+            {dict.back}
+          </Button>
         )}
-        {step === 1 && (
-          <>
-            <Button type="button" variant="ghost" onClick={() => setStep(0)}>
-              <ArrowLeft className="size-4.5" aria-hidden />
-              {dict.back}
-            </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              onClick={() => setStep(2)}
-              className="ml-auto"
-            >
-              {dict.skip}
-            </Button>
-            <Button
-              type="button"
-              onClick={() => setStep(2)}
-              className="h-12 md:h-11 md:px-4.5"
-            >
-              {dict.next}
-              <ArrowRight className="size-4.5" aria-hidden />
-            </Button>
-          </>
-        )}
-        {step === 2 && (
-          <>
-            <Button type="button" variant="ghost" onClick={() => setStep(1)}>
-              <ArrowLeft className="size-4.5" aria-hidden />
-              {dict.back}
-            </Button>
-            <Button
-              type="button"
-              className="ml-auto h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
-            >
-              {dict.save}
-            </Button>
-          </>
+        {step < steps.length - 1 ? (
+          <Button
+            key="next"
+            type="button"
+            onClick={goNext}
+            className="ml-auto h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
+          >
+            {dict.next}
+            <ArrowRight className="size-4.5" aria-hidden />
+          </Button>
+        ) : (
+          <Button
+            key="save"
+            type="submit"
+            disabled={pending}
+            className="ml-auto h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
+          >
+            {dict.save}
+          </Button>
         )}
       </footer>
     </form>

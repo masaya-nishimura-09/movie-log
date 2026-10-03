@@ -1,4 +1,8 @@
+"use client";
+
 import { Trash2 } from "lucide-react";
+import { useActionState } from "react";
+import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import {
   AlertDialog,
@@ -11,21 +15,29 @@ import {
   AlertDialogTrigger,
 } from "@/components/molecules/alert-dialog";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import type { Locale } from "@/i18n/locales";
+import { formatDate } from "@/lib/date/format-date";
 import { interpolate } from "@/lib/text/interpolate";
 
 type DeleteRecordDialogProps = {
+  action: () => Promise<ActionResult<never>>;
   title: string;
-  watchedLabel: string;
+  watchedAt: string;
+  lang: Locale;
   triggerLabel: string;
   dict: Dictionary["deleteRecord"];
 };
 
 export function DeleteRecordDialog({
+  action,
   title,
-  watchedLabel,
+  watchedAt,
+  lang,
   triggerLabel,
   dict,
 }: DeleteRecordDialogProps) {
+  const [state, formAction, pending] = useActionState(action, undefined);
+
   return (
     <AlertDialog>
       <AlertDialogTrigger
@@ -43,18 +55,33 @@ export function DeleteRecordDialog({
       </AlertDialogTrigger>
       <AlertDialogContent className="rounded-[18px] p-6">
         <AlertDialogHeader className="text-left">
-          <AlertDialogTitle className="font-bold font-heading text-[17px]">
+          <AlertDialogTitle className="font-bold text-[17px]">
             {dict.title}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-[13px] text-foreground-sub leading-relaxed">
-            {interpolate(dict.description, { title, date: watchedLabel })}
+            {interpolate(dict.description, {
+              title,
+              date: formatDate(watchedAt, lang, "medium"),
+            })}
           </AlertDialogDescription>
         </AlertDialogHeader>
+        {state?.success === false && (
+          <p role="alert" className="text-destructive-foreground text-sm">
+            {dict.unexpectedError}
+          </p>
+        )}
         <AlertDialogFooter>
           <AlertDialogCancel>{dict.cancel}</AlertDialogCancel>
-          <Button type="button" variant="danger">
-            {dict.confirm}
-          </Button>
+          <form action={formAction}>
+            <Button
+              type="submit"
+              variant="danger"
+              disabled={pending}
+              className="w-full"
+            >
+              {dict.confirm}
+            </Button>
+          </form>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>

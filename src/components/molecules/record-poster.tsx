@@ -40,18 +40,18 @@ export function RecordPoster({
     >
       {posterUrl === "" ? (
         <div className="flex h-full flex-col justify-between bg-header p-3.25">
-          <span className="font-mono text-[11px] text-accent-foreground tracking-[0.08em]">
+          <span className="text-[11px] text-accent-foreground tracking-[0.08em]">
             {year}
           </span>
           <span
             className={cn(
-              "text-pretty font-bold font-heading text-foreground leading-[1.3]",
+              "text-pretty font-bold text-foreground leading-[1.3]",
               titleSize,
             )}
           >
             {title}
           </span>
-          <span className="truncate font-mono text-[11px] text-foreground-sub tracking-[0.04em]">
+          <span className="truncate text-[11px] text-foreground-sub tracking-[0.04em]">
             {platformLabel}
           </span>
         </div>
@@ -61,6 +61,7 @@ export function RecordPoster({
           alt=""
           fill
           sizes={sizes}
+          unoptimized={!posterUrl.startsWith("https://image.tmdb.org/")}
           className="object-cover"
         />
       )}

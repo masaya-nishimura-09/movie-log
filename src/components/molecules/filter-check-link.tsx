@@ -6,15 +6,9 @@ type FilterCheckLinkProps = {
   href: string;
   active: boolean;
   label: string;
-  count: number;
 };
 
-export function FilterCheckLink({
-  href,
-  active,
-  label,
-  count,
-}: FilterCheckLinkProps) {
+export function FilterCheckLink({ href, active, label }: FilterCheckLinkProps) {
   return (
     <Link
       href={href}
@@ -34,9 +28,6 @@ export function FilterCheckLink({
         {active && <Check className="size-3" strokeWidth={3} aria-hidden />}
       </span>
       <span className="flex-1 truncate">{label}</span>
-      <span className="text-muted-foreground text-xs tabular-nums">
-        {count}
-      </span>
     </Link>
   );
 }

@@ -1,40 +1,31 @@
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { GenreTag } from "@/components/atoms/genre-tag";
+import { LocalDate } from "@/components/atoms/local-date";
 import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { RecordPoster } from "@/components/molecules/record-poster";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { formatDate } from "@/lib/date/format-date";
 import { languageName } from "@/lib/record/language-options";
 import { interpolate } from "@/lib/text/interpolate";
+import { interpolateNode } from "@/lib/text/interpolate-node";
 import type { MovieRecord } from "@/schemas/record/record";
 
 type RecordDetailProps = {
   lang: Locale;
   record: MovieRecord;
-  newer: MovieRecord | undefined;
-  older: MovieRecord | undefined;
   dict: Dictionary;
 };
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <h2 className="font-bold font-sans text-muted-foreground text-xs tracking-[0.08em]">
+    <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">
       {children}
     </h2>
   );
 }
 
-export function RecordDetail({
-  lang,
-  record,
-  newer,
-  older,
-  dict,
-}: RecordDetailProps) {
+export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   const d = dict.recordDetail;
   const regionNames = new Intl.DisplayNames(lang, { type: "region" });
   const year =
@@ -63,11 +54,21 @@ export function RecordDetail({
     <dl className="flex gap-6 rounded-2xl border bg-card p-4 xl:flex-col xl:gap-4 xl:p-5">
       <div className="flex flex-col gap-1">
         <dt className="text-muted-foreground text-xs">{d.watchedAt}</dt>
-        <dd className="font-bold font-heading text-[15px] text-foreground xl:text-[19px]">
-          {formatDate(record.watchedAt, lang, "longDate")}
-          <span className="font-medium font-sans text-[13px] text-foreground-sub">
-            {interpolate(d.weekday, {
-              weekday: formatDate(record.watchedAt, lang, "weekday"),
+        <dd className="font-bold text-[15px] text-foreground xl:text-[19px]">
+          <LocalDate
+            date={record.watchedAt}
+            locale={lang}
+            dateStyle="longDate"
+          />
+          <span className="font-medium text-[13px] text-foreground-sub">
+            {interpolateNode(d.weekday, {
+              weekday: (
+                <LocalDate
+                  date={record.watchedAt}
+                  locale={lang}
+                  dateStyle="weekday"
+                />
+              ),
             })}
           </span>
         </dd>
@@ -78,51 +79,6 @@ export function RecordDetail({
         <dd className="text-[15px] text-foreground">{platformLabel}</dd>
       </div>
     </dl>
-  );
-
-  const adjacent = (newer || older) && (
-    <nav
-      aria-label={d.adjacent}
-      className="flex flex-col gap-2.25 rounded-2xl border border-input bg-header px-5 py-4.5"
-    >
-      <h2 className="font-bold font-sans text-[12.5px] text-foreground">
-        {d.adjacent}
-      </h2>
-      {newer && (
-        <Link
-          href={`/${lang}/records/${newer.recordId}`}
-          className="flex items-center gap-2 text-[12.5px] text-foreground-sub hover:text-foreground"
-        >
-          <ChevronLeft
-            className="size-4.25 shrink-0 text-muted-foreground"
-            aria-hidden
-          />
-          <span className="truncate">
-            {interpolate(d.adjacentItem, {
-              title: newer.title,
-              date: formatDate(newer.watchedAt, lang, "short"),
-            })}
-          </span>
-        </Link>
-      )}
-      {older && (
-        <Link
-          href={`/${lang}/records/${older.recordId}`}
-          className="flex items-center gap-2 text-[12.5px] text-foreground-sub hover:text-foreground"
-        >
-          <span className="truncate">
-            {interpolate(d.adjacentItem, {
-              title: older.title,
-              date: formatDate(older.watchedAt, lang, "short"),
-            })}
-          </span>
-          <ChevronRight
-            className="size-4.25 shrink-0 text-muted-foreground"
-            aria-hidden
-          />
-        </Link>
-      )}
-    </nav>
   );
 
   return (
@@ -155,10 +111,20 @@ export function RecordDetail({
         </div>
         <div className="hidden flex-col gap-1 px-0.5 text-muted-foreground text-xs md:flex">
           <span>
-            {d.createdAt} {formatDate(record.createdAt, lang, "dateTime")}
+            {d.createdAt}{" "}
+            <LocalDate
+              date={record.createdAt}
+              locale={lang}
+              dateStyle="dateTime"
+            />
           </span>
           <span>
-            {d.updatedAt} {formatDate(record.updatedAt, lang, "dateTime")}
+            {d.updatedAt}{" "}
+            <LocalDate
+              date={record.updatedAt}
+              locale={lang}
+              dateStyle="dateTime"
+            />
           </span>
         </div>
       </div>
@@ -218,12 +184,12 @@ export function RecordDetail({
               {record.credits.map((credit, index) => (
                 <div
                   key={`${credit.creditRole}-${credit.personName}-${index}`}
-                  className="flex items-baseline gap-3 border-b border-dashed pb-2.25"
+                  className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
                 >
-                  <dt className="min-w-15.5 shrink-0 whitespace-nowrap text-muted-foreground text-xs">
+                  <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
                     {dict.enums.creditRole[credit.creditRole]}
                   </dt>
-                  <dd className="text-foreground text-sm">
+                  <dd className="text-right text-foreground text-sm">
                     {credit.personName}
                   </dd>
                 </div>
@@ -231,14 +197,9 @@ export function RecordDetail({
             </dl>
           </section>
         )}
-
-        {adjacent && <div className="xl:hidden">{adjacent}</div>}
       </div>
 
-      <div className="hidden flex-col gap-3.5 xl:flex">
-        {watchedCard}
-        {adjacent}
-      </div>
+      <div className="hidden flex-col gap-3.5 xl:flex">{watchedCard}</div>
     </article>
   );
 }

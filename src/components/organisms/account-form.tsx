@@ -1,3 +1,7 @@
+"use client";
+
+import { type FormEvent, startTransition, useActionState } from "react";
+import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
 import { CountedInput } from "@/components/molecules/counted-input";
@@ -7,6 +11,10 @@ import type { Dictionary } from "@/i18n/get-dictionary";
 import type { User } from "@/schemas/user/user";
 
 type AccountFormProps = {
+  action: (
+    previous: ActionResult<null> | undefined,
+    formData: FormData,
+  ) => Promise<ActionResult<null>>;
   user: User;
   dict: Dictionary["account"];
   passwordDict: Dictionary["passwordInput"];
@@ -14,14 +22,46 @@ type AccountFormProps = {
 };
 
 export function AccountForm({
+  action,
   user,
   dict,
   passwordDict,
   counterTemplate,
 }: AccountFormProps) {
+  const [state, formAction, pending] = useActionState(action, undefined);
+  const failure = state?.success === false ? state : undefined;
+  const message = (key: string) =>
+    key in dict ? dict[key as keyof typeof dict] : dict.unexpectedError;
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => formAction(formData));
+  };
+
   return (
-    <form className="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-5.5">
-      <FormField label={dict.username} htmlFor="username">
+    <form
+      onSubmit={submit}
+      className="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-5.5"
+    >
+      {failure && !failure.errors && (
+        <p
+          role="alert"
+          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
+        >
+          {message(failure.messageKey)}
+        </p>
+      )}
+      {state?.success && (
+        <output className="rounded-lg bg-secondary px-3.5 py-2.5 text-foreground text-sm">
+          {dict.saved}
+        </output>
+      )}
+      <FormField
+        label={dict.username}
+        htmlFor="username"
+        error={failure?.errors?.username && dict.usernameError}
+      >
         <CountedInput
           id="username"
           name="username"
@@ -31,7 +71,11 @@ export function AccountForm({
           counterTemplate={counterTemplate}
         />
       </FormField>
-      <FormField label={dict.email} htmlFor="email">
+      <FormField
+        label={dict.email}
+        htmlFor="email"
+        error={failure?.errors?.email && dict.emailError}
+      >
         <Input
           id="email"
           name="email"
@@ -44,11 +88,13 @@ export function AccountForm({
         label={dict.password}
         htmlFor="password"
         hint={dict.passwordHint}
+        error={failure?.errors?.password && dict.passwordError}
       >
         <PasswordInput
           id="password"
           name="password"
           autoComplete="new-password"
+          required
           minLength={8}
           maxLength={72}
           showLabel={passwordDict.show}
@@ -63,7 +109,11 @@ export function AccountForm({
         >
           {dict.cancel}
         </Button>
-        <Button type="button" className="h-12 flex-1 md:h-11 md:flex-none">
+        <Button
+          type="submit"
+          disabled={pending}
+          className="h-12 flex-1 md:h-11 md:flex-none"
+        >
           {dict.save}
         </Button>
       </div>

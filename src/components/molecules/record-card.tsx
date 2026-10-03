@@ -1,5 +1,6 @@
 import { ImageOff } from "lucide-react";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { RecordPoster } from "@/components/molecules/record-poster";
 import type { Score } from "@/schemas/record/enums";
@@ -12,8 +13,8 @@ type RecordCardProps = {
   scoreLabel: string;
   year: string;
   platformLabel: string;
-  meta: string;
-  watchedLabel: string;
+  meta: ReactNode;
+  watchedLabel: ReactNode;
   noPosterLabel: string;
 };
 
@@ -48,7 +49,7 @@ export function RecordCard({
       />
       {hasPoster ? (
         <div className="flex flex-1 flex-col gap-1.25 px-3 py-2.75">
-          <span className="text-pretty font-bold font-heading text-foreground text-sm leading-[1.4]">
+          <span className="text-pretty font-bold text-foreground text-sm leading-[1.4]">
             {title}
           </span>
           <span className="text-[11px] text-muted-foreground">{meta}</span>

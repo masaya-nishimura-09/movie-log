@@ -11,7 +11,7 @@ export function Logo({
   return (
     <span
       className={cn(
-        "inline-flex items-center gap-2 font-bold font-heading text-[19px] text-foreground leading-none",
+        "inline-flex items-center gap-2 font-bold text-[19px] text-foreground leading-none",
         className,
       )}
     >

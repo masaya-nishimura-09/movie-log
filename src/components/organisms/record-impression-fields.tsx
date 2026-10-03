@@ -2,11 +2,13 @@ import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { FormField } from "@/components/molecules/form-field";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { moodTagSchema } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordImpressionFieldsProps = {
   values: RecordFormValues;
+  errors?: RecordFieldErrors;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   counterTemplate: string;
@@ -14,13 +16,18 @@ type RecordImpressionFieldsProps = {
 
 export function RecordImpressionFields({
   values,
+  errors,
   dict,
   enums,
   counterTemplate,
 }: RecordImpressionFieldsProps) {
   return (
     <div className="flex flex-col gap-4.5">
-      <FormField label={dict.moodTags} hint={dict.moodTagsHint}>
+      <FormField
+        label={dict.moodTags}
+        error={fieldError(errors, dict, "moodTags")}
+        hint={dict.moodTagsHint}
+      >
         <div className="flex flex-wrap gap-1.75">
           {moodTagSchema.options.map((mood) => (
             <ChoiceChip
@@ -38,7 +45,11 @@ export function RecordImpressionFields({
         </div>
       </FormField>
 
-      <FormField label={dict.memo} htmlFor="memo">
+      <FormField
+        label={dict.memo}
+        error={fieldError(errors, dict, "memo")}
+        htmlFor="memo"
+      >
         <CountedTextarea
           id="memo"
           name="memo"

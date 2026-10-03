@@ -1,4 +1,8 @@
+"use client";
+
 import Link from "next/link";
+import { type FormEvent, startTransition, useActionState } from "react";
+import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
 import { CountedInput } from "@/components/molecules/counted-input";
@@ -9,6 +13,10 @@ import type { Locale } from "@/i18n/locales";
 
 type RegisterFormProps = {
   lang: Locale;
+  action: (
+    previous: ActionResult<never> | undefined,
+    formData: FormData,
+  ) => Promise<ActionResult<never>>;
   dict: Dictionary["register"];
   passwordDict: Dictionary["passwordInput"];
   counterTemplate: string;
@@ -16,13 +24,37 @@ type RegisterFormProps = {
 
 export function RegisterForm({
   lang,
+  action,
   dict,
   passwordDict,
   counterTemplate,
 }: RegisterFormProps) {
+  const [state, formAction, pending] = useActionState(action, undefined);
+  const failure = state?.success === false ? state : undefined;
+  const message = (key: string) =>
+    key in dict ? dict[key as keyof typeof dict] : dict.unexpectedError;
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(() => formAction(formData));
+  };
+
   return (
-    <form className="flex flex-col gap-5">
-      <FormField label={dict.username} htmlFor="username">
+    <form onSubmit={submit} className="flex flex-col gap-5">
+      {failure && !failure.errors && (
+        <p
+          role="alert"
+          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
+        >
+          {message(failure.messageKey)}
+        </p>
+      )}
+      <FormField
+        label={dict.username}
+        htmlFor="username"
+        error={failure?.errors?.username && dict.usernameError}
+      >
         <CountedInput
           id="username"
           name="username"
@@ -32,7 +64,11 @@ export function RegisterForm({
           counterTemplate={counterTemplate}
         />
       </FormField>
-      <FormField label={dict.email} htmlFor="email">
+      <FormField
+        label={dict.email}
+        htmlFor="email"
+        error={failure?.errors?.email && dict.emailError}
+      >
         <Input
           id="email"
           name="email"
@@ -45,6 +81,7 @@ export function RegisterForm({
         label={dict.password}
         htmlFor="password"
         hint={dict.passwordHint}
+        error={failure?.errors?.password && dict.passwordError}
       >
         <PasswordInput
           id="password"
@@ -57,7 +94,12 @@ export function RegisterForm({
           hideLabel={passwordDict.hide}
         />
       </FormField>
-      <Button type="button" size="lg" className="mt-1 w-full">
+      <Button
+        type="submit"
+        size="lg"
+        className="mt-1 w-full"
+        disabled={pending}
+      >
         {dict.submit}
       </Button>
       <p className="text-center text-muted-foreground text-sm">

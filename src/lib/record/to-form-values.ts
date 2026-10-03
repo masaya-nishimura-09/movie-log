@@ -1,11 +1,10 @@
-import { toDateInputValue } from "@/lib/date/format-date";
 import type { MovieRecord } from "@/schemas/record/record";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
-export function emptyFormValues(today: Date): RecordFormValues {
+export function emptyFormValues(): RecordFormValues {
   return {
     title: "",
-    watchedAt: toDateInputValue(today),
+    watchedAt: "",
     runtime: 0,
     genres: [],
     countries: [],
@@ -20,7 +19,7 @@ export function emptyFormValues(today: Date): RecordFormValues {
 export function toFormValues(record: MovieRecord): RecordFormValues {
   return {
     title: record.title,
-    watchedAt: toDateInputValue(new Date(record.watchedAt)),
+    watchedAt: record.watchedAt,
     releaseYear: record.releaseYear,
     runtime: record.runtime,
     genres: record.genres,

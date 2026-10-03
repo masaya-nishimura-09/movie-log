@@ -1,79 +1,49 @@
-import { mockRecords } from "@/api/record/mock-records";
-import type {
-  RecordList,
-  RecordQuery,
-  RecordSort,
+import { apiFetch } from "@/api/client/api-fetch";
+import {
+  type RecordList,
+  type RecordQuery,
+  type RecordSort,
+  recordListResponseSchema,
 } from "@/schemas/record/list";
-import type { MovieRecord } from "@/schemas/record/record";
 
 const perPage = 12;
 
-const comparators: Record<
-  RecordSort,
-  (a: MovieRecord, b: MovieRecord) => number
-> = {
-  watchedAtDesc: (a, b) => b.watchedAt.localeCompare(a.watchedAt),
-  watchedAtAsc: (a, b) => a.watchedAt.localeCompare(b.watchedAt),
-  scoreDesc: (a, b) => b.score - a.score,
-  releaseYearDesc: (a, b) => b.releaseYear - a.releaseYear,
-  titleAsc: (a, b) => a.title.localeCompare(b.title, "ja"),
+const sortParams: Record<RecordSort, { field: string; order: string }> = {
+  watchedAtDesc: { field: "watched_at", order: "desc" },
+  watchedAtAsc: { field: "watched_at", order: "asc" },
+  scoreDesc: { field: "score", order: "desc" },
+  releaseYearDesc: { field: "release_year", order: "desc" },
+  titleAsc: { field: "title", order: "asc" },
 };
 
-type Facet = "scores" | "platforms" | "moodTags" | "genres";
-
-function matches(
-  record: MovieRecord,
-  query: RecordQuery,
-  ignore?: Facet,
-): boolean {
-  return (
-    (ignore === "scores" ||
-      query.scores.length === 0 ||
-      query.scores.includes(record.score)) &&
-    (ignore === "platforms" ||
-      query.platforms.length === 0 ||
-      query.platforms.includes(record.platform)) &&
-    (ignore === "moodTags" ||
-      query.moodTags.every((tag) => record.moodTags.includes(tag))) &&
-    (ignore === "genres" ||
-      query.genres.every((genre) => record.genres.includes(genre))) &&
-    record.title.includes(query.keyword)
-  );
-}
-
-function countFacet(
-  query: RecordQuery,
-  facet: Facet,
-  pick: (record: MovieRecord) => string[],
-): Record<string, number> {
-  const counts: Record<string, number> = {};
-  for (const record of mockRecords) {
-    if (!matches(record, query, facet)) continue;
-    for (const value of pick(record)) {
-      counts[value] = (counts[value] ?? 0) + 1;
-    }
-  }
-  return counts;
+function toParams(query: RecordQuery): URLSearchParams {
+  const params = new URLSearchParams();
+  for (const score of query.scores) params.append("scores", String(score));
+  for (const platform of query.platforms) params.append("platforms", platform);
+  for (const moodTag of query.moodTags) params.append("mood_tags", moodTag);
+  for (const genre of query.genres) params.append("genres", genre);
+  if (query.keyword !== "") params.set("title", query.keyword);
+  params.set("sort_field", sortParams[query.sort].field);
+  params.set("sort_order", sortParams[query.sort].order);
+  params.set("page", String(query.page));
+  params.set("per_page", String(perPage));
+  return params;
 }
 
 export async function getRecords(query: RecordQuery): Promise<RecordList> {
-  const filtered = mockRecords
-    .filter((record) => matches(record, query))
-    .sort(comparators[query.sort]);
-  const pageCount = Math.max(1, Math.ceil(filtered.length / perPage));
-  const page = Math.min(query.page, pageCount);
-
+  const list = await apiFetch(
+    `/records/?${toParams(query)}`,
+    recordListResponseSchema,
+  );
+  const pageCount = Math.max(1, Math.ceil(list.filteredCount / perPage));
+  if (query.page > pageCount) {
+    return getRecords({ ...query, page: pageCount });
+  }
   return {
-    records: filtered.slice((page - 1) * perPage, page * perPage),
-    totalCount: mockRecords.length,
-    filteredCount: filtered.length,
-    page,
+    records: list.records,
+    totalCount: list.totalCount,
+    filteredCount: list.filteredCount,
+    page: query.page,
     pageCount,
-    facets: {
-      scores: countFacet(query, "scores", (r) => [String(r.score)]),
-      platforms: countFacet(query, "platforms", (r) => [r.platform]),
-      moodTags: countFacet(query, "moodTags", (r) => r.moodTags),
-      genres: countFacet(query, "genres", (r) => r.genres),
-    },
   };
 }

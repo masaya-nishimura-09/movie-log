@@ -10,12 +10,12 @@
   "header": {
     "searchPlaceholder": "タイトルで検索",
     "searchLabel": "タイトルで検索",
-    "newRecord": "記録する",
     "themeToggle": "テーマを切り替える",
     "accountMenu": "アカウントメニュー",
     "account": "アカウント設定",
     "logout": "ログアウト",
-    "openSearch": "検索"
+    "openSearch": "検索",
+    "toggleSidebar": "サイドバーを開閉する"
   },
   "bottomNav": {
     "records": "みた映画",
@@ -28,7 +28,12 @@
     "passwordHint": "8〜72文字",
     "submit": "ログイン",
     "toRegisterPrompt": "はじめて？",
-    "toRegister": "アカウントを作る"
+    "toRegister": "アカウントを作る",
+    "invalidEmail": "メールアドレスの形式が正しくありません",
+    "invalidPassword": "パスワードは半角英数字・記号で8〜72文字です",
+    "invalidCredentials": "メールアドレスかパスワードが違います",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "unexpectedError": "ログインできませんでした。時間をおいてやり直してください"
   },
   "register": {
     "title": "アカウントを作る",
@@ -39,7 +44,14 @@
     "passwordHint": "8〜72文字",
     "submit": "登録して始める",
     "toLoginPrompt": "すでに登録済み？",
-    "toLogin": "ログイン"
+    "toLogin": "ログイン",
+    "usernameError": "1〜100文字で入力してください",
+    "emailError": "メールアドレスの形式が正しくありません",
+    "passwordError": "半角英数字・記号で8〜72文字です",
+    "invalidInput": "入力内容を確認してください",
+    "userAlreadyExists": "このメールアドレスはすでに使われています",
+    "unexpectedError": "登録できませんでした。時間をおいてやり直してください",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください"
   },
   "passwordInput": {
     "show": "パスワードを表示",
@@ -49,13 +61,11 @@
     "heading": "みた映画",
     "summary": "{total}件中 {shown}件を表示",
     "activeFilters": "絞り込み {count}件",
-    "monthCount": "{count}本",
     "noMatch": "条件に合う記録がありません",
     "clearFilters": "条件を解除する",
     "previousPage": "前のページ",
     "nextPage": "次のページ",
-    "pageStatus": "{current} / {total}",
-    "summaryShort": "{total}件中 {shown}件"
+    "pageStatus": "{current} / {total}"
   },
   "recordFilter": {
     "open": "絞り込み",
@@ -66,7 +76,6 @@
     "moodTag": "雰囲気タグ",
     "genre": "ジャンル",
     "showAllPlatforms": "すべて表示（{count}件）",
-    "showFewerPlatforms": "件数のあるものだけ表示",
     "remove": "{label} を解除",
     "showResults": "{count}件を表示"
   },
@@ -101,15 +110,14 @@
     "platform": "プラットフォーム",
     "createdAt": "記録日時",
     "updatedAt": "最終更新",
-    "adjacentItem": "{title}（{date}）",
-    "adjacent": "前後の記録",
     "weekday": "（{weekday}）"
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",
     "description": "「{title}」（{date}）とメモが消えます。取り消しできません。",
     "cancel": "やめる",
-    "confirm": "削除する"
+    "confirm": "削除する",
+    "unexpectedError": "削除できませんでした。時間をおいてやり直してください"
   },
   "recordForm": {
     "createTitle": "記録する",
@@ -127,15 +135,9 @@
     "score": "スコア",
     "scoreHint": "1〜5・基準は決めない",
     "platform": "プラットフォーム",
-    "platformHint": "よく使うものを先に表示しています",
-    "morePlatforms": "ほかから探す（{count}件）",
-    "fewerPlatforms": "よく使うものだけ表示",
-    "canSaveHere": "ここまでで保存できます",
-    "saveAndFinish": "保存して終わる",
     "next": "つづける",
     "back": "もどる",
-    "skip": "スキップ",
-    "movieInfoHint": "すべて任意（言語のみ既定あり）",
+    "movieInfoHint": "公開年と言語は必須",
     "releaseYear": "公開年",
     "releaseYearHint": "1888〜{max}",
     "runtime": "上映時間",
@@ -166,25 +168,55 @@
     "movieSection": "映画情報",
     "cancel": "取り消す",
     "saveChanges": "変更を保存",
-    "saveShort": "保存",
-    "languageUnknown": "不明"
+    "languageUnknown": "不明",
+    "invalidInput": "入力内容を確認してください",
+    "notFound": "この記録は削除されています",
+    "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
+    "errors": {
+      "title": "1〜255文字で入力してください",
+      "watchedAt": "今日以前の日付を入れてください",
+      "score": "スコアを選んでください",
+      "platform": "プラットフォームを選んでください",
+      "releaseYear": "1888年から5年後までの年を入れてください",
+      "runtime": "0〜1440分で入れてください",
+      "language": "言語を選んでください",
+      "countries": "国コードが正しくありません",
+      "genres": "ジャンルが正しくありません",
+      "credits": "名前は100文字以内で入力してください",
+      "posterUrl": "http か https で始まる URL を入れてください",
+      "moodTags": "雰囲気タグが正しくありません",
+      "memo": "1000文字以内で入力してください"
+    },
+    "movieSuggestions": "映画の候補",
+    "titleHint": "2文字以上で TMDB の候補を表示。選ぶと映画の情報を入力します",
+    "uploadPoster": "画像をアップロード",
+    "uploadingPoster": "アップロード中",
+    "posterUploadError": "アップロードできませんでした。JPEG・PNG・WebP の5MBまでです"
   },
   "account": {
     "back": "もどる",
     "title": "アカウント設定",
-    "notice": "このフォームは表示名・メールアドレス・パスワードをまとめて更新します。変更しない欄はそのまま送信されます。パスワードを変えた場合、他の端末のログインは解除されます。",
+    "notice": "このフォームは表示名・メールアドレス・パスワードをまとめて更新します。パスワードは変えない場合も入力してください。パスワードを変えた場合、他の端末のログインは解除されます。",
     "username": "表示名",
     "email": "メールアドレス",
     "password": "パスワード",
-    "passwordHint": "変えないときはそのまま。変える場合は8〜72文字。",
+    "passwordHint": "8〜72文字。変えない場合は今のパスワードを入力",
     "cancel": "取り消す",
     "save": "変更を保存",
     "withdrawTitle": "退会する",
-    "withdrawDescription": "{count}件の記録とメモがすべて消えます。取り消しはできません。",
+    "withdrawDescription": "記録とメモがすべて消えます。取り消しはできません。",
     "withdrawAction": "退会の手続きへ",
     "withdrawConfirmTitle": "本当に退会しますか？",
     "withdrawConfirm": "退会する",
-    "withdrawCancel": "やめる"
+    "withdrawCancel": "やめる",
+    "usernameError": "1〜100文字で入力してください",
+    "emailError": "メールアドレスの形式が正しくありません",
+    "passwordError": "半角英数字・記号で8〜72文字です",
+    "invalidInput": "入力内容を確認してください",
+    "userAlreadyExists": "このメールアドレスはすでに使われています",
+    "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
+    "saved": "保存しました",
+    "withdrawFailed": "退会できませんでした。時間をおいてやり直してください"
   },
   "characterCount": "{current} / {max}",
   "enums": {
@@ -273,5 +305,10 @@
     "title": "ページが見つかりません",
     "description": "記録が削除されたか、URL が間違っている可能性があります。",
     "action": "一覧にもどる"
+  },
+  "errorPage": {
+    "title": "読み込めませんでした",
+    "description": "時間をおいて、もう一度お試しください。",
+    "retry": "もう一度読み込む"
   }
 }

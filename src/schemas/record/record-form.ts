@@ -16,7 +16,7 @@ export const recordFormValuesSchema = recordSchema
     moodTags: true,
     memo: true,
   })
-  .extend({ watchedAt: z.iso.date() })
+  .extend({ watchedAt: z.string() })
   .partial({ releaseYear: true, platform: true, score: true });
 
 export type RecordFormValues = z.infer<typeof recordFormValuesSchema>;

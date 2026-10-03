@@ -5,7 +5,7 @@ import {
   platformSchema,
   scoreSchema,
 } from "@/schemas/record/enums";
-import { recordSchema } from "@/schemas/record/record";
+import { recordResponseSchema, recordSchema } from "@/schemas/record/record";
 
 export const recordSortSchema = z.enum([
   "watchedAtDesc",
@@ -33,18 +33,24 @@ export type RecordQuery = z.infer<typeof recordQuerySchema>;
 
 const countSchema = z.number().int().min(0);
 
+export const recordListResponseSchema = z
+  .object({
+    records: z.array(recordResponseSchema),
+    filtered_count: countSchema,
+    total_count: countSchema,
+  })
+  .transform((r) => ({
+    records: r.records,
+    filteredCount: r.filtered_count,
+    totalCount: r.total_count,
+  }));
+
 export const recordListSchema = z.object({
   records: z.array(recordSchema),
   totalCount: countSchema,
   filteredCount: countSchema,
   page: z.number().int().min(1),
   pageCount: z.number().int().min(1),
-  facets: z.object({
-    scores: z.record(z.string(), countSchema),
-    platforms: z.record(z.string(), countSchema),
-    moodTags: z.record(z.string(), countSchema),
-    genres: z.record(z.string(), countSchema),
-  }),
 });
 
 export type RecordList = z.infer<typeof recordListSchema>;
