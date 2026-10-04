@@ -116,7 +116,7 @@ export function RecordCreateForm({
     <form
       onSubmit={submit}
       noValidate
-      className="flex min-h-dvh flex-col bg-card md:mx-auto md:my-10 md:min-h-0 md:w-160 md:overflow-hidden md:rounded-[18px] md:border"
+      className="flex min-h-dvh flex-col bg-card md:mx-auto md:my-10 md:min-h-0 md:w-160 md:shrink-0 md:overflow-hidden md:rounded-[18px] md:border"
     >
       <header className="sticky top-0 z-10 flex flex-col gap-3.5 border-b bg-card px-4.5 pt-4 pb-3.5 md:static md:border-none md:px-6.5 md:pt-5.5 md:pb-0">
         <div className="flex items-center justify-between">
