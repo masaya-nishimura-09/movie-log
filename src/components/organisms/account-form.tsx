@@ -1,6 +1,13 @@
 "use client";
 
-import { type FormEvent, startTransition, useActionState } from "react";
+import { Toast } from "@base-ui/react/toast";
+import {
+  type FormEvent,
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+} from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
@@ -29,9 +36,20 @@ export function AccountForm({
   counterTemplate,
 }: AccountFormProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
+  const toastManager = Toast.useToastManager();
+  const toastManagerRef = useRef(toastManager);
+  toastManagerRef.current = toastManager;
+  const formRef = useRef<HTMLFormElement>(null);
   const failure = state?.success === false ? state : undefined;
   const message = (key: string) =>
     key in dict ? dict[key as keyof typeof dict] : dict.unexpectedError;
+
+  useEffect(() => {
+    if (!state?.success) return;
+    toastManagerRef.current.add({ title: dict.saved, type: "success" });
+    const password = formRef.current?.elements.namedItem("password");
+    if (password instanceof HTMLInputElement) password.value = "";
+  }, [state, dict.saved]);
 
   const submit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -41,6 +59,7 @@ export function AccountForm({
 
   return (
     <form
+      ref={formRef}
       onSubmit={submit}
       className="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-5.5"
     >
@@ -51,11 +70,6 @@ export function AccountForm({
         >
           {message(failure.messageKey)}
         </p>
-      )}
-      {state?.success && (
-        <output className="rounded-lg bg-secondary px-3.5 py-2.5 text-foreground text-sm">
-          {dict.saved}
-        </output>
       )}
       <FormField
         label={dict.username}
