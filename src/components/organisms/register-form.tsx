@@ -10,6 +10,7 @@ import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { interpolateNode } from "@/lib/text/interpolate-node";
 
 type RegisterFormProps = {
   lang: Locale;
@@ -94,6 +95,42 @@ export function RegisterForm({
           hideLabel={passwordDict.hide}
         />
       </FormField>
+      <div className="flex flex-col gap-2">
+        <label className="flex items-center gap-2 text-sm">
+          <input
+            type="checkbox"
+            name="agreedToTerms"
+            required
+            className="size-4 accent-primary"
+          />
+          <span>
+            {interpolateNode(dict.agreeTerms, {
+              terms: (
+                <Link
+                  href={`/${lang}/terms`}
+                  target="_blank"
+                  className="font-medium text-primary underline-offset-4 hover:underline"
+                >
+                  {dict.termsLink}
+                </Link>
+              ),
+            })}
+          </span>
+        </label>
+        <p className="text-muted-foreground text-xs">
+          {interpolateNode(dict.privacyNote, {
+            privacy: (
+              <Link
+                href={`/${lang}/privacy`}
+                target="_blank"
+                className="text-primary underline-offset-4 hover:underline"
+              >
+                {dict.privacyLink}
+              </Link>
+            ),
+          })}
+        </p>
+      </div>
       <Button
         type="submit"
         size="lg"

@@ -14,6 +14,9 @@ export async function registerAction(
   _previous: ActionResult<never> | undefined,
   formData: FormData,
 ): Promise<ActionResult<never>> {
+  if (formData.get("agreedToTerms") !== "on") {
+    return { success: false, messageKey: "termsNotAgreed" };
+  }
   const input = userInputSchema.safeParse({
     username: formData.get("username"),
     email: formData.get("email"),
