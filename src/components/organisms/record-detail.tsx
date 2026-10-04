@@ -51,10 +51,10 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   });
 
   const watchedCard = (
-    <dl className="flex gap-6 rounded-2xl border bg-card p-4 xl:flex-col xl:gap-4 xl:p-5">
-      <div className="flex flex-col gap-1">
-        <dt className="text-muted-foreground text-xs">{d.watchedAt}</dt>
-        <dd className="font-bold text-[15px] text-foreground xl:text-[19px]">
+    <div className="grid max-w-3xl gap-4 sm:grid-cols-2">
+      <section className="flex flex-col gap-2.5">
+        <SectionLabel>{d.watchedAt}</SectionLabel>
+        <p className="rounded-2xl border bg-card px-5.5 py-4 font-bold text-[15px] text-foreground">
           <LocalDate
             date={record.watchedAt}
             locale={lang}
@@ -71,18 +71,19 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               ),
             })}
           </span>
-        </dd>
-      </div>
-      <div className="hidden h-px bg-border xl:block" />
-      <div className="flex flex-col gap-1">
-        <dt className="text-muted-foreground text-xs">{d.platform}</dt>
-        <dd className="text-[15px] text-foreground">{platformLabel}</dd>
-      </div>
-    </dl>
+        </p>
+      </section>
+      <section className="flex flex-col gap-2.5">
+        <SectionLabel>{d.platform}</SectionLabel>
+        <p className="rounded-2xl border bg-card px-5.5 py-4 text-[15px] text-foreground">
+          {platformLabel}
+        </p>
+      </section>
+    </div>
   );
 
   return (
-    <article className="mx-auto grid w-full max-w-295 gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[232px_minmax(0,1fr)_300px]">
+    <article className="mx-auto grid w-full gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[232px_minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)_340px]">
       <div className="flex gap-4 md:flex-col md:gap-3.5">
         <RecordPoster
           title={record.title}
@@ -90,7 +91,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           year={record.releaseYear > 0 ? String(record.releaseYear) : ""}
           platformLabel={platformLabel}
           size="detail"
-          sizes="(min-width: 768px) 232px, 116px"
+          sizes="(min-width: 1536px) 320px, (min-width: 768px) 232px, 116px"
           className="w-29 shrink-0 rounded-xl border md:w-full md:rounded-2xl"
         />
         <div className="flex min-w-0 flex-col gap-3 md:hidden">
@@ -166,40 +167,37 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           </div>
         </div>
 
-        <div className="xl:hidden">{watchedCard}</div>
+        {watchedCard}
 
         {record.memo !== "" && (
           <section className="flex flex-col gap-2.5">
             <SectionLabel>{d.memo}</SectionLabel>
-            <p className="whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
+            <p className="max-w-3xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
               {record.memo}
             </p>
           </section>
         )}
-
-        {record.credits.length > 0 && (
-          <section className="flex flex-col gap-3">
-            <SectionLabel>{d.credits}</SectionLabel>
-            <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2">
-              {record.credits.map((credit, index) => (
-                <div
-                  key={`${credit.creditRole}-${credit.personName}-${index}`}
-                  className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
-                >
-                  <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
-                    {dict.enums.creditRole[credit.creditRole]}
-                  </dt>
-                  <dd className="text-right text-foreground text-sm">
-                    {credit.personName}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </section>
-        )}
       </div>
-
-      <div className="hidden flex-col gap-3.5 xl:flex">{watchedCard}</div>
+      {record.credits.length > 0 && (
+        <section className="flex min-w-0 flex-col gap-3 md:col-start-2 xl:col-start-3 xl:row-start-1">
+          <SectionLabel>{d.credits}</SectionLabel>
+          <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2 xl:grid-cols-1">
+            {record.credits.map((credit, index) => (
+              <div
+                key={`${credit.creditRole}-${credit.personName}-${index}`}
+                className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
+              >
+                <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
+                  {dict.enums.creditRole[credit.creditRole]}
+                </dt>
+                <dd className="text-right text-foreground text-sm">
+                  {credit.personName}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </section>
+      )}
     </article>
   );
 }
