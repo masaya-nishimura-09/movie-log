@@ -3,7 +3,9 @@
 import { Upload } from "lucide-react";
 import { type ChangeEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
+import { buttonVariants } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
+import { cn } from "@/lib/style/cn";
 import { posterContentTypes } from "@/schemas/media/media";
 
 type PosterUrlFieldProps = {
@@ -56,7 +58,12 @@ export function PosterUrlField({
           onChange={(event) => setUrl(event.target.value)}
           className="flex-1"
         />
-        <label className="flex h-11 shrink-0 cursor-pointer items-center gap-1.5 rounded-lg border border-input bg-card px-3.5 text-foreground-sub text-sm hover:text-foreground has-disabled:cursor-default has-disabled:opacity-50">
+        <label
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "cursor-pointer has-disabled:cursor-default has-disabled:opacity-50",
+          )}
+        >
           <Upload className="size-4" aria-hidden />
           {pending ? uploadingLabel : uploadLabel}
           <input
