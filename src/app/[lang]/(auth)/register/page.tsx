@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { registerAction } from "@/actions/user/register";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -28,6 +29,12 @@ export default async function RegisterPage() {
         passwordDict={dict.passwordInput}
         counterTemplate={dict.characterCount}
       />
+      <Link
+        href={`/${lang}/about`}
+        className="self-center rounded-sm text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {dict.about.link}
+      </Link>
     </div>
   );
 }

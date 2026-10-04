@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { loginAction } from "@/actions/auth/login";
 import { LoginForm } from "@/components/organisms/login-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -25,6 +26,12 @@ export default async function LoginPage() {
         dict={dict.login}
         passwordDict={dict.passwordInput}
       />
+      <Link
+        href={`/${lang}/about`}
+        className="self-center rounded-sm text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+      >
+        {dict.about.link}
+      </Link>
     </div>
   );
 }
