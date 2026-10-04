@@ -84,7 +84,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   );
 
   return (
-    <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(232px,520px)_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(232px,440px)_minmax(0,1fr)]">
+    <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(180px,min(520px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(180px,min(320px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] 2xl:grid-cols-[minmax(180px,min(440px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)]">
       <div className="flex gap-4 md:flex-col md:gap-3.5">
         <div className="contents md:relative md:block md:rounded-2xl md:border md:bg-card">
           <RecordPoster
