@@ -14,7 +14,7 @@ type RecordGridProps = {
 
 export function RecordGrid({ lang, records, dict }: RecordGridProps) {
   return (
-    <ul className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3.5">
+    <ul className="grid grid-cols-2 gap-3.5 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-6">
       {records.map((record) => {
         const year = record.releaseYear > 0 ? String(record.releaseYear) : "";
         const platformLabel = dict.enums.platform[record.platform];
