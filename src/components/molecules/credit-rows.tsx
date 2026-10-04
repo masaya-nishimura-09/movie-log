@@ -57,9 +57,12 @@ export function CreditRows({
   }
 
   return (
-    <div className="flex flex-col gap-2">
+    <div className="@container flex flex-col gap-2">
       {rows.map((row, index) => (
-        <div key={row.key} className="flex items-center gap-2">
+        <div
+          key={row.key}
+          className="flex flex-wrap @md:flex-nowrap items-center gap-2"
+        >
           <Select
             name={`credits.${index}.creditRole`}
             items={items}
@@ -69,7 +72,10 @@ export function CreditRows({
               if (parsed.success) update(row.key, { creditRole: parsed.data });
             }}
           >
-            <SelectTrigger aria-label={roleLabel} className="w-32 shrink-0">
+            <SelectTrigger
+              aria-label={roleLabel}
+              className="order-1 w-32 shrink-0"
+            >
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -84,6 +90,7 @@ export function CreditRows({
             name={`credits.${index}.personName`}
             value={row.personName}
             maxLength={100}
+            className="@md:order-2 order-3 @md:flex-1 @md:basis-0 basis-full"
             placeholder={namePlaceholder}
             onChange={(event) =>
               update(row.key, { personName: event.target.value })
@@ -95,7 +102,7 @@ export function CreditRows({
             size="icon"
             aria-label={removeLabel}
             onClick={() => setRows(rows.filter((r) => r.key !== row.key))}
-            className="shrink-0 text-muted-foreground"
+            className="@md:order-3 order-2 @md:ml-0 ml-auto shrink-0 text-muted-foreground"
           >
             <MinusCircle aria-hidden />
           </Button>
