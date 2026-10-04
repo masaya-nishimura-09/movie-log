@@ -139,7 +139,7 @@ export function RecordEditForm({
         </Panel>
       </div>
 
-      <div className="sticky bottom-0 -mx-4 flex justify-end gap-2 border-t bg-background/95 px-4 py-3 backdrop-blur md:static md:mx-0 md:mb-6 md:rounded-[18px] md:border md:bg-card md:px-5">
+      <div className="mb-6 flex justify-end gap-2 rounded-[18px] border bg-card px-4 py-3 md:px-5">
         <Link
           href={backHref}
           className={buttonVariants({ variant: "outline" })}
