@@ -57,7 +57,10 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
           >
             <Search className="size-5" aria-hidden />
           </SheetTrigger>
-          <SheetContent side="top" className="bg-sidebar p-4 pt-12">
+          <SheetContent
+            side="top"
+            className="shell rounded-b-[20px] bg-sidebar p-4 pt-12"
+          >
             <SheetTitle className="sr-only">{dict.searchLabel}</SheetTitle>
             {search}
           </SheetContent>
