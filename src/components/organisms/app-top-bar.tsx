@@ -45,10 +45,10 @@ export function AppTopBar({
   );
 
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-4">
+    <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
       <Link
         href={`/${lang}/records`}
-        className="flex items-center rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Logo name={brandName} />
       </Link>

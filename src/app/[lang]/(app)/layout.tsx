@@ -19,7 +19,7 @@ export default async function AppLayout({ children }: LayoutProps<"/[lang]">) {
         newRecordLabel={dict.bottomNav.newRecord}
         dict={dict.header}
       />
-      <main className="shell-inset relative mx-2 mb-[calc(4.75rem+env(safe-area-inset-bottom))] flex min-h-0 min-w-0 flex-1 flex-col rounded-2xl bg-background md:mb-2 md:h-[calc(100svh-var(--header-height)-1rem)] md:flex-none md:overflow-y-auto">
+      <main className="shell-inset relative mx-2 mb-[calc(4.75rem+env(safe-area-inset-bottom))] flex min-h-0 min-w-0 flex-1 flex-col rounded-2xl bg-background md:mx-7 md:mb-7 md:h-[calc(100svh-var(--header-height)-1.75rem)] md:flex-none md:overflow-y-auto">
         {children}
       </main>
       <BottomNav lang={lang} dict={dict.bottomNav} />
