@@ -7,6 +7,29 @@
     "name": "Cinelog",
     "tagline": "Remember every film you have watched."
   },
+  "landing": {
+    "headline": "Remember every film you have watched.",
+    "lead": "The date, a score, the mood, a memo. Keep how a film felt on a card that looks like a ticket stub.",
+    "start": "Sign up to start",
+    "login": "Log in",
+    "listAlt": "A grid of posters for the films you have logged",
+    "detailAlt": "One film's record, with the watched date and platform on a ticket stub under the poster",
+    "features": [
+      {
+        "title": "Keep it like a ticket stub",
+        "text": "The watched date, score and platform sit with the poster on a single card."
+      },
+      {
+        "title": "Film details fill in for you",
+        "text": "Type a title and the release year, genres and credits come from TMDB."
+      },
+      {
+        "title": "A logbook just for you",
+        "text": "Your records are not shown to anyone else. Available in Japanese and English."
+      }
+    ],
+    "closing": "Start with the last film you saw. A title and a date take about thirty seconds."
+  },
   "about": {
     "title": "About",
     "link": "About this app",

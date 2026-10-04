@@ -1,0 +1,138 @@
+import Image from "next/image";
+import Link from "next/link";
+import { buttonVariants } from "@/components/atoms/button";
+import { Logo } from "@/components/atoms/logo";
+import type { Dictionary } from "@/i18n/get-dictionary";
+import type { Locale } from "@/i18n/locales";
+import { cn } from "@/lib/style/cn";
+
+type LandingProps = {
+  lang: Locale;
+  dict: Dictionary;
+};
+
+function Screenshot({
+  src,
+  alt,
+  priority,
+}: {
+  src: string;
+  alt: string;
+  priority?: boolean;
+}) {
+  return (
+    <Image
+      src={src}
+      alt={alt}
+      width={1440}
+      height={900}
+      priority={priority}
+      sizes="(min-width: 1024px) 560px, 100vw"
+      className="h-auto w-full rounded-[18px] border shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
+    />
+  );
+}
+
+export function Landing({ lang, dict }: LandingProps) {
+  const l = dict.landing;
+  const loginHref = `/${lang}/login`;
+  const registerHref = `/${lang}/register`;
+
+  return (
+    <main className="shell flex flex-1 flex-col bg-sidebar text-foreground">
+      <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
+        <Logo name={dict.brand.name} />
+        <nav className="flex items-center gap-2">
+          <Link
+            href={loginHref}
+            className={buttonVariants({ variant: "outline", size: "sm" })}
+          >
+            {l.login}
+          </Link>
+          <Link
+            href={registerHref}
+            className={cn(
+              buttonVariants({ size: "sm" }),
+              "hidden sm:inline-flex",
+            )}
+          >
+            {l.start}
+          </Link>
+        </nav>
+      </header>
+
+      <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_1.15fr] lg:py-16">
+        <div className="flex flex-col gap-6">
+          <h1 className="text-balance font-bold text-4xl leading-tight md:text-5xl">
+            {l.headline}
+          </h1>
+          <p className="text-foreground-sub text-lg leading-relaxed">
+            {l.lead}
+          </p>
+          <div className="flex flex-wrap gap-3">
+            <Link
+              href={registerHref}
+              className={buttonVariants({ size: "lg" })}
+            >
+              {l.start}
+            </Link>
+            <Link
+              href={loginHref}
+              className={buttonVariants({ variant: "outline", size: "lg" })}
+            >
+              {l.login}
+            </Link>
+          </div>
+        </div>
+        <Screenshot
+          src={`/landing/list-${lang}.webp`}
+          alt={l.listAlt}
+          priority
+        />
+      </section>
+
+      <section className="shell-inset mx-auto grid w-full max-w-6xl gap-4 px-6 py-6 md:grid-cols-3">
+        {l.features.map((feature) => (
+          <div
+            key={feature.title}
+            className="flex flex-col gap-2 rounded-[18px] border bg-card p-6"
+          >
+            <h2 className="font-bold text-card-foreground text-lg">
+              {feature.title}
+            </h2>
+            <p className="text-foreground-sub text-sm leading-relaxed">
+              {feature.text}
+            </p>
+          </div>
+        ))}
+      </section>
+
+      <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.15fr_1fr] lg:py-16">
+        <Screenshot src={`/landing/detail-${lang}.webp`} alt={l.detailAlt} />
+        <div className="flex flex-col gap-6">
+          <p className="text-balance font-bold text-2xl leading-snug">
+            {l.closing}
+          </p>
+          <Link
+            href={registerHref}
+            className={cn(buttonVariants({ size: "lg" }), "self-start")}
+          >
+            {l.start}
+          </Link>
+        </div>
+      </section>
+
+      <footer className="mx-auto mt-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-8 text-foreground-sub text-xs">
+        <Link href={`/${lang}/about`} className="hover:underline">
+          {dict.about.link}
+        </Link>
+        <Link href={`/${lang}/terms`} className="hover:underline">
+          {dict.register.termsLink}
+        </Link>
+        <Link href={`/${lang}/privacy`} className="hover:underline">
+          {dict.register.privacyLink}
+        </Link>
+      </footer>
+    </main>
+  );
+}
