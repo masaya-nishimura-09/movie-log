@@ -1,36 +1,93 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Movie Log
+
+A web frontend for logging and managing personal movie watching records.
+It talks to [Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api).
+
+## Features
+
+- Register, log in, and log out (tokens are refreshed automatically)
+- Update or delete your account
+- Create, view, edit, and delete movie records
+- Filter records by score, platform, mood tag, and genre
+- Search records by title, sort them, and paginate the list
+- Look up movies on TMDb when creating a record
+- Upload poster images
+- English and Japanese UI (negotiated from the browser language)
+- Light and dark themes
+- Mock mode that runs without the backend
+
+## Tech Stack
+
+- Next.js (App Router) / React
+- TypeScript
+- Tailwind CSS / shadcn/ui (Base UI)
+- Zod
+- Biome
+- pnpm
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 20.9+
+- pnpm
+- [Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api)
+    (not needed in mock mode)
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+git clone https://github.com/masaya-nishimura-09/movie-log.git
+cd movie-log
+pnpm install
+cp .env.example .env.local
+# Edit .env.local with your configuration
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Configuration
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Create a `.env.local` file based on `.env.example`:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `API_BASE_URL` - Base URL of Movie Log API
+- `USE_MOCK` - Set to `true` to use mock data instead of the API
 
-## Learn More
+### Scripts
 
-To learn more about Next.js, take a look at the following resources:
+| Command          | Description                |
+|------------------|----------------------------|
+| `pnpm dev`       | Start the dev server      |
+| `pnpm build`     | Build for production      |
+| `pnpm start`     | Start the production build |
+| `pnpm lint`      | Check with Biome          |
+| `pnpm fix`       | Fix lint issues           |
+| `pnpm format`    | Format with Biome         |
+| `pnpm typecheck` | Run the TypeScript check  |
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Project Structure
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```
+src/
+  app/            # Routes ([lang]/(auth), [lang]/(app))
+  actions/        # Server Actions
+  api/            # Backend API clients and mock data
+  components/     # UI components (atoms / molecules / organisms)
+  schemas/        # Zod schemas
+  i18n/           # Locales and dictionaries
+  lib/            # Helpers (auth, date, record, style, text, url)
+  styles/         # Global styles
+  proxy.ts        # Locale routing and token refresh
+docs/             # Working documents
+```
 
-## Deploy on Vercel
+## Pages
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+| Path                     | Description   | Auth |
+|--------------------------|---------------|------|
+| /:lang/login             | Login         | No   |
+| /:lang/register          | Register      | No   |
+| /:lang/records           | List records  | Yes  |
+| /:lang/records/new       | Create record | Yes  |
+| /:lang/records/:id       | Record detail | Yes  |
+| /:lang/records/:id/edit  | Edit record   | Yes  |
+| /:lang/account           | Account       | Yes  |
