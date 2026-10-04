@@ -33,12 +33,12 @@ export function AppSidebar({ lang, dict }: AppSidebarProps) {
     >
       <SidebarContent>
         <SidebarGroup className="gap-3">
-          <SidebarMenu className="gap-1">
+          <SidebarMenu className="gap-3">
             <SidebarMenuItem>
               <SidebarMenuButton
                 render={<Link href={newHref} />}
                 tooltip={dict.newRecord}
-                className="h-11 rounded-xl bg-primary font-bold text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground data-active:bg-primary data-active:text-primary-foreground group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:[&>span]:hidden"
+                className="h-12 w-fit rounded-2xl bg-primary px-5 font-bold text-primary-foreground shadow-sm hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground data-active:bg-primary data-active:text-primary-foreground group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:[&>span]:hidden"
                 isActive={onNew}
               >
                 <Plus />
