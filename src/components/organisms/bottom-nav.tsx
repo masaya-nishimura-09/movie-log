@@ -50,7 +50,7 @@ export function BottomNav({ lang, dict }: BottomNavProps) {
         />
         <Link
           href={`/${lang}/records/new`}
-          className="flex h-11.5 items-center gap-1.5 rounded-full bg-primary px-5 font-bold text-primary-foreground text-sm shadow-[0_6px_14px_-8px_rgb(110_73_48/0.8)]"
+          className="flex h-11.5 items-center gap-1.5 rounded-full bg-primary px-5 font-bold text-primary-foreground text-sm shadow-[0_3px_0_0_var(--color-primary-edge)] transition-all active:translate-y-[3px] active:shadow-[0_0_0_0_var(--color-primary-edge)]"
         >
           <Plus className="size-4.5" aria-hidden />
           {dict.newRecord}

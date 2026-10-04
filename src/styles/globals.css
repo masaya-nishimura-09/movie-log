@@ -9,6 +9,7 @@
   --color-foreground: var(--foreground);
   --color-foreground-sub: var(--foreground-sub);
   --color-header: var(--header);
+  --color-primary-edge: var(--primary-edge);
   --color-field: var(--field);
   --color-placeholder: var(--placeholder);
   --color-selected: var(--selected);
@@ -82,6 +83,7 @@
   --popover-foreground: #0a2947;
   --primary: #8b5e3c;
   --primary-foreground: #fbf3e2;
+  --primary-edge: #5c3b22;
   --secondary: #e8d9bb;
   --secondary-foreground: #3d4b5a;
   --muted: #e8d9bb;
@@ -128,6 +130,7 @@
   --popover-foreground: #f3e4c9;
   --primary: #c08a5e;
   --primary-foreground: #24160c;
+  --primary-edge: #6a4a31;
   --secondary: #163553;
   --secondary-foreground: #c6d6e4;
   --muted: #163553;
