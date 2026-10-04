@@ -27,7 +27,7 @@ export default async function AccountPage() {
         backLabel={dict.account.back}
         title={dict.account.title}
       />
-      <main className="mx-auto flex w-full max-w-180 flex-col gap-4 px-4 pt-4 pb-8 md:px-7 md:pt-6">
+      <main className="flex w-full max-w-180 flex-col gap-4 px-4 pt-5 pb-8 md:px-10 md:pt-8">
         <p className="flex gap-2.5 rounded-[14px] bg-mood px-4 py-3.5 text-[13px] text-foreground leading-relaxed">
           <Info className="mt-0.5 size-4.5 shrink-0" aria-hidden />
           {dict.account.notice}
