@@ -9,14 +9,14 @@
   },
   "landing": {
     "headline": "Remember every film you have watched.",
-    "lead": "The date, a score, the mood, a memo. Keep how a film felt on a card that looks like a ticket stub.",
+    "lead": "The date, a score, the mood, a memo. Keep how a film felt, right next to its poster.",
     "start": "Sign up to start",
     "login": "Log in",
     "listAlt": "A grid of posters for the films you have logged",
-    "detailAlt": "One film's record, with the watched date and platform on a ticket stub under the poster",
+    "detailAlt": "One film's record, with the watched date and platform under the poster",
     "features": [
       {
-        "title": "Keep it like a ticket stub",
+        "title": "Keep it with the poster",
         "text": "The watched date, score and platform sit with the poster on a single card."
       },
       {
