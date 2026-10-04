@@ -108,6 +108,8 @@
     "memoEmpty": "メモはまだありません。",
     "memoAdd": "メモを書く",
     "credits": "クレジット",
+    "creditsEmpty": "クレジットはまだありません。",
+    "creditsAdd": "クレジットを足す",
     "watchedAt": "視聴日",
     "platform": "プラットフォーム",
     "createdAt": "記録日時",

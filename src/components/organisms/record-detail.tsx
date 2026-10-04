@@ -189,9 +189,9 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           )}
         </section>
       </div>
-      {record.credits.length > 0 && (
-        <section className="flex min-w-0 flex-col gap-3 md:col-start-2 xl:col-start-3 xl:row-start-1">
-          <SectionLabel>{d.credits}</SectionLabel>
+      <section className="flex min-w-0 flex-col gap-3 md:col-start-2 xl:col-start-3 xl:row-start-1">
+        <SectionLabel>{d.credits}</SectionLabel>
+        {record.credits.length > 0 ? (
           <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2 xl:grid-cols-1">
             {record.credits.map((credit, index) => (
               <div
@@ -207,8 +207,18 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               </div>
             ))}
           </dl>
-        </section>
-      )}
+        ) : (
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+            {d.creditsEmpty}
+            <Link
+              href={`/${lang}/records/${record.recordId}/edit`}
+              className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+            >
+              {d.creditsAdd}
+            </Link>
+          </p>
+        )}
+      </section>
     </article>
   );
 }

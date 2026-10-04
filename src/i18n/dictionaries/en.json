@@ -108,6 +108,8 @@
     "memoEmpty": "No memo yet.",
     "memoAdd": "Add a memo",
     "credits": "Credits",
+    "creditsEmpty": "No credits yet.",
+    "creditsAdd": "Add credits",
     "watchedAt": "Watched on",
     "platform": "Platform",
     "createdAt": "Logged",
