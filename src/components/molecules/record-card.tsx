@@ -15,6 +15,7 @@ type RecordCardProps = {
   platformLabel: string;
   meta: ReactNode;
   watchedLabel: ReactNode;
+  watchedStamp: ReactNode;
   noPosterLabel: string;
 };
 
@@ -28,6 +29,7 @@ export function RecordCard({
   platformLabel,
   meta,
   watchedLabel,
+  watchedStamp,
   noPosterLabel,
 }: RecordCardProps) {
   const hasPoster = posterUrl !== "";
@@ -35,7 +37,7 @@ export function RecordCard({
   return (
     <Link
       href={href}
-      className="flex w-full flex-col overflow-hidden rounded-[14px] border bg-card shadow-[0_2px_6px_-4px_rgb(10_41_71/0.14)] outline-none transition-shadow hover:shadow-[0_10px_24px_-14px_rgb(10_41_71/0.35)] focus-visible:ring-2 focus-visible:ring-ring"
+      className="group relative flex w-full flex-col rounded-[14px] border bg-card outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
     >
       <RecordPoster
         title={title}
@@ -44,15 +46,27 @@ export function RecordCard({
         platformLabel={platformLabel}
         size="card"
         sizes="(min-width: 768px) 190px, 50vw"
-        className={hasPoster ? undefined : "border-b"}
+        className="rounded-t-[13px]"
         badge={<ScoreBadge score={score} size="sm" label={scoreLabel} />}
       />
+      <div aria-hidden className="relative h-0">
+        <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
+        <span className="absolute -top-2 -left-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_0_0_50%)]" />
+        <span className="absolute -top-2 -right-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_50%_0_0)]" />
+      </div>
       {hasPoster ? (
         <div className="flex flex-1 flex-col gap-1.25 px-3 py-2.75">
           <span className="text-pretty font-bold text-foreground text-sm leading-[1.4]">
             {title}
           </span>
-          <span className="text-[11px] text-muted-foreground">{meta}</span>
+          <div className="flex items-center justify-between gap-2">
+            <span className="min-w-0 truncate text-[11px] text-muted-foreground">
+              {meta}
+            </span>
+            <span className="shrink-0 -rotate-6 rounded-sm border-2 border-primary/60 px-1.5 py-px font-bold text-[10px] text-primary/80 tabular-nums tracking-wider">
+              {watchedStamp}
+            </span>
+          </div>
         </div>
       ) : (
         <div className="flex flex-1 items-center justify-between gap-2 px-3 py-2.75">

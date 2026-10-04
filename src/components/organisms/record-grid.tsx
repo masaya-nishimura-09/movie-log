@@ -33,13 +33,8 @@ export function RecordGrid({ lang, records, dict }: RecordGridProps) {
               })}
               year={year}
               platformLabel={platformLabel}
-              meta={
-                <>
-                  {[year, platformLabel].filter(Boolean).join(" · ")}
-                  {" · "}
-                  {watchedShort}
-                </>
-              }
+              meta={[year, platformLabel].filter(Boolean).join(" · ")}
+              watchedStamp={watchedShort}
               watchedLabel={interpolateNode(dict.recordCard.watched, {
                 date: watchedShort,
               })}
