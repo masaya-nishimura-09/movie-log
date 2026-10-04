@@ -113,7 +113,7 @@ export function RecordCreateForm({
 
   return (
     <form onSubmit={submit} noValidate className="flex w-full flex-1 flex-col">
-      <header className="sticky top-14 z-10 flex flex-col gap-3.5 border-b bg-background px-4 pt-4 pb-3.5 md:static md:border-none md:px-10 md:pt-6 md:pb-0">
+      <header className="flex flex-col gap-3.5 border-b bg-background px-4 pt-4 pb-3.5 md:border-none md:px-10 md:pt-6 md:pb-0">
         <ol className="flex gap-2">
           {steps.map((label, index) => (
             <li
