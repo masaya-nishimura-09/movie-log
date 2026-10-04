@@ -1,6 +1,5 @@
 import { Info } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { updateAccountAction } from "@/actions/user/update-account";
 import { withdrawAction } from "@/actions/user/withdraw";
 import { getCurrentUser } from "@/api/user/get-current-user";
@@ -44,12 +43,6 @@ export default async function AccountPage() {
           action={withdrawAction.bind(null, lang)}
           dict={dict.account}
         />
-        <Link
-          href={`/${lang}/about`}
-          className="self-start rounded-sm text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-        >
-          {dict.about.link}
-        </Link>
       </main>
     </>
   );
