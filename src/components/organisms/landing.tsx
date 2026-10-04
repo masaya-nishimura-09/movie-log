@@ -27,6 +27,7 @@ function Screenshot({
       width={1440}
       height={900}
       priority={priority}
+      unoptimized
       sizes="(min-width: 1024px) 560px, 100vw"
       className="h-auto w-full rounded-[18px] border shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
     />
