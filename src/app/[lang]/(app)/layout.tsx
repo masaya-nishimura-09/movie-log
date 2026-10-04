@@ -11,7 +11,7 @@ export default async function AppLayout({ children }: LayoutProps<"/[lang]">) {
   ]);
 
   return (
-    <div className="shell flex min-h-svh w-full flex-col bg-sidebar [--header-height:--spacing(15)]">
+    <div className="shell flex min-h-svh w-full flex-col bg-sidebar [--header-height:--spacing(15)] md:[--header-height:--spacing(18)]">
       <AppTopBar
         lang={lang}
         brandName={dict.brand.name}
