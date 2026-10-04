@@ -1,3 +1,4 @@
+import Link from "next/link";
 import type { ReactNode } from "react";
 import { GenreTag } from "@/components/atoms/genre-tag";
 import { LocalDate } from "@/components/atoms/local-date";
@@ -169,14 +170,24 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
 
         {watchedCard}
 
-        {record.memo !== "" && (
-          <section className="flex flex-col gap-2.5">
-            <SectionLabel>{d.memo}</SectionLabel>
+        <section className="flex flex-col gap-2.5">
+          <SectionLabel>{d.memo}</SectionLabel>
+          {record.memo !== "" ? (
             <p className="max-w-3xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
               {record.memo}
             </p>
-          </section>
-        )}
+          ) : (
+            <p className="flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+              {d.memoEmpty}
+              <Link
+                href={`/${lang}/records/${record.recordId}/edit`}
+                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {d.memoAdd}
+              </Link>
+            </p>
+          )}
+        </section>
       </div>
       {record.credits.length > 0 && (
         <section className="flex min-w-0 flex-col gap-3 md:col-start-2 xl:col-start-3 xl:row-start-1">

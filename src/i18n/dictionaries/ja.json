@@ -105,6 +105,8 @@
     "releaseYear": "{year}年",
     "runtime": "{minutes}分",
     "memo": "メモ",
+    "memoEmpty": "メモはまだありません。",
+    "memoAdd": "メモを書く",
     "credits": "クレジット",
     "watchedAt": "視聴日",
     "platform": "プラットフォーム",

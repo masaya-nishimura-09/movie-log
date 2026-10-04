@@ -105,6 +105,8 @@
     "releaseYear": "{year}",
     "runtime": "{minutes} min",
     "memo": "Memo",
+    "memoEmpty": "No memo yet.",
+    "memoAdd": "Add a memo",
     "credits": "Credits",
     "watchedAt": "Watched on",
     "platform": "Platform",
