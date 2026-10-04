@@ -170,6 +170,7 @@ export function RecordCreateForm({
             }}
           >
             <RecordBasicsFields
+              split
               errors={failure?.errors}
               title={movie.title}
               onTitleChange={movie.setTitle}
@@ -197,6 +198,7 @@ export function RecordCreateForm({
               </span>
             </div>
             <RecordMovieFields
+              split
               errors={failure?.errors}
               key={movie.version}
               lang={lang}
@@ -224,6 +226,7 @@ export function RecordCreateForm({
               </span>
             </div>
             <RecordImpressionFields
+              split
               errors={failure?.errors}
               values={values}
               dict={dict}

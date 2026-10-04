@@ -23,6 +23,7 @@ type RecordBasicsFieldsProps = {
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   counterTemplate: string;
+  split?: boolean;
 };
 
 function daysAgo(days: number) {
@@ -41,6 +42,7 @@ export function RecordBasicsFields({
   dict,
   enums,
   counterTemplate,
+  split = false,
 }: RecordBasicsFieldsProps) {
   const [watchedAt, setWatchedAt] = useState("");
   useEffect(() => {
@@ -56,95 +58,107 @@ export function RecordBasicsFields({
   ];
 
   return (
-    <div className="flex flex-col gap-4.5">
-      <FormField
-        label={dict.title}
-        error={fieldError(errors, dict, "title")}
-        hint={dict.titleHint}
-        htmlFor="title"
-        required
-        requiredLabel={dict.required}
-      >
-        <MovieTitleField
-          id="title"
-          name="title"
-          required
-          maxLength={255}
-          value={title}
-          onValueChange={onTitleChange}
-          search={searchMovies}
-          onSelect={onMovieSelect}
-          counterTemplate={counterTemplate}
-          listLabel={dict.movieSuggestions}
-        />
-      </FormField>
-
-      <div className="grid gap-4.5 md:grid-cols-2 md:gap-4">
+    <div
+      className={cn(
+        "flex flex-col gap-4.5",
+        split && "xl:grid xl:grid-cols-2 xl:items-start xl:gap-8",
+      )}
+    >
+      <div className={split ? "flex flex-col gap-4.5" : "contents"}>
         <FormField
-          label={dict.watchedAt}
-          error={fieldError(errors, dict, "watchedAt")}
-          htmlFor="watchedAt"
+          label={dict.title}
+          error={fieldError(errors, dict, "title")}
+          hint={dict.titleHint}
+          htmlFor="title"
           required
           requiredLabel={dict.required}
         >
-          <Input
-            id="watchedAt"
-            name="watchedAt"
-            type="date"
+          <MovieTitleField
+            id="title"
+            name="title"
             required
-            value={watchedAt}
-            onChange={(event) => setWatchedAt(event.target.value)}
-            className="tabular-nums"
+            maxLength={255}
+            value={title}
+            onValueChange={onTitleChange}
+            search={searchMovies}
+            onSelect={onMovieSelect}
+            counterTemplate={counterTemplate}
+            listLabel={dict.movieSuggestions}
           />
-          <div className="mt-0.75 flex gap-1.5">
-            {quickDates.map((quick) => (
-              <button
-                key={quick.label}
-                type="button"
-                onClick={() => setWatchedAt(quick.value)}
-                className={cn(
-                  "rounded-full px-2.75 py-1.25 text-xs",
-                  watchedAt === quick.value
-                    ? "bg-selected text-selected-foreground"
-                    : "bg-secondary text-foreground-sub hover:text-foreground",
-                )}
-              >
-                {quick.label}
-              </button>
-            ))}
-          </div>
         </FormField>
 
-        <FormField
-          label={dict.score}
-          error={fieldError(errors, dict, "score")}
-          required
-          requiredLabel={dict.required}
-          hint={dict.scoreHint}
+        <div
+          className={cn(
+            "grid gap-4.5 md:grid-cols-2 md:gap-4",
+            split && "xl:grid-cols-1",
+          )}
         >
-          <div
-            className="flex gap-1.75"
-            role="radiogroup"
-            aria-label={dict.score}
+          <FormField
+            label={dict.watchedAt}
+            error={fieldError(errors, dict, "watchedAt")}
+            htmlFor="watchedAt"
+            required
+            requiredLabel={dict.required}
           >
-            {scores.toReversed().map((score) => (
-              <ChoiceChip
-                key={score}
-                type="radio"
-                name="score"
-                value={score}
-                required
-                defaultChecked={values.score === score}
-                shape="block"
-                size="lg"
-                tone="field"
-                className="h-13 md:h-11"
-              >
-                {score}
-              </ChoiceChip>
-            ))}
-          </div>
-        </FormField>
+            <Input
+              id="watchedAt"
+              name="watchedAt"
+              type="date"
+              required
+              value={watchedAt}
+              onChange={(event) => setWatchedAt(event.target.value)}
+              className="tabular-nums"
+            />
+            <div className="mt-0.75 flex gap-1.5">
+              {quickDates.map((quick) => (
+                <button
+                  key={quick.label}
+                  type="button"
+                  onClick={() => setWatchedAt(quick.value)}
+                  className={cn(
+                    "rounded-full px-2.75 py-1.25 text-xs",
+                    watchedAt === quick.value
+                      ? "bg-selected text-selected-foreground"
+                      : "bg-secondary text-foreground-sub hover:text-foreground",
+                  )}
+                >
+                  {quick.label}
+                </button>
+              ))}
+            </div>
+          </FormField>
+
+          <FormField
+            label={dict.score}
+            error={fieldError(errors, dict, "score")}
+            required
+            requiredLabel={dict.required}
+            hint={dict.scoreHint}
+          >
+            <div
+              className="flex gap-1.75"
+              role="radiogroup"
+              aria-label={dict.score}
+            >
+              {scores.toReversed().map((score) => (
+                <ChoiceChip
+                  key={score}
+                  type="radio"
+                  name="score"
+                  value={score}
+                  required
+                  defaultChecked={values.score === score}
+                  shape="block"
+                  size="lg"
+                  tone="field"
+                  className="h-13 md:h-11"
+                >
+                  {score}
+                </ChoiceChip>
+              ))}
+            </div>
+          </FormField>
+        </div>
       </div>
 
       <FormField
