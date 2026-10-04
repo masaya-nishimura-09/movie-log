@@ -52,10 +52,10 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   });
 
   const watchedCard = (
-    <div className="grid max-w-4xl gap-4 sm:grid-cols-2">
+    <div className="grid grid-cols-2 gap-3">
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.watchedAt}</SectionLabel>
-        <p className="rounded-2xl border bg-card px-5.5 py-4 font-bold text-[15px] text-foreground">
+        <p className="flex-1 rounded-2xl border bg-card px-4 py-4 font-bold text-[15px] text-foreground">
           <LocalDate
             date={record.watchedAt}
             locale={lang}
@@ -76,7 +76,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
       </section>
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.platform}</SectionLabel>
-        <p className="rounded-2xl border bg-card px-5.5 py-4 text-[15px] text-foreground">
+        <p className="flex-1 rounded-2xl border bg-card px-4 py-4 text-[15px] text-foreground">
           {platformLabel}
         </p>
       </section>
