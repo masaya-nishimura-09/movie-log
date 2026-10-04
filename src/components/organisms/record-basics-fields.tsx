@@ -151,7 +151,7 @@ export function RecordBasicsFields({
                   shape="block"
                   size="lg"
                   tone="field"
-                  className="h-13 md:h-11"
+                  className="h-13 min-w-0 px-0 md:h-11"
                 >
                   {score}
                 </ChoiceChip>
