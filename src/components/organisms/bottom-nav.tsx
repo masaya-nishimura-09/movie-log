@@ -37,9 +37,6 @@ type BottomNavProps = {
 };
 
 export function BottomNav({ lang, dict }: BottomNavProps) {
-  const pathname = usePathname();
-  if (pathname.endsWith("/new") || pathname.endsWith("/edit")) return null;
-
   return (
     <nav className="fixed inset-x-0 bottom-0 z-40 bg-sidebar pb-[env(safe-area-inset-bottom)] md:hidden">
       <div className="flex h-17 items-center px-2">

@@ -237,7 +237,7 @@ export function RecordCreateForm({
         </div>
       </div>
 
-      <footer className="sticky bottom-0 flex items-center gap-2 border-t bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:static md:mx-10 md:mb-8 md:border-secondary md:px-0 md:pt-2 md:pb-0">
+      <footer className="flex items-center gap-2 border-t px-4 pt-3 pb-4 md:mx-10 md:mb-8 md:border-secondary md:px-0 md:pt-2 md:pb-0">
         {step > 0 && (
           <Button
             type="button"
