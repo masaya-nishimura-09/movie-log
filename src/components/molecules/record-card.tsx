@@ -54,7 +54,8 @@ export function RecordCard({
         className="pointer-events-none absolute -top-px -left-px size-0 bg-background transition-all duration-200 [clip-path:polygon(0_0,100%_0,0_100%)] group-hover:size-[28px]"
       />
       <svg
-        aria-hidden
+        aria-hidden="true"
+        role="presentation"
         viewBox="0 0 19 19"
         className="pointer-events-none absolute -top-px -left-px size-0 fill-secondary transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
       >
