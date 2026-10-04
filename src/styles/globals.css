@@ -10,6 +10,7 @@
   --color-foreground-sub: var(--foreground-sub);
   --color-header: var(--header);
   --color-primary-edge: var(--primary-edge);
+  --color-destructive-edge: var(--destructive-edge);
   --color-field: var(--field);
   --color-placeholder: var(--placeholder);
   --color-selected: var(--selected);
@@ -91,6 +92,7 @@
   --accent: #ead7b5;
   --accent-foreground: #5c3b22;
   --destructive: #a2432f;
+  --destructive-edge: #66291c;
   --destructive-border: #d9b8ad;
   --destructive-foreground: #8a3423;
   --border: #a1a9a2;
@@ -138,6 +140,7 @@
   --accent: #3a2c22;
   --accent-foreground: #e0b58c;
   --destructive: #d9745e;
+  --destructive-edge: #824134;
   --destructive-border: #6b3a30;
   --destructive-foreground: #e89a88;
   --border: #17395a;

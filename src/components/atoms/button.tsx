@@ -17,7 +17,8 @@ const buttonStyles = cva(
           "text-foreground-sub hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary",
         destructive:
           "border-destructive-border bg-card text-destructive-foreground shadow-[0_3px_0_0_var(--color-destructive-border)] hover:bg-destructive/5 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--color-destructive-border)]",
-        danger: "bg-destructive font-bold text-white hover:bg-destructive/90",
+        danger:
+          "bg-clip-border bg-destructive font-bold text-white shadow-[0_3px_0_0_var(--color-destructive-edge)] hover:bg-destructive/90 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--color-destructive-edge)]",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {
