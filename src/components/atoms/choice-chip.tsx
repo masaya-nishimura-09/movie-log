@@ -18,11 +18,11 @@ export const choiceChipVariants = cva(
       },
       tone: {
         plain:
-          "[--chip-edge:var(--color-input)] border-input bg-card text-foreground hover:bg-secondary",
+          "[--chip-edge:var(--input)] border-input bg-card text-foreground hover:bg-secondary",
         field:
-          "[--chip-edge:var(--color-input)] border-input bg-field text-foreground-sub hover:bg-secondary",
+          "[--chip-edge:var(--input)] border-input bg-field text-foreground-sub hover:bg-secondary",
         genre:
-          "[--chip-edge:var(--color-genre)] border-genre bg-transparent text-genre-foreground hover:bg-secondary",
+          "[--chip-edge:var(--genre)] border-genre bg-transparent text-genre-foreground hover:bg-secondary",
       },
     },
     defaultVariants: { shape: "pill", size: "md", tone: "plain" },

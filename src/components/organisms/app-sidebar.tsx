@@ -38,7 +38,7 @@ export function AppSidebar({ lang, dict }: AppSidebarProps) {
               <SidebarMenuButton
                 render={<Link href={newHref} />}
                 tooltip={dict.newRecord}
-                className="h-12 w-fit rounded-2xl bg-primary px-5 font-bold text-primary-foreground shadow-[0_3px_0_0_var(--color-primary-edge)] transition-all hover:bg-primary/90 hover:text-primary-foreground active:translate-y-[3px] active:bg-primary/90 active:text-primary-foreground active:shadow-[0_0_0_0_var(--color-primary-edge)] data-active:bg-primary data-active:text-primary-foreground group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:[&>span]:hidden"
+                className="h-12 w-fit rounded-2xl bg-primary px-5 font-bold text-primary-foreground shadow-[0_3px_0_0_var(--primary-edge)] transition-all hover:bg-primary/90 hover:text-primary-foreground active:translate-y-[3px] active:bg-primary/90 active:text-primary-foreground active:shadow-[0_0_0_0_var(--primary-edge)] data-active:bg-primary data-active:text-primary-foreground group-data-[collapsible=icon]:size-10! group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-0! group-data-[collapsible=icon]:[&>span]:hidden"
                 isActive={onNew}
               >
                 <Plus />
