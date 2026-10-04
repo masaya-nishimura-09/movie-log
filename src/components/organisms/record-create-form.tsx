@@ -1,7 +1,6 @@
 "use client";
 
-import { ArrowLeft, ArrowRight, X } from "lucide-react";
-import Link from "next/link";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import {
   type FormEvent,
   startTransition,
@@ -113,24 +112,8 @@ export function RecordCreateForm({
   };
 
   return (
-    <form
-      onSubmit={submit}
-      noValidate
-      className="flex min-h-dvh flex-col bg-card md:mx-auto md:my-10 md:min-h-0 md:w-160 md:shrink-0 md:overflow-hidden md:rounded-[18px] md:border"
-    >
-      <header className="sticky top-0 z-10 flex flex-col gap-3.5 border-b bg-card px-4.5 pt-4 pb-3.5 md:static md:border-none md:px-6.5 md:pt-5.5 md:pb-0">
-        <div className="flex items-center justify-between">
-          <h1 className="font-bold text-[19px] text-foreground">
-            {dict.createTitle}
-          </h1>
-          <Link
-            href={`/${lang}/records`}
-            aria-label={dict.close}
-            className="-mr-1 rounded-sm p-1 text-muted-foreground hover:text-foreground"
-          >
-            <X className="size-5.25" aria-hidden />
-          </Link>
-        </div>
+    <form onSubmit={submit} noValidate className="flex w-full flex-1 flex-col">
+      <header className="sticky top-14 z-10 flex flex-col gap-3.5 border-b bg-background px-4 pt-4 pb-3.5 md:static md:border-none md:px-10 md:pt-6 md:pb-0">
         <ol className="flex gap-2">
           {steps.map((label, index) => (
             <li
@@ -166,90 +149,92 @@ export function RecordCreateForm({
         </p>
       </header>
 
-      <div className="flex-1 px-4.5 py-5.5 md:px-6.5 md:pb-2">
-        {failure && (
-          <p
-            role="alert"
-            className="mb-4.5 rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
+      <div className="flex-1 px-4 py-5.5 md:flex-none md:px-10 md:pb-2">
+        <div className="rounded-[18px] border bg-card p-4.5 md:p-5.5">
+          {failure && (
+            <p
+              role="alert"
+              className="mb-4.5 rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
+            >
+              {failure.messageKey === "notFound"
+                ? dict.notFound
+                : failure.messageKey === "invalidInput"
+                  ? dict.invalidInput
+                  : dict.unexpectedError}
+            </p>
+          )}
+          <div
+            hidden={step !== 0}
+            ref={(el) => {
+              stepRefs.current[0] = el;
+            }}
           >
-            {failure.messageKey === "notFound"
-              ? dict.notFound
-              : failure.messageKey === "invalidInput"
-                ? dict.invalidInput
-                : dict.unexpectedError}
-          </p>
-        )}
-        <div
-          hidden={step !== 0}
-          ref={(el) => {
-            stepRefs.current[0] = el;
-          }}
-        >
-          <RecordBasicsFields
-            errors={failure?.errors}
-            title={movie.title}
-            onTitleChange={movie.setTitle}
-            searchMovies={searchMovies}
-            onMovieSelect={movie.select}
-            values={values}
-            dict={dict}
-            enums={enums}
-            counterTemplate={counterTemplate}
-          />
-        </div>
-        <div
-          hidden={step !== 1}
-          ref={(el) => {
-            stepRefs.current[1] = el;
-          }}
-          className="flex flex-col gap-4.5"
-        >
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-bold text-base text-foreground">
-              {dict.stepMovieInfo}
-            </h2>
-            <span className="text-muted-foreground text-xs">
-              {dict.movieInfoHint}
-            </span>
+            <RecordBasicsFields
+              errors={failure?.errors}
+              title={movie.title}
+              onTitleChange={movie.setTitle}
+              searchMovies={searchMovies}
+              onMovieSelect={movie.select}
+              values={values}
+              dict={dict}
+              enums={enums}
+              counterTemplate={counterTemplate}
+            />
           </div>
-          <RecordMovieFields
-            errors={failure?.errors}
-            key={movie.version}
-            lang={lang}
-            values={movie.values}
-            languageOptions={movieLanguageOptions}
-            maxReleaseYear={maxReleaseYear}
-            uploadPoster={uploadPoster}
-            dict={dict}
-            enums={enums}
-          />
-        </div>
-        <div
-          hidden={step !== 2}
-          ref={(el) => {
-            stepRefs.current[2] = el;
-          }}
-          className="flex flex-col gap-4.5"
-        >
-          <div className="flex items-baseline gap-2">
-            <h2 className="font-bold text-base text-foreground">
-              {dict.impressionHeading}
-            </h2>
-            <span className="text-muted-foreground text-xs">
-              {dict.optional}
-            </span>
+          <div
+            hidden={step !== 1}
+            ref={(el) => {
+              stepRefs.current[1] = el;
+            }}
+            className="flex flex-col gap-4.5"
+          >
+            <div className="flex items-baseline gap-2">
+              <h2 className="font-bold text-base text-foreground">
+                {dict.stepMovieInfo}
+              </h2>
+              <span className="text-muted-foreground text-xs">
+                {dict.movieInfoHint}
+              </span>
+            </div>
+            <RecordMovieFields
+              errors={failure?.errors}
+              key={movie.version}
+              lang={lang}
+              values={movie.values}
+              languageOptions={movieLanguageOptions}
+              maxReleaseYear={maxReleaseYear}
+              uploadPoster={uploadPoster}
+              dict={dict}
+              enums={enums}
+            />
           </div>
-          <RecordImpressionFields
-            errors={failure?.errors}
-            values={values}
-            dict={dict}
-            enums={enums}
-            counterTemplate={counterTemplate}
-          />
+          <div
+            hidden={step !== 2}
+            ref={(el) => {
+              stepRefs.current[2] = el;
+            }}
+            className="flex flex-col gap-4.5"
+          >
+            <div className="flex items-baseline gap-2">
+              <h2 className="font-bold text-base text-foreground">
+                {dict.impressionHeading}
+              </h2>
+              <span className="text-muted-foreground text-xs">
+                {dict.optional}
+              </span>
+            </div>
+            <RecordImpressionFields
+              errors={failure?.errors}
+              values={values}
+              dict={dict}
+              enums={enums}
+              counterTemplate={counterTemplate}
+            />
+          </div>
         </div>
       </div>
 
-      <footer className="sticky bottom-0 flex items-center gap-2 border-t bg-card px-4.5 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:static md:mx-6.5 md:mb-6.5 md:border-secondary md:px-0 md:pt-2 md:pb-0">
+      <footer className="sticky bottom-0 flex items-center gap-2 border-t bg-background px-4 pt-3 pb-[calc(0.75rem+env(safe-area-inset-bottom))] md:static md:mx-10 md:mb-8 md:border-secondary md:px-0 md:pt-2 md:pb-0">
         {step > 0 && (
           <Button
             type="button"
