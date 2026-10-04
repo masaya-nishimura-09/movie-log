@@ -196,7 +196,8 @@
   html {
     @apply font-sans;
   }
-  html:has(.shell) {
+  html:has(.shell),
+  body:has(.shell) {
     background-color: #0a2947;
   }
 }
