@@ -8,7 +8,7 @@ const scoreBadgeVariants = cva(
     variants: {
       size: {
         sm: "h-6.5 min-w-6.5 rounded-[8px] px-1.75 text-[13px]",
-        md: "size-13 gap-0.5 rounded-2xl text-2xl",
+        md: "size-16 gap-1 rounded-[18px] text-2xl",
         lg: "size-18 gap-1 rounded-[20px] text-3xl",
       },
       tone: {
