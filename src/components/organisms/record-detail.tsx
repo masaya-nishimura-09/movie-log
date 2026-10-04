@@ -20,7 +20,7 @@ type RecordDetailProps = {
 
 function SectionLabel({ children }: { children: ReactNode }) {
   return (
-    <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">
+    <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em] 2xl:text-sm">
       {children}
     </h2>
   );
@@ -84,7 +84,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   );
 
   return (
-    <article className="mx-auto grid w-full gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(232px,440px)_minmax(0,1fr)]">
+    <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(232px,520px)_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(232px,440px)_minmax(0,1fr)]">
       <div className="flex gap-4 md:flex-col md:gap-3.5">
         <div className="contents md:relative md:block md:rounded-2xl md:border md:bg-card">
           <RecordPoster
@@ -93,7 +93,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             year={record.releaseYear > 0 ? String(record.releaseYear) : ""}
             platformLabel={platformLabel}
             size="detail"
-            sizes="(min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
+            sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
             className="w-29 shrink-0 rounded-xl border md:w-full md:rounded-t-[calc(var(--radius-2xl)-1px)] md:rounded-b-none md:border-0"
           />
           <div className="flex min-w-0 flex-col gap-3 md:hidden">
@@ -119,18 +119,18 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           </div>
           <div className="hidden flex-col gap-3 px-4 py-4 md:flex">
             <div className="flex items-center justify-between gap-3">
-              <span className="shrink-0 -rotate-3 rounded-sm border-2 border-primary/60 px-2 py-0.5 font-bold text-primary/80 text-xs tabular-nums tracking-wider">
+              <span className="shrink-0 -rotate-3 rounded-sm border-2 border-primary/60 px-2 py-0.5 font-bold text-primary/80 text-xs tabular-nums tracking-wider 2xl:text-sm">
                 <LocalDate
                   date={record.watchedAt}
                   locale={lang}
                   dateStyle="medium"
                 />
               </span>
-              <span className="min-w-0 truncate text-foreground-sub text-sm">
+              <span className="min-w-0 truncate text-foreground-sub text-sm 2xl:text-base">
                 {platformLabel}
               </span>
             </div>
-            <div className="flex flex-col gap-1 text-muted-foreground text-xs">
+            <div className="flex flex-col gap-1 text-muted-foreground text-xs 2xl:text-sm">
               <span>
                 {d.createdAt}{" "}
                 <LocalDate
@@ -158,14 +158,15 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             <ScoreBadge
               score={record.score}
               size="lg"
+              className="2xl:size-24 2xl:rounded-[26px] 2xl:text-5xl"
               label={scoreLabel}
               caption={d.scoreCaption}
             />
             <div className="flex min-w-0 flex-col gap-2.25 pt-0.5">
-              <h1 className="font-bold text-[29px] text-foreground leading-[1.35]">
+              <h1 className="font-bold text-[29px] text-foreground leading-[1.35] 2xl:text-[42px]">
                 {record.title}
               </h1>
-              <p className="flex flex-wrap gap-2.5 text-foreground-sub text-sm">
+              <p className="flex flex-wrap gap-2.5 text-foreground-sub text-sm 2xl:text-lg">
                 {meta.map((item, index) => (
                   <span key={item} className="flex gap-2.5">
                     {index > 0 && (
@@ -179,7 +180,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               </p>
             </div>
           </div>
-          <div className="flex flex-wrap gap-1.75">
+          <div className="flex flex-wrap gap-1.75 2xl:gap-2.5 2xl:[&>*]:px-3.5 2xl:[&>*]:py-2 2xl:[&>*]:text-sm">
             {record.genres.map((genre) => (
               <GenreTag key={genre}>{dict.enums.genre[genre]}</GenreTag>
             ))}
@@ -194,11 +195,11 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
         <section className="flex flex-col gap-2.5">
           <SectionLabel>{d.memo}</SectionLabel>
           {record.memo !== "" ? (
-            <p className="max-w-4xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
+            <p className="max-w-4xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
               {record.memo}
             </p>
           ) : (
-            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.memoEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
@@ -213,23 +214,23 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
         <section className="flex min-w-0 flex-col gap-3">
           <SectionLabel>{d.credits}</SectionLabel>
           {record.credits.length > 0 ? (
-            <dl className="grid max-w-4xl gap-x-7 gap-y-2.5 md:grid-cols-2">
+            <dl className="grid max-w-4xl gap-x-7 gap-y-2.5 md:grid-cols-2 2xl:max-w-5xl 2xl:gap-x-10 2xl:gap-y-3.5">
               {record.credits.map((credit, index) => (
                 <div
                   key={`${credit.creditRole}-${credit.personName}-${index}`}
                   className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
                 >
-                  <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
+                  <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs 2xl:text-sm">
                     {dict.enums.creditRole[credit.creditRole]}
                   </dt>
-                  <dd className="text-right text-foreground text-sm">
+                  <dd className="text-right text-foreground text-sm 2xl:text-lg">
                     {credit.personName}
                   </dd>
                 </div>
               ))}
             </dl>
           ) : (
-            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.creditsEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
