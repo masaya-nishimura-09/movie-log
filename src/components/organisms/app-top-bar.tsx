@@ -44,7 +44,7 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
       />
       <Link
         href={`/${lang}/records`}
-        className="rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-46"
+        className="flex items-center rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-46"
       >
         <Logo name={brandName} />
       </Link>
