@@ -18,7 +18,7 @@
     "toggleSidebar": "サイドバーを開閉する"
   },
   "bottomNav": {
-    "records": "みた映画",
+    "records": "鑑賞記録",
     "newRecord": "記録する",
     "account": "アカウント"
   },
@@ -58,7 +58,7 @@
     "hide": "パスワードを隠す"
   },
   "recordList": {
-    "heading": "みた映画",
+    "heading": "鑑賞記録",
     "summary": "{total}件中 {shown}件を表示",
     "activeFilters": "絞り込み {count}件",
     "noMatch": "条件に合う記録がありません",
