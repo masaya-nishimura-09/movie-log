@@ -1,4 +1,5 @@
 import { Pencil } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteRecordAction } from "@/actions/record/delete-record";
@@ -9,6 +10,14 @@ import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordDetail } from "@/components/organisms/record-detail";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
+
+export async function generateMetadata({
+  params,
+}: PageProps<"/[lang]/records/[id]">): Promise<Metadata> {
+  const { id } = await params;
+  const record = await getRecord(id);
+  return { title: record?.title };
+}
 
 export default async function RecordPage({
   params,

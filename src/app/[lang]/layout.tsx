@@ -19,7 +19,10 @@ const notoSansJP = Noto_Sans_JP({
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
   return {
-    title: dict.metadata.title,
+    title: {
+      default: dict.metadata.title,
+      template: `%s | ${dict.metadata.title}`,
+    },
     description: dict.metadata.description,
   };
 }

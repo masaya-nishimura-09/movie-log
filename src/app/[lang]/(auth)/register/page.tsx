@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { registerAction } from "@/actions/user/register";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.register.title };
+}
 
 export default async function RegisterPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);

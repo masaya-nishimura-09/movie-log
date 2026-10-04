@@ -1,4 +1,5 @@
 import { Info } from "lucide-react";
+import type { Metadata } from "next";
 import { updateAccountAction } from "@/actions/user/update-account";
 import { withdrawAction } from "@/actions/user/withdraw";
 import { getCurrentUser } from "@/api/user/get-current-user";
@@ -6,6 +7,11 @@ import { AccountForm } from "@/components/organisms/account-form";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { WithdrawSection } from "@/components/organisms/withdraw-section";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.account.title };
+}
 
 export default async function AccountPage() {
   const [lang, dict, user] = await Promise.all([

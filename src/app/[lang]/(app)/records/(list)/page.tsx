@@ -1,4 +1,5 @@
 import { Plus } from "lucide-react";
+import type { Metadata } from "next";
 import Link from "next/link";
 import { getRecords } from "@/api/record/get-records";
 import { buttonVariants } from "@/components/atoms/button";
@@ -24,6 +25,11 @@ import {
 } from "@/lib/record/parse-record-query";
 import { interpolate } from "@/lib/text/interpolate";
 import { buildHref } from "@/lib/url/build-href";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.recordList.heading };
+}
 
 export default async function RecordsPage({
   searchParams,

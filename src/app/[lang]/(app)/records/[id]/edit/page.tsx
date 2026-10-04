@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { uploadPosterAction } from "@/actions/media/upload-poster";
 import {
@@ -11,6 +12,11 @@ import { RecordEditForm } from "@/components/organisms/record-edit-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { buildLanguageOptions } from "@/lib/record/language-options";
 import { maxReleaseYear, toFormValues } from "@/lib/record/to-form-values";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.recordForm.editTitle };
+}
 
 export default async function EditRecordPage({
   params,

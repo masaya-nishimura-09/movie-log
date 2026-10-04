@@ -1,3 +1,4 @@
+import { cache } from "react";
 import { ApiError } from "@/api/client/api-error";
 import { apiFetch } from "@/api/client/api-fetch";
 import {
@@ -5,7 +6,7 @@ import {
   recordResponseSchema,
 } from "@/schemas/record/record";
 
-export async function getRecord(
+export const getRecord = cache(async function getRecord(
   recordId: string,
 ): Promise<MovieRecord | undefined> {
   try {
@@ -19,4 +20,4 @@ export async function getRecord(
     }
     throw error;
   }
-}
+});

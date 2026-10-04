@@ -1,6 +1,12 @@
+import type { Metadata } from "next";
 import { loginAction } from "@/actions/auth/login";
 import { LoginForm } from "@/components/organisms/login-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return { title: dict.login.submit };
+}
 
 export default async function LoginPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
