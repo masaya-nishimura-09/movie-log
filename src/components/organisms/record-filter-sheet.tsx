@@ -12,6 +12,7 @@ import {
   SheetTrigger,
 } from "@/components/molecules/sheet";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 
 type RecordFilterSheetProps = {
@@ -33,7 +34,12 @@ export function RecordFilterSheet({
     <Sheet>
       <SheetTrigger
         aria-label={dict.open}
-        className="flex h-9 items-center gap-1.5 rounded-full border-[1.5px] border-selected-border bg-card px-3 font-bold text-accent-foreground text-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(
+          buttonVariants({ variant: "outline", size: "sm" }),
+          "px-3",
+          activeCount > 0 &&
+            "border-selected-border bg-selected text-selected-foreground",
+        )}
       >
         <SlidersHorizontal className="size-4" aria-hidden />
         {activeCount > 0 && activeCount}
