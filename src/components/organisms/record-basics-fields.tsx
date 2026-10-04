@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { ChoiceChip } from "@/components/atoms/choice-chip";
+import { ChoiceChip, choiceChipVariants } from "@/components/atoms/choice-chip";
 import { Input } from "@/components/atoms/input";
 import { FormField } from "@/components/molecules/form-field";
 import { MovieTitleField } from "@/components/molecules/movie-title-field";
@@ -115,12 +115,12 @@ export function RecordBasicsFields({
                   key={quick.label}
                   type="button"
                   onClick={() => setWatchedAt(quick.value)}
-                  className={cn(
-                    "rounded-full px-2.75 py-1.25 text-xs",
-                    watchedAt === quick.value
-                      ? "bg-selected text-selected-foreground"
-                      : "bg-secondary text-foreground-sub hover:text-foreground",
-                  )}
+                  data-active={watchedAt === quick.value}
+                  className={choiceChipVariants({
+                    shape: "pill",
+                    size: "sm",
+                    tone: "field",
+                  })}
                 >
                   {quick.label}
                 </button>
