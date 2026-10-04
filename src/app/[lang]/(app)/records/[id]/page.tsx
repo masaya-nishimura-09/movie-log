@@ -42,7 +42,7 @@ export default async function RecordPage({
               aria-label={dict.recordDetail.edit}
               className={cn(
                 buttonVariants({ variant: "outline", size: "sm" }),
-                "border-transparent bg-transparent px-2 md:border-input md:bg-card md:px-3.5",
+                "px-2.5 md:px-3.5",
               )}
             >
               <Pencil className="size-4.5" aria-hidden />

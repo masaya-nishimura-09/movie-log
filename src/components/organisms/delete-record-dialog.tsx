@@ -46,7 +46,7 @@ export function DeleteRecordDialog({
             variant="destructive"
             size="sm"
             aria-label={triggerLabel}
-            className="border-transparent bg-transparent px-2 md:border-destructive-border md:bg-card md:px-3.5"
+            className="px-2.5 md:px-3.5"
           />
         }
       >
