@@ -33,7 +33,7 @@ export function LoginForm({
     key && key in dict ? dict[key as keyof typeof dict] : undefined;
 
   return (
-    <form action={formAction} className="flex flex-col gap-5">
+    <form action={formAction} noValidate className="flex flex-col gap-5">
       {failure && !failure.errors && (
         <p
           role="alert"

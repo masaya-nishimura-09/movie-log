@@ -85,6 +85,7 @@ export function RecordEditForm({
   return (
     <form
       onSubmit={submit}
+      noValidate
       className="flex w-full flex-col gap-4 px-4 pt-5 md:px-10 md:pt-8"
     >
       {failure && (
