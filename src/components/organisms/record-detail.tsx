@@ -52,7 +52,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   });
 
   const watchedCard = (
-    <div className="grid max-w-3xl gap-4 sm:grid-cols-2">
+    <div className="grid max-w-4xl gap-4 sm:grid-cols-2">
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.watchedAt}</SectionLabel>
         <p className="rounded-2xl border bg-card px-5.5 py-4 font-bold text-[15px] text-foreground">
@@ -84,50 +84,71 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   );
 
   return (
-    <article className="mx-auto grid w-full gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[232px_minmax(0,1fr)_300px] 2xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)_340px]">
+    <article className="mx-auto grid w-full gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(232px,320px)_minmax(0,1fr)] 2xl:grid-cols-[minmax(232px,440px)_minmax(0,1fr)]">
       <div className="flex gap-4 md:flex-col md:gap-3.5">
-        <RecordPoster
-          title={record.title}
-          posterUrl={record.posterUrl}
-          year={record.releaseYear > 0 ? String(record.releaseYear) : ""}
-          platformLabel={platformLabel}
-          size="detail"
-          sizes="(min-width: 1536px) 320px, (min-width: 768px) 232px, 116px"
-          className="w-29 shrink-0 rounded-xl border md:w-full md:rounded-2xl"
-        />
-        <div className="flex min-w-0 flex-col gap-3 md:hidden">
-          <ScoreBadge
-            score={record.score}
-            size="md"
-            label={scoreLabel}
-            caption={d.scoreCaption}
+        <div className="contents md:relative md:block md:rounded-2xl md:border md:bg-card">
+          <RecordPoster
+            title={record.title}
+            posterUrl={record.posterUrl}
+            year={record.releaseYear > 0 ? String(record.releaseYear) : ""}
+            platformLabel={platformLabel}
+            size="detail"
+            sizes="(min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
+            className="w-29 shrink-0 rounded-xl border md:w-full md:rounded-t-[calc(var(--radius-2xl)-1px)] md:rounded-b-none md:border-0"
           />
-          <h1 className="font-bold text-foreground text-xl leading-[1.35]">
-            {record.title}
-          </h1>
-          <p className="text-[13px] text-foreground-sub leading-relaxed">
-            {[year, runtime].filter(Boolean).join(" ・ ")}
-            <br />
-            {[language, ...countries].join(" ・ ")}
-          </p>
-        </div>
-        <div className="hidden flex-col gap-1 px-0.5 text-muted-foreground text-xs md:flex">
-          <span>
-            {d.createdAt}{" "}
-            <LocalDate
-              date={record.createdAt}
-              locale={lang}
-              dateStyle="dateTime"
+          <div className="flex min-w-0 flex-col gap-3 md:hidden">
+            <ScoreBadge
+              score={record.score}
+              size="md"
+              label={scoreLabel}
+              caption={d.scoreCaption}
             />
-          </span>
-          <span>
-            {d.updatedAt}{" "}
-            <LocalDate
-              date={record.updatedAt}
-              locale={lang}
-              dateStyle="dateTime"
-            />
-          </span>
+            <h1 className="font-bold text-foreground text-xl leading-[1.35]">
+              {record.title}
+            </h1>
+            <p className="text-[13px] text-foreground-sub leading-relaxed">
+              {[year, runtime].filter(Boolean).join(" ・ ")}
+              <br />
+              {[language, ...countries].join(" ・ ")}
+            </p>
+          </div>
+          <div aria-hidden className="relative hidden h-0 md:block">
+            <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
+            <span className="absolute -top-2 -left-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_0_0_50%)]" />
+            <span className="absolute -top-2 -right-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_50%_0_0)]" />
+          </div>
+          <div className="hidden flex-col gap-3 px-4 py-4 md:flex">
+            <div className="flex items-center justify-between gap-3">
+              <span className="shrink-0 -rotate-3 rounded-sm border-2 border-primary/60 px-2 py-0.5 font-bold text-primary/80 text-xs tabular-nums tracking-wider">
+                <LocalDate
+                  date={record.watchedAt}
+                  locale={lang}
+                  dateStyle="medium"
+                />
+              </span>
+              <span className="min-w-0 truncate text-foreground-sub text-sm">
+                {platformLabel}
+              </span>
+            </div>
+            <div className="flex flex-col gap-1 text-muted-foreground text-xs">
+              <span>
+                {d.createdAt}{" "}
+                <LocalDate
+                  date={record.createdAt}
+                  locale={lang}
+                  dateStyle="dateTime"
+                />
+              </span>
+              <span>
+                {d.updatedAt}{" "}
+                <LocalDate
+                  date={record.updatedAt}
+                  locale={lang}
+                  dateStyle="dateTime"
+                />
+              </span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -168,16 +189,16 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           </div>
         </div>
 
-        {watchedCard}
+        <div className="md:hidden">{watchedCard}</div>
 
         <section className="flex flex-col gap-2.5">
           <SectionLabel>{d.memo}</SectionLabel>
           {record.memo !== "" ? (
-            <p className="max-w-3xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
+            <p className="max-w-4xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose">
               {record.memo}
             </p>
           ) : (
-            <p className="flex max-w-3xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
               {d.memoEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
@@ -188,37 +209,38 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             </p>
           )}
         </section>
-      </div>
-      <section className="flex min-w-0 flex-col gap-3 md:col-start-2 xl:col-start-3 xl:row-start-1">
-        <SectionLabel>{d.credits}</SectionLabel>
-        {record.credits.length > 0 ? (
-          <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2 xl:grid-cols-1">
-            {record.credits.map((credit, index) => (
-              <div
-                key={`${credit.creditRole}-${credit.personName}-${index}`}
-                className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
+
+        <section className="flex min-w-0 flex-col gap-3">
+          <SectionLabel>{d.credits}</SectionLabel>
+          {record.credits.length > 0 ? (
+            <dl className="grid max-w-4xl gap-x-7 gap-y-2.5 md:grid-cols-2">
+              {record.credits.map((credit, index) => (
+                <div
+                  key={`${credit.creditRole}-${credit.personName}-${index}`}
+                  className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
+                >
+                  <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
+                    {dict.enums.creditRole[credit.creditRole]}
+                  </dt>
+                  <dd className="text-right text-foreground text-sm">
+                    {credit.personName}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          ) : (
+            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
+              {d.creditsEmpty}
+              <Link
+                href={`/${lang}/records/${record.recordId}/edit`}
+                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
               >
-                <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs">
-                  {dict.enums.creditRole[credit.creditRole]}
-                </dt>
-                <dd className="text-right text-foreground text-sm">
-                  {credit.personName}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        ) : (
-          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground">
-            {d.creditsEmpty}
-            <Link
-              href={`/${lang}/records/${record.recordId}/edit`}
-              className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-            >
-              {d.creditsAdd}
-            </Link>
-          </p>
-        )}
-      </section>
+                {d.creditsAdd}
+              </Link>
+            </p>
+          )}
+        </section>
+      </div>
     </article>
   );
 }
