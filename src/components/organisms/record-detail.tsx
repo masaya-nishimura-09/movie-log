@@ -211,19 +211,19 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           )}
         </section>
 
-        <section className="flex min-w-0 flex-col gap-3">
+        <section className="@container flex min-w-0 flex-col gap-3">
           <SectionLabel>{d.credits}</SectionLabel>
           {record.credits.length > 0 ? (
-            <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2 2xl:gap-x-10 2xl:gap-y-3.5">
+            <dl className="grid @2xl:grid-cols-2 gap-x-7 gap-y-2.5 2xl:gap-x-10 2xl:gap-y-3.5">
               {record.credits.map((credit, index) => (
                 <div
                   key={`${credit.creditRole}-${credit.personName}-${index}`}
-                  className="flex items-baseline justify-between gap-3 border-b border-dashed pb-2.25"
+                  className="flex flex-wrap items-baseline justify-between gap-x-3 border-b border-dashed pb-2.25"
                 >
                   <dt className="shrink-0 whitespace-nowrap text-muted-foreground text-xs 2xl:text-sm">
                     {dict.enums.creditRole[credit.creditRole]}
                   </dt>
-                  <dd className="text-right text-foreground text-sm 2xl:text-lg">
+                  <dd className="ml-auto min-w-0 break-words text-right text-foreground text-sm 2xl:text-lg">
                     {credit.personName}
                   </dd>
                 </div>
