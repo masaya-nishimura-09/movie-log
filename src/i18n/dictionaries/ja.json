@@ -7,6 +7,13 @@
     "name": "Cinelog",
     "tagline": "みた映画を、あとで思い出せるように。"
   },
+  "about": {
+    "title": "このアプリについて",
+    "link": "このアプリについて",
+    "back": "戻る",
+    "creditsHeading": "クレジット",
+    "tmdbNotice": "This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB."
+  },
   "header": {
     "searchPlaceholder": "タイトルで検索",
     "searchLabel": "タイトルで検索",
