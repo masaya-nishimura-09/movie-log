@@ -18,7 +18,7 @@ export default async function AppLayout({ children }: LayoutProps<"/[lang]">) {
   return (
     <SidebarProvider
       defaultOpen={defaultOpen}
-      className="flex-col bg-sidebar [--header-height:--spacing(15)]"
+      className="shell flex-col bg-sidebar [--header-height:--spacing(15)]"
     >
       <AppTopBar
         lang={lang}
@@ -28,7 +28,7 @@ export default async function AppLayout({ children }: LayoutProps<"/[lang]">) {
       />
       <div className="flex flex-1">
         <AppSidebar lang={lang} dict={dict.bottomNav} />
-        <SidebarInset className="mx-2 mb-[calc(4.75rem+env(safe-area-inset-bottom))] min-w-0 rounded-2xl md:mb-2 md:h-[calc(100svh-var(--header-height)-1rem)] md:overflow-y-auto">
+        <SidebarInset className="shell-inset mx-2 mb-[calc(4.75rem+env(safe-area-inset-bottom))] min-w-0 rounded-2xl md:mb-2 md:h-[calc(100svh-var(--header-height)-1rem)] md:overflow-y-auto">
           {children}
         </SidebarInset>
       </div>
