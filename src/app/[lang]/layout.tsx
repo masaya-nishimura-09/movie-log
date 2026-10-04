@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
@@ -15,6 +15,10 @@ const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
 });
+
+export const viewport: Viewport = {
+  themeColor: "#0a2947",
+};
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
