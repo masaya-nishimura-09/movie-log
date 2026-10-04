@@ -125,7 +125,6 @@
   "recordForm": {
     "createTitle": "記録する",
     "editTitle": "記録を編集",
-    "close": "閉じる",
     "required": "必須",
     "stepBasics": "まず4つ",
     "stepMovieInfo": "映画の情報",

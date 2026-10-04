@@ -125,7 +125,6 @@
   "recordForm": {
     "createTitle": "Log a film",
     "editTitle": "Edit record",
-    "close": "Close",
     "required": "Required",
     "stepBasics": "The basics",
     "stepMovieInfo": "Film info",
