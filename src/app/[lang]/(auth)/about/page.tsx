@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
+import { Logo } from "@/components/atoms/logo";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 
@@ -17,8 +18,8 @@ export default async function AboutPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-bold text-2xl text-foreground">
-          {dict.brand.name}
+        <h1>
+          <Logo name={dict.brand.name} className="text-2xl [&>svg]:size-7" />
         </h1>
         <p className="text-[13px] text-foreground-sub">{dict.brand.tagline}</p>
       </div>
