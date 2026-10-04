@@ -107,7 +107,7 @@ export function RecordBasicsFields({
               required
               value={watchedAt}
               onChange={(event) => setWatchedAt(event.target.value)}
-              className="tabular-nums"
+              className="max-w-full appearance-none tabular-nums [&::-webkit-date-and-time-value]:text-left"
             />
             <div className="mt-0.75 flex gap-1.5">
               {quickDates.map((quick) => (
