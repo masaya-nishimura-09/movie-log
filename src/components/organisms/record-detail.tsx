@@ -195,11 +195,11 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
         <section className="flex flex-col gap-2.5">
           <SectionLabel>{d.memo}</SectionLabel>
           {record.memo !== "" ? (
-            <p className="max-w-4xl whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
+            <p className="whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
               {record.memo}
             </p>
           ) : (
-            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.memoEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
@@ -214,7 +214,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
         <section className="flex min-w-0 flex-col gap-3">
           <SectionLabel>{d.credits}</SectionLabel>
           {record.credits.length > 0 ? (
-            <dl className="grid max-w-4xl gap-x-7 gap-y-2.5 md:grid-cols-2 2xl:max-w-5xl 2xl:gap-x-10 2xl:gap-y-3.5">
+            <dl className="grid gap-x-7 gap-y-2.5 md:grid-cols-2 2xl:gap-x-10 2xl:gap-y-3.5">
               {record.credits.map((credit, index) => (
                 <div
                   key={`${credit.creditRole}-${credit.personName}-${index}`}
@@ -230,7 +230,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               ))}
             </dl>
           ) : (
-            <p className="flex max-w-4xl flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:max-w-5xl 2xl:px-7 2xl:py-6 2xl:text-lg">
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.creditsEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
