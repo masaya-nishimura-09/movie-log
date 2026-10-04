@@ -1,5 +1,8 @@
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { buttonVariants } from "@/components/atoms/button";
 import { contactFormUrl } from "@/lib/legal/contact";
+import { cn } from "@/lib/style/cn";
 
 type LegalSection = { h: string; p: string[] };
 
@@ -65,8 +68,9 @@ export function LegalDocument({
       ))}
       <Link
         href={backHref}
-        className="self-center rounded-sm text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(buttonVariants({ variant: "outline" }), "self-center")}
       >
+        <ArrowLeft aria-hidden />
         {backLabel}
       </Link>
     </article>

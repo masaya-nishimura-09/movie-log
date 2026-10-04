@@ -1,7 +1,10 @@
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { buttonVariants } from "@/components/atoms/button";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { cn } from "@/lib/style/cn";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -51,8 +54,9 @@ export default async function AboutPage() {
       </nav>
       <Link
         href={`/${lang}/records`}
-        className="self-center rounded-sm text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+        className={cn(buttonVariants({ variant: "outline" }), "self-center")}
       >
+        <ArrowLeft aria-hidden />
         {dict.about.back}
       </Link>
     </div>
