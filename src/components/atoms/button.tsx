@@ -8,15 +8,15 @@ const buttonStyles = cva(
     variants: {
       variant: {
         default:
-          "bg-clip-border bg-primary font-bold text-primary-foreground shadow-[0_3px_0_0_var(--color-primary-edge)] hover:bg-primary/90 active:not-aria-[haspopup]:translate-y-[3px] active:not-aria-[haspopup]:shadow-[0_0_0_0_var(--color-primary-edge)]",
+          "bg-clip-border bg-primary font-bold text-primary-foreground shadow-[0_3px_0_0_var(--color-primary-edge)] hover:bg-primary/90 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--color-primary-edge)]",
         outline:
-          "border-input bg-card text-foreground shadow-[0_3px_0_0_var(--color-input)] hover:bg-secondary aria-expanded:bg-secondary active:not-aria-[haspopup]:translate-y-[3px] active:not-aria-[haspopup]:shadow-[0_0_0_0_var(--color-input)]",
+          "border-input bg-card text-foreground shadow-[0_3px_0_0_var(--color-input)] hover:bg-secondary aria-expanded:bg-secondary active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--color-input)]",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
           "text-foreground-sub hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary",
         destructive:
-          "border-destructive-border bg-card text-destructive-foreground shadow-[0_3px_0_0_var(--color-destructive-border)] hover:bg-destructive/5 active:not-aria-[haspopup]:translate-y-[3px] active:not-aria-[haspopup]:shadow-[0_0_0_0_var(--color-destructive-border)]",
+          "border-destructive-border bg-card text-destructive-foreground shadow-[0_3px_0_0_var(--color-destructive-border)] hover:bg-destructive/5 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--color-destructive-border)]",
         danger: "bg-destructive font-bold text-white hover:bg-destructive/90",
         link: "text-primary underline-offset-4 hover:underline",
       },
