@@ -14,6 +14,195 @@
     "creditsHeading": "Credits",
     "tmdbNotice": "This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB."
   },
+  "legal": {
+    "updatedLabel": "Last updated",
+    "updated": "October 4, 2026",
+    "contactLabel": "Contact form",
+    "contactPending": "Coming soon",
+    "back": "Back",
+    "terms": {
+      "title": "Terms of Use",
+      "intro": "These Terms of Use (the \"Terms\") set out the conditions for using Cinelog (the \"Service\") between the Cinelog operator (the \"Operator\") and its users. You must agree to these Terms to use the Service.",
+      "sections": [
+        {
+          "h": "1. About the Service",
+          "p": [
+            "The Service is a personal log for films you have watched. You can save, list, search and edit records such as the watched date, score and memo.",
+            "Film information is searched through TMDB (The Movie Database).",
+            "The Service is provided free of charge."
+          ]
+        },
+        {
+          "h": "2. Accounts",
+          "p": [
+            "To use the Service, you register with a display name, an email address and a password. Please enter accurate information.",
+            "You are responsible for keeping your password safe. Do not let anyone else use it.",
+            "Anything done through your account is treated as done by you."
+          ]
+        },
+        {
+          "h": "3. Prohibited acts",
+          "p": [
+            "You must not:",
+            "- break the law or public order;",
+            "- save or upload content that infringes the rights of others, such as copyright or privacy;",
+            "- interfere with the operation of the Service, for example by unauthorized access or excessive load;",
+            "- use another user's account without permission; or",
+            "- do anything else the Operator considers inappropriate."
+          ]
+        },
+        {
+          "h": "4. Your records",
+          "p": [
+            "You keep the rights to the records you save, such as memos and images.",
+            "With the current features, your records are not shown to other users.",
+            "The Operator handles your records only as needed to provide and maintain the Service and to respond to problems.",
+            "You confirm that you hold the necessary rights to any image you upload."
+          ]
+        },
+        {
+          "h": "5. External services",
+          "p": [
+            "Film information comes from TMDB. The Service is not endorsed or certified by TMDB.",
+            "We do not guarantee that the information is accurate or up to date."
+          ]
+        },
+        {
+          "h": "6. Changes, suspension and end of the Service",
+          "p": [
+            "The Operator may change, suspend or end the Service without prior notice.",
+            "If the Service ends, we will try to give notice beforehand."
+          ]
+        },
+        {
+          "h": "7. Leaving the Service",
+          "p": [
+            "You can delete your account at any time from the account settings.",
+            "When you do, your account and records are deleted and cannot be restored."
+          ]
+        },
+        {
+          "h": "8. Suspension of use",
+          "p": [
+            "If you break these Terms, the Operator may suspend your use or delete your account without prior notice."
+          ]
+        },
+        {
+          "h": "9. Disclaimer",
+          "p": [
+            "The Service is provided as is. We do not guarantee accuracy, continuity or that data will not be lost.",
+            "Except where the Operator acts intentionally or with gross negligence, the Operator is not liable for damages arising from your use of the Service.",
+            "We recommend keeping your own copy of records that matter to you."
+          ]
+        },
+        {
+          "h": "10. Changes to these Terms",
+          "p": [
+            "The Operator may change these Terms when needed.",
+            "Changes take effect when posted on the Service. Important changes will be announced on the Service."
+          ]
+        },
+        {
+          "h": "11. Governing law and courts",
+          "p": [
+            "These Terms are governed by Japanese law.",
+            "Japanese courts have jurisdiction as the court of first instance for any dispute about the Service."
+          ]
+        },
+        {
+          "h": "12. Contact",
+          "p": [
+            "For questions about the Service, please use the contact form below."
+          ]
+        }
+      ]
+    },
+    "privacy": {
+      "title": "Privacy Policy",
+      "intro": "The Cinelog operator (the \"Operator\") sets out below how it handles users' information in Cinelog (the \"Service\").",
+      "sections": [
+        {
+          "h": "1. Information we collect",
+          "p": [
+            "The Service collects the following.",
+            "- Account information: display name, email address, and password (stored in a form that cannot be turned back into the original text)",
+            "- Record information: title, release year, runtime, language, countries, genres, credits, watched date, platform, score, mood tags and memo",
+            "- Poster images: the image URL you enter, or the image you upload",
+            "- Information used to keep you logged in",
+            "- For server operation, activity logs may be kept."
+          ]
+        },
+        {
+          "h": "2. How we use it",
+          "p": [
+            "We use the information for:",
+            "- providing the Service (saving, showing, searching and editing records);",
+            "- logging in and verifying who you are;",
+            "- answering inquiries;",
+            "- investigating and fixing problems; and",
+            "- dealing with violations of the Terms of Use."
+          ]
+        },
+        {
+          "h": "3. Sharing with third parties",
+          "p": [
+            "Except where required by law, the Operator does not share the information with third parties without your consent."
+          ]
+        },
+        {
+          "h": "4. External services",
+          "p": [
+            "We use TMDB (The Movie Database) to search for films and fetch their information. The words you type when searching are sent to TMDB.",
+            "The Service runs on servers of [TO FILL IN: hosting provider name], which also stores the data.",
+            "We do not use external services for advertising or analytics."
+          ]
+        },
+        {
+          "h": "5. Cookies and local storage",
+          "p": [
+            "The Service uses cookies and local storage for:",
+            "- keeping you logged in (two cookies);",
+            "- remembering whether the sidebar is open; and",
+            "- remembering your theme setting (light or dark).",
+            "They are not used for advertising or tracking."
+          ]
+        },
+        {
+          "h": "6. Retention and deletion",
+          "p": [
+            "Account information and records are kept until you delete your account.",
+            "When you delete your account, your account information, records and uploaded images are deleted."
+          ]
+        },
+        {
+          "h": "7. Security",
+          "p": [
+            "The Operator works to prevent leaks, loss and damage of the information.",
+            "Passwords are stored in a form that cannot be turned back into the original text."
+          ]
+        },
+        {
+          "h": "8. Access, correction and deletion",
+          "p": [
+            "From the account settings, you can change your display name, email address and password, and delete your account (and with it your information).",
+            "For any other request, please use the contact form."
+          ]
+        },
+        {
+          "h": "9. Changes to this policy",
+          "p": [
+            "The Operator may change this policy when needed. Changes take effect when posted on the Service."
+          ]
+        },
+        {
+          "h": "10. Contact",
+          "p": [
+            "For questions about this policy, please use the contact form below."
+          ]
+        }
+      ]
+    }
+  },
   "header": {
     "searchPlaceholder": "Search by title",
     "searchLabel": "Search by title",
@@ -50,6 +239,11 @@
     "email": "Email",
     "password": "Password",
     "passwordHint": "8-72 characters",
+    "agreeTerms": "I agree to the {terms}",
+    "termsLink": "Terms of Use",
+    "privacyNote": "Please read the {privacy}.",
+    "privacyLink": "Privacy Policy",
+    "termsNotAgreed": "You need to agree to the Terms of Use",
     "submit": "Sign up and start",
     "toLoginPrompt": "Already registered?",
     "toLogin": "Log in",

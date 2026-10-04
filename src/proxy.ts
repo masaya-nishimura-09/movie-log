@@ -14,7 +14,7 @@ import {
   tokenCookies,
 } from "@/lib/auth/token-cookies";
 
-const publicPaths = ["/login", "/register", "/about"];
+const publicPaths = ["/login", "/register", "/about", "/terms", "/privacy"];
 
 function redirectToLogin(request: NextRequest, locale: Locale) {
   const url = request.nextUrl.clone();
