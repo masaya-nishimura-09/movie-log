@@ -234,8 +234,7 @@
     "account": "Account settings",
     "about": "About this app",
     "logout": "Log out",
-    "openSearch": "Search",
-    "toggleSidebar": "Toggle sidebar"
+    "openSearch": "Search"
   },
   "bottomNav": {
     "records": "Films",

@@ -1,6 +1,7 @@
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
+import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
 import { SearchForm } from "@/components/molecules/search-form";
 import {
@@ -11,21 +12,28 @@ import {
 } from "@/components/molecules/sheet";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { AccountMenu } from "@/components/organisms/account-menu";
-import { SidebarTrigger } from "@/components/organisms/sidebar";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { cn } from "@/lib/style/cn";
 
 type AppTopBarProps = {
   lang: Locale;
   brandName: string;
   username: string;
+  newRecordLabel: string;
   dict: Dictionary["header"];
 };
 
 const roundIcon =
   "grid size-9 place-items-center rounded-full text-foreground-sub outline-none hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
-export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
+export function AppTopBar({
+  lang,
+  brandName,
+  username,
+  newRecordLabel,
+  dict,
+}: AppTopBarProps) {
   const search = (
     <Suspense>
       <SearchForm
@@ -38,13 +46,9 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-4">
-      <SidebarTrigger
-        label={dict.toggleSidebar}
-        className="hidden size-9 rounded-full md:inline-flex"
-      />
       <Link
         href={`/${lang}/records`}
-        className="flex items-center rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-46"
+        className="flex items-center rounded-sm px-1 outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         <Logo name={brandName} />
       </Link>
@@ -65,6 +69,16 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
             {search}
           </SheetContent>
         </Sheet>
+        <Link
+          href={`/${lang}/records/new`}
+          className={cn(
+            buttonVariants({ size: "sm" }),
+            "mr-1 hidden md:inline-flex",
+          )}
+        >
+          <Plus aria-hidden />
+          {newRecordLabel}
+        </Link>
         <ThemeToggle label={dict.themeToggle} className={roundIcon} />
         <AccountMenu lang={lang} username={username} dict={dict} />
       </div>
