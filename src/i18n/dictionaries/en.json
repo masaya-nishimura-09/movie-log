@@ -113,8 +113,7 @@
     "watchedAt": "Watched on",
     "platform": "Platform",
     "createdAt": "Logged",
-    "updatedAt": "Last updated",
-    "weekday": " ({weekday})"
+    "updatedAt": "Last updated"
   },
   "deleteRecord": {
     "title": "Delete this record?",

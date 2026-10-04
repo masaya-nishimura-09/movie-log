@@ -9,7 +9,6 @@ import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { languageName } from "@/lib/record/language-options";
 import { interpolate } from "@/lib/text/interpolate";
-import { interpolateNode } from "@/lib/text/interpolate-node";
 import type { MovieRecord } from "@/schemas/record/record";
 
 type RecordDetailProps = {
@@ -61,17 +60,6 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             locale={lang}
             dateStyle="longDate"
           />
-          <span className="font-medium text-[13px] text-foreground-sub">
-            {interpolateNode(d.weekday, {
-              weekday: (
-                <LocalDate
-                  date={record.watchedAt}
-                  locale={lang}
-                  dateStyle="weekday"
-                />
-              ),
-            })}
-          </span>
         </p>
       </section>
       <section className="flex flex-col gap-2.5">

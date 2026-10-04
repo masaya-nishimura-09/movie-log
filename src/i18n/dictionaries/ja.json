@@ -113,8 +113,7 @@
     "watchedAt": "視聴日",
     "platform": "プラットフォーム",
     "createdAt": "記録日時",
-    "updatedAt": "最終更新",
-    "weekday": "（{weekday}）"
+    "updatedAt": "最終更新"
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",
