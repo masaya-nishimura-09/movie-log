@@ -47,8 +47,8 @@ export function PosterUrlField({
   };
 
   return (
-    <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+    <div className="@container flex flex-col gap-2">
+      <div className="flex flex-wrap @md:flex-nowrap gap-2">
         <Input
           id={id}
           name={name}
@@ -56,12 +56,12 @@ export function PosterUrlField({
           placeholder={placeholder}
           value={url}
           onChange={(event) => setUrl(event.target.value)}
-          className="flex-1"
+          className="@md:flex-1 @md:basis-0 basis-full"
         />
         <label
           className={cn(
             buttonVariants({ variant: "outline" }),
-            "cursor-pointer has-disabled:cursor-default has-disabled:opacity-50",
+            "@md:w-auto w-full cursor-pointer has-disabled:cursor-default has-disabled:opacity-50",
           )}
         >
           <Upload className="size-4" aria-hidden />
