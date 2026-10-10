@@ -1,5 +1,6 @@
 "use client";
 
+import { Check } from "lucide-react";
 import Link from "next/link";
 import { type FormEvent, startTransition, useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
@@ -96,13 +97,20 @@ export function RegisterForm({
         />
       </FormField>
       <div className="flex flex-col gap-2">
-        <label className="flex items-center gap-2 text-sm">
-          <input
-            type="checkbox"
-            name="agreedToTerms"
-            required
-            className="size-4 accent-primary"
-          />
+        <label className="flex items-center gap-2 font-medium text-sm">
+          <span className="relative grid size-4.25 shrink-0 place-items-center">
+            <input
+              type="checkbox"
+              name="agreedToTerms"
+              required
+              className="peer size-full appearance-none rounded-[5px] bg-field outline-none checked:bg-selected-border focus-visible:ring-2 focus-visible:ring-ring"
+            />
+            <Check
+              className="pointer-events-none absolute size-3 text-primary-foreground opacity-0 peer-checked:opacity-100"
+              strokeWidth={3}
+              aria-hidden
+            />
+          </span>
           <span>
             {interpolateNode(dict.agreeTerms, {
               terms: (
