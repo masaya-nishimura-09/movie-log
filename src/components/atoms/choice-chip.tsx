@@ -19,7 +19,9 @@ export const choiceChipVariants = cva(
       tone: {
         plain: "text-foreground",
         field: "text-foreground-sub",
-        genre: "text-genre-foreground",
+        mood: "bg-mood-tag text-foreground",
+        genre:
+          "bg-genre-chip text-genre-foreground [--edge:var(--control-edge)] has-checked:bg-genre-selected has-checked:text-genre-selected-foreground data-[active=true]:bg-genre-selected data-[active=true]:text-genre-selected-foreground",
       },
     },
     defaultVariants: { shape: "pill", size: "md", tone: "plain" },

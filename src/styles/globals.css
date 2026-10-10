@@ -29,6 +29,10 @@
   --color-genre-foreground: var(--genre-foreground);
   --color-mood: var(--mood);
   --color-mood-foreground: var(--mood-foreground);
+  --color-mood-tag: var(--mood-tag);
+  --color-genre-chip: var(--genre-chip);
+  --color-genre-selected: var(--genre-selected);
+  --color-genre-selected-foreground: var(--genre-selected-foreground);
   --color-dash-line: var(--dash-line);
   --color-destructive-border: var(--destructive-border);
   --color-destructive-foreground: var(--destructive-foreground);
@@ -111,6 +115,11 @@
   --header: var(--sage);
   --field: color-mix(in oklab, var(--brown) 9%, transparent);
   --control: var(--sage);
+  --control-edge: color-mix(in oklab, var(--sage) 70%, var(--navy));
+  --genre-chip: color-mix(in oklab, var(--sage) 45%, var(--card));
+  --genre-selected: var(--sage);
+  --genre-selected-foreground: var(--navy);
+  --mood-tag: var(--field);
   --placeholder: color-mix(in oklab, var(--navy) 50%, var(--beige));
   --selected: color-mix(in oklab, var(--brown) 22%, var(--beige));
   --selected-border: var(--brown);
@@ -196,6 +205,11 @@
   --header: var(--navy);
   --field: color-mix(in oklab, var(--beige) 8%, transparent);
   --control: color-mix(in oklab, var(--sage) 22%, var(--navy));
+  --control-edge: color-mix(in oklab, var(--control) 60%, black);
+  --genre-chip: var(--control);
+  --genre-selected: color-mix(in oklab, var(--sage) 45%, var(--navy));
+  --genre-selected-foreground: var(--beige);
+  --mood-tag: color-mix(in oklab, var(--brown) 30%, var(--navy));
   --placeholder: color-mix(in oklab, var(--beige) 50%, var(--navy));
   --selected: color-mix(in oklab, var(--brown) 80%, var(--navy));
   --selected-border: var(--primary);

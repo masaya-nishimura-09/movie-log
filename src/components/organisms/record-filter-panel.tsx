@@ -161,6 +161,7 @@ export function MoodOptions({
         <FilterChipLink
           key={mood}
           size="sm"
+          tone="mood"
           href={toggleHref(recordQueryKeys.moodTag, mood)}
           active={query.moodTags.includes(mood)}
         >

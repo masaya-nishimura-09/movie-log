@@ -44,6 +44,7 @@ export function RecordImpressionFields({
               name="moodTags"
               value={mood}
               size="sm"
+              tone="mood"
               className="text-[13px]"
               defaultChecked={values.moodTags.includes(mood)}
             >
