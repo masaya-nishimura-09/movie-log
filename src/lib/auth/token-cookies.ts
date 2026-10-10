@@ -12,15 +12,27 @@ const baseOptions = {
   path: "/",
 } as const;
 
-export function readJwtExpiry(token: string): Date | undefined {
+function readJwtPayload(token: string): Record<string, unknown> | undefined {
   const payload = token.split(".")[1];
   if (!payload) return undefined;
   try {
-    const { exp } = JSON.parse(Buffer.from(payload, "base64url").toString());
-    return typeof exp === "number" ? new Date(exp * 1000) : undefined;
+    return JSON.parse(Buffer.from(payload, "base64url").toString());
   } catch {
     return undefined;
   }
+}
+
+export function readJwtExpiry(token: string): Date | undefined {
+  const exp = readJwtPayload(token)?.exp;
+  return typeof exp === "number" ? new Date(exp * 1000) : undefined;
+}
+
+export function readJwtUserId(token: string): string | undefined {
+  const payload = readJwtPayload(token);
+  const id = payload?.UserID ?? payload?.sub;
+  return typeof id === "number" || typeof id === "string"
+    ? String(id)
+    : undefined;
 }
 
 export function isTokenExpired(token: string, now = new Date()): boolean {

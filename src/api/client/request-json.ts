@@ -1,7 +1,9 @@
-import { headers as requestHeaders } from "next/headers";
+import { cookies, headers as requestHeaders } from "next/headers";
 import type { z } from "zod";
 import { ApiError } from "@/api/client/api-error";
 import { mockFetch } from "@/api/mock/mock-fetch";
+import { accessTokenCookie } from "@/lib/auth/token-cookies";
+import { logError } from "@/lib/log/logger";
 import { apiErrorResponseSchema } from "@/schemas/error/api-error";
 
 const useMock = process.env.USE_MOCK === "true";
@@ -31,22 +33,50 @@ async function send(path: string, init: RequestInit): Promise<Response> {
   });
 }
 
+async function log(
+  level: "error" | "warn",
+  event: string,
+  error: unknown,
+  path: string,
+) {
+  const accessToken = (await cookies()).get(accessTokenCookie)?.value;
+  logError(level, event, error, { path, accessToken });
+}
+
 export async function requestJson<T extends z.ZodType>(
   path: string,
   schema: T,
   init: RequestInit = {},
 ): Promise<z.output<T>> {
-  const response = await send(path, init);
+  let response: Response;
+  try {
+    response = await send(path, init);
+  } catch (error) {
+    await log("error", "api_request_failed", error, path);
+    throw error;
+  }
   const body: unknown = await response.json().catch(() => undefined);
 
   if (!response.ok) {
-    const error = apiErrorResponseSchema.safeParse(body);
-    throw new ApiError(
+    const parsed = apiErrorResponseSchema.safeParse(body);
+    const error = new ApiError(
       response.status,
-      error.success ? error.data.code : "INTERNAL_SERVER_ERROR",
+      parsed.success ? parsed.data.code : "INTERNAL_SERVER_ERROR",
     );
+    if (response.status >= 500) {
+      await log("error", "api_request_failed", error, path);
+    } else if (response.status === 429) {
+      await log("warn", "api_rate_limited", error, path);
+    }
+    throw error;
   }
-  return schema.parse(body);
+
+  const result = schema.safeParse(body);
+  if (!result.success) {
+    await log("error", "api_response_invalid", result.error, path);
+    throw result.error;
+  }
+  return result.data;
 }
 
 export function jsonBody(body: unknown, method = "POST"): RequestInit {
