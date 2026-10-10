@@ -14,23 +14,32 @@ type LandingProps = {
 function Screenshot({
   src,
   alt,
+  side,
   priority,
 }: {
   src: string;
   alt: string;
+  side: "left" | "right";
   priority?: boolean;
 }) {
   return (
-    <Image
-      src={src}
-      alt={alt}
-      width={1440}
-      height={900}
-      priority={priority}
-      unoptimized
-      sizes="(min-width: 1024px) 560px, 100vw"
-      className="h-auto w-full rounded-[18px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
-    />
+    <div
+      className={cn(
+        "rounded-[28px] bg-(--sage) p-3 md:p-5",
+        side === "right" ? "md:pr-10 md:pb-10" : "md:pb-10 md:pl-10",
+      )}
+    >
+      <Image
+        src={src}
+        alt={alt}
+        width={1440}
+        height={900}
+        priority={priority}
+        unoptimized
+        sizes="(min-width: 1024px) 560px, 100vw"
+        className="h-auto w-full rounded-[18px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
+      />
+    </div>
   );
 }
 
@@ -88,6 +97,7 @@ export function Landing({ lang, dict }: LandingProps) {
         <Screenshot
           src={`/landing/list-${lang}.webp`}
           alt={l.listAlt}
+          side="right"
           priority
         />
       </section>
@@ -109,7 +119,11 @@ export function Landing({ lang, dict }: LandingProps) {
       </section>
 
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.15fr_1fr] lg:py-16">
-        <Screenshot src={`/landing/detail-${lang}.webp`} alt={l.detailAlt} />
+        <Screenshot
+          src={`/landing/detail-${lang}.webp`}
+          alt={l.detailAlt}
+          side="left"
+        />
         <div className="flex flex-col gap-6">
           <p className="text-balance font-bold text-2xl leading-snug">
             {l.closing}
