@@ -25,7 +25,7 @@ function Screenshot({
   return (
     <div
       className={cn(
-        "rounded-[28px] bg-(--sage) p-3 md:p-5",
+        "rounded-[20px] bg-(--sage) p-3 md:rounded-[28px] md:p-5",
         side === "right" ? "md:pr-10 md:pb-10" : "md:pb-10 md:pl-10",
       )}
     >
@@ -37,7 +37,7 @@ function Screenshot({
         priority={priority}
         unoptimized
         sizes="(min-width: 1024px) 560px, 100vw"
-        className="h-auto w-full rounded-[18px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
+        className="h-auto w-full rounded-[8px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
       />
     </div>
   );
