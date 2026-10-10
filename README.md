@@ -1,13 +1,10 @@
 <div align="center">
 
-<img src="src/app/icon.svg" width="72" alt="Cinelog logo">
-
 # Cinelog
 
 **English** | [日本語](README.ja.md)
 
-A quiet place to log the films you watch:
-the poster, the date, a score, the mood and a memo, all on one card.
+The web app of Cinelog, an app for keeping a record of the films you watch.<br/>Each record keeps the poster, viewing date, score, mood, and notes for a film.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-0a2947?logo=nextdotjs&logoColor=f3e4c9)
 ![React](https://img.shields.io/badge/React-19-0a2947?logo=react&logoColor=f3e4c9)
@@ -19,94 +16,118 @@ the poster, the date, a score, the mood and a memo, all on one card.
 
 </div>
 
-This repository is the web frontend.
-It talks to [Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api),
-and can also run on its own with mock data.
+This repository contains the web app of Cinelog. It uses the
+[Cinelog API](https://github.com/masaya-nishimura-09/movie-log-api)
+for data and can also run on its own with mock data.
+A [mobile app](https://github.com/masaya-nishimura-09/movie-log-mobile) is also available.
 
-## Recommend a film in seconds
+## Overview
 
-> "Anything moving on Netflix?"
-
-If you love films, people keep asking you what to watch,
-and the right pick for someone else rarely comes to mind on the spot.
-Every record keeps its platform and mood,
-so you can filter the films you have seen down to exactly what they asked for
-and answer right away.
+Since every record includes the platform and mood, you can filter the films
+you have watched by those conditions. When someone asks
+"Is there anything moving on Netflix?", you can find an answer right away.
 
 <p align="center">
-  <img src=".github/assets/recommend-en.webp" alt="Records filtered to the Netflix platform and the Moving mood" width="820">
+  <img src=".github/assets/recommend-en.webp" alt="Records filtered by the Netflix platform and the Moving mood" width="820">
 </p>
 
-## Screens
-
 <p align="center">
-  <img src=".github/assets/mobile-en.webp" alt="Record list, record detail and the filter sheet on mobile" width="760">
+  <img src=".github/assets/mobile-en.webp" alt="The record list, a record, and the filter sheet on mobile" width="760">
 </p>
 
 <p align="center">
   <img src=".github/assets/dark-en.webp" alt="The record list in the dark theme" width="760">
 </p>
 
+## Architecture
+
+```mermaid
+flowchart LR
+    browser["Browser"] --> web["Cinelog Web<br/>(Next.js)"]
+    web --> api["Cinelog API<br/>(Go / Gin)"]
+    web --> resend["Resend<br/>contact emails"]
+    web --> turnstile["Cloudflare Turnstile<br/>bot protection"]
+    browser --> turnstile
+```
+
+The browser never calls the API directly. Server Components and
+Server Actions call the API on the server, and the access and refresh tokens
+are kept in HTTP-only cookies. `src/proxy.ts` handles language routing,
+redirects to the login page, and token refresh.
+
+UI components are organized into atoms, molecules, and organisms.
+
 ## Features
 
-**Records**
+**Viewing records**
 
-- Create, view, edit and delete records of the films you watch
-- Look up a film on TMDB to fill in its year, runtime, language, countries,
-  genres, credits and poster
-- Upload your own poster image
-- Pick the watched date from a calendar, or tap Today / Yesterday
+- Create, view, update, and delete viewing records
+- Film details (release year, runtime, language, countries, genres, credits, and poster) filled in from TMDB
+- Poster image uploads
+- Viewing date selection from a calendar, with shortcuts for today and yesterday
 
 **Finding records**
 
-- Search by title, sort, and page through the list
-- Filter by score, platform, mood and genre
+- Title search, sorting, and pagination
+- Filtering by score, platform, mood, and genre
+  (one score and one platform; moods and genres match only records that have all of them)
 
-**Account**
+**Accounts**
 
-- Register, log in and log out, with tokens refreshed automatically
-- Update or delete your account
+- Registration, login, and logout, with automatic token refresh
+- Account updates and deletion
 
-**Everywhere**
+**Contact**
 
-- English and Japanese, chosen from the browser language
+- A contact form that sends messages by email through Resend
+- Protection against automated submissions with Cloudflare Turnstile and a hidden field
+
+**Interface**
+
+- Japanese and English, chosen from the browser language
 - Light and dark themes
 - Layouts for phones and desktops
-- Mock mode that runs without the backend
+- Preview cards for shared links (Open Graph)
+
+**Security and operations**
+
+- Security headers on every response, including Content-Security-Policy
+- The client IP and an internal secret sent to the API so it can rate limit per visitor
+- Structured JSON logs for server errors and warnings
+- A mock mode that runs without the API
 
 ## Design
 
-The whole UI is built from four colors, plus red for errors and deletion.
+The interface is built from four colors, with red reserved for errors and deletion.
 
 ![Navy](https://img.shields.io/badge/Navy-0a2947-0a2947)
 ![Beige](https://img.shields.io/badge/Beige-f3e4c9-f3e4c9)
 ![Sage](https://img.shields.io/badge/Sage-d3d4c0-d3d4c0)
 ![Brown](https://img.shields.io/badge/Brown-8b5e3c-8b5e3c)
 
-Every other color is mixed from these in `src/styles/globals.css`.
-Font weights follow the role of the text:
-400 for text to read, 500 for anything you can press,
-and 700 for headings, primary buttons and scores.
+All other colors are mixed from these four in `src/styles/globals.css`.
+Font weights depend on the role of the text: 400 for body text,
+500 for anything that can be pressed, and 700 for headings, primary buttons, and scores.
 
 ## Tech Stack
 
-| Area        | Tools                                               |
-|-------------|-----------------------------------------------------|
-| Framework   | Next.js (App Router), React                         |
-| Language    | TypeScript                                          |
-| Styling     | Tailwind CSS, shadcn/ui on Base UI, react-day-picker |
-| Validation  | Zod                                                 |
-| Lint/format | Biome                                               |
-| Packages    | pnpm                                                |
+| Category   | Technologies                                          |
+|------------|-------------------------------------------------------|
+| Framework  | Next.js (App Router), React                           |
+| Language   | TypeScript                                            |
+| Styling    | Tailwind CSS, shadcn/ui (Base UI), react-day-picker   |
+| Validation | Zod                                                   |
+| Contact    | Resend, Cloudflare Turnstile                          |
+| Tooling    | Biome, pnpm                                           |
 
-## Getting Started
+## Setup
 
 ### Prerequisites
 
-- Node.js 20.9+
+- Node.js 20.9 or later
 - pnpm
-- [Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api)
-  (not needed in mock mode)
+- [Cinelog API](https://github.com/masaya-nishimura-09/movie-log-api)
+  (not required in mock mode)
 
 ### Installation
 
@@ -115,76 +136,80 @@ git clone https://github.com/masaya-nishimura-09/movie-log.git
 cd movie-log
 pnpm install
 cp .env.example .env.local
-# Edit .env.local with your configuration
+# Edit .env.local and set each environment variable
 pnpm dev
 ```
 
-### Configuration
+The app starts on `http://localhost:3000`.
 
-Set these in `.env.local`:
+### Mock Mode
 
-| Variable        | Description                                          |
-|-----------------|------------------------------------------------------|
-| `API_BASE_URL`  | Base URL of Movie Log API                            |
-| `USE_MOCK`      | `true` to use mock data instead of the API           |
-| `MOCK_DATASET`  | `demo` to use the fictional demo films (mock mode)   |
-| `MOCK_LANGUAGE` | `en` for English mock records, Japanese otherwise    |
-| `INTERNAL_API_SECRET` | Shared secret sent to the API with the client IP for rate limiting (same value as the API) |
-| `APP_VERSION`   | Version written to server logs, such as the Git commit hash |
-| `RESEND_API_KEY` | Resend API key for sending contact form messages |
-| `CONTACT_TO_EMAIL` | Address that receives contact form messages |
-| `CONTACT_FROM_EMAIL` | Sender of contact form messages (default `Cinelog <onboarding@resend.dev>`) |
-| `TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key for the contact form |
-| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key for the contact form |
+When `USE_MOCK=true`, the app runs on mock data without the API.
+Log in with `demo@example.com` and the password `password`.
+Mock data is kept in memory and resets when the server restarts.
 
-### Mock mode
+### Environment Variables
 
-With `USE_MOCK=true`, log in with `demo@example.com` / `password`.
-Mock data lives in memory and resets when the server restarts.
+Set the following environment variables in `.env.local`.
+
+| Variable               | Required | Description                                                         |
+|------------------------|----------|---------------------------------------------------------------------|
+| `API_BASE_URL`         | Required | Base URL of the Cinelog API (not required in mock mode)             |
+| `USE_MOCK`             | Optional | Set to `true` to use mock data instead of the API                   |
+| `MOCK_DATASET`         | Optional | Set to `demo` to use the fictional demo films in mock mode          |
+| `MOCK_LANGUAGE`        | Optional | Set to `en` for English mock records (Japanese otherwise)           |
+| `INTERNAL_API_SECRET`  | Optional | Secret shared with the API for rate limiting by client IP (must match the API's value) |
+| `APP_VERSION`          | Optional | Version written to logs, such as the Git commit hash                |
+| `RESEND_API_KEY`       | Optional | Resend API key (required for the contact form)                      |
+| `CONTACT_TO_EMAIL`     | Optional | Address that receives contact messages (required for the contact form) |
+| `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinelog <onboarding@resend.dev>`) |
+| `TURNSTILE_SITE_KEY`   | Optional | Cloudflare Turnstile site key (required for the contact form)       |
+| `TURNSTILE_SECRET_KEY` | Optional | Cloudflare Turnstile secret key (required for the contact form)     |
 
 ### Scripts
 
-| Command          | Description                |
-|------------------|----------------------------|
-| `pnpm dev`       | Start the dev server       |
-| `pnpm build`     | Build for production       |
-| `pnpm start`     | Start the production build |
-| `pnpm lint`      | Check with Biome           |
-| `pnpm fix`       | Fix lint issues            |
-| `pnpm format`    | Format with Biome          |
-| `pnpm typecheck` | Run the TypeScript check   |
+| Command          | Description                     |
+|------------------|---------------------------------|
+| `pnpm dev`       | Start the development server    |
+| `pnpm build`     | Build for production            |
+| `pnpm start`     | Start the production build      |
+| `pnpm lint`      | Check the code with Biome       |
+| `pnpm fix`       | Fix lint issues                 |
+| `pnpm format`    | Format the code with Biome      |
+| `pnpm typecheck` | Run the TypeScript type check   |
 
 ## Project Structure
 
 ```
 src/
-  app/            # Routes ([lang]/(app), (auth), (legal))
-  actions/        # Server Actions
-  api/            # Backend API clients and mock data
-  components/     # UI components (atoms / molecules / organisms)
-  schemas/        # Zod schemas
-  i18n/           # Locales and dictionaries
-  lib/            # Helpers (auth, date, record, style, text, url)
-  styles/         # Global styles and color tokens
-  proxy.ts        # Locale routing and token refresh
+  app/                # Routes ([lang]/(app), (auth), (legal))
+  actions/            # Server Actions
+  api/                # API clients and mock data
+  components/         # UI components (atoms, molecules, organisms)
+  schemas/            # Zod schemas
+  i18n/               # Locales and dictionaries
+  lib/                # Helpers (auth, contact, date, log, record, style, text, url)
+  styles/             # Global styles and color tokens
+  proxy.ts            # Language routing and token refresh
+  instrumentation.ts  # Logging of unhandled server errors
 ```
 
 ## Pages
 
-| Path                    | Description      | Auth |
-|-------------------------|------------------|------|
-| /:lang                  | Landing page     | No   |
-| /:lang/login            | Login            | No   |
-| /:lang/register         | Register         | No   |
-| /:lang/about            | About the app    | No   |
-| /:lang/terms            | Terms of use     | No   |
-| /:lang/privacy          | Privacy policy   | No   |
-| /:lang/contact          | Contact form     | No   |
-| /:lang/records          | List records     | Yes  |
-| /:lang/records/new      | Create a record  | Yes  |
-| /:lang/records/:id      | Record detail    | Yes  |
-| /:lang/records/:id/edit | Edit a record    | Yes  |
-| /:lang/account          | Account settings | Yes  |
+| Path                    | Description        | Login        |
+|-------------------------|--------------------|--------------|
+| /:lang                  | Landing page       | Not required |
+| /:lang/login            | Login              | Not required |
+| /:lang/register         | Registration       | Not required |
+| /:lang/about            | About the app      | Not required |
+| /:lang/contact          | Contact form       | Not required |
+| /:lang/terms            | Terms of use       | Not required |
+| /:lang/privacy          | Privacy policy     | Not required |
+| /:lang/records          | Record list        | Required     |
+| /:lang/records/new      | New record         | Required     |
+| /:lang/records/:id      | Record details     | Required     |
+| /:lang/records/:id/edit | Record editing     | Required     |
+| /:lang/account          | Account settings   | Required     |
 
 ## Credits
 
