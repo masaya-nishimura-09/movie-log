@@ -1,7 +1,6 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
-import { contactFormUrl } from "@/lib/legal/contact";
 import { cn } from "@/lib/style/cn";
 
 type LegalSection = { h: string; p: string[] };
@@ -13,7 +12,7 @@ type LegalDocumentProps = {
   updatedLabel: string;
   updated: string;
   contactLabel: string;
-  contactPending: string;
+  contactHref: string;
   backLabel: string;
   backHref: string;
 };
@@ -25,7 +24,7 @@ export function LegalDocument({
   updatedLabel,
   updated,
   contactLabel,
-  contactPending,
+  contactHref,
   backLabel,
   backHref,
 }: LegalDocumentProps) {
@@ -49,21 +48,14 @@ export function LegalDocument({
               {paragraph}
             </p>
           ))}
-          {index === sections.length - 1 &&
-            (contactFormUrl === "" ? (
-              <p className="text-[13px] text-foreground-sub">
-                {contactLabel}: {contactPending}
-              </p>
-            ) : (
-              <a
-                href={contactFormUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="self-start text-[13px] text-primary underline-offset-4 hover:underline"
-              >
-                {contactLabel}
-              </a>
-            ))}
+          {index === sections.length - 1 && (
+            <Link
+              href={contactHref}
+              className="self-start font-medium text-[13px] text-primary underline-offset-4 hover:underline"
+            >
+              {contactLabel}
+            </Link>
+          )}
         </section>
       ))}
       <Link

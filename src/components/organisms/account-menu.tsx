@@ -1,4 +1,4 @@
-import { Info, LogOut, UserRound } from "lucide-react";
+import { Info, LogOut, Mail, UserRound } from "lucide-react";
 import Link from "next/link";
 import { logoutAction } from "@/actions/auth/logout";
 import {
@@ -38,6 +38,10 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
         <DropdownMenuItem render={<Link href={`/${lang}/about`} />}>
           <Info aria-hidden />
           {dict.about}
+        </DropdownMenuItem>
+        <DropdownMenuItem render={<Link href={`/${lang}/contact`} />}>
+          <Mail aria-hidden />
+          {dict.contact}
         </DropdownMenuItem>
         <form action={logoutAction.bind(null, lang)}>
           <DropdownMenuItem

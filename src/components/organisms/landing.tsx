@@ -187,6 +187,9 @@ export function Landing({ lang, dict }: LandingProps) {
         <Link href={`/${lang}/privacy`} className="font-medium hover:underline">
           {dict.register.privacyLink}
         </Link>
+        <Link href={`/${lang}/contact`} className="font-medium hover:underline">
+          {dict.contact.link}
+        </Link>
       </footer>
     </main>
   );

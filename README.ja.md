@@ -120,6 +120,11 @@ pnpm dev
 | `MOCK_LANGUAGE` | `en` で英語のモック記録、それ以外は日本語          |
 | `INTERNAL_API_SECRET` | 利用者の IP と一緒に API へ送る合言葉。回数制限に使う(API と同じ値) |
 | `APP_VERSION`   | サーバーのログに書くバージョン。Git のコミット ID など |
+| `RESEND_API_KEY` | お問い合わせをメールで送る Resend の API キー |
+| `CONTACT_TO_EMAIL` | お問い合わせを受け取るメールアドレス |
+| `CONTACT_FROM_EMAIL` | お問い合わせのメールの送信元(初期値 `Cinelog <onboarding@resend.dev>`) |
+| `TURNSTILE_SITE_KEY` | お問い合わせフォームで使う Cloudflare Turnstile のサイトキー |
+| `TURNSTILE_SECRET_KEY` | お問い合わせフォームで使う Cloudflare Turnstile の秘密鍵 |
 
 ### モックモード
 
@@ -162,6 +167,7 @@ src/
 | /:lang/about            | このアプリについて | 不要     |
 | /:lang/terms            | 利用規約           | 不要     |
 | /:lang/privacy          | プライバシーポリシー | 不要   |
+| /:lang/contact          | お問い合わせ       | 不要     |
 | /:lang/records          | 記録の一覧         | 必要     |
 | /:lang/records/new      | 記録の作成         | 必要     |
 | /:lang/records/:id      | 記録の詳細         | 必要     |

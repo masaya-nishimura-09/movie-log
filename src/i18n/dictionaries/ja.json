@@ -46,7 +46,6 @@
     "updatedLabel": "最終更新日",
     "updated": "2026年10月4日",
     "contactLabel": "お問い合わせフォーム",
-    "contactPending": "準備中",
     "back": "戻る",
     "terms": {
       "title": "利用規約",
@@ -231,6 +230,24 @@
       ]
     }
   },
+  "contact": {
+    "title": "お問い合わせ",
+    "link": "お問い合わせ",
+    "intro": "Cinelog についてのご質問や不具合の報告は、こちらから送ってください。返信は入力されたメールアドレスに届きます。",
+    "email": "メールアドレス",
+    "emailHint": "返信に使います",
+    "message": "お問い合わせ内容",
+    "submit": "送信する",
+    "successTitle": "送信しました",
+    "successText": "お問い合わせを受け付けました。返信まで数日かかることがあります。",
+    "back": "戻る",
+    "invalidEmail": "メールアドレスの形式が正しくありません",
+    "messageRequired": "お問い合わせ内容を入力してください",
+    "messageTooLong": "お問い合わせ内容は2000文字以内で入力してください",
+    "invalidInput": "入力内容を確認してください",
+    "verificationFailed": "確認に失敗しました。もう一度送信してください",
+    "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
+  },
   "header": {
     "searchPlaceholder": "タイトルで検索",
     "searchLabel": "タイトルで検索",
@@ -239,7 +256,8 @@
     "account": "アカウント設定",
     "about": "このアプリについて",
     "logout": "ログアウト",
-    "openSearch": "検索"
+    "openSearch": "検索",
+    "contact": "お問い合わせ"
   },
   "bottomNav": {
     "records": "鑑賞記録",

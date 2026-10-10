@@ -19,7 +19,7 @@ export default async function PrivacyPage() {
       updatedLabel={legal.updatedLabel}
       updated={legal.updated}
       contactLabel={legal.contactLabel}
-      contactPending={legal.contactPending}
+      contactHref={`/${lang}/contact`}
       backLabel={legal.back}
       backHref={`/${lang}/about`}
     />

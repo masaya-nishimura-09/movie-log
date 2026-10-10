@@ -131,6 +131,11 @@ Set these in `.env.local`:
 | `MOCK_LANGUAGE` | `en` for English mock records, Japanese otherwise    |
 | `INTERNAL_API_SECRET` | Shared secret sent to the API with the client IP for rate limiting (same value as the API) |
 | `APP_VERSION`   | Version written to server logs, such as the Git commit hash |
+| `RESEND_API_KEY` | Resend API key for sending contact form messages |
+| `CONTACT_TO_EMAIL` | Address that receives contact form messages |
+| `CONTACT_FROM_EMAIL` | Sender of contact form messages (default `Cinelog <onboarding@resend.dev>`) |
+| `TURNSTILE_SITE_KEY` | Cloudflare Turnstile site key for the contact form |
+| `TURNSTILE_SECRET_KEY` | Cloudflare Turnstile secret key for the contact form |
 
 ### Mock mode
 
@@ -174,6 +179,7 @@ src/
 | /:lang/about            | About the app    | No   |
 | /:lang/terms            | Terms of use     | No   |
 | /:lang/privacy          | Privacy policy   | No   |
+| /:lang/contact          | Contact form     | No   |
 | /:lang/records          | List records     | Yes  |
 | /:lang/records/new      | Create a record  | Yes  |
 | /:lang/records/:id      | Record detail    | Yes  |

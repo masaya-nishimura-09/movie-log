@@ -46,7 +46,6 @@
     "updatedLabel": "Last updated",
     "updated": "October 4, 2026",
     "contactLabel": "Contact form",
-    "contactPending": "Coming soon",
     "back": "Back",
     "terms": {
       "title": "Terms of Use",
@@ -231,6 +230,24 @@
       ]
     }
   },
+  "contact": {
+    "title": "Contact",
+    "link": "Contact",
+    "intro": "Send us questions about Cinelog or report a problem here. We will reply to the email address you enter.",
+    "email": "Email",
+    "emailHint": "We use this to reply",
+    "message": "Message",
+    "submit": "Send",
+    "successTitle": "Message sent",
+    "successText": "We received your message. A reply may take a few days.",
+    "back": "Back",
+    "invalidEmail": "Enter a valid email address",
+    "messageRequired": "Enter a message",
+    "messageTooLong": "Keep the message within 2000 characters",
+    "invalidInput": "Check the fields below",
+    "verificationFailed": "We could not verify the request. Send it again",
+    "unexpectedError": "Your message could not be sent. Try again later"
+  },
   "header": {
     "searchPlaceholder": "Search by title",
     "searchLabel": "Search by title",
@@ -239,7 +256,8 @@
     "account": "Account settings",
     "about": "About this app",
     "logout": "Log out",
-    "openSearch": "Search"
+    "openSearch": "Search",
+    "contact": "Contact"
   },
   "bottomNav": {
     "records": "Films",
