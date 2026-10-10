@@ -44,7 +44,7 @@
   },
   "legal": {
     "updatedLabel": "Last updated",
-    "updated": "October 4, 2026",
+    "updated": "October 10, 2026",
     "contactLabel": "Contact form",
     "back": "Back",
     "terms": {
@@ -155,8 +155,9 @@
             "- Account information: display name, email address, and password (stored in a form that cannot be turned back into the original text)",
             "- Record information: title, release year, runtime, language, countries, genres, credits, watched date, platform, score, mood tags and memo",
             "- Poster images: the image URL you enter, or the image you upload",
+            "- Contact information: the email address and message you enter in the contact form",
             "- Information used to keep you logged in",
-            "- For server operation, activity logs may be kept."
+            "- Activity logs: access time, IP address, browser type, and your user ID when an error occurs"
           ]
         },
         {
@@ -166,21 +167,28 @@
             "- providing the Service (saving, showing, searching and editing records);",
             "- logging in and verifying who you are;",
             "- answering inquiries;",
-            "- investigating and fixing problems; and",
+            "- investigating and fixing problems;",
+            "- preventing abuse, such as limiting login attempts and blocking automated contact form submissions; and",
             "- dealing with violations of the Terms of Use."
           ]
         },
         {
           "h": "3. Sharing with third parties",
           "p": [
-            "Except where required by law, the Operator does not share the information with third parties without your consent."
+            "Except where required by law, the Operator does not share the information with third parties without your consent.",
+            "However, to run the Service, the Operator may entrust the handling of information to the providers listed in \"4. External services\", only as far as needed."
           ]
         },
         {
           "h": "4. External services",
           "p": [
-            "We use TMDB (The Movie Database) to search for films and fetch their information. The words you type when searching are sent to TMDB.",
-            "The Service runs on servers of [TO FILL IN: hosting provider name], which also stores the data.",
+            "The Service uses the following external services.",
+            "- TMDB (film search and information): the words you search for are sent from our server to TMDB. When TMDB poster images are shown, your IP address and browser information are sent to TMDB.",
+            "- Vercel (United States): the web server of the Service. Access logs are kept.",
+            "- Cloudflare Turnstile (United States): to block automated contact form submissions, your IP address and browser information are sent to Cloudflare.",
+            "- Resend (United States): to deliver your inquiry to the Operator by email, the email address and message you enter are sent to Resend.",
+            "We will add the provider and country of the server that stores account information and records to this policy once it is decided.",
+            "Information on the personal data protection system of the United States is available on the website of Japan's Personal Information Protection Commission.",
             "We do not use external services for advertising or analytics."
           ]
         },
@@ -188,31 +196,32 @@
           "h": "5. Cookies and local storage",
           "p": [
             "The Service uses cookies and local storage for:",
-            "- keeping you logged in (two cookies);",
-            "- remembering whether the sidebar is open; and",
-            "- remembering your theme setting (light or dark).",
+            "- keeping you logged in (two cookies); and",
+            "- remembering your theme setting (light or dark) in your browser.",
             "They are not used for advertising or tracking."
           ]
         },
         {
           "h": "6. Retention and deletion",
           "p": [
-            "Account information and records are kept until you delete your account.",
-            "When you delete your account, your account information, records and uploaded images are deleted."
+            "Account information and records are kept until you delete your account. When you do, your account information, records and uploaded images are deleted.",
+            "Contact information is kept as long as needed to answer the inquiry and deleted once it is no longer needed.",
+            "Activity logs are deleted after a set period."
           ]
         },
         {
           "h": "7. Security",
           "p": [
             "The Operator works to prevent leaks, loss and damage of the information.",
-            "Passwords are stored in a form that cannot be turned back into the original text."
+            "Passwords are stored in a form that cannot be turned back into the original text.",
+            "Communication with the Service is encrypted (HTTPS)."
           ]
         },
         {
           "h": "8. Access, correction and deletion",
           "p": [
             "From the account settings, you can change your display name, email address and password, and delete your account (and with it your information).",
-            "For any other request, please use the contact form."
+            "For any other request, please use the contact form. We will respond after confirming your identity."
           ]
         },
         {
