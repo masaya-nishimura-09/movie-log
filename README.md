@@ -129,6 +129,7 @@ Set these in `.env.local`:
 | `USE_MOCK`      | `true` to use mock data instead of the API           |
 | `MOCK_DATASET`  | `demo` to use the fictional demo films (mock mode)   |
 | `MOCK_LANGUAGE` | `en` for English mock records, Japanese otherwise    |
+| `INTERNAL_API_SECRET` | Shared secret sent to the API with the client IP for rate limiting (same value as the API) |
 
 ### Mock mode
 
