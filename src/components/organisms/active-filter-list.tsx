@@ -85,7 +85,7 @@ export function ActiveFilterList({
       <Link
         href={clearHref}
         scroll={false}
-        className="px-1.5 text-muted-foreground text-xs underline-offset-4 hover:underline"
+        className="px-1.5 font-medium text-muted-foreground text-xs underline-offset-4 hover:underline"
       >
         {dict.clearAll}
       </Link>

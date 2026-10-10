@@ -138,13 +138,13 @@ export function Landing({ lang, dict }: LandingProps) {
       </section>
 
       <footer className="mx-auto mt-auto flex w-full max-w-6xl flex-wrap items-center justify-center gap-x-6 gap-y-2 px-6 py-8 text-foreground-sub text-xs">
-        <Link href={`/${lang}/about`} className="hover:underline">
+        <Link href={`/${lang}/about`} className="font-medium hover:underline">
           {dict.about.link}
         </Link>
-        <Link href={`/${lang}/terms`} className="hover:underline">
+        <Link href={`/${lang}/terms`} className="font-medium hover:underline">
           {dict.register.termsLink}
         </Link>
-        <Link href={`/${lang}/privacy`} className="hover:underline">
+        <Link href={`/${lang}/privacy`} className="font-medium hover:underline">
           {dict.register.privacyLink}
         </Link>
       </footer>

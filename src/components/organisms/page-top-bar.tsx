@@ -21,7 +21,7 @@ export function PageTopBar({
         <Link
           href={backHref}
           aria-label={title ? backLabel : undefined}
-          className="-ml-1 flex items-center gap-3.5 rounded-sm p-1 text-foreground-sub text-sm outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
+          className="-ml-1 flex items-center gap-3.5 rounded-sm p-1 font-medium text-foreground-sub text-sm outline-none hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
         >
           <ArrowLeft className="size-5.25" aria-hidden />
           {!title && <span className="hidden md:inline">{backLabel}</span>}

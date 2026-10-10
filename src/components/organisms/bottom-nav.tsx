@@ -21,8 +21,8 @@ function NavTab({ href, label, Icon }: NavTabProps) {
       href={href}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "flex flex-1 flex-col items-center justify-center gap-1 text-[11px]",
-        active ? "font-bold text-accent-foreground" : "text-muted-foreground",
+        "flex flex-1 flex-col items-center justify-center gap-1 font-medium text-[11px]",
+        active ? "text-accent-foreground" : "text-muted-foreground",
       )}
     >
       <Icon className="size-5.5" aria-hidden />

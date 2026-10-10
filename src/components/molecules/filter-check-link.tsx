@@ -15,7 +15,7 @@ export function FilterCheckLink({ href, active, label }: FilterCheckLinkProps) {
       scroll={false}
       role="checkbox"
       aria-checked={active}
-      className="flex items-center gap-2.25 rounded-sm text-[13px] text-foreground outline-none hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring"
+      className="flex items-center gap-2.25 rounded-sm font-medium text-[13px] text-foreground outline-none hover:text-accent-foreground focus-visible:ring-2 focus-visible:ring-ring"
     >
       <span
         className={cn(

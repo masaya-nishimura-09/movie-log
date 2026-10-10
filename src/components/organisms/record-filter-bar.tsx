@@ -26,9 +26,9 @@ export function FilterButton({
     <Popover>
       <PopoverTrigger
         className={cn(
-          "flex h-9.5 items-center gap-1.5 rounded-full px-3.5 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "flex h-9.5 items-center gap-1.5 rounded-full px-3.5 font-medium text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
           count > 0
-            ? "bg-selected font-bold text-selected-foreground"
+            ? "bg-selected text-selected-foreground"
             : "bg-(--sage) text-foreground-sub hover:text-foreground",
         )}
       >

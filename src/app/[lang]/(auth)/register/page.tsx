@@ -35,7 +35,7 @@ export default async function RegisterPage() {
       />
       <Link
         href={`/${lang}/about`}
-        className="self-center rounded-sm text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+        className="self-center rounded-sm font-medium text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
       >
         {dict.about.link}
       </Link>

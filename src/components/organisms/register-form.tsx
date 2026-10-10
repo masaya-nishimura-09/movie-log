@@ -123,7 +123,7 @@ export function RegisterForm({
               <Link
                 href={`/${lang}/privacy`}
                 target="_blank"
-                className="text-primary underline-offset-4 hover:underline"
+                className="font-medium text-primary underline-offset-4 hover:underline"
               >
                 {dict.privacyLink}
               </Link>

@@ -22,12 +22,12 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={dict.accountMenu}
-        className="grid size-9 place-items-center rounded-full bg-mood font-bold text-[13px] text-mood-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="grid size-9 place-items-center rounded-full bg-mood font-medium text-[13px] text-mood-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
         {Array.from(username)[0]}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-52">
-        <div className="truncate px-1.5 py-1.5 font-medium text-sm">
+        <div className="truncate px-1.5 py-1.5 font-bold text-sm">
           {username}
         </div>
         <DropdownMenuSeparator />

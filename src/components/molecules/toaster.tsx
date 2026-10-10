@@ -15,7 +15,7 @@ function ToastList() {
       {toast.type === "success" && (
         <CircleCheck className="size-5 shrink-0" aria-hidden />
       )}
-      <Toast.Title className="font-medium text-sm" />
+      <Toast.Title className="font-bold text-sm" />
     </Toast.Root>
   ));
 }

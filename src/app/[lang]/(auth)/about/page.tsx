@@ -42,13 +42,13 @@ export default async function AboutPage() {
       <nav className="flex flex-col gap-2">
         <Link
           href={`/${lang}/terms`}
-          className="self-start rounded-sm text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+          className="self-start rounded-sm font-medium text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
         >
           {dict.register.termsLink}
         </Link>
         <Link
           href={`/${lang}/privacy`}
-          className="self-start rounded-sm text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+          className="self-start rounded-sm font-medium text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
         >
           {dict.register.privacyLink}
         </Link>

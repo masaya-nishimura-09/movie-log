@@ -54,7 +54,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
     <div className="grid grid-cols-2 gap-3">
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.watchedAt}</SectionLabel>
-        <p className="flex-1 rounded-2xl bg-card px-4 py-4 font-bold text-[15px] text-foreground">
+        <p className="flex-1 rounded-2xl bg-card px-4 py-4 text-[15px] text-foreground">
           <LocalDate
             date={record.watchedAt}
             locale={lang}
@@ -191,7 +191,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               {d.memoEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
-                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded-sm font-medium text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {d.memoAdd}
               </Link>
@@ -222,7 +222,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               {d.creditsEmpty}
               <Link
                 href={`/${lang}/records/${record.recordId}/edit`}
-                className="rounded-sm text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+                className="rounded-sm font-medium text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
               >
                 {d.creditsAdd}
               </Link>
