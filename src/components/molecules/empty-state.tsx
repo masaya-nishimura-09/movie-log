@@ -9,7 +9,7 @@ type EmptyStateProps = {
 
 export function EmptyState({ title, description, action }: EmptyStateProps) {
   return (
-    <div className="flex w-full max-w-110 flex-col items-center gap-3 self-center rounded-[18px] border bg-card px-6 pt-7.5 pb-7 text-center">
+    <div className="flex w-full max-w-110 flex-col items-center gap-3 self-center rounded-[18px] bg-card px-6 pt-7.5 pb-7 text-center">
       <span className="mb-1 grid size-22 place-items-center rounded-[22px] bg-secondary text-muted-foreground">
         <Clapperboard className="size-7" aria-hidden />
       </span>

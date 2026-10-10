@@ -29,7 +29,7 @@ function Screenshot({
       priority={priority}
       unoptimized
       sizes="(min-width: 1024px) 560px, 100vw"
-      className="h-auto w-full rounded-[18px] border shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
+      className="h-auto w-full rounded-[18px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
     />
   );
 }
@@ -96,7 +96,7 @@ export function Landing({ lang, dict }: LandingProps) {
         {l.features.map((feature) => (
           <div
             key={feature.title}
-            className="flex flex-col gap-2 rounded-[18px] border bg-card p-6"
+            className="flex flex-col gap-2 rounded-[18px] bg-card p-6"
           >
             <h2 className="font-bold text-card-foreground text-lg">
               {feature.title}

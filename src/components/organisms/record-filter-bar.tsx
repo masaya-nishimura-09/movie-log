@@ -26,10 +26,10 @@ export function FilterButton({
     <Popover>
       <PopoverTrigger
         className={cn(
-          "flex h-9.5 items-center gap-1.5 rounded-full border px-3.5 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "flex h-9.5 items-center gap-1.5 rounded-full px-3.5 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
           count > 0
-            ? "border-selected-border bg-selected font-bold text-selected-foreground"
-            : "border-input bg-card text-foreground-sub hover:text-foreground",
+            ? "bg-selected font-bold text-selected-foreground"
+            : "bg-card text-foreground-sub hover:text-foreground",
         )}
       >
         {label}

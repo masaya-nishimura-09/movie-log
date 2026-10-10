@@ -32,7 +32,7 @@ export function SortSelect({ label, value, options }: SortSelectProps) {
       <SelectTrigger
         aria-label={label}
         size="sm"
-        className="w-full bg-card text-[13px]"
+        className="w-full border-0 bg-card text-[13px]"
       >
         <SelectValue />
       </SelectTrigger>

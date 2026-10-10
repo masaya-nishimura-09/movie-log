@@ -62,7 +62,7 @@ export function AccountForm({
       ref={formRef}
       onSubmit={submit}
       noValidate
-      className="flex flex-col gap-4 rounded-2xl border bg-card p-4 md:p-5.5"
+      className="flex flex-col gap-4 rounded-2xl bg-card p-4 md:p-5.5"
     >
       {failure && !failure.errors && (
         <p

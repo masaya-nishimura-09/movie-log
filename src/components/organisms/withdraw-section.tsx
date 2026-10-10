@@ -24,7 +24,7 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
 
   return (
-    <section className="flex flex-col items-start gap-2 rounded-2xl border border-destructive-border bg-card px-4 py-4.5 md:px-5">
+    <section className="flex flex-col items-start gap-2 rounded-2xl bg-card px-4 py-4.5 md:px-5">
       <h2 className="font-bold text-[15px] text-destructive-foreground">
         {dict.withdrawTitle}
       </h2>

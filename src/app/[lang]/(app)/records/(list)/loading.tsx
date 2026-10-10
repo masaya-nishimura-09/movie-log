@@ -14,10 +14,7 @@ export default function Loading() {
       </div>
       <ul className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] gap-3.5">
         {placeholders.map((key) => (
-          <li
-            key={key}
-            className="overflow-hidden rounded-[14px] border bg-card"
-          >
+          <li key={key} className="overflow-hidden rounded-[14px] bg-card">
             <Skeleton className="aspect-2/3 w-full rounded-none bg-header" />
             <div className="flex flex-col gap-2 p-3">
               <Skeleton className="h-3 w-3/4 rounded-full bg-secondary" />

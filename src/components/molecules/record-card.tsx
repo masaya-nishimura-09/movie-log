@@ -37,7 +37,7 @@ export function RecordCard({
   return (
     <Link
       href={href}
-      className="group relative flex w-full flex-col rounded-[14px] border bg-card outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
+      className="group relative flex w-full flex-col rounded-[14px] bg-card outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
     >
       <RecordPoster
         title={title}
@@ -46,25 +46,25 @@ export function RecordCard({
         platformLabel={platformLabel}
         size="card"
         sizes="(min-width: 768px) 190px, 50vw"
-        className="rounded-t-[13px]"
+        className="rounded-t-[14px]"
         badge={<ScoreBadge score={score} size="sm" label={scoreLabel} />}
       />
       <span
         aria-hidden
-        className="pointer-events-none absolute -top-px -left-px size-0 bg-background transition-all duration-200 [clip-path:polygon(0_0,100%_0,0_100%)] group-hover:size-[28px]"
+        className="pointer-events-none absolute top-0 left-0 size-0 bg-background transition-all duration-200 [clip-path:polygon(0_0,100%_0,0_100%)] group-hover:size-[28px]"
       />
       <svg
         aria-hidden="true"
         role="presentation"
         viewBox="0 0 19 19"
-        className="pointer-events-none absolute -top-px -left-px size-0 fill-secondary transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
+        className="pointer-events-none absolute top-0 left-0 size-0 fill-secondary transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
       >
         <path d="M18 1 L1 18 Q0 19 2 19 L11 19 A8 8 0 0 0 19 11 L19 2 Q19 0 18 1 Z" />
       </svg>
       <div aria-hidden className="relative h-0">
         <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
-        <span className="absolute -top-2 -left-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_0_0_50%)]" />
-        <span className="absolute -top-2 -right-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_50%_0_0)]" />
+        <span className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-background [clip-path:inset(0_0_0_50%)]" />
+        <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
       </div>
       {hasPoster ? (
         <div className="flex flex-1 flex-col gap-1.25 px-3 py-2.75">

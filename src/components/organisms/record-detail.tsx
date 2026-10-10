@@ -54,7 +54,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
     <div className="grid grid-cols-2 gap-3">
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.watchedAt}</SectionLabel>
-        <p className="flex-1 rounded-2xl border bg-card px-4 py-4 font-bold text-[15px] text-foreground">
+        <p className="flex-1 rounded-2xl bg-card px-4 py-4 font-bold text-[15px] text-foreground">
           <LocalDate
             date={record.watchedAt}
             locale={lang}
@@ -64,7 +64,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
       </section>
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.platform}</SectionLabel>
-        <p className="flex-1 rounded-2xl border bg-card px-4 py-4 text-[15px] text-foreground">
+        <p className="flex-1 rounded-2xl bg-card px-4 py-4 text-[15px] text-foreground">
           {platformLabel}
         </p>
       </section>
@@ -74,7 +74,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
   return (
     <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(180px,min(520px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(180px,min(320px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] 2xl:grid-cols-[minmax(180px,min(440px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)]">
       <div className="flex gap-4 md:flex-col md:gap-3.5">
-        <div className="contents md:relative md:block md:rounded-2xl md:border md:bg-card">
+        <div className="contents md:relative md:block md:rounded-2xl md:bg-card">
           <RecordPoster
             title={record.title}
             posterUrl={record.posterUrl}
@@ -82,7 +82,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             platformLabel={platformLabel}
             size="detail"
             sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
-            className="w-29 shrink-0 rounded-xl border md:w-full md:rounded-t-[calc(var(--radius-2xl)-1px)] md:rounded-b-none md:border-0"
+            className="w-29 shrink-0 rounded-xl md:w-full md:rounded-t-2xl md:rounded-b-none"
           />
           <div className="flex min-w-0 flex-col gap-3 md:hidden">
             <ScoreBadge
@@ -102,8 +102,8 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           </div>
           <div aria-hidden className="relative hidden h-0 md:block">
             <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
-            <span className="absolute -top-2 -left-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_0_0_50%)]" />
-            <span className="absolute -top-2 -right-[9px] size-4 rounded-full border bg-background [clip-path:inset(0_50%_0_0)]" />
+            <span className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-background [clip-path:inset(0_0_0_50%)]" />
+            <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
           </div>
           <div className="hidden flex-col gap-3 px-4 py-4 md:flex">
             <div className="flex items-center justify-between gap-3">
@@ -183,7 +183,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
         <section className="flex flex-col gap-2.5">
           <SectionLabel>{d.memo}</SectionLabel>
           {record.memo !== "" ? (
-            <p className="whitespace-pre-wrap text-pretty rounded-2xl border bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
+            <p className="whitespace-pre-wrap text-pretty rounded-2xl bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
               {record.memo}
             </p>
           ) : (
