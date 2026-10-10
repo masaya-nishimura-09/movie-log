@@ -1,11 +1,11 @@
 {
   "metadata": {
     "title": "Cinelog",
-    "description": "みた映画を、あとで思い出せるように。"
+    "description": "観た映画を、あとで思い出せるように。"
   },
   "brand": {
     "name": "Cinelog",
-    "tagline": "みた映画を、あとで思い出せるように。"
+    "tagline": "観た映画を、あとで思い出せるように。"
   },
   "landing": {
     "headline": "観た映画を、あとで思い出せるように。",
@@ -318,7 +318,7 @@
   },
   "emptyState": {
     "title": "まだ記録がありません",
-    "description": "最後にみた1本から。タイトルと日付だけで、30秒で終わります。",
+    "description": "最後に観た1本から。タイトルと日付だけで、30秒で終わります。",
     "action": "はじめての記録"
   },
   "recordCard": {
