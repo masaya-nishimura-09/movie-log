@@ -130,6 +130,7 @@ Set these in `.env.local`:
 | `MOCK_DATASET`  | `demo` to use the fictional demo films (mock mode)   |
 | `MOCK_LANGUAGE` | `en` for English mock records, Japanese otherwise    |
 | `INTERNAL_API_SECRET` | Shared secret sent to the API with the client IP for rate limiting (same value as the API) |
+| `APP_VERSION`   | Version written to server logs, such as the Git commit hash |
 
 ### Mock mode
 

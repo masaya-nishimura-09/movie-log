@@ -119,6 +119,7 @@ pnpm dev
 | `MOCK_DATASET`  | `demo` にすると架空のデモ映画を使う(モックモード) |
 | `MOCK_LANGUAGE` | `en` で英語のモック記録、それ以外は日本語          |
 | `INTERNAL_API_SECRET` | 利用者の IP と一緒に API へ送る合言葉。回数制限に使う(API と同じ値) |
+| `APP_VERSION`   | サーバーのログに書くバージョン。Git のコミット ID など |
 
 ### モックモード
 
