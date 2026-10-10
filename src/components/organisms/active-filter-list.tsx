@@ -3,7 +3,12 @@ import Link from "next/link";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
 import { interpolate } from "@/lib/text/interpolate";
-import { buildHref, type QueryValues, toggleValue } from "@/lib/url/build-href";
+import {
+  buildHref,
+  type QueryValues,
+  selectValue,
+  toggleValue,
+} from "@/lib/url/build-href";
 import type { RecordQuery } from "@/schemas/record/list";
 
 type ActiveFilterListProps = {
@@ -36,20 +41,28 @@ export function ActiveFilterList({
             }),
           },
         ]),
-    ...query.scores.map((score) => ({
-      label: `${dict.score} ${score}`,
-      href: buildHref(
-        basePath,
-        toggleValue(values, recordQueryKeys.score, String(score)),
-      ),
-    })),
-    ...query.platforms.map((platform) => ({
-      label: enums.platform[platform],
-      href: buildHref(
-        basePath,
-        toggleValue(values, recordQueryKeys.platform, platform),
-      ),
-    })),
+    ...(query.score === undefined
+      ? []
+      : [
+          {
+            label: `${dict.score} ${query.score}`,
+            href: buildHref(
+              basePath,
+              selectValue(values, recordQueryKeys.score, String(query.score)),
+            ),
+          },
+        ]),
+    ...(query.platform === undefined
+      ? []
+      : [
+          {
+            label: enums.platform[query.platform],
+            href: buildHref(
+              basePath,
+              selectValue(values, recordQueryKeys.platform, query.platform),
+            ),
+          },
+        ]),
     ...query.moodTags.map((mood) => ({
       label: enums.moodTag[mood],
       href: buildHref(

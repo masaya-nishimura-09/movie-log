@@ -32,33 +32,31 @@ function byIdDesc(a: RecordResponse, b: RecordResponse): number {
 }
 
 type Filter = {
-  scores: string[];
-  platforms: string[];
+  score: string | null;
+  platform: string | null;
   mood_tags: string[];
   genres: string[];
   title: string;
 };
 
-function anyOf(selected: string[], values: string[]): boolean {
-  return (
-    selected.length === 0 || values.some((value) => selected.includes(value))
-  );
+function allOf(selected: string[], values: string[]): boolean {
+  return selected.every((value) => values.includes(value));
 }
 
 function matches(record: RecordResponse, filter: Filter): boolean {
   return (
-    anyOf(filter.scores, [String(record.score)]) &&
-    anyOf(filter.platforms, [record.platform]) &&
-    anyOf(filter.mood_tags, record.mood_tags) &&
-    anyOf(filter.genres, record.genres) &&
+    (filter.score === null || filter.score === String(record.score)) &&
+    (filter.platform === null || filter.platform === record.platform) &&
+    allOf(filter.mood_tags, record.mood_tags) &&
+    allOf(filter.genres, record.genres) &&
     record.title.toLowerCase().includes(filter.title.toLowerCase())
   );
 }
 
 function listRecords(params: URLSearchParams): Response {
   const filter: Filter = {
-    scores: params.getAll("scores"),
-    platforms: params.getAll("platforms"),
+    score: params.get("score"),
+    platform: params.get("platform"),
     mood_tags: params.getAll("mood_tags"),
     genres: params.getAll("genres"),
     title: params.get("title") ?? "",

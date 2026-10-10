@@ -47,8 +47,8 @@ export default async function RecordsPage({
     [recordQueryKeys.sort]: values[recordQueryKeys.sort],
   });
   const activeCount =
-    query.scores.length +
-    query.platforms.length +
+    (query.score === undefined ? 0 : 1) +
+    (query.platform === undefined ? 0 : 1) +
     query.moodTags.length +
     query.genres.length +
     (query.keyword === "" ? 0 : 1);
@@ -114,13 +114,21 @@ export default async function RecordsPage({
             <span className="mx-1 h-6 w-px bg-border" aria-hidden />
             <FilterButton
               label={dict.recordFilter.score}
-              count={query.scores.length}
+              selectedLabel={
+                query.score === undefined
+                  ? undefined
+                  : `${dict.recordFilter.score} ${query.score}`
+              }
             >
               <ScoreOptions {...filterProps} />
             </FilterButton>
             <FilterButton
               label={dict.recordFilter.platform}
-              count={query.platforms.length}
+              selectedLabel={
+                query.platform === undefined
+                  ? undefined
+                  : dict.enums.platform[query.platform]
+              }
               wide
             >
               <PlatformOptions {...filterProps} />

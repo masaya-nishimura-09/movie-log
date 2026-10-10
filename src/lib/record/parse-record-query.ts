@@ -27,16 +27,18 @@ function toArray(value: string | string[] | undefined): string[] {
 }
 
 function pickValid<T>(schema: z.ZodType<T>, values: string[]): T[] {
-  return values.flatMap((value) => {
+  const valid = values.flatMap((value) => {
     const result = schema.safeParse(value);
     return result.success ? [result.data] : [];
   });
+  return [...new Set(valid)];
 }
 
 export function toQueryValues(query: RecordQuery): QueryValues {
   return {
-    [recordQueryKeys.score]: query.scores.map(String),
-    [recordQueryKeys.platform]: query.platforms,
+    [recordQueryKeys.score]:
+      query.score === undefined ? undefined : String(query.score),
+    [recordQueryKeys.platform]: query.platform,
     [recordQueryKeys.moodTag]: query.moodTags,
     [recordQueryKeys.genre]: query.genres,
     [recordQueryKeys.keyword]: query.keyword,
@@ -56,14 +58,14 @@ export function parseRecordQuery(params: SearchParams): RecordQuery {
     .safeParse(params[recordQueryKeys.page]);
 
   return {
-    scores: pickValid(
+    score: pickValid(
       z.coerce.number().pipe(scoreSchema),
       toArray(params[recordQueryKeys.score]),
-    ),
-    platforms: pickValid(
+    )[0],
+    platform: pickValid(
       platformSchema,
       toArray(params[recordQueryKeys.platform]),
-    ),
+    )[0],
     moodTags: pickValid(
       moodTagSchema,
       toArray(params[recordQueryKeys.moodTag]),

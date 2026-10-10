@@ -11,6 +11,15 @@ export function buildHref(pathname: string, values: QueryValues): string {
   return query === "" ? pathname : `${pathname}?${query}`;
 }
 
+export function selectValue(
+  values: QueryValues,
+  key: string,
+  value: string,
+): QueryValues {
+  const next = values[key] === value ? undefined : value;
+  return { ...values, [key]: next, page: undefined };
+}
+
 export function toggleValue(
   values: QueryValues,
   key: string,

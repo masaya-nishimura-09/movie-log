@@ -18,8 +18,8 @@ const sortParams: Record<RecordSort, { field: string; order: string }> = {
 
 function toParams(query: RecordQuery): URLSearchParams {
   const params = new URLSearchParams();
-  for (const score of query.scores) params.append("scores", String(score));
-  for (const platform of query.platforms) params.append("platforms", platform);
+  if (query.score !== undefined) params.set("score", String(query.score));
+  if (query.platform !== undefined) params.set("platform", query.platform);
   for (const moodTag of query.moodTags) params.append("mood_tags", moodTag);
   for (const genre of query.genres) params.append("genres", genre);
   if (query.keyword !== "") params.set("title", query.keyword);

@@ -1,11 +1,16 @@
 import type { ReactNode } from "react";
-import { FilterCheckLink } from "@/components/molecules/filter-check-link";
 import { FilterChipLink } from "@/components/molecules/filter-chip-link";
+import { FilterRadioLink } from "@/components/molecules/filter-radio-link";
 import { SortSelect } from "@/components/molecules/sort-select";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
 import { interpolate } from "@/lib/text/interpolate";
-import { buildHref, type QueryValues, toggleValue } from "@/lib/url/build-href";
+import {
+  buildHref,
+  type QueryValues,
+  selectValue,
+  toggleValue,
+} from "@/lib/url/build-href";
 import {
   genreSchema,
   moodTagSchema,
@@ -43,6 +48,11 @@ function toggleHrefFor(basePath: string, values: QueryValues) {
     buildHref(basePath, toggleValue(values, key, value));
 }
 
+function selectHrefFor(basePath: string, values: QueryValues) {
+  return (key: string, value: string) =>
+    buildHref(basePath, selectValue(values, key, value));
+}
+
 export function SortOptions({
   basePath,
   query,
@@ -72,7 +82,7 @@ export function SortOptions({
 }
 
 export function ScoreOptions({ basePath, query, values }: FilterOptionsProps) {
-  const toggleHref = toggleHrefFor(basePath, values);
+  const selectHref = selectHrefFor(basePath, values);
   return (
     <div className="flex gap-1.5">
       {scores.toReversed().map((score) => (
@@ -80,8 +90,8 @@ export function ScoreOptions({ basePath, query, values }: FilterOptionsProps) {
           key={score}
           shape="block"
           size="sm"
-          href={toggleHref(recordQueryKeys.score, String(score))}
-          active={query.scores.includes(score)}
+          href={selectHref(recordQueryKeys.score, String(score))}
+          active={query.score === score}
           className="h-9 rounded-[10px] text-[13px] text-foreground-sub"
         >
           {score}
@@ -99,31 +109,34 @@ export function PlatformOptions({
   collapsed,
   showAllLabel,
 }: FilterOptionsProps & { collapsed?: boolean; showAllLabel?: string }) {
-  const toggleHref = toggleHrefFor(basePath, values);
-  const platforms = platformSchema.options.toSorted(
-    (a, b) =>
-      Number(query.platforms.includes(b)) - Number(query.platforms.includes(a)),
-  );
+  const selectHref = selectHrefFor(basePath, values);
+  const platforms = platformSchema.options;
   const platformLink = (platform: (typeof platforms)[number]) => (
-    <FilterCheckLink
+    <FilterRadioLink
       key={platform}
-      href={toggleHref(recordQueryKeys.platform, platform)}
-      active={query.platforms.includes(platform)}
+      href={selectHref(recordQueryKeys.platform, platform)}
+      active={query.platform === platform}
       label={enums.platform[platform]}
     />
   );
 
   if (!collapsed) {
     return (
-      <div className="grid grid-cols-2 gap-x-4 gap-y-2">
+      <div role="radiogroup" className="grid grid-cols-2 gap-x-4 gap-y-2">
         {platforms.map(platformLink)}
       </div>
     );
   }
   return (
-    <div className="flex flex-col gap-2">
+    <div role="radiogroup" className="flex flex-col gap-2">
       {platforms.slice(0, visiblePlatformCount).map(platformLink)}
-      <details className="group flex flex-col">
+      <details
+        open={
+          query.platform !== undefined &&
+          platforms.indexOf(query.platform) >= visiblePlatformCount
+        }
+        className="group flex flex-col"
+      >
         <summary className="mt-0.5 cursor-pointer list-none font-medium text-primary text-xs group-open:hidden">
           {showAllLabel}
         </summary>
