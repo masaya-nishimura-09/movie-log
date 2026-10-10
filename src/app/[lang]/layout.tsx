@@ -21,13 +21,31 @@ export const viewport: Viewport = {
 };
 
 export async function generateMetadata(): Promise<Metadata> {
-  const dict = await getDictionary();
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return {
     title: {
       default: dict.metadata.title,
       template: `%s | ${dict.metadata.title}`,
     },
     description: dict.metadata.description,
+    openGraph: {
+      type: "website",
+      siteName: dict.brand.name,
+      title: dict.metadata.title,
+      description: dict.metadata.description,
+      locale: lang === "ja" ? "ja_JP" : "en_US",
+      images: [
+        {
+          url: `/og/og-${lang}.jpg`,
+          width: 1200,
+          height: 630,
+          alt: dict.landing.listAlt,
+        },
+      ],
+    },
+    twitter: {
+      card: "summary_large_image",
+    },
   };
 }
 
