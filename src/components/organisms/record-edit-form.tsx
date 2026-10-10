@@ -104,6 +104,7 @@ export function RecordEditForm({
         <div className="flex flex-col gap-4">
           <Panel title={dict.watchSection}>
             <RecordBasicsFields
+              lang={lang}
               errors={failure?.errors}
               title={movie.title}
               onTitleChange={movie.setTitle}

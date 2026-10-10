@@ -170,6 +170,7 @@ export function RecordCreateForm({
             }}
           >
             <RecordBasicsFields
+              lang={lang}
               split
               errors={failure?.errors}
               title={movie.title}

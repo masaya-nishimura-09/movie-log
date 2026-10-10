@@ -2,10 +2,11 @@
 
 import { useEffect, useState } from "react";
 import { ChoiceChip, choiceChipVariants } from "@/components/atoms/choice-chip";
-import { Input } from "@/components/atoms/input";
+import { DatePickerField } from "@/components/molecules/date-picker-field";
 import { FormField } from "@/components/molecules/form-field";
 import { MovieTitleField } from "@/components/molecules/movie-title-field";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import type { Locale } from "@/i18n/locales";
 import { toDateInputValue } from "@/lib/date/format-date";
 import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { cn } from "@/lib/style/cn";
@@ -14,6 +15,7 @@ import { platformSchema, scores } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordBasicsFieldsProps = {
+  lang: Locale;
   values: RecordFormValues;
   title: string;
   onTitleChange: (title: string) => void;
@@ -33,6 +35,7 @@ function daysAgo(days: number) {
 }
 
 export function RecordBasicsFields({
+  lang,
   values,
   title,
   onTitleChange,
@@ -100,14 +103,12 @@ export function RecordBasicsFields({
             required
             requiredLabel={dict.required}
           >
-            <Input
+            <DatePickerField
               id="watchedAt"
               name="watchedAt"
-              type="date"
-              required
               value={watchedAt}
-              onChange={(event) => setWatchedAt(event.target.value)}
-              className="max-w-full appearance-none tabular-nums [&::-webkit-date-and-time-value]:text-left"
+              onValueChange={setWatchedAt}
+              lang={lang}
             />
             <div className="mt-0.75 flex gap-1.5">
               {quickDates.map((quick) => (
