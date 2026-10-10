@@ -23,6 +23,20 @@ This repository is the web frontend.
 It talks to [Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api),
 and can also run on its own with mock data.
 
+## Recommend a film in seconds
+
+> "Anything moving on Netflix?"
+
+If you love films, people keep asking you what to watch,
+and the right pick for someone else rarely comes to mind on the spot.
+Every record keeps its platform and mood,
+so you can filter the films you have seen down to exactly what they asked for
+and answer right away.
+
+<p align="center">
+  <img src=".github/assets/recommend-en.webp" alt="Records filtered to the Netflix platform and the Moving mood" width="820">
+</p>
+
 ## Screens
 
 <p align="center">

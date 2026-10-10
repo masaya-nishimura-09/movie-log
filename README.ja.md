@@ -20,6 +20,16 @@
 
 このリポジトリはフロントエンドです。[Movie Log API](https://github.com/masaya-nishimura-09/movie-log-api) とつないで動きます。モックデータを使えば、API なしでも動かせます。
 
+## 聞かれたら、すぐにおすすめできる
+
+> 「Netflix で観られる、感動する映画ない？」
+
+映画が好きだと、おすすめを聞かれることがよくあります。でも相手の好みに合う1本は、その場ではなかなか思い出せません。記録にはプラットフォームと気分が残っているので、聞かれた条件で絞り込めば、自分が観た映画の中からすぐに答えられます。
+
+<p align="center">
+  <img src=".github/assets/recommend-ja.webp" alt="プラットフォーム「Netflix」と気分「感動系」で絞り込んだ記録の一覧" width="820">
+</p>
+
 ## 画面
 
 <p align="center">
