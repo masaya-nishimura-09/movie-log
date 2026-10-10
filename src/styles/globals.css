@@ -197,7 +197,7 @@
   --field: color-mix(in oklab, var(--beige) 8%, transparent);
   --control: color-mix(in oklab, var(--sage) 22%, var(--navy));
   --placeholder: color-mix(in oklab, var(--beige) 50%, var(--navy));
-  --selected: color-mix(in oklab, var(--brown) 55%, var(--navy));
+  --selected: color-mix(in oklab, var(--brown) 80%, var(--navy));
   --selected-border: var(--primary);
   --selected-foreground: var(--beige);
   --score-high: color-mix(in oklab, var(--brown) 55%, var(--navy));
