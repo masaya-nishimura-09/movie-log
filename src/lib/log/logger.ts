@@ -45,7 +45,7 @@ export function logError(
     level,
     event,
     service: "movie-log-web",
-    version: process.env.APP_VERSION,
+    version: process.env.APP_VERSION || undefined,
     userId: accessToken ? readJwtUserId(accessToken) : undefined,
     path: path?.split("?")[0],
     ...errorFields(error),
