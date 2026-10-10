@@ -77,7 +77,6 @@ src/
   lib/            # Helpers (auth, date, record, style, text, url)
   styles/         # Global styles
   proxy.ts        # Locale routing and token refresh
-docs/             # Working documents
 ```
 
 ## Pages
