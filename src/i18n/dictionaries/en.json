@@ -28,6 +28,11 @@
         "text": "Your records are not shown to anyone else. Available in Japanese and English."
       }
     ],
+    "recommend": {
+      "title": "“Anything moving on Netflix?”",
+      "text": "Love films, and people keep asking you what to watch. The right pick for someone else rarely comes to mind on the spot. Filter the films you have seen by platform and mood, and the answer is right there.",
+      "alt": "Records filtered to the Netflix platform and the Moving mood"
+    },
     "closing": "Start with the last film you saw. A title and a date take about thirty seconds."
   },
   "about": {

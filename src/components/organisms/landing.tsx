@@ -140,6 +140,23 @@ export function Landing({ lang, dict }: LandingProps) {
         ))}
       </section>
 
+      <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_1.15fr] lg:py-16">
+        <div className="flex flex-col gap-5">
+          <h2 className="text-balance font-bold text-2xl leading-snug md:text-3xl">
+            {l.recommend.title}
+          </h2>
+          <p className="text-foreground-sub text-lg leading-relaxed">
+            {l.recommend.text}
+          </p>
+        </div>
+        <Screenshot
+          src={`/landing/recommend-${lang}.webp`}
+          mobileSrc={`/landing/recommend-mobile-${lang}.webp`}
+          alt={l.recommend.alt}
+          side="right"
+        />
+      </section>
+
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.15fr_1fr] lg:py-16">
         <Screenshot
           src={`/landing/detail-${lang}.webp`}
