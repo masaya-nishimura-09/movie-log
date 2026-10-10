@@ -1,6 +1,9 @@
+"use client";
+
 import type { VariantProps } from "class-variance-authority";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { useRouter } from "next/navigation";
+import { type MouseEvent, type ReactNode, useTransition } from "react";
 import { choiceChipVariants } from "@/components/atoms/choice-chip";
 import { cn } from "@/lib/style/cn";
 
@@ -20,12 +23,31 @@ export function FilterChipLink({
   className,
   children,
 }: FilterChipLinkProps) {
+  const router = useRouter();
+  const [pending, startTransition] = useTransition();
+  const shown = pending ? !active : active;
+
+  function handleClick(event: MouseEvent<HTMLAnchorElement>) {
+    if (
+      event.button !== 0 ||
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.altKey
+    ) {
+      return;
+    }
+    event.preventDefault();
+    startTransition(() => router.push(href, { scroll: false }));
+  }
+
   return (
     <Link
       href={href}
       scroll={false}
-      data-active={active}
-      aria-pressed={active}
+      onClick={handleClick}
+      data-active={shown}
+      aria-pressed={shown}
       role="button"
       className={cn(
         choiceChipVariants({ shape, size, tone }),
