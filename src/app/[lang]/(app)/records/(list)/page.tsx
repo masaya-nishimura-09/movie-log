@@ -108,7 +108,7 @@ export default async function RecordsPage({
               <SortOptions
                 {...filterProps}
                 sortDict={dict.recordSort}
-                className="bg-(--sage)"
+                className="bg-control"
               />
             </div>
             <span className="mx-1 h-6 w-px bg-border" aria-hidden />
