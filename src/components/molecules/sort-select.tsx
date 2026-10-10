@@ -8,6 +8,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/molecules/select";
+import { cn } from "@/lib/style/cn";
 
 type SortOption = { value: string; label: string; href: string };
 
@@ -15,9 +16,15 @@ type SortSelectProps = {
   label: string;
   value: string;
   options: SortOption[];
+  className?: string;
 };
 
-export function SortSelect({ label, value, options }: SortSelectProps) {
+export function SortSelect({
+  label,
+  value,
+  options,
+  className,
+}: SortSelectProps) {
   const router = useRouter();
 
   return (
@@ -32,7 +39,7 @@ export function SortSelect({ label, value, options }: SortSelectProps) {
       <SelectTrigger
         aria-label={label}
         size="sm"
-        className="w-full border-0 bg-card text-[13px]"
+        className={cn("w-full text-[13px]", className)}
       >
         <SelectValue />
       </SelectTrigger>

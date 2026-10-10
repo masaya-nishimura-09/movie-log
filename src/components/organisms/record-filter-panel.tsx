@@ -62,11 +62,14 @@ export function SortOptions({
   query,
   values,
   sortDict,
+  className,
 }: Omit<FilterOptionsProps, "enums"> & {
   sortDict: Dictionary["recordSort"];
+  className?: string;
 }) {
   return (
     <SortSelect
+      className={className}
       label={sortDict.label}
       value={query.sort}
       options={recordSorts.map((sort) => ({

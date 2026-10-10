@@ -105,7 +105,11 @@ export default async function RecordsPage({
         <div className="hidden flex-col gap-3 md:flex">
           <div className="flex flex-wrap items-center gap-2">
             <div className="w-48">
-              <SortOptions {...filterProps} sortDict={dict.recordSort} />
+              <SortOptions
+                {...filterProps}
+                sortDict={dict.recordSort}
+                className="bg-(--sage)"
+              />
             </div>
             <span className="mx-1 h-6 w-px bg-border" aria-hidden />
             <FilterButton
