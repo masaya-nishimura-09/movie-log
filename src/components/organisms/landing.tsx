@@ -13,11 +13,13 @@ type LandingProps = {
 
 function Screenshot({
   src,
+  mobileSrc,
   alt,
   side,
   priority,
 }: {
   src: string;
+  mobileSrc: string;
   alt: string;
   side: "left" | "right";
   priority?: boolean;
@@ -25,7 +27,7 @@ function Screenshot({
   return (
     <div
       className={cn(
-        "rounded-[20px] bg-(--sage) p-3 md:rounded-[28px] md:p-5",
+        "relative rounded-[20px] bg-(--sage) p-3 md:rounded-[28px] md:p-5",
         side === "right" ? "md:pr-10 md:pb-10" : "md:pb-10 md:pl-10",
       )}
     >
@@ -39,6 +41,25 @@ function Screenshot({
         sizes="(min-width: 1024px) 560px, 100vw"
         className="h-auto w-full rounded-[8px] shadow-[0_24px_48px_-24px_rgb(0_0_0/0.6)]"
       />
+      <div
+        className={cn(
+          "absolute bottom-2 w-[26%] rounded-[12px] bg-(--navy) p-0.5 shadow-[0_24px_48px_-16px_rgb(0_0_0/0.7)] md:bottom-4 md:w-[21%] md:rounded-[16px] md:p-1",
+          side === "right"
+            ? "right-2 md:right-4"
+            : "right-2 md:right-auto md:left-4",
+        )}
+      >
+        <Image
+          src={mobileSrc}
+          alt=""
+          width={780}
+          height={1688}
+          priority={priority}
+          unoptimized
+          sizes="140px"
+          className="h-auto w-full rounded-[10px] md:rounded-[12px]"
+        />
+      </div>
     </div>
   );
 }
@@ -96,6 +117,7 @@ export function Landing({ lang, dict }: LandingProps) {
         </div>
         <Screenshot
           src={`/landing/list-${lang}.webp`}
+          mobileSrc={`/landing/list-mobile-${lang}.webp`}
           alt={l.listAlt}
           side="right"
           priority
@@ -121,6 +143,7 @@ export function Landing({ lang, dict }: LandingProps) {
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.15fr_1fr] lg:py-16">
         <Screenshot
           src={`/landing/detail-${lang}.webp`}
+          mobileSrc={`/landing/detail-mobile-${lang}.webp`}
           alt={l.detailAlt}
           side="left"
         />
