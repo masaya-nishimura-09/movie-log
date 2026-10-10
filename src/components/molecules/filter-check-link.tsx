@@ -19,10 +19,8 @@ export function FilterCheckLink({ href, active, label }: FilterCheckLinkProps) {
     >
       <span
         className={cn(
-          "grid size-4.25 shrink-0 place-items-center rounded-[5px] border-[1.5px]",
-          active
-            ? "border-selected-border bg-selected-border text-white"
-            : "border-dash-line bg-card",
+          "grid size-4.25 shrink-0 place-items-center rounded-[5px]",
+          active ? "bg-selected-border text-primary-foreground" : "bg-field",
         )}
       >
         {active && <Check className="size-3" strokeWidth={3} aria-hidden />}

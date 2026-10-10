@@ -10,15 +10,15 @@ const buttonStyles = cva(
         default:
           "bg-clip-border bg-primary font-bold text-primary-foreground shadow-[0_3px_0_0_var(--primary-edge)] hover:bg-primary/90 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--primary-edge)]",
         outline:
-          "border-input bg-card text-foreground shadow-[0_3px_0_0_var(--input)] hover:bg-secondary aria-expanded:bg-secondary active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--input)]",
+          "text-foreground shadow-[0_0_0_1px_var(--edge),0_3px_0_0_var(--edge)] hover:bg-secondary aria-expanded:bg-secondary active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_1px_var(--edge)]",
         secondary:
           "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
         ghost:
           "text-foreground-sub hover:bg-secondary hover:text-foreground aria-expanded:bg-secondary",
         destructive:
-          "border-destructive-border bg-card text-destructive-foreground shadow-[0_3px_0_0_var(--destructive-border)] hover:bg-destructive/5 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--destructive-border)]",
+          "text-destructive-foreground shadow-[0_0_0_1px_var(--destructive-border),0_3px_0_0_var(--destructive-border)] hover:bg-destructive/5 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_1px_var(--destructive-border)]",
         danger:
-          "bg-clip-border bg-destructive font-bold text-white shadow-[0_3px_0_0_var(--destructive-edge)] hover:bg-destructive/90 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--destructive-edge)]",
+          "bg-clip-border bg-destructive font-bold text-primary-foreground shadow-[0_3px_0_0_var(--destructive-edge)] hover:bg-destructive/90 active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:translate-y-[3px] active:not-aria-[haspopup=menu]:not-aria-[haspopup=listbox]:shadow-[0_0_0_0_var(--destructive-edge)]",
         link: "text-primary underline-offset-4 hover:underline",
       },
       size: {

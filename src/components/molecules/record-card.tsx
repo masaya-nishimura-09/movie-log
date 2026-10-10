@@ -57,7 +57,7 @@ export function RecordCard({
         aria-hidden="true"
         role="presentation"
         viewBox="0 0 19 19"
-        className="pointer-events-none absolute top-0 left-0 size-0 fill-secondary transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
+        className="pointer-events-none absolute top-0 left-0 size-0 fill-card transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
       >
         <path d="M18 1 L1 18 Q0 19 2 19 L11 19 A8 8 0 0 0 19 11 L19 2 Q19 0 18 1 Z" />
       </svg>

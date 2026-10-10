@@ -76,7 +76,7 @@ export function ActiveFilterList({
           href={item.href}
           scroll={false}
           aria-label={interpolate(dict.remove, { label: item.label })}
-          className="inline-flex h-8 items-center gap-1.5 rounded-full border-[1.5px] border-selected-border bg-selected px-2.75 font-medium text-selected-foreground text-xs hover:brightness-97"
+          className="inline-flex h-8 items-center gap-1.5 rounded-full bg-selected px-2.75 font-medium text-selected-foreground text-xs hover:brightness-97"
         >
           {item.label}
           <X className="size-3.75" aria-hidden />

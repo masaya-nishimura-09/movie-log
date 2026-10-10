@@ -24,7 +24,7 @@ export function SearchForm({
     <form
       action={action}
       className={cn(
-        "flex h-10 items-center gap-2 rounded-full border border-input bg-background px-4 focus-within:border-selected-border",
+        "flex h-10 items-center gap-2 rounded-full bg-field px-4 focus-within:ring-1 focus-within:ring-selected-border",
         className,
       )}
     >

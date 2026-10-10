@@ -41,7 +41,7 @@ export function CountryInput({
             return (
               <li
                 key={code}
-                className="inline-flex h-8 items-center gap-1 rounded-md border bg-secondary pr-1 pl-2.5 text-sm"
+                className="inline-flex h-8 items-center gap-1 rounded-md bg-secondary pr-1 pl-2.5 text-sm"
               >
                 {label}
                 <span className="text-muted-foreground text-xs">{code}</span>

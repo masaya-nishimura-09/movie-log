@@ -37,8 +37,7 @@ export function RecordFilterSheet({
         className={cn(
           buttonVariants({ variant: "outline", size: "sm" }),
           "px-3",
-          activeCount > 0 &&
-            "border-selected-border bg-selected text-selected-foreground",
+          activeCount > 0 && "bg-selected text-selected-foreground",
         )}
       >
         <SlidersHorizontal className="size-4" aria-hidden />

@@ -75,48 +75,53 @@
   --font-display:
     var(--font-poppins), var(--font-zen-maru-gothic), var(--font-noto-sans-jp),
     sans-serif;
+  --navy: #0a2947;
+  --beige: #f3e4c9;
+  --sage: #d3d4c0;
+  --brown: #8b5e3c;
 }
 
 :root,
 :root:not(.dark) .shell-inset {
-  --background: #f3e4c9;
-  --foreground: #0a2947;
-  --foreground-sub: #3d4b5a;
-  --card: #fbf3e2;
-  --card-foreground: #0a2947;
-  --popover: #fbf3e2;
-  --popover-foreground: #0a2947;
-  --primary: #8b5e3c;
-  --primary-foreground: #fbf3e2;
-  --primary-edge: #5c3b22;
-  --secondary: #e8d9bb;
-  --secondary-foreground: #3d4b5a;
-  --muted: #e8d9bb;
-  --muted-foreground: #54687a;
-  --accent: #ead7b5;
-  --accent-foreground: #5c3b22;
+  --background: var(--beige);
+  --foreground: var(--navy);
+  --foreground-sub: color-mix(in oklab, var(--navy) 80%, var(--beige));
+  --card: color-mix(in oklab, var(--beige) 40%, white);
+  --card-foreground: var(--navy);
+  --popover: var(--card);
+  --popover-foreground: var(--navy);
+  --primary: var(--brown);
+  --primary-foreground: var(--card);
+  --primary-edge: color-mix(in oklab, var(--brown) 65%, var(--navy));
+  --secondary: color-mix(in oklab, var(--navy) 6%, transparent);
+  --secondary-foreground: var(--foreground-sub);
+  --muted: var(--secondary);
+  --muted-foreground: color-mix(in oklab, var(--navy) 65%, var(--beige));
+  --accent: var(--sage);
+  --accent-foreground: var(--navy);
   --destructive: #a2432f;
   --destructive-edge: #66291c;
   --destructive-border: #d9b8ad;
   --destructive-foreground: #8a3423;
-  --border: #a1a9a2;
-  --input: #a1a9a2;
-  --ring: #8b5e3c;
-  --header: #e3d3b0;
-  --field: #fffaf0;
-  --placeholder: #607282;
-  --selected: #ead7b5;
-  --selected-border: #8b5e3c;
-  --selected-foreground: #5c3b22;
-  --score-high: #e0c19a;
-  --score-high-foreground: #5c3b22;
-  --score-low: #e8d9bb;
-  --score-low-foreground: #3d4b5a;
-  --genre: #a9ac96;
-  --genre-foreground: #3f4733;
-  --mood: #cfd9e2;
-  --mood-foreground: #1b3a55;
-  --dash-line: #d3d4c0;
+  --border: var(--sage);
+  --input: var(--sage);
+  --edge: color-mix(in oklab, var(--brown) 28%, transparent);
+  --ring: var(--brown);
+  --header: var(--sage);
+  --field: color-mix(in oklab, var(--brown) 9%, transparent);
+  --placeholder: color-mix(in oklab, var(--navy) 50%, var(--beige));
+  --selected: color-mix(in oklab, var(--brown) 22%, var(--beige));
+  --selected-border: var(--brown);
+  --selected-foreground: var(--primary-edge);
+  --score-high: color-mix(in oklab, var(--brown) 35%, var(--beige));
+  --score-high-foreground: var(--primary-edge);
+  --score-low: var(--sage);
+  --score-low-foreground: var(--navy);
+  --genre: var(--sage);
+  --genre-foreground: var(--foreground-sub);
+  --mood: var(--sage);
+  --mood-foreground: var(--navy);
+  --dash-line: var(--sage);
   --chart-1: oklch(0.87 0 0);
   --chart-2: oklch(0.556 0 0);
   --chart-3: oklch(0.439 0 0);
@@ -125,8 +130,44 @@
   --radius: 0.75rem;
 }
 
-.dark,
 :root:not(.dark) .shell {
+  --background: color-mix(in oklab, var(--navy) 80%, black);
+  --foreground: var(--beige);
+  --foreground-sub: color-mix(in oklab, var(--beige) 80%, var(--navy));
+  --card: color-mix(in oklab, var(--beige) 8%, var(--navy));
+  --card-foreground: var(--beige);
+  --popover: var(--card);
+  --popover-foreground: var(--beige);
+  --primary: var(--brown);
+  --primary-foreground: color-mix(in oklab, var(--beige) 40%, white);
+  --primary-edge: color-mix(in oklab, var(--brown) 65%, var(--navy));
+  --secondary: color-mix(in oklab, var(--beige) 10%, transparent);
+  --secondary-foreground: var(--foreground-sub);
+  --muted: var(--secondary);
+  --muted-foreground: color-mix(in oklab, var(--beige) 60%, var(--navy));
+  --accent: color-mix(in oklab, var(--beige) 12%, var(--navy));
+  --accent-foreground: var(--beige);
+  --destructive: #d9745e;
+  --destructive-edge: #824134;
+  --destructive-border: #6b3a30;
+  --destructive-foreground: #e89a88;
+  --border: color-mix(in oklab, var(--beige) 15%, var(--navy));
+  --input: var(--border);
+  --edge: color-mix(in oklab, black 30%, transparent);
+  --ring: var(--brown);
+  --header: var(--navy);
+  --field: color-mix(in oklab, var(--beige) 9%, transparent);
+  --placeholder: color-mix(in oklab, var(--beige) 50%, var(--navy));
+  --selected: color-mix(in oklab, var(--brown) 30%, var(--navy));
+  --selected-border: var(--brown);
+  --selected-foreground: var(--beige);
+  --mood: var(--sage);
+  --mood-foreground: var(--navy);
+  --dash-line: var(--border);
+}
+
+.dark {
+  --edge: color-mix(in oklab, black 30%, transparent);
   --background: #08182a;
   --foreground: #f3e4c9;
   --foreground-sub: #c6d6e4;
