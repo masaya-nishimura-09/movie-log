@@ -4,7 +4,6 @@ import { FilterChipLink } from "@/components/molecules/filter-chip-link";
 import { SortSelect } from "@/components/molecules/sort-select";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
-import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 import { buildHref, type QueryValues, toggleValue } from "@/lib/url/build-href";
 import {
@@ -26,22 +25,9 @@ type RecordFilterPanelProps = {
 
 const visiblePlatformCount = 6;
 
-function Section({
-  title,
-  dashed,
-  children,
-}: {
-  title: string;
-  dashed?: boolean;
-  children: ReactNode;
-}) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
-    <section
-      className={cn(
-        "flex flex-col gap-2.25",
-        dashed && "border-t border-dashed pt-1",
-      )}
-    >
+    <section className="flex flex-col gap-2.25">
       <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">
         {title}
       </h2>
@@ -203,7 +189,7 @@ export function RecordFilterPanel({
   ...props
 }: RecordFilterPanelProps) {
   return (
-    <div className="flex flex-col gap-5.5">
+    <div className="flex flex-col gap-8">
       <Section title={sortDict.label}>
         <SortOptions {...props} sortDict={sortDict} />
       </Section>
@@ -222,7 +208,7 @@ export function RecordFilterPanel({
       <Section title={dict.moodTag}>
         <MoodOptions {...props} />
       </Section>
-      <Section title={dict.genre} dashed>
+      <Section title={dict.genre}>
         <GenreOptions {...props} />
       </Section>
     </div>

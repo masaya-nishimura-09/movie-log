@@ -57,7 +57,7 @@ export function RecordFilterSheet({
             {dict.clearAll}
           </Link>
         </SheetHeader>
-        <div className="overflow-y-auto px-4">{children}</div>
+        <div className="overflow-y-auto px-4 pb-6">{children}</div>
         <SheetFooter className="border-t">
           <SheetClose render={<Button className="w-full" />}>
             {interpolate(dict.showResults, { count: resultCount })}
