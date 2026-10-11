@@ -118,6 +118,7 @@ Font weights depend on the role of the text: 400 for body text,
 | Language       | TypeScript                                          |
 | Styling        | Tailwind CSS, shadcn/ui (Base UI), react-day-picker |
 | Validation     | Zod                                                 |
+| Testing        | Vitest                                              |
 | Bot protection | Cloudflare Turnstile                                |
 | Contact        | Resend                                              |
 | Tooling        | Biome, pnpm                                         |
@@ -170,15 +171,19 @@ Set the following environment variables in `.env.local`.
 
 ### Scripts
 
-| Command          | Description                     |
-|------------------|---------------------------------|
-| `pnpm dev`       | Start the development server    |
-| `pnpm build`     | Build for production            |
-| `pnpm start`     | Start the production build      |
-| `pnpm lint`      | Check the code with Biome       |
-| `pnpm fix`       | Fix lint issues                 |
-| `pnpm format`    | Format the code with Biome      |
-| `pnpm typecheck` | Run the TypeScript type check   |
+| Command           | Description                                  |
+|-------------------|----------------------------------------------|
+| `pnpm dev`        | Start the development server                 |
+| `pnpm build`      | Build for production                         |
+| `pnpm start`      | Start the production build                   |
+| `pnpm lint`       | Check the code with Biome                    |
+| `pnpm fix`        | Fix lint issues                              |
+| `pnpm format`     | Format the code with Biome                   |
+| `pnpm typecheck`  | Run the TypeScript type check                |
+| `pnpm test`       | Run the tests with Vitest                    |
+| `pnpm test:watch` | Run the tests and rerun them on file changes |
+
+Unit tests sit next to the file they test as `*.test.ts` (for example, `src/lib/url/build-href.test.ts`).
 
 ## Project Structure
 

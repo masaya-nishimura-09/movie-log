@@ -101,15 +101,16 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 
 ## 技術スタック
 
-| 分類             | 使用技術                                            |
-|------------------|-----------------------------------------------------|
-| フレームワーク   | Next.js（App Router）、React                        |
-| 言語             | TypeScript                                          |
-| スタイル         | Tailwind CSS、shadcn/ui（Base UI）、react-day-picker |
-| バリデーション   | Zod                                                 |
-| ボット対策       | Cloudflare Turnstile                                |
-| お問い合わせ     | Resend                                              |
-| 開発ツール       | Biome、pnpm                                         |
+| 分類           | 使用技術                                             |
+|----------------|------------------------------------------------------|
+| フレームワーク | Next.js（App Router）、React                         |
+| 言語           | TypeScript                                           |
+| スタイル       | Tailwind CSS、shadcn/ui（Base UI）、react-day-picker |
+| バリデーション | Zod                                                  |
+| テスト         | Vitest                                               |
+| ボット対策     | Cloudflare Turnstile                                 |
+| お問い合わせ   | Resend                                               |
+| 開発ツール     | Biome、pnpm                                          |
 
 ## セットアップ
 
@@ -156,15 +157,19 @@ pnpm dev
 
 ### スクリプト
 
-| コマンド         | 説明                           |
-|------------------|--------------------------------|
-| `pnpm dev`       | 開発サーバーの起動             |
-| `pnpm build`     | 本番用のビルド                 |
-| `pnpm start`     | ビルドしたアプリの起動         |
-| `pnpm lint`      | Biome によるチェック           |
-| `pnpm fix`       | lint の指摘の自動修正          |
-| `pnpm format`    | Biome による整形               |
-| `pnpm typecheck` | TypeScript の型チェック        |
+| コマンド          | 説明                                 |
+|-------------------|--------------------------------------|
+| `pnpm dev`        | 開発サーバーの起動                   |
+| `pnpm build`      | 本番用のビルド                       |
+| `pnpm start`      | ビルドしたアプリの起動               |
+| `pnpm lint`       | Biome によるチェック                 |
+| `pnpm fix`        | lint の指摘の自動修正                |
+| `pnpm format`     | Biome による整形                     |
+| `pnpm typecheck`  | TypeScript の型チェック              |
+| `pnpm test`       | Vitest によるテストの実行            |
+| `pnpm test:watch` | ファイルの変更を監視してテストを実行 |
+
+単体テストは、対象のファイルの隣に `*.test.ts` として置いています（例：`src/lib/url/build-href.test.ts`）。
 
 ## ディレクトリ構成
 
