@@ -1,3 +1,10 @@
+import {
+  CalendarDays,
+  Clock,
+  Languages,
+  type LucideIcon,
+  MapPin,
+} from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { GenreTag } from "@/components/atoms/genre-tag";
@@ -41,10 +48,35 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
     record.language,
     dict.recordForm.languageUnknown,
   );
-  const countries = record.countries.map(
-    (code) => regionNames.of(code) ?? code,
+  const countries = new Intl.ListFormat(lang).format(
+    record.countries.map((code) => regionNames.of(code) ?? code),
   );
-  const meta = [year, runtime, language, ...countries].filter(Boolean);
+  const withIcon = (Icon: LucideIcon, label: string, value: string) => (
+    <span className="inline-flex items-start gap-1">
+      <span className="flex h-lh shrink-0 items-center">
+        <Icon className="size-[1em] text-muted-foreground" aria-hidden />
+      </span>
+      <span className="sr-only">{label}</span>
+      {value}
+    </span>
+  );
+  const countriesItem =
+    countries === ""
+      ? null
+      : withIcon(MapPin, dict.recordForm.countries, countries);
+  const languageItem = withIcon(Languages, dict.recordForm.language, language);
+  const yearItem =
+    year === ""
+      ? null
+      : withIcon(CalendarDays, dict.recordForm.releaseYear, year);
+  const runtimeItem =
+    runtime === "" ? null : withIcon(Clock, dict.recordForm.runtime, runtime);
+  const meta = [
+    { key: "year", node: yearItem },
+    { key: "runtime", node: runtimeItem },
+    { key: "countries", node: countriesItem },
+    { key: "language", node: languageItem },
+  ].filter((item) => item.node);
   const platformLabel = dict.enums.platform[record.platform];
   const scoreLabel = interpolate(dict.recordCard.score, {
     score: record.score,
@@ -94,10 +126,10 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             <h1 className="font-bold text-foreground text-xl leading-[1.35]">
               {record.title}
             </h1>
-            <p className="text-[13px] text-foreground-sub leading-relaxed">
-              {[year, runtime].filter(Boolean).join(" ・ ")}
-              <br />
-              {[language, ...countries].join(" ・ ")}
+            <p className="flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-foreground-sub leading-relaxed">
+              {meta.map((item) => (
+                <span key={item.key}>{item.node}</span>
+              ))}
             </p>
           </div>
           <div aria-hidden className="relative hidden h-0 md:block">
@@ -156,13 +188,13 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
               </h1>
               <p className="flex flex-wrap gap-2.5 text-foreground-sub text-sm 2xl:text-lg">
                 {meta.map((item, index) => (
-                  <span key={item} className="flex gap-2.5">
+                  <span key={item.key} className="flex gap-2.5">
                     {index > 0 && (
                       <span className="text-genre" aria-hidden>
                         |
                       </span>
                     )}
-                    {item}
+                    {item.node}
                   </span>
                 ))}
               </p>
