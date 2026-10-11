@@ -350,7 +350,6 @@
   },
   "recordCard": {
     "score": "Score {score}",
-    "watched": "Watched {date}",
     "noPoster": "No poster"
   },
   "recordDetail": {

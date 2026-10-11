@@ -23,9 +23,13 @@ describe("記録が0件のとき", () => {
       day: "numeric",
     }).format(new Date());
     cy.get(`[aria-label="${ja.recordCard.noPoster}"]`)
-      .parent()
-      .should("contain.text", date)
-      .and("contain.text", ja.recordCard.watched.replace("{date}", "").trim());
+      .closest("a")
+      .should("contain.text", title)
+      .and("contain.text", date)
+      .click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.get(`[aria-label="${ja.recordCard.noPoster}"]`).should("exist");
+    cy.contains("h1", title).should("exist");
   });
 });
 

@@ -350,7 +350,6 @@
   },
   "recordCard": {
     "score": "スコア {score}",
-    "watched": "{date} に視聴",
     "noPoster": "ポスター未登録"
   },
   "recordDetail": {

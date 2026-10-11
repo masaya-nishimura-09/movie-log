@@ -3,7 +3,6 @@ import { RecordCard } from "@/components/molecules/record-card";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { interpolate } from "@/lib/text/interpolate";
-import { interpolateNode } from "@/lib/text/interpolate-node";
 import type { MovieRecord } from "@/schemas/record/record";
 
 type RecordGridProps = {
@@ -31,13 +30,8 @@ export function RecordGrid({ lang, records, dict }: RecordGridProps) {
               scoreLabel={interpolate(dict.recordCard.score, {
                 score: record.score,
               })}
-              year={year}
-              platformLabel={platformLabel}
               meta={[year, platformLabel].filter(Boolean).join(" · ")}
               watchedStamp={watchedShort}
-              watchedLabel={interpolateNode(dict.recordCard.watched, {
-                date: watchedShort,
-              })}
               noPosterLabel={dict.recordCard.noPoster}
             />
           </li>

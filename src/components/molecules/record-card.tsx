@@ -1,4 +1,3 @@
-import { ImageOff } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { ScoreBadge } from "@/components/atoms/score-badge";
@@ -11,10 +10,7 @@ type RecordCardProps = {
   posterUrl: string;
   score: Score;
   scoreLabel: string;
-  year: string;
-  platformLabel: string;
   meta: ReactNode;
-  watchedLabel: ReactNode;
   watchedStamp: ReactNode;
   noPosterLabel: string;
 };
@@ -25,26 +21,18 @@ export function RecordCard({
   posterUrl,
   score,
   scoreLabel,
-  year,
-  platformLabel,
   meta,
-  watchedLabel,
   watchedStamp,
   noPosterLabel,
 }: RecordCardProps) {
-  const hasPoster = posterUrl !== "";
-
   return (
     <Link
       href={href}
       className="group relative flex w-full flex-col rounded-[14px] bg-card outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
     >
       <RecordPoster
-        title={title}
         posterUrl={posterUrl}
-        year={year}
-        platformLabel={platformLabel}
-        size="card"
+        noPosterLabel={noPosterLabel}
         sizes="(min-width: 768px) 190px, 50vw"
         className="rounded-t-[14px]"
         badge={<ScoreBadge score={score} size="sm" label={scoreLabel} />}
@@ -66,31 +54,19 @@ export function RecordCard({
         <span className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-background [clip-path:inset(0_0_0_50%)]" />
         <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
       </div>
-      {hasPoster ? (
-        <div className="flex h-22 flex-col gap-1.25 px-3 py-2.75">
-          <span className="line-clamp-2 h-[2lh] text-pretty font-bold text-foreground text-sm leading-[1.4]">
-            {title}
+      <div className="flex h-22 flex-col gap-1.25 px-3 py-2.75">
+        <span className="line-clamp-2 h-[2lh] text-pretty font-bold text-foreground text-sm leading-[1.4]">
+          {title}
+        </span>
+        <div className="flex items-center justify-between gap-2">
+          <span className="min-w-0 truncate text-[11px] text-muted-foreground">
+            {meta}
           </span>
-          <div className="flex items-center justify-between gap-2">
-            <span className="min-w-0 truncate text-[11px] text-muted-foreground">
-              {meta}
-            </span>
-            <span className="shrink-0 -rotate-6 rounded-sm border-2 border-primary/60 px-1.5 py-px font-bold text-[10px] text-primary/80 tabular-nums tracking-wider">
-              {watchedStamp}
-            </span>
-          </div>
-        </div>
-      ) : (
-        <div className="flex h-22 items-center justify-between gap-2 px-3 py-2.75">
-          <span className="text-[11px] text-muted-foreground">
-            {watchedLabel}
+          <span className="shrink-0 -rotate-6 rounded-sm border-2 border-primary/60 px-1.5 py-px font-bold text-[10px] text-primary/80 tabular-nums tracking-wider">
+            {watchedStamp}
           </span>
-          <ImageOff
-            className="size-3.75 text-muted-foreground"
-            aria-label={noPosterLabel}
-          />
         </div>
-      )}
+      </div>
     </Link>
   );
 }

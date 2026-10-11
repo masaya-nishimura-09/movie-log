@@ -108,11 +108,8 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
       <div className="flex gap-4 md:flex-col md:gap-3.5">
         <div className="contents md:relative md:block md:rounded-2xl md:bg-card">
           <RecordPoster
-            title={record.title}
             posterUrl={record.posterUrl}
-            year={record.releaseYear > 0 ? String(record.releaseYear) : ""}
-            platformLabel={platformLabel}
-            size="detail"
+            noPosterLabel={dict.recordCard.noPoster}
             sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
             className="w-29 shrink-0 self-start rounded-xl md:w-full md:self-auto md:rounded-t-2xl md:rounded-b-none"
           />

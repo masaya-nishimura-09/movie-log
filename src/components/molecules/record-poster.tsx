@@ -1,60 +1,48 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { StampShapes } from "@/components/atoms/stamp-shapes";
 import { cn } from "@/lib/style/cn";
 
 type RecordPosterProps = {
-  title: string;
   posterUrl: string;
-  year: string;
-  platformLabel: string;
+  noPosterLabel: string;
   sizes: string;
-  size: "card" | "detail";
   badge?: ReactNode;
   className?: string;
 };
 
-const titleSizes = {
-  card: { short: "text-[21px]", long: "text-[17px]" },
-  detail: {
-    short: "text-base md:text-[28px]",
-    long: "text-[13px] md:text-[22px]",
-  },
-};
+function StampPlaceholder({ label }: { label: string }) {
+  return (
+    <div className="flex h-full items-center justify-center bg-header">
+      <svg
+        viewBox="0 0 110 110"
+        role="img"
+        aria-label={label}
+        className="w-1/2"
+      >
+        <StampShapes
+          stampClassName="fill-foreground/20"
+          cClassName="fill-header"
+          playClassName="fill-primary/60"
+        />
+      </svg>
+    </div>
+  );
+}
 
 export function RecordPoster({
-  title,
   posterUrl,
-  year,
-  platformLabel,
+  noPosterLabel,
   sizes,
-  size,
   badge,
   className,
 }: RecordPosterProps) {
-  const titleSize =
-    titleSizes[size][Array.from(title).length > 12 ? "long" : "short"];
-
   return (
     <div
       className={cn("relative aspect-2/3 w-full overflow-hidden", className)}
     >
       {posterUrl === "" ? (
-        <div className="flex h-full flex-col justify-between bg-header p-3.25">
-          <span className="text-[11px] text-accent-foreground tracking-[0.08em]">
-            {year}
-          </span>
-          <span
-            className={cn(
-              "line-clamp-6 text-pretty font-bold text-foreground leading-[1.3]",
-              titleSize,
-            )}
-          >
-            {title}
-          </span>
-          <span className="truncate text-[11px] text-foreground-sub tracking-[0.04em]">
-            {platformLabel}
-          </span>
-        </div>
+        <StampPlaceholder label={noPosterLabel} />
       ) : (
         <Image
           src={posterUrl}
