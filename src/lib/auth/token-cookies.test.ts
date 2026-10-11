@@ -1,8 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
+  accessTokenCookie,
   isTokenExpired,
   readJwtExpiry,
   readJwtUserId,
+  refreshTokenCookie,
+  tokenCookies,
 } from "@/lib/auth/token-cookies";
 
 function jwt(payload: Record<string, unknown>): string {
@@ -61,5 +64,32 @@ describe("isTokenExpired", () => {
 
   it("treats a token without exp as expired", () => {
     expect(isTokenExpired(jwt({}), now)).toBe(true);
+  });
+});
+
+describe("tokenCookies", () => {
+  it("returns HTTP-only cookies for both tokens", () => {
+    const accessToken = jwt({ exp: 1_800_000_000 });
+    const cookies = tokenCookies({ accessToken, refreshToken: "refresh" });
+    const options = {
+      httpOnly: true,
+      secure: true,
+      sameSite: "lax",
+      path: "/",
+    };
+    expect(cookies).toEqual([
+      {
+        name: accessTokenCookie,
+        value: accessToken,
+        expires: new Date(1_800_000_000_000),
+        ...options,
+      },
+      {
+        name: refreshTokenCookie,
+        value: "refresh",
+        maxAge: 30 * 24 * 60 * 60,
+        ...options,
+      },
+    ]);
   });
 });
