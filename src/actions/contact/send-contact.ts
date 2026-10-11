@@ -1,8 +1,10 @@
 "use server";
 
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { z } from "zod";
 import type { ActionResult } from "@/actions/action-result";
+import type { Locale } from "@/i18n/locales";
+import { accessTokenCookie, readJwtUserId } from "@/lib/auth/token-cookies";
 import { sendContactMail } from "@/lib/contact/send-contact-mail";
 import { verifyTurnstile } from "@/lib/contact/verify-turnstile";
 import { logError } from "@/lib/log/logger";
@@ -11,6 +13,7 @@ import { contactInputSchema, honeypotField } from "@/schemas/contact/contact";
 const useMock = process.env.USE_MOCK === "true";
 
 export async function sendContactAction(
+  lang: Locale,
   _previous: ActionResult<null> | undefined,
   formData: FormData,
 ): Promise<ActionResult<null>> {
@@ -38,7 +41,12 @@ export async function sendContactAction(
     if (token === "" || !(await verifyTurnstile(token, remoteIp))) {
       return { success: false, messageKey: "verificationFailed" };
     }
-    await sendContactMail(input.data);
+    const accessToken = (await cookies()).get(accessTokenCookie)?.value;
+    await sendContactMail(input.data, {
+      lang,
+      userId: accessToken ? readJwtUserId(accessToken) : undefined,
+      receivedAt: new Date(),
+    });
   } catch (error) {
     logError("error", "contact_send_failed", error);
     return { success: false, messageKey: "unexpectedError" };

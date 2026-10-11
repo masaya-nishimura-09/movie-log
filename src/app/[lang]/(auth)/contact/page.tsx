@@ -29,7 +29,7 @@ export default async function ContactPage() {
       <ContactForm
         lang={lang}
         siteKey={siteKey}
-        action={sendContactAction}
+        action={sendContactAction.bind(null, lang)}
         dict={dict.contact}
         counterTemplate={dict.characterCount}
       />
