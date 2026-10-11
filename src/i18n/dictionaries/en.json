@@ -284,6 +284,7 @@
     "invalidPassword": "Use 8 to 72 half-width letters, digits, or symbols",
     "invalidCredentials": "Incorrect email or password",
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "verificationFailed": "We could not verify the request. Log in again",
     "unexpectedError": "Couldn't log in. Please try again later"
   },
   "register": {
@@ -307,7 +308,8 @@
     "invalidInput": "Please check your input",
     "userAlreadyExists": "This email address is already in use",
     "unexpectedError": "Couldn't sign up. Please try again later",
-    "tooManyRequests": "Too many attempts. Please wait a moment and try again"
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "verificationFailed": "We could not verify the request. Sign up again"
   },
   "passwordInput": {
     "show": "Show password",

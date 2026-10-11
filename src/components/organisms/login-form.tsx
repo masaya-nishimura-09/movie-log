@@ -7,11 +7,13 @@ import { Button } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
+import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 
 type LoginFormProps = {
   lang: Locale;
+  siteKey: string | undefined;
   action: (
     previous: ActionResult<never> | undefined,
     formData: FormData,
@@ -22,6 +24,7 @@ type LoginFormProps = {
 
 export function LoginForm({
   lang,
+  siteKey,
   action,
   dict,
   passwordDict,
@@ -76,6 +79,7 @@ export function LoginForm({
           hideLabel={passwordDict.hide}
         />
       </FormField>
+      <TurnstileWidget lang={lang} siteKey={siteKey} failure={failure} />
       <Button
         type="submit"
         size="lg"

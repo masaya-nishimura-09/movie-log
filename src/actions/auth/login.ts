@@ -6,6 +6,7 @@ import type { ActionResult } from "@/actions/action-result";
 import { startSession } from "@/actions/auth/session";
 import { ApiError } from "@/api/client/api-error";
 import type { Locale } from "@/i18n/locales";
+import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { loginInputSchema } from "@/schemas/auth/login";
 
 export async function loginAction(
@@ -24,6 +25,9 @@ export async function loginAction(
       errors: z.flattenError(input.error).fieldErrors,
     };
   }
+
+  const turnstileFailure = await verifyTurnstile(formData);
+  if (turnstileFailure) return { success: false, messageKey: turnstileFailure };
 
   try {
     await startSession(input.data);

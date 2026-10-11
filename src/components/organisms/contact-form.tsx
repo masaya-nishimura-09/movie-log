@@ -1,33 +1,18 @@
 "use client";
 
-import Script from "next/script";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
 import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { FormField } from "@/components/molecules/form-field";
+import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import {
   contactMessageMaxLength,
   honeypotField,
 } from "@/schemas/contact/contact";
-
-type Turnstile = {
-  render: (
-    container: HTMLElement,
-    options: { sitekey: string; language: string; theme: "auto" },
-  ) => string;
-  reset: (widgetId: string) => void;
-  remove: (widgetId: string) => void;
-};
-
-declare global {
-  interface Window {
-    turnstile?: Turnstile;
-  }
-}
 
 type ContactFormProps = {
   lang: Locale;
@@ -48,28 +33,9 @@ export function ContactForm({
   counterTemplate,
 }: ContactFormProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
-  const [scriptReady, setScriptReady] = useState(false);
-  const widgetRef = useRef<HTMLDivElement>(null);
-  const widgetId = useRef<string | undefined>(undefined);
   const failure = state?.success === false ? state : undefined;
   const message = (key: string | undefined) =>
     key && key in dict ? dict[key as keyof typeof dict] : undefined;
-
-  useEffect(() => {
-    const turnstile = window.turnstile;
-    if (!scriptReady || !siteKey || !turnstile || !widgetRef.current) return;
-    const id = turnstile.render(widgetRef.current, {
-      sitekey: siteKey,
-      language: lang,
-      theme: "auto",
-    });
-    widgetId.current = id;
-    return () => turnstile.remove(id);
-  }, [scriptReady, siteKey, lang]);
-
-  useEffect(() => {
-    if (failure && widgetId.current) window.turnstile?.reset(widgetId.current);
-  }, [failure]);
 
   if (state?.success) {
     return (
@@ -86,12 +52,6 @@ export function ContactForm({
 
   return (
     <form action={formAction} noValidate className="flex flex-col gap-5">
-      {siteKey && (
-        <Script
-          src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit"
-          onReady={() => setScriptReady(true)}
-        />
-      )}
       {failure && !failure.errors && (
         <p
           role="alert"
@@ -142,7 +102,7 @@ export function ContactForm({
           autoComplete="off"
         />
       </div>
-      {siteKey && <div ref={widgetRef} className="min-h-[65px]" />}
+      <TurnstileWidget lang={lang} siteKey={siteKey} failure={failure} />
       <Button type="submit" disabled={pending}>
         {dict.submit}
       </Button>

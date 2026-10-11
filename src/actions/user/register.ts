@@ -7,6 +7,7 @@ import { startSession } from "@/actions/auth/session";
 import { ApiError } from "@/api/client/api-error";
 import { registerUser } from "@/api/user/register-user";
 import type { Locale } from "@/i18n/locales";
+import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { userInputSchema } from "@/schemas/user/user-input";
 
 export async function registerAction(
@@ -29,6 +30,9 @@ export async function registerAction(
   if (formData.get("agreedToTerms") !== "on") {
     return { success: false, messageKey: "termsNotAgreed" };
   }
+
+  const turnstileFailure = await verifyTurnstile(formData);
+  if (turnstileFailure) return { success: false, messageKey: turnstileFailure };
 
   try {
     await registerUser(input.data);

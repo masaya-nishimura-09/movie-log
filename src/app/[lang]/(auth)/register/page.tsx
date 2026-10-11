@@ -4,6 +4,7 @@ import { registerAction } from "@/actions/user/register";
 import { Logo } from "@/components/atoms/logo";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { turnstileSiteKey } from "@/lib/turnstile/verify-turnstile";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -28,6 +29,7 @@ export default async function RegisterPage() {
       </div>
       <RegisterForm
         lang={lang}
+        siteKey={turnstileSiteKey()}
         action={registerAction.bind(null, lang)}
         dict={dict.register}
         passwordDict={dict.passwordInput}

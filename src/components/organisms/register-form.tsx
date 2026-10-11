@@ -9,12 +9,14 @@ import { Input } from "@/components/atoms/input";
 import { CountedInput } from "@/components/molecules/counted-input";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
+import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { interpolateNode } from "@/lib/text/interpolate-node";
 
 type RegisterFormProps = {
   lang: Locale;
+  siteKey: string | undefined;
   action: (
     previous: ActionResult<never> | undefined,
     formData: FormData,
@@ -26,6 +28,7 @@ type RegisterFormProps = {
 
 export function RegisterForm({
   lang,
+  siteKey,
   action,
   dict,
   passwordDict,
@@ -139,6 +142,7 @@ export function RegisterForm({
           })}
         </p>
       </div>
+      <TurnstileWidget lang={lang} siteKey={siteKey} failure={failure} />
       <Button
         type="submit"
         size="lg"

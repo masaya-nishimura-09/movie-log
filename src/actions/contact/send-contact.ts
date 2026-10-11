@@ -1,13 +1,13 @@
 "use server";
 
-import { cookies, headers } from "next/headers";
+import { cookies } from "next/headers";
 import { z } from "zod";
 import type { ActionResult } from "@/actions/action-result";
 import type { Locale } from "@/i18n/locales";
 import { accessTokenCookie, readJwtUserId } from "@/lib/auth/token-cookies";
 import { sendContactMail } from "@/lib/contact/send-contact-mail";
-import { verifyTurnstile } from "@/lib/contact/verify-turnstile";
 import { logError } from "@/lib/log/logger";
+import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { contactInputSchema, honeypotField } from "@/schemas/contact/contact";
 
 const useMock = process.env.USE_MOCK === "true";
@@ -35,12 +35,10 @@ export async function sendContactAction(
 
   if (useMock) return { success: true, data: null };
 
+  const turnstileFailure = await verifyTurnstile(formData);
+  if (turnstileFailure) return { success: false, messageKey: turnstileFailure };
+
   try {
-    const token = String(formData.get("cf-turnstile-response") ?? "");
-    const remoteIp = (await headers()).get("x-real-ip") ?? undefined;
-    if (token === "" || !(await verifyTurnstile(token, remoteIp))) {
-      return { success: false, messageKey: "verificationFailed" };
-    }
     const accessToken = (await cookies()).get(accessTokenCookie)?.value;
     await sendContactMail(input.data, {
       lang,

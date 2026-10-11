@@ -67,6 +67,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 
 - ユーザー登録、ログイン、ログアウト（トークンは自動で更新）
 - アカウント情報の変更と退会
+- Cloudflare Turnstile による、ログインとユーザー登録の自動送信の防止
 
 **お問い合わせ**
 
@@ -106,7 +107,8 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 | 言語             | TypeScript                                          |
 | スタイル         | Tailwind CSS、shadcn/ui（Base UI）、react-day-picker |
 | バリデーション   | Zod                                                 |
-| お問い合わせ     | Resend、Cloudflare Turnstile                        |
+| ボット対策       | Cloudflare Turnstile                                |
+| お問い合わせ     | Resend                                              |
 | 開発ツール       | Biome、pnpm                                         |
 
 ## セットアップ
@@ -149,8 +151,8 @@ pnpm dev
 | `RESEND_API_KEY`       | 任意      | Resend の API キー（お問い合わせフォームを使う場合は必須）           |
 | `CONTACT_TO_EMAIL`     | 任意      | お問い合わせを受け取るメールアドレス（お問い合わせフォームを使う場合は必須） |
 | `CONTACT_FROM_EMAIL`   | 任意      | お問い合わせのメールの送信元（既定値 `Cinelog <onboarding@resend.dev>`） |
-| `TURNSTILE_SITE_KEY`   | 任意      | Cloudflare Turnstile のサイトキー（お問い合わせフォームを使う場合は必須） |
-| `TURNSTILE_SECRET_KEY` | 任意      | Cloudflare Turnstile の秘密鍵（お問い合わせフォームを使う場合は必須） |
+| `TURNSTILE_SITE_KEY`   | 必須      | Cloudflare Turnstile のサイトキー（モックモードでは不要）            |
+| `TURNSTILE_SECRET_KEY` | 必須      | Cloudflare Turnstile の秘密鍵（モックモードでは不要）                |
 
 ### スクリプト
 

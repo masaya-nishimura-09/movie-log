@@ -76,6 +76,7 @@ UI components are organized into atoms, molecules, and organisms.
 
 - Registration, login, and logout, with automatic token refresh
 - Account updates and deletion
+- Protection against automated login and registration with Cloudflare Turnstile
 
 **Contact**
 
@@ -111,14 +112,15 @@ Font weights depend on the role of the text: 400 for body text,
 
 ## Tech Stack
 
-| Category   | Technologies                                          |
-|------------|-------------------------------------------------------|
-| Framework  | Next.js (App Router), React                           |
-| Language   | TypeScript                                            |
-| Styling    | Tailwind CSS, shadcn/ui (Base UI), react-day-picker   |
-| Validation | Zod                                                   |
-| Contact    | Resend, Cloudflare Turnstile                          |
-| Tooling    | Biome, pnpm                                           |
+| Category       | Technologies                                        |
+|----------------|-----------------------------------------------------|
+| Framework      | Next.js (App Router), React                         |
+| Language       | TypeScript                                          |
+| Styling        | Tailwind CSS, shadcn/ui (Base UI), react-day-picker |
+| Validation     | Zod                                                 |
+| Bot protection | Cloudflare Turnstile                                |
+| Contact        | Resend                                              |
+| Tooling        | Biome, pnpm                                         |
 
 ## Setup
 
@@ -163,8 +165,8 @@ Set the following environment variables in `.env.local`.
 | `RESEND_API_KEY`       | Optional | Resend API key (required for the contact form)                      |
 | `CONTACT_TO_EMAIL`     | Optional | Address that receives contact messages (required for the contact form) |
 | `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinelog <onboarding@resend.dev>`) |
-| `TURNSTILE_SITE_KEY`   | Optional | Cloudflare Turnstile site key (required for the contact form)       |
-| `TURNSTILE_SECRET_KEY` | Optional | Cloudflare Turnstile secret key (required for the contact form)     |
+| `TURNSTILE_SITE_KEY`   | Required | Cloudflare Turnstile site key (not required in mock mode)           |
+| `TURNSTILE_SECRET_KEY` | Required | Cloudflare Turnstile secret key (not required in mock mode)         |
 
 ### Scripts
 

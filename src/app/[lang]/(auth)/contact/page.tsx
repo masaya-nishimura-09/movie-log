@@ -3,6 +3,7 @@ import { sendContactAction } from "@/actions/contact/send-contact";
 import { BackButton } from "@/components/molecules/back-button";
 import { ContactForm } from "@/components/organisms/contact-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { turnstileSiteKey } from "@/lib/turnstile/verify-turnstile";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -11,11 +12,6 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function ContactPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
-  const siteKey =
-    process.env.USE_MOCK === "true"
-      ? undefined
-      : process.env.TURNSTILE_SITE_KEY;
-
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col items-center gap-2 text-center">
@@ -28,7 +24,7 @@ export default async function ContactPage() {
       </header>
       <ContactForm
         lang={lang}
-        siteKey={siteKey}
+        siteKey={turnstileSiteKey()}
         action={sendContactAction.bind(null, lang)}
         dict={dict.contact}
         counterTemplate={dict.characterCount}
