@@ -67,8 +67,8 @@ export function RecordCard({
         <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
       </div>
       {hasPoster ? (
-        <div className="flex flex-1 flex-col gap-1.25 px-3 py-2.75">
-          <span className="text-pretty font-bold text-foreground text-sm leading-[1.4]">
+        <div className="flex h-22 flex-col gap-1.25 px-3 py-2.75">
+          <span className="line-clamp-2 h-[2lh] text-pretty font-bold text-foreground text-sm leading-[1.4]">
             {title}
           </span>
           <div className="flex items-center justify-between gap-2">
@@ -81,7 +81,7 @@ export function RecordCard({
           </div>
         </div>
       ) : (
-        <div className="flex flex-1 items-center justify-between gap-2 px-3 py-2.75">
+        <div className="flex h-22 items-center justify-between gap-2 px-3 py-2.75">
           <span className="text-[11px] text-muted-foreground">
             {watchedLabel}
           </span>

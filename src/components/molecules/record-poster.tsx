@@ -45,7 +45,7 @@ export function RecordPoster({
           </span>
           <span
             className={cn(
-              "text-pretty font-bold text-foreground leading-[1.3]",
+              "line-clamp-6 text-pretty font-bold text-foreground leading-[1.3]",
               titleSize,
             )}
           >

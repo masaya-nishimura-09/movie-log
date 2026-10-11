@@ -114,7 +114,7 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             platformLabel={platformLabel}
             size="detail"
             sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
-            className="w-29 shrink-0 rounded-xl md:w-full md:rounded-t-2xl md:rounded-b-none"
+            className="w-29 shrink-0 self-start rounded-xl md:w-full md:self-auto md:rounded-t-2xl md:rounded-b-none"
           />
           <div className="flex min-w-0 flex-col gap-3 md:hidden">
             <ScoreBadge
