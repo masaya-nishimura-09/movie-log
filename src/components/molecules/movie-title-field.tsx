@@ -4,30 +4,10 @@ import { type KeyboardEvent, useEffect, useRef, useState } from "react";
 import { Input } from "@/components/atoms/input";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
-import type { MovieSuggestion, MovieValues } from "@/schemas/movie/movie";
-import type { RecordFormValues } from "@/schemas/record/record-form";
+import type { MovieSuggestion } from "@/schemas/movie/movie";
 
 const searchDelay = 300;
 const minQueryLength = 2;
-
-export function useMovieAssist(
-  initial: RecordFormValues,
-  getMovie: (movieId: string) => Promise<MovieValues | undefined>,
-) {
-  const [title, setTitle] = useState(initial.title);
-  const [values, setValues] = useState(initial);
-  const [version, setVersion] = useState(0);
-
-  const select = async (movieId: string) => {
-    const movie = await getMovie(movieId);
-    if (!movie) return;
-    setTitle(movie.title);
-    setValues((current) => ({ ...current, ...movie }));
-    setVersion((current) => current + 1);
-  };
-
-  return { title, setTitle, values, version, select };
-}
 
 type MovieTitleFieldProps = {
   id: string;

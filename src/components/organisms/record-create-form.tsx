@@ -1,31 +1,23 @@
 "use client";
 
 import { ArrowLeft, ArrowRight } from "lucide-react";
-import {
-  type FormEvent,
-  startTransition,
-  useActionState,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useRef, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
-import { useMovieAssist } from "@/components/molecules/movie-title-field";
+import { FormAlert } from "@/components/atoms/form-alert";
 import { RecordBasicsFields } from "@/components/organisms/record-basics-fields";
 import { RecordImpressionFields } from "@/components/organisms/record-impression-fields";
 import { RecordMovieFields } from "@/components/organisms/record-movie-fields";
+import { useFormSubmit } from "@/hooks/use-form-submit";
+import { useMovieAssist } from "@/hooks/use-movie-assist";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { startOfLocalDay } from "@/lib/date/start-of-local-day";
-import { buildLanguageOptions } from "@/lib/record/language-options";
+import { convertWatchedAt } from "@/lib/record/watched-at";
 import { cn } from "@/lib/style/cn";
+import { dictMessage } from "@/lib/text/dict-message";
 import { interpolate } from "@/lib/text/interpolate";
 import type { MovieSuggestion, MovieValues } from "@/schemas/movie/movie";
-import type {
-  RecordFormValues,
-  SelectOption,
-} from "@/schemas/record/record-form";
+import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordCreateFormProps = {
   lang: Locale;
@@ -37,7 +29,6 @@ type RecordCreateFormProps = {
   getMovie: (movieId: string) => Promise<MovieValues | undefined>;
   uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
   values: RecordFormValues;
-  languageOptions: SelectOption[];
   maxReleaseYear: number;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
@@ -67,7 +58,6 @@ export function RecordCreateForm({
   getMovie,
   uploadPoster,
   values,
-  languageOptions,
   maxReleaseYear,
   dict,
   enums,
@@ -75,13 +65,8 @@ export function RecordCreateForm({
 }: RecordCreateFormProps) {
   const [step, setStep] = useState(0);
   const steps = [dict.stepBasics, dict.stepMovieInfo, dict.stepImpression];
-  const [state, formAction, pending] = useActionState(action, undefined);
+  const { failure, pending, submit } = useFormSubmit(action, convertWatchedAt);
   const movie = useMovieAssist(values, getMovie);
-  const movieLanguageOptions =
-    movie.version === 0
-      ? languageOptions
-      : buildLanguageOptions(lang, movie.values.language, dict.languageUnknown);
-  const failure = state?.success === false ? state : undefined;
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
   useEffect(() => {
@@ -99,16 +84,6 @@ export function RecordCreateForm({
       return;
     }
     setStep(step + 1);
-  };
-
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    formData.set(
-      "watchedAt",
-      startOfLocalDay(String(formData.get("watchedAt") ?? "")),
-    );
-    startTransition(() => formAction(formData));
   };
 
   return (
@@ -152,16 +127,9 @@ export function RecordCreateForm({
       <div className="flex-1 px-4 py-5.5 md:flex-none md:px-10 md:pb-2">
         <div className="rounded-[18px] bg-card p-4.5 md:p-5.5">
           {failure && (
-            <p
-              role="alert"
-              className="mb-4.5 rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
-            >
-              {failure.messageKey === "notFound"
-                ? dict.notFound
-                : failure.messageKey === "invalidInput"
-                  ? dict.invalidInput
-                  : dict.unexpectedError}
-            </p>
+            <FormAlert className="mb-4.5">
+              {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
+            </FormAlert>
           )}
           <div
             hidden={step !== 0}
@@ -204,7 +172,6 @@ export function RecordCreateForm({
               key={movie.version}
               lang={lang}
               values={movie.values}
-              languageOptions={movieLanguageOptions}
               maxReleaseYear={maxReleaseYear}
               uploadPoster={uploadPoster}
               dict={dict}

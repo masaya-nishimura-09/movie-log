@@ -2,9 +2,9 @@
 
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
-import { endSession } from "@/actions/auth/session";
 import { logout } from "@/api/auth/logout";
 import type { Locale } from "@/i18n/locales";
+import { endSession } from "@/lib/auth/session";
 import { refreshTokenCookie } from "@/lib/auth/token-cookies";
 
 export async function logoutAction(lang: Locale): Promise<void> {

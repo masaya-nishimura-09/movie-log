@@ -15,3 +15,11 @@ export function pattern(template: string) {
 export function shows(...texts: string[]) {
   for (const text of texts) cy.contains(text).should("exist");
 }
+
+export function longDate(date: Date, lang = "ja") {
+  return new Intl.DateTimeFormat(lang, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  }).format(date);
+}

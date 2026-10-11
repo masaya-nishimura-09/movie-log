@@ -1,17 +1,19 @@
 "use client";
 
 import { Check } from "lucide-react";
-import Link from "next/link";
-import { type FormEvent, startTransition, useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
+import { TextLink } from "@/components/atoms/text-link";
 import { CountedInput } from "@/components/molecules/counted-input";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
+import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { dictMessage } from "@/lib/text/dict-message";
 import { interpolateNode } from "@/lib/text/interpolate-node";
 
 type RegisterFormProps = {
@@ -34,26 +36,14 @@ export function RegisterForm({
   passwordDict,
   counterTemplate,
 }: RegisterFormProps) {
-  const [state, formAction, pending] = useActionState(action, undefined);
-  const failure = state?.success === false ? state : undefined;
-  const message = (key: string) =>
-    key in dict ? dict[key as keyof typeof dict] : dict.unexpectedError;
-
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    startTransition(() => formAction(formData));
-  };
+  const { failure, pending, submit } = useFormSubmit(action);
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
       {failure && !failure.errors && (
-        <p
-          role="alert"
-          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
-        >
-          {message(failure.messageKey)}
-        </p>
+        <FormAlert>
+          {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
+        </FormAlert>
       )}
       <FormField
         label={dict.username}
@@ -117,13 +107,9 @@ export function RegisterForm({
           <span>
             {interpolateNode(dict.agreeTerms, {
               terms: (
-                <Link
-                  href={`/${lang}/terms`}
-                  target="_blank"
-                  className="font-medium text-primary underline-offset-4 hover:underline"
-                >
+                <TextLink href={`/${lang}/terms`} target="_blank">
                   {dict.termsLink}
-                </Link>
+                </TextLink>
               ),
             })}
           </span>
@@ -131,13 +117,9 @@ export function RegisterForm({
         <p className="text-muted-foreground text-xs">
           {interpolateNode(dict.privacyNote, {
             privacy: (
-              <Link
-                href={`/${lang}/privacy`}
-                target="_blank"
-                className="font-medium text-primary underline-offset-4 hover:underline"
-              >
+              <TextLink href={`/${lang}/privacy`} target="_blank">
                 {dict.privacyLink}
-              </Link>
+              </TextLink>
             ),
           })}
         </p>
@@ -153,12 +135,7 @@ export function RegisterForm({
       </Button>
       <p className="text-center text-muted-foreground text-sm">
         {dict.toLoginPrompt}{" "}
-        <Link
-          href={`/${lang}/login`}
-          className="font-medium text-primary underline-offset-4 hover:underline"
-        >
-          {dict.toLogin}
-        </Link>
+        <TextLink href={`/${lang}/login`}>{dict.toLogin}</TextLink>
       </p>
     </form>
   );

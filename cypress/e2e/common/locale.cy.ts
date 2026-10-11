@@ -32,11 +32,7 @@ describe("言語", () => {
 
     const title = `E2E English ${Date.now()}`;
     cy.visit("/en/records/new");
-    cy.get("#title").type(title);
-    cy.get(`[role=radiogroup][aria-label="${en.recordForm.score}"]`)
-      .contains("label", "4")
-      .click();
-    cy.contains("label", en.enums.platform.netflix).click();
+    cy.fillRecordBasics(title, { score: 4, lang: "en" });
     cy.contains("button", en.recordForm.next).click();
     cy.get("#releaseYear").type("2020");
     cy.contains("button", en.recordForm.next).click();

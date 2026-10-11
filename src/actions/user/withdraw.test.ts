@@ -4,13 +4,9 @@ import { ApiError } from "@/api/client/api-error";
 const deleteUser = vi.fn();
 const endSession = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/user/delete-user", () => ({ deleteUser }));
-vi.mock("@/actions/auth/session", () => ({ endSession }));
+vi.mock("@/lib/auth/session", () => ({ endSession }));
 
 const { withdrawAction } = await import("@/actions/user/withdraw");
 

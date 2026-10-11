@@ -19,6 +19,8 @@ describe("新規登録", () => {
     cy.get("input[name=agreedToTerms]").check();
     cy.contains("button", ja.register.submit).click();
     cy.get("[role=alert]").should("have.text", ja.register.userAlreadyExists);
+    cy.get("#username").should("have.value", "tester");
+    cy.get("#email").should("have.value", demoAccount.email);
   });
 
   it("利用規約に同意しないとエラーを表示する", () => {

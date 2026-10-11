@@ -226,11 +226,7 @@ for (const [lang, t] of locales) {
           fill(t.characterCount, { current: 0, max: 255 }),
         );
         cy.get(`[title="${t.recordForm.required}"]`).should("exist");
-        cy.get("#title").type("Arrival");
-        cy.get(`[role=radiogroup][aria-label="${t.recordForm.score}"]`)
-          .contains("label", "3")
-          .click();
-        cy.contains("label", t.enums.platform.netflix).click();
+        cy.fillRecordBasics("Arrival", { score: 3, lang });
         cy.contains("button", t.recordForm.next).click();
         shows(
           t.recordForm.movieInfoHint,

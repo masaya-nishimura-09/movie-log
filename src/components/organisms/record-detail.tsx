@@ -5,12 +5,12 @@ import {
   type LucideIcon,
   MapPin,
 } from "lucide-react";
-import Link from "next/link";
 import type { ReactNode } from "react";
 import { GenreTag } from "@/components/atoms/genre-tag";
 import { LocalDate } from "@/components/atoms/local-date";
 import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
+import { TextLink } from "@/components/atoms/text-link";
 import { RecordPoster } from "@/components/molecules/record-poster";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
@@ -221,12 +221,9 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           ) : (
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.memoEmpty}
-              <Link
-                href={`/${lang}/records/${record.recordId}/edit`}
-                className="rounded-sm font-medium text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-              >
+              <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
                 {d.memoAdd}
-              </Link>
+              </TextLink>
             </p>
           )}
         </section>
@@ -252,12 +249,9 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           ) : (
             <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
               {d.creditsEmpty}
-              <Link
-                href={`/${lang}/records/${record.recordId}/edit`}
-                className="rounded-sm font-medium text-primary underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-              >
+              <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
                 {d.creditsAdd}
-              </Link>
+              </TextLink>
             </p>
           )}
         </section>

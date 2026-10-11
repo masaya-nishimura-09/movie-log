@@ -202,9 +202,10 @@ src/
   actions/            # Server Actions
   api/                # API clients and mock data
   components/         # UI components (atoms, molecules, organisms)
+  hooks/              # Custom React hooks
   schemas/            # Zod schemas
   i18n/               # Locales and dictionaries
-  lib/                # Helpers (auth, contact, date, log, record, style, text, url)
+  lib/                # Helpers (auth, contact, date, log, navigation, record, style, text, turnstile, url)
   styles/             # Global styles and color tokens
   proxy.ts            # Language routing and token refresh
   instrumentation.ts  # Logging of unhandled server errors

@@ -5,13 +5,9 @@ const registerUser = vi.fn();
 const startSession = vi.fn();
 const verifyTurnstile = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/user/register-user", () => ({ registerUser }));
-vi.mock("@/actions/auth/session", () => ({ startSession }));
+vi.mock("@/lib/auth/session", () => ({ startSession }));
 vi.mock("@/lib/turnstile/verify-turnstile", () => ({ verifyTurnstile }));
 
 const { registerAction } = await import("@/actions/user/register");

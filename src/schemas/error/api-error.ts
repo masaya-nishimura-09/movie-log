@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const apiErrorCodeSchema = z.enum([
+const apiErrorCodeSchema = z.enum([
   "INVALID_INPUT",
   "INVALID_ACCESS_TOKEN",
   "INVALID_REFRESH_TOKEN",

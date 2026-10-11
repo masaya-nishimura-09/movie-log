@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fakeJwt } from "@/test/fake-jwt";
 
 const store = { set: vi.fn(), delete: vi.fn() };
 const login = vi.fn();
@@ -6,7 +7,7 @@ const login = vi.fn();
 vi.mock("next/headers", () => ({ cookies: async () => store }));
 vi.mock("@/api/auth/login", () => ({ login }));
 
-const { endSession, startSession } = await import("@/actions/auth/session");
+const { endSession, startSession } = await import("@/lib/auth/session");
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -14,9 +15,7 @@ beforeEach(() => {
 
 describe("startSession", () => {
   it("logs in and stores both tokens as cookies", async () => {
-    const encode = (value: object) =>
-      Buffer.from(JSON.stringify(value)).toString("base64url");
-    const accessToken = `${encode({})}.${encode({ exp: 1_800_000_000 })}.x`;
+    const accessToken = fakeJwt({ exp: 1_800_000_000 });
     login.mockResolvedValue({ accessToken, refreshToken: "refresh" });
     await startSession({ email: "user@example.com", password: "password" });
     expect(login).toHaveBeenCalledWith({

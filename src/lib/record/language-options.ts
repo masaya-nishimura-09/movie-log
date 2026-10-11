@@ -1,5 +1,6 @@
 import type { Locale } from "@/i18n/locales";
-import type { SelectOption } from "@/schemas/record/record-form";
+
+export type LanguageOption = { value: string; label: string };
 
 const unknownLanguage = "und";
 
@@ -35,7 +36,7 @@ export function buildLanguageOptions(
   locale: Locale,
   current: string,
   unknownLabel: string,
-): SelectOption[] {
+): LanguageOption[] {
   const codes = languageCodes.includes(current)
     ? languageCodes
     : [current, ...languageCodes];

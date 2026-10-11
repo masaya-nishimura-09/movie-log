@@ -1,14 +1,7 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
+import { longDate } from "../../support/text";
 
 const form = ja.recordForm;
-
-function dateLabel(date: Date) {
-  return new Intl.DateTimeFormat("ja", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
-}
 
 describe("記録の作成", () => {
   beforeEach(() => {
@@ -30,7 +23,7 @@ describe("記録の作成", () => {
     cy.visit("/ja/records/new");
     cy.get("#title").type(title);
     cy.contains("button", form.yesterday).click();
-    cy.get("#watchedAt").should("have.text", dateLabel(yesterday));
+    cy.get("#watchedAt").should("have.text", longDate(yesterday));
     cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
       .contains("label", "3")
       .click();
@@ -72,7 +65,7 @@ describe("記録の作成", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get("h1:visible").should("have.text", title);
     cy.get("main").within(() => {
-      cy.contains(dateLabel(yesterday)).should("exist");
+      cy.contains(longDate(yesterday)).should("exist");
       cy.contains(ja.enums.platform.hulu).should("exist");
       cy.contains("2016年").should("exist");
       cy.contains("116分").should("exist");
@@ -131,23 +124,19 @@ describe("記録の作成", () => {
     cy.visit("/ja/records/new");
     cy.get("#watchedAt").click();
     cy.get("[role=dialog]").contains("button", /^1$/).click();
-    cy.get("#watchedAt").should("have.text", dateLabel(first));
+    cy.get("#watchedAt").should("have.text", longDate(first));
   });
 
   it("「今日」を押すと視聴日が今日になる", () => {
     cy.visit("/ja/records/new");
     cy.contains("button", form.yesterday).click();
     cy.contains("button", form.today).click();
-    cy.get("#watchedAt").should("have.text", dateLabel(new Date()));
+    cy.get("#watchedAt").should("have.text", longDate(new Date()));
   });
 
   it("もどるで前のステップに戻ると、入力した内容が残っている", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("戻るテスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "2")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("戻るテスト", { score: 2 });
     cy.contains("button", form.next).click();
     cy.get("li[aria-current=step]").should("contain.text", form.stepMovieInfo);
     cy.contains("button", form.back).click();
@@ -171,11 +160,7 @@ describe("記録の作成", () => {
 
   it("公開年が範囲外だと次のステップに進めない", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("公開年テスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("公開年テスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#releaseYear").type("1800");
     cy.contains("button", form.next).click();
@@ -185,11 +170,7 @@ describe("記録の作成", () => {
 
   it("画像以外のファイルはアップロードできない", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("アップロードテスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("アップロードテスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("input[type=file]").selectFile(
       {
@@ -205,11 +186,7 @@ describe("記録の作成", () => {
 
   it("英字2文字でない国コードは追加されない", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("国コードテスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("国コードテスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#countries").type("1x{enter}");
     cy.get("#countries").should("have.value", "1x");
@@ -263,11 +240,7 @@ describe("記録の作成（候補とアップロード）", () => {
 
   it("言語を「不明」にすると、詳細画面に不明と表示する", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type(`E2E 言語不明 ${Date.now()}`);
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics(`E2E 言語不明 ${Date.now()}`, { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#releaseYear").type("2000");
     cy.get(`button[aria-label="${form.language}"]`).click();
@@ -280,11 +253,7 @@ describe("記録の作成（候補とアップロード）", () => {
 
   it("アップロード中は、アップロード中と表示する", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("アップロード中テスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("アップロード中テスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.intercept({ method: "POST", url: "/ja/records/new" }, (req) => {
       req.on("response", (res) => {
@@ -301,11 +270,7 @@ describe("記録の作成（候補とアップロード）", () => {
 
   it("5MB を超える画像はアップロードできない", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("大きい画像テスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("大きい画像テスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("input[type=file]").selectFile(
       {
@@ -321,11 +286,7 @@ describe("記録の作成（候補とアップロード）", () => {
 
   it("サーバーで不正と判定された項目があると、そのステップに戻る", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("ステップに戻るテスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("ステップに戻るテスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#releaseYear").type("2000");
     cy.contains("button", form.next).click();
@@ -338,11 +299,7 @@ describe("記録の作成（候補とアップロード）", () => {
 
   it("保存に失敗すると、エラーを表示する", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("__error__");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("__error__", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#releaseYear").type("2000");
     cy.contains("button", form.next).click();

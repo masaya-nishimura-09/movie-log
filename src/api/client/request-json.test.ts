@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { z } from "zod";
 import { ApiError } from "@/api/client/api-error";
+import { fakeJwt } from "@/test/fake-jwt";
 
 const headerValues = new Map<string, string>();
 const cookieValues = new Map<string, string>();
@@ -104,12 +105,7 @@ describe("requestJson", () => {
   });
 
   it("logs a server error as an error, with the user and the path", async () => {
-    const encode = (value: object) =>
-      Buffer.from(JSON.stringify(value)).toString("base64url");
-    cookieValues.set(
-      "access_token",
-      `${encode({ alg: "none" })}.${encode({ UserID: 7 })}.x`,
-    );
+    cookieValues.set("access_token", fakeJwt({ UserID: 7 }));
     fetchMock.mockResolvedValue(
       Response.json(
         { code: "INTERNAL_SERVER_ERROR", message: "x" },

@@ -1,13 +1,12 @@
 import { headers } from "next/headers";
 import { z } from "zod";
+import { useMock } from "@/lib/env";
 import { logError } from "@/lib/log/logger";
 
 const siteverifyUrl =
   "https://challenges.cloudflare.com/turnstile/v0/siteverify";
 
 const siteverifyResponseSchema = z.object({ success: z.boolean() });
-
-const useMock = process.env.USE_MOCK === "true";
 
 async function siteverify(
   token: string,

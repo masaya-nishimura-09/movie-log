@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { onRequestError } from "@/instrumentation";
 import { logError } from "@/lib/log/logger";
+import { fakeJwt } from "@/test/fake-jwt";
 
 const context = {
   routerKind: "App Router",
@@ -19,9 +20,7 @@ function request(cookie?: string | string[]) {
 }
 
 function token(userId: number) {
-  const encode = (value: object) =>
-    Buffer.from(JSON.stringify(value)).toString("base64url");
-  return `${encode({})}.${encode({ UserID: userId })}.x`;
+  return fakeJwt({ UserID: userId });
 }
 
 beforeEach(() => {

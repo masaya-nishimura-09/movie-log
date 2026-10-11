@@ -18,6 +18,7 @@ describe("ログイン", () => {
     cy.contains("button", ja.login.submit).click();
     cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
     cy.location("pathname").should("eq", "/ja/login");
+    cy.get("#email").should("have.value", demoAccount.email);
   });
 
   it("登録されていないメールアドレスではエラーを表示する", () => {

@@ -22,8 +22,6 @@ export const genreSchema = z.enum([
   "western",
 ]);
 
-export type Genre = z.infer<typeof genreSchema>;
-
 export const moodTagSchema = z.enum([
   "moving",
   "dark",

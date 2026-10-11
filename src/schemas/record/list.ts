@@ -19,7 +19,7 @@ export type RecordSort = z.infer<typeof recordSortSchema>;
 
 export const recordSorts = recordSortSchema.options;
 
-export const recordQuerySchema = z.object({
+const recordQuerySchema = z.object({
   score: scoreSchema.optional(),
   platform: platformSchema.optional(),
   moodTags: z.array(moodTagSchema),
@@ -45,7 +45,7 @@ export const recordListResponseSchema = z
     totalCount: r.total_count,
   }));
 
-export const recordListSchema = z.object({
+const recordListSchema = z.object({
   records: z.array(recordSchema),
   totalCount: countSchema,
   filteredCount: countSchema,

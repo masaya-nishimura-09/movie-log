@@ -253,7 +253,6 @@
     "invalidEmail": "メールアドレスの形式が正しくありません",
     "messageRequired": "お問い合わせ内容を入力してください",
     "messageTooLong": "お問い合わせ内容は2000文字以内で入力してください",
-    "invalidInput": "入力内容を確認してください",
     "verificationFailed": "確認に失敗しました。もう一度送信してください",
     "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
   },
@@ -305,7 +304,6 @@
     "usernameError": "1〜100文字で入力してください",
     "emailError": "メールアドレスの形式が正しくありません",
     "passwordError": "半角英数字・記号で8〜72文字です",
-    "invalidInput": "入力内容を確認してください",
     "userAlreadyExists": "このメールアドレスはすでに使われています",
     "unexpectedError": "登録できませんでした。時間をおいてやり直してください",
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
@@ -472,7 +470,6 @@
     "usernameError": "1〜100文字で入力してください",
     "emailError": "メールアドレスの形式が正しくありません",
     "passwordError": "半角英数字・記号で8〜72文字です",
-    "invalidInput": "入力内容を確認してください",
     "userAlreadyExists": "このメールアドレスはすでに使われています",
     "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
     "saved": "保存しました",

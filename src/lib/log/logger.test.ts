@@ -1,12 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "@/api/client/api-error";
 import { logError, wasLogged } from "@/lib/log/logger";
-
-function jwt(payload: Record<string, unknown>): string {
-  const encode = (value: unknown) =>
-    Buffer.from(JSON.stringify(value)).toString("base64url");
-  return `${encode({ alg: "HS256" })}.${encode(payload)}.signature`;
-}
+import { fakeJwt } from "@/test/fake-jwt";
 
 beforeEach(() => {
   vi.useFakeTimers();
@@ -30,7 +25,7 @@ describe("logError", () => {
     const error = new Error("boom");
     logError("error", "request_failed", error, {
       path: "/records?q=secret",
-      accessToken: jwt({ UserID: 42 }),
+      accessToken: fakeJwt({ UserID: 42 }),
     });
     expect(spy).toHaveBeenCalledTimes(1);
     expect(lastLine(spy)).toEqual({

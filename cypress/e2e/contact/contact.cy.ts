@@ -71,4 +71,14 @@ describe("お問い合わせ", () => {
     cy.contains("button", contact.submit).click();
     cy.contains(contact.messageTooLong).should("be.visible");
   });
+
+  it("エラーになっても、入力した内容が残る", () => {
+    cy.visit("/ja/contact");
+    cy.get("#email").type("not-an-email");
+    cy.get("#message").type("消えてほしくない本文");
+    cy.contains("button", contact.submit).click();
+    cy.contains(contact.invalidEmail).should("be.visible");
+    cy.get("#email").should("have.value", "not-an-email");
+    cy.get("#message").should("have.value", "消えてほしくない本文");
+  });
 });

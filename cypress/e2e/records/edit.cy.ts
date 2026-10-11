@@ -1,14 +1,7 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
+import { longDate } from "../../support/text";
 
 const form = ja.recordForm;
-
-function dateLabel(date: Date) {
-  return new Intl.DateTimeFormat("ja", {
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  }).format(date);
-}
 
 describe("記録の編集", () => {
   beforeEach(() => {
@@ -59,7 +52,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get("h1:visible").should("have.text", `${title} 改`);
     cy.get("main").within(() => {
-      cy.contains(dateLabel(yesterday)).should("exist");
+      cy.contains(longDate(yesterday)).should("exist");
       cy.contains(ja.enums.platform.hulu).should("exist");
       cy.contains("1999年").should("exist");
       cy.contains("136分").should("exist");
@@ -96,11 +89,7 @@ describe("記録の編集", () => {
 
   it("クレジットとジャンルを外して保存すると、詳細画面から消える", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type(`E2E 外す ${Date.now()}`);
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics(`E2E 外す ${Date.now()}`, { score: 3 });
     cy.contains("button", form.next).click();
     cy.get("#releaseYear").type("2001");
     cy.contains("label", ja.enums.genre.drama).click();

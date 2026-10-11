@@ -1,16 +1,14 @@
 "use server";
 
 import { cookies } from "next/headers";
-import { z } from "zod";
-import type { ActionResult } from "@/actions/action-result";
+import { type ActionResult, invalidInput } from "@/actions/action-result";
 import type { Locale } from "@/i18n/locales";
 import { accessTokenCookie, readJwtUserId } from "@/lib/auth/token-cookies";
 import { sendContactMail } from "@/lib/contact/send-contact-mail";
+import { useMock } from "@/lib/env";
 import { logError } from "@/lib/log/logger";
 import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { contactInputSchema, honeypotField } from "@/schemas/contact/contact";
-
-const useMock = process.env.USE_MOCK === "true";
 
 export async function sendContactAction(
   lang: Locale,
@@ -26,11 +24,7 @@ export async function sendContactAction(
     message: formData.get("message"),
   });
   if (!input.success) {
-    return {
-      success: false,
-      messageKey: "invalidInput",
-      errors: z.flattenError(input.error).fieldErrors,
-    };
+    return invalidInput(input.error);
   }
 
   if (useMock) return { success: true, data: null };

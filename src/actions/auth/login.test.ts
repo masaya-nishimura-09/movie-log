@@ -4,12 +4,8 @@ import { ApiError } from "@/api/client/api-error";
 const startSession = vi.fn();
 const verifyTurnstile = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
-vi.mock("@/actions/auth/session", () => ({ startSession }));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
+vi.mock("@/lib/auth/session", () => ({ startSession }));
 vi.mock("@/lib/turnstile/verify-turnstile", () => ({ verifyTurnstile }));
 
 const { loginAction } = await import("@/actions/auth/login");

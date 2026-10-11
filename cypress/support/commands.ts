@@ -1,8 +1,15 @@
+import en from "../../src/i18n/dictionaries/en.json";
 import ja from "../../src/i18n/dictionaries/ja.json";
 
 export const demoAccount = { email: "demo@example.com", password: "password" };
 
 export type Account = { username: string; email: string; password: string };
+
+type RecordBasicsOptions = {
+  score?: number;
+  platform?: keyof typeof ja.enums.platform;
+  lang?: "ja" | "en";
+};
 
 declare global {
   namespace Cypress {
@@ -10,6 +17,10 @@ declare global {
       login(account?: { email: string; password: string }): Chainable<void>;
       register(): Chainable<Account>;
       createRecord(title: string): Chainable<void>;
+      fillRecordBasics(
+        title: string,
+        options?: RecordBasicsOptions,
+      ): Chainable<void>;
     }
   }
 }
@@ -41,13 +52,21 @@ Cypress.Commands.add("register", () => {
   return cy.wrap(account);
 });
 
+Cypress.Commands.add(
+  "fillRecordBasics",
+  (title, { score = 3, platform = "netflix", lang = "ja" } = {}) => {
+    const t = lang === "en" ? en : ja;
+    cy.get("#title").type(title);
+    cy.get(`[role=radiogroup][aria-label="${t.recordForm.score}"]`)
+      .contains("label", String(score))
+      .click();
+    cy.contains("label", t.enums.platform[platform]).click();
+  },
+);
+
 Cypress.Commands.add("createRecord", (title) => {
   cy.visit("/ja/records/new");
-  cy.get("#title").type(title);
-  cy.get(`[role=radiogroup][aria-label="${ja.recordForm.score}"]`)
-    .contains("label", "4")
-    .click();
-  cy.contains("label", ja.enums.platform.netflix).click();
+  cy.fillRecordBasics(title, { score: 4 });
   cy.contains("button", ja.recordForm.next).click();
   cy.get("#releaseYear").type("2020");
   cy.contains("button", ja.recordForm.next).click();

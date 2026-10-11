@@ -5,11 +5,7 @@ import ja from "@/i18n/dictionaries/ja.json";
 const rootLang = vi.fn<() => Promise<string>>();
 
 vi.mock("next/root-params", () => ({ lang: () => rootLang() }));
-vi.mock("next/navigation", () => ({
-  notFound: () => {
-    throw new Error("NOT_FOUND");
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 
 const { getDictionary, getLocale } = await import("@/i18n/get-dictionary");
 

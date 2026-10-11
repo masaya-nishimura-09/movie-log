@@ -2,6 +2,7 @@ import { unstable_doesMiddlewareMatch } from "next/experimental/testing/server";
 import { NextRequest } from "next/server";
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "@/api/client/api-error";
+import { fakeJwt } from "@/test/fake-jwt";
 
 const refreshTokens = vi.fn();
 
@@ -9,14 +10,8 @@ vi.mock("@/api/auth/refresh-tokens", () => ({ refreshTokens }));
 
 const { config, proxy } = await import("@/proxy");
 
-function jwt(exp: number) {
-  const encode = (value: object) =>
-    Buffer.from(JSON.stringify(value)).toString("base64url");
-  return `${encode({})}.${encode({ exp })}.x`;
-}
-
-const valid = jwt(Math.floor(Date.now() / 1000) + 3600);
-const expired = jwt(1);
+const valid = fakeJwt({ exp: Math.floor(Date.now() / 1000) + 3600 });
+const expired = fakeJwt({ exp: 1 });
 
 function request(
   path: string,

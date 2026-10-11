@@ -1,11 +1,10 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { z } from "zod";
-import type { ActionResult } from "@/actions/action-result";
-import { startSession } from "@/actions/auth/session";
+import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import type { Locale } from "@/i18n/locales";
+import { startSession } from "@/lib/auth/session";
 import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { loginInputSchema } from "@/schemas/auth/login";
 
@@ -19,11 +18,7 @@ export async function loginAction(
     password: formData.get("password"),
   });
   if (!input.success) {
-    return {
-      success: false,
-      messageKey: "invalidInput",
-      errors: z.flattenError(input.error).fieldErrors,
-    };
+    return invalidInput(input.error);
   }
 
   const turnstileFailure = await verifyTurnstile(formData);

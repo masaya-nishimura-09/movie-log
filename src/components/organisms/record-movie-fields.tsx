@@ -15,19 +15,16 @@ import {
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
+import { buildLanguageOptions } from "@/lib/record/language-options";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 import { genreSchema } from "@/schemas/record/enums";
-import type {
-  RecordFormValues,
-  SelectOption,
-} from "@/schemas/record/record-form";
+import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordMovieFieldsProps = {
   lang: Locale;
   values: RecordFormValues;
   errors?: RecordFieldErrors;
-  languageOptions: SelectOption[];
   maxReleaseYear: number;
   uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
   dict: Dictionary["recordForm"];
@@ -39,13 +36,18 @@ export function RecordMovieFields({
   lang,
   values,
   errors,
-  languageOptions,
   maxReleaseYear,
   uploadPoster,
   dict,
   enums,
   split = false,
 }: RecordMovieFieldsProps) {
+  const languageOptions = buildLanguageOptions(
+    lang,
+    values.language,
+    dict.languageUnknown,
+  );
+
   return (
     <div
       className={cn(

@@ -1,27 +1,21 @@
 "use client";
 
 import Link from "next/link";
-import {
-  type FormEvent,
-  type ReactNode,
-  startTransition,
-  useActionState,
-} from "react";
+import type { ReactNode } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button, buttonVariants } from "@/components/atoms/button";
-import { useMovieAssist } from "@/components/molecules/movie-title-field";
+import { FormAlert } from "@/components/atoms/form-alert";
 import { RecordBasicsFields } from "@/components/organisms/record-basics-fields";
 import { RecordImpressionFields } from "@/components/organisms/record-impression-fields";
 import { RecordMovieFields } from "@/components/organisms/record-movie-fields";
+import { useFormSubmit } from "@/hooks/use-form-submit";
+import { useMovieAssist } from "@/hooks/use-movie-assist";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { startOfLocalDay } from "@/lib/date/start-of-local-day";
-import { buildLanguageOptions } from "@/lib/record/language-options";
+import { convertWatchedAt } from "@/lib/record/watched-at";
+import { dictMessage } from "@/lib/text/dict-message";
 import type { MovieSuggestion, MovieValues } from "@/schemas/movie/movie";
-import type {
-  RecordFormValues,
-  SelectOption,
-} from "@/schemas/record/record-form";
+import type { RecordFormValues } from "@/schemas/record/record-form";
 
 type RecordEditFormProps = {
   lang: Locale;
@@ -34,7 +28,6 @@ type RecordEditFormProps = {
   uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
   backHref: string;
   values: RecordFormValues;
-  languageOptions: SelectOption[];
   maxReleaseYear: number;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
@@ -58,29 +51,13 @@ export function RecordEditForm({
   uploadPoster,
   backHref,
   values,
-  languageOptions,
   maxReleaseYear,
   dict,
   enums,
   counterTemplate,
 }: RecordEditFormProps) {
-  const [state, formAction, pending] = useActionState(action, undefined);
+  const { failure, pending, submit } = useFormSubmit(action, convertWatchedAt);
   const movie = useMovieAssist(values, getMovie);
-  const movieLanguageOptions =
-    movie.version === 0
-      ? languageOptions
-      : buildLanguageOptions(lang, movie.values.language, dict.languageUnknown);
-  const failure = state?.success === false ? state : undefined;
-
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    formData.set(
-      "watchedAt",
-      startOfLocalDay(String(formData.get("watchedAt") ?? "")),
-    );
-    startTransition(() => formAction(formData));
-  };
 
   return (
     <form
@@ -89,16 +66,9 @@ export function RecordEditForm({
       className="flex w-full flex-col gap-4 px-4 pt-5 md:px-10 md:pt-8"
     >
       {failure && (
-        <p
-          role="alert"
-          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
-        >
-          {failure.messageKey === "notFound"
-            ? dict.notFound
-            : failure.messageKey === "invalidInput"
-              ? dict.invalidInput
-              : dict.unexpectedError}
-        </p>
+        <FormAlert>
+          {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
+        </FormAlert>
       )}
       <div className="grid items-start gap-4 lg:grid-cols-2">
         <div className="flex flex-col gap-4">
@@ -132,7 +102,6 @@ export function RecordEditForm({
             key={movie.version}
             lang={lang}
             values={movie.values}
-            languageOptions={movieLanguageOptions}
             maxReleaseYear={maxReleaseYear}
             uploadPoster={uploadPoster}
             dict={dict}

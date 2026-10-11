@@ -5,13 +5,9 @@ const updateUser = vi.fn();
 const startSession = vi.fn();
 const endSession = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/user/update-user", () => ({ updateUser }));
-vi.mock("@/actions/auth/session", () => ({ startSession, endSession }));
+vi.mock("@/lib/auth/session", () => ({ startSession, endSession }));
 
 const { updateAccountAction } = await import("@/actions/user/update-account");
 

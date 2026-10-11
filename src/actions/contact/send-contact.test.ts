@@ -1,4 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { fakeJwt } from "@/test/fake-jwt";
 
 const cookieValues = new Map<string, string>();
 const sendContactMail = vi.fn();
@@ -42,12 +43,7 @@ afterEach(() => {
 describe("sendContactAction", () => {
   it("sends the mail with the language, the user and the time", async () => {
     const send = await load();
-    const encode = (value: object) =>
-      Buffer.from(JSON.stringify(value)).toString("base64url");
-    cookieValues.set(
-      "access_token",
-      `${encode({})}.${encode({ UserID: 7 })}.x`,
-    );
+    cookieValues.set("access_token", fakeJwt({ UserID: 7 }));
     await expect(send("en", undefined, form())).resolves.toEqual({
       success: true,
       data: null,

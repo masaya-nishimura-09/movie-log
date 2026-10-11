@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { fakeJwt } from "@/test/fake-jwt";
 
 let mockFetch: typeof import("@/api/mock/mock-fetch").mockFetch;
 
@@ -104,11 +105,9 @@ describe("mockFetch: 認証", () => {
     expect(await invalid.json()).toMatchObject({
       code: "INVALID_ACCESS_TOKEN",
     });
-    const encode = (value: object) =>
-      Buffer.from(JSON.stringify(value)).toString("base64url");
     const expired = await mockFetch("/users/", {
       headers: {
-        Authorization: `Bearer ${encode({})}.${encode({ sub: "1", exp: 1 })}.mock`,
+        Authorization: `Bearer ${fakeJwt({ sub: "1", exp: 1 }, "mock")}`,
       },
     });
     expect(await expired.json()).toMatchObject({

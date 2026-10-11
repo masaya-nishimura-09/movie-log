@@ -2,10 +2,10 @@
 
 import { redirect } from "next/navigation";
 import type { ActionResult } from "@/actions/action-result";
-import { endSession } from "@/actions/auth/session";
 import { ApiError } from "@/api/client/api-error";
 import { deleteUser } from "@/api/user/delete-user";
 import type { Locale } from "@/i18n/locales";
+import { endSession } from "@/lib/auth/session";
 
 export async function withdrawAction(
   lang: Locale,

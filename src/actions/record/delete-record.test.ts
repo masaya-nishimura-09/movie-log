@@ -3,11 +3,7 @@ import { ApiError } from "@/api/client/api-error";
 
 const deleteRecord = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/record/delete-record", () => ({ deleteRecord }));
 
 const { deleteRecordAction } = await import("@/actions/record/delete-record");

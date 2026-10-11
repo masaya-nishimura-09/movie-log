@@ -9,7 +9,7 @@ import {
 import type { RecordQuery } from "@/schemas/record/list";
 import { recordSortSchema } from "@/schemas/record/list";
 
-export type SearchParams = Record<string, string | string[] | undefined>;
+type SearchParams = Record<string, string | string[] | undefined>;
 
 export const recordQueryKeys = {
   score: "score",

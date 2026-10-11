@@ -10,13 +10,9 @@ vi.mock("next/headers", () => ({
       cookieValues.has(name) ? { value: cookieValues.get(name) } : undefined,
   }),
 }));
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/auth/logout", () => ({ logout }));
-vi.mock("@/actions/auth/session", () => ({ endSession }));
+vi.mock("@/lib/auth/session", () => ({ endSession }));
 
 const { logoutAction } = await import("@/actions/auth/logout");
 

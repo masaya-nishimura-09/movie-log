@@ -1,12 +1,11 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { z } from "zod";
-import type { ActionResult } from "@/actions/action-result";
-import { endSession, startSession } from "@/actions/auth/session";
+import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import { updateUser } from "@/api/user/update-user";
 import type { Locale } from "@/i18n/locales";
+import { endSession, startSession } from "@/lib/auth/session";
 import { userInputSchema } from "@/schemas/user/user-input";
 
 export async function updateAccountAction(
@@ -20,11 +19,7 @@ export async function updateAccountAction(
     password: formData.get("password"),
   });
   if (!input.success) {
-    return {
-      success: false,
-      messageKey: "invalidInput",
-      errors: z.flattenError(input.error).fieldErrors,
-    };
+    return invalidInput(input.error);
   }
 
   try {

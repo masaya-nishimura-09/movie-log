@@ -20,5 +20,3 @@ export const recordFormValuesSchema = recordSchema
   .partial({ releaseYear: true, platform: true, score: true });
 
 export type RecordFormValues = z.infer<typeof recordFormValuesSchema>;
-
-export type SelectOption = { value: string; label: string };

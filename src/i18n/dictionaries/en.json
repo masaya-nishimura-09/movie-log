@@ -253,7 +253,6 @@
     "invalidEmail": "Enter a valid email address",
     "messageRequired": "Enter a message",
     "messageTooLong": "Keep the message within 2000 characters",
-    "invalidInput": "Check the fields below",
     "verificationFailed": "We could not verify the request. Send it again",
     "unexpectedError": "Your message could not be sent. Try again later"
   },
@@ -305,7 +304,6 @@
     "usernameError": "Enter 1 to 100 characters",
     "emailError": "Enter a valid email address",
     "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
-    "invalidInput": "Please check your input",
     "userAlreadyExists": "This email address is already in use",
     "unexpectedError": "Couldn't sign up. Please try again later",
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
@@ -472,7 +470,6 @@
     "usernameError": "Enter 1 to 100 characters",
     "emailError": "Enter a valid email address",
     "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
-    "invalidInput": "Please check your input",
     "userAlreadyExists": "This email address is already in use",
     "unexpectedError": "Couldn't save. Please try again later",
     "saved": "Saved",

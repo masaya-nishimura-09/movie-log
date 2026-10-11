@@ -1,20 +1,17 @@
 "use client";
 
 import { Toast } from "@base-ui/react/toast";
-import {
-  type FormEvent,
-  startTransition,
-  useActionState,
-  useEffect,
-  useRef,
-} from "react";
+import { useEffect, useRef } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
 import { CountedInput } from "@/components/molecules/counted-input";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
+import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { dictMessage } from "@/lib/text/dict-message";
 import type { User } from "@/schemas/user/user";
 
 type AccountFormProps = {
@@ -35,14 +32,11 @@ export function AccountForm({
   passwordDict,
   counterTemplate,
 }: AccountFormProps) {
-  const [state, formAction, pending] = useActionState(action, undefined);
+  const { state, failure, pending, submit } = useFormSubmit(action);
   const toastManager = Toast.useToastManager();
   const toastManagerRef = useRef(toastManager);
   toastManagerRef.current = toastManager;
   const formRef = useRef<HTMLFormElement>(null);
-  const failure = state?.success === false ? state : undefined;
-  const message = (key: string) =>
-    key in dict ? dict[key as keyof typeof dict] : dict.unexpectedError;
 
   useEffect(() => {
     if (!state?.success) return;
@@ -50,12 +44,6 @@ export function AccountForm({
     const password = formRef.current?.elements.namedItem("password");
     if (password instanceof HTMLInputElement) password.value = "";
   }, [state, dict.saved]);
-
-  const submit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const formData = new FormData(event.currentTarget);
-    startTransition(() => formAction(formData));
-  };
 
   return (
     <form
@@ -65,12 +53,9 @@ export function AccountForm({
       className="flex flex-col gap-4 rounded-2xl bg-card p-4 md:p-5.5"
     >
       {failure && !failure.errors && (
-        <p
-          role="alert"
-          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
-        >
-          {message(failure.messageKey)}
-        </p>
+        <FormAlert>
+          {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
+        </FormAlert>
       )}
       <FormField
         label={dict.username}

@@ -7,7 +7,7 @@ import {
   scoreSchema,
 } from "@/schemas/record/enums";
 
-export const creditSchema = z.object({
+const creditSchema = z.object({
   personName: z.string(),
   creditRole: creditRoleSchema,
 });

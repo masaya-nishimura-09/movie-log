@@ -1,14 +1,16 @@
 "use client";
 
-import { useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
 import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { FormField } from "@/components/molecules/form-field";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
+import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { dictMessage } from "@/lib/text/dict-message";
 import {
   contactMessageMaxLength,
   honeypotField,
@@ -32,10 +34,7 @@ export function ContactForm({
   dict,
   counterTemplate,
 }: ContactFormProps) {
-  const [state, formAction, pending] = useActionState(action, undefined);
-  const failure = state?.success === false ? state : undefined;
-  const message = (key: string | undefined) =>
-    key && key in dict ? dict[key as keyof typeof dict] : undefined;
+  const { state, failure, pending, submit } = useFormSubmit(action);
 
   if (state?.success) {
     return (
@@ -51,20 +50,17 @@ export function ContactForm({
   }
 
   return (
-    <form action={formAction} noValidate className="flex flex-col gap-5">
+    <form onSubmit={submit} noValidate className="flex flex-col gap-5">
       {failure && !failure.errors && (
-        <p
-          role="alert"
-          className="rounded-lg bg-destructive/10 px-3.5 py-2.5 text-destructive-foreground text-sm"
-        >
-          {message(failure.messageKey) ?? dict.unexpectedError}
-        </p>
+        <FormAlert>
+          {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
+        </FormAlert>
       )}
       <FormField
         label={dict.email}
         htmlFor="email"
         hint={dict.emailHint}
-        error={message(failure?.errors?.email?.[0])}
+        error={dictMessage(dict, failure?.errors?.email?.[0])}
       >
         <Input
           id="email"
@@ -78,7 +74,7 @@ export function ContactForm({
       <FormField
         label={dict.message}
         htmlFor="message"
-        error={message(failure?.errors?.message?.[0])}
+        error={dictMessage(dict, failure?.errors?.message?.[0])}
       >
         <CountedTextarea
           id="message"

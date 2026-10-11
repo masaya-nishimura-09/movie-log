@@ -25,11 +25,7 @@ describe("スマホの画面での操作", () => {
     cy.login();
     const title = `E2E スマホ ${Date.now()}`;
     cy.visit("/ja/records/new");
-    cy.get("#title").type(title);
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "4")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics(title, { score: 4 });
     cy.contains("button", form.next).click();
     cy.contains(
       form.stepProgress.replace("{current}", "2").replace("{total}", "3"),

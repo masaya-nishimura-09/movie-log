@@ -4,11 +4,7 @@ import { ApiError } from "@/api/client/api-error";
 const createRecord = vi.fn();
 const updateRecord = vi.fn();
 
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/record/create-record", () => ({ createRecord }));
 vi.mock("@/api/record/update-record", () => ({ updateRecord }));
 

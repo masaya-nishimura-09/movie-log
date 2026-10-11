@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
+import { TextLink } from "@/components/atoms/text-link";
 import { cn } from "@/lib/style/cn";
 
 type LegalSection = { h: string; p: string[] };
@@ -49,12 +50,9 @@ export function LegalDocument({
             </p>
           ))}
           {index === sections.length - 1 && (
-            <Link
-              href={contactHref}
-              className="self-start font-medium text-[13px] text-primary underline-offset-4 hover:underline"
-            >
+            <TextLink href={contactHref} className="self-start text-[13px]">
               {contactLabel}
-            </Link>
+            </TextLink>
           )}
         </section>
       ))}

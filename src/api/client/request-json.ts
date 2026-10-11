@@ -3,10 +3,9 @@ import type { z } from "zod";
 import { ApiError } from "@/api/client/api-error";
 import { mockFetch } from "@/api/mock/mock-fetch";
 import { accessTokenCookie } from "@/lib/auth/token-cookies";
+import { useMock } from "@/lib/env";
 import { logError } from "@/lib/log/logger";
 import { apiErrorResponseSchema } from "@/schemas/error/api-error";
-
-const useMock = process.env.USE_MOCK === "true";
 
 async function clientHeaders(init: RequestInit): Promise<Headers> {
   const headers = new Headers(init.headers);

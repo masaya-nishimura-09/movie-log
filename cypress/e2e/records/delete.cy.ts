@@ -59,11 +59,7 @@ describe("記録の削除", () => {
 
   it("削除に失敗すると、ダイアログにエラーを表示する", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type(`E2E 削除失敗 ${Date.now()}`);
-    cy.get(`[role=radiogroup][aria-label="${ja.recordForm.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics(`E2E 削除失敗 ${Date.now()}`, { score: 3 });
     cy.contains("button", ja.recordForm.next).click();
     cy.get("#releaseYear").type("2000");
     cy.contains("button", ja.recordForm.next).click();

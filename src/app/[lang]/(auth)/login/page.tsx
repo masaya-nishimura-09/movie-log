@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { loginAction } from "@/actions/auth/login";
 import { Logo } from "@/components/atoms/logo";
+import { TextLink } from "@/components/atoms/text-link";
 import { LoginForm } from "@/components/organisms/login-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { turnstileSiteKey } from "@/lib/turnstile/verify-turnstile";
@@ -29,12 +29,13 @@ export default async function LoginPage() {
         dict={dict.login}
         passwordDict={dict.passwordInput}
       />
-      <Link
+      <TextLink
         href={`/${lang}/about`}
-        className="self-center rounded-sm font-medium text-foreground-sub text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
+        tone="muted"
+        className="self-center text-xs"
       >
         {dict.about.link}
-      </Link>
+      </TextLink>
     </div>
   );
 }

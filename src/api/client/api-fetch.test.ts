@@ -15,11 +15,7 @@ vi.mock("next/headers", () => ({
       cookieValues.has(name) ? { value: cookieValues.get(name) } : undefined,
   }),
 }));
-vi.mock("next/navigation", () => ({
-  redirect: (url: string) => {
-    throw new Error(`REDIRECT ${url}`);
-  },
-}));
+vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/client/request-json", () => ({ requestJson }));
 
 const { apiFetch } = await import("@/api/client/api-fetch");

@@ -183,9 +183,10 @@ src/
   actions/            # Server Actions
   api/                # API クライアント、モックデータ
   components/         # UI コンポーネント（atoms、molecules、organisms）
+  hooks/              # React のカスタムフック
   schemas/            # Zod スキーマ
   i18n/               # 言語設定、辞書
-  lib/                # 補助関数（auth、contact、date、log、record、style、text、url）
+  lib/                # 補助関数（auth、contact、date、log、navigation、record、style、text、turnstile、url）
   styles/             # グローバルスタイル、色の定義
   proxy.ts            # 言語の振り分け、トークンの更新
   instrumentation.ts  # 未処理のサーバーエラーのログ出力

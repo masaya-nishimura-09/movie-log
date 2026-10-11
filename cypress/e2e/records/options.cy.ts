@@ -17,11 +17,7 @@ describe("選択肢がすべて表示される", () => {
         .contains("label", score)
         .should("exist");
     }
-    cy.get("#title").type("選択肢テスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("選択肢テスト", { score: 3 });
     cy.contains("button", form.next).click();
     for (const label of Object.values(ja.enums.genre)) {
       cy.contains("label", label).should("exist");
@@ -40,11 +36,7 @@ describe("選択肢がすべて表示される", () => {
 
   it("作成フォーム：言語の選択肢", () => {
     cy.visit("/ja/records/new");
-    cy.get("#title").type("言語テスト");
-    cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-      .contains("label", "3")
-      .click();
-    cy.contains("label", ja.enums.platform.netflix).click();
+    cy.fillRecordBasics("言語テスト", { score: 3 });
     cy.contains("button", form.next).click();
     cy.get(`button[aria-label="${form.language}"]`).click();
     const names = new Intl.DisplayNames("ja", { type: "language" });

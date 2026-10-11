@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
+import { TextLink } from "@/components/atoms/text-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 
@@ -40,18 +41,12 @@ export default async function AboutPage() {
         </p>
       </section>
       <nav className="flex flex-col gap-2">
-        <Link
-          href={`/${lang}/terms`}
-          className="self-start rounded-sm font-medium text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-        >
+        <TextLink href={`/${lang}/terms`} className="self-start text-sm">
           {dict.register.termsLink}
-        </Link>
-        <Link
-          href={`/${lang}/privacy`}
-          className="self-start rounded-sm font-medium text-primary text-sm outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
-        >
+        </TextLink>
+        <TextLink href={`/${lang}/privacy`} className="self-start text-sm">
           {dict.register.privacyLink}
-        </Link>
+        </TextLink>
       </nav>
       <Link
         href={`/${lang}/records`}

@@ -4,9 +4,9 @@ import Link from "next/link";
 import { getRecords } from "@/api/record/get-records";
 import { buttonVariants } from "@/components/atoms/button";
 import { EmptyState } from "@/components/molecules/empty-state";
+import { FilterButton } from "@/components/molecules/filter-button";
 import { Pagination } from "@/components/molecules/pagination";
 import { ActiveFilterList } from "@/components/organisms/active-filter-list";
-import { FilterButton } from "@/components/organisms/record-filter-bar";
 import {
   GenreOptions,
   MoodOptions,

@@ -1,8 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { z } from "zod";
-import type { ActionResult } from "@/actions/action-result";
+import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import { createRecord } from "@/api/record/create-record";
 import { updateRecord } from "@/api/record/update-record";
@@ -19,11 +18,7 @@ async function save(
 ): Promise<ActionResult<never>> {
   const input = recordInputSchema.safeParse(readRecordForm(formData));
   if (!input.success) {
-    return {
-      success: false,
-      messageKey: "invalidInput",
-      errors: z.flattenError(input.error).fieldErrors,
-    };
+    return invalidInput(input.error);
   }
 
   let savedId: string;
