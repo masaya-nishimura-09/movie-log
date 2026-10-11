@@ -25,7 +25,7 @@ function receiptId(receivedAt: Date): string {
   const date = new Intl.DateTimeFormat("en-CA", { timeZone })
     .format(receivedAt)
     .replaceAll("-", "");
-  return `CL-${date}-${randomBytes(2).toString("hex").toUpperCase()}`;
+  return `CS-${date}-${randomBytes(2).toString("hex").toUpperCase()}`;
 }
 
 function receivedAtLabel(receivedAt: Date): string {
@@ -66,7 +66,7 @@ export function buildContactMail(
 <body style="margin:0;padding:24px;background:#efe7d6;font-family:-apple-system,'Hiragino Sans','Noto Sans JP',sans-serif;color:#0a2947">
 <div style="max-width:600px;margin:0 auto;background:#fbf6ec;border-radius:12px;overflow:hidden">
 <div style="background:#0a2947;color:#f3e4c9;padding:20px 28px">
-<div style="font-size:12px;letter-spacing:.08em;opacity:.8">CINELOG</div>
+<div style="font-size:12px;letter-spacing:.08em;opacity:.8">CINESTAMP</div>
 <div style="font-size:20px;font-weight:700;margin-top:4px">新しいお問い合わせ</div>
 <div style="font-size:13px;margin-top:6px;opacity:.85">受付番号 ${id}</div>
 </div>
@@ -76,12 +76,12 @@ export function buildContactMail(
 <div style="font-size:12px;font-weight:700;letter-spacing:.06em;color:#3d5268;margin:24px 0 8px">お問い合わせ内容</div>
 <div style="border-left:3px solid #8b5e3c;background:#ffffff;padding:14px 16px;font-size:14px;line-height:1.8;white-space:pre-wrap">${escapeHtml(message)}</div>
 </div>
-<div style="padding:14px 28px 22px;font-size:11px;color:#5a6b7c;line-height:1.6">このメールは、Cinelog のお問い合わせフォームから自動で送信されました。</div>
+<div style="padding:14px 28px 22px;font-size:11px;color:#5a6b7c;line-height:1.6">このメールは、Cinestamp のお問い合わせフォームから自動で送信されました。</div>
 </div>
 </body></html>`;
 
   const text = [
-    "Cinelog 新しいお問い合わせ",
+    "Cinestamp 新しいお問い合わせ",
     "",
     ...rows.map(([label, value]) => `${label}: ${value}`),
     "",
@@ -89,11 +89,11 @@ export function buildContactMail(
     "----------------",
     message,
     "",
-    "このメールは、Cinelog のお問い合わせフォームから自動で送信されました。",
+    "このメールは、Cinestamp のお問い合わせフォームから自動で送信されました。",
   ].join("\n");
 
   return {
-    subject: `[Cinelog お問い合わせ] #${id} ${email}`,
+    subject: `[Cinestamp お問い合わせ] #${id} ${email}`,
     html,
     text,
   };

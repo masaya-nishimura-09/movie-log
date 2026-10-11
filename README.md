@@ -1,10 +1,10 @@
 <div align="center">
 
-# Cinelog
+# Cinestamp
 
 **English** | [日本語](README.ja.md)
 
-The web app of Cinelog, an app for keeping a record of the films you watch.<br/>Each record keeps the poster, viewing date, score, mood, and notes for a film.
+The web app of Cinestamp, an app for keeping a record of the films you watch.<br/>Each record keeps the poster, viewing date, score, mood, and notes for a film.
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-0a2947?logo=nextdotjs&logoColor=f3e4c9)
 ![React](https://img.shields.io/badge/React-19-0a2947?logo=react&logoColor=f3e4c9)
@@ -16,8 +16,8 @@ The web app of Cinelog, an app for keeping a record of the films you watch.<br/>
 
 </div>
 
-This repository contains the web app of Cinelog. It uses the
-[Cinelog API](https://github.com/masaya-nishimura-09/movie-log-api)
+This repository contains the web app of Cinestamp. It uses the
+[Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
 for data and can also run on its own with mock data.
 A [mobile app](https://github.com/masaya-nishimura-09/movie-log-mobile) is also available.
 
@@ -43,8 +43,8 @@ you have watched by those conditions. When someone asks
 
 ```mermaid
 flowchart LR
-    browser["Browser"] --> web["Cinelog Web<br/>(Next.js)"]
-    web --> api["Cinelog API<br/>(Go / Gin)"]
+    browser["Browser"] --> web["Cinestamp Web<br/>(Next.js)"]
+    web --> api["Cinestamp API<br/>(Go / Gin)"]
     web --> resend["Resend<br/>contact emails"]
     web --> turnstile["Cloudflare Turnstile<br/>bot protection"]
     browser --> turnstile
@@ -129,7 +129,7 @@ Font weights depend on the role of the text: 400 for body text,
 
 - Node.js 20.9 or later
 - pnpm
-- [Cinelog API](https://github.com/masaya-nishimura-09/movie-log-api)
+- [Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
   (not required in mock mode)
 
 ### Installation
@@ -162,7 +162,7 @@ Set the following environment variables in `.env.local`.
 
 | Variable               | Required | Description                                                         |
 |------------------------|----------|---------------------------------------------------------------------|
-| `API_BASE_URL`         | Required | Base URL of the Cinelog API (not required in mock mode)             |
+| `API_BASE_URL`         | Required | Base URL of the Cinestamp API (not required in mock mode)             |
 | `USE_MOCK`             | Optional | Set to `true` to use mock data instead of the API                   |
 | `MOCK_DATASET`         | Optional | Set to `demo` to use the fictional demo films in mock mode          |
 | `MOCK_LANGUAGE`        | Optional | Set to `en` for English mock records (Japanese otherwise)           |
@@ -170,7 +170,7 @@ Set the following environment variables in `.env.local`.
 | `APP_VERSION`          | Optional | Version written to logs, such as the Git commit hash                |
 | `RESEND_API_KEY`       | Optional | Resend API key (required for the contact form)                      |
 | `CONTACT_TO_EMAIL`     | Optional | Address that receives contact messages (required for the contact form) |
-| `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinelog <onboarding@resend.dev>`) |
+| `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinestamp <onboarding@resend.dev>`) |
 | `TURNSTILE_SITE_KEY`   | Required | Cloudflare Turnstile site key (not required in mock mode)           |
 | `TURNSTILE_SECRET_KEY` | Required | Cloudflare Turnstile secret key (not required in mock mode)         |
 

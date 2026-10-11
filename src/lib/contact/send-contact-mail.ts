@@ -5,7 +5,7 @@ import {
 import type { ContactInput } from "@/schemas/contact/contact";
 
 const resendUrl = "https://api.resend.com/emails";
-const defaultFrom = "Cinelog <onboarding@resend.dev>";
+const defaultFrom = "Cinestamp <onboarding@resend.dev>";
 
 export async function sendContactMail(
   input: ContactInput,

@@ -10,7 +10,7 @@ describe("buildContactMail", () => {
       { lang: "ja", userId: undefined, receivedAt },
     );
     expect(mail.subject).toMatch(
-      /^\[Cinelog お問い合わせ\] #CL-20261011-[0-9A-F]{4} user@example\.com$/,
+      /^\[Cinestamp お問い合わせ\] #CS-20261011-[0-9A-F]{4} user@example\.com$/,
     );
   });
 
@@ -19,7 +19,7 @@ describe("buildContactMail", () => {
       { email: "user@example.com", message: "Hello" },
       { lang: "ja", userId: undefined, receivedAt },
     );
-    const id = mail.subject.match(/#(CL-\d{8}-[0-9A-F]{4})/)?.[1];
+    const id = mail.subject.match(/#(CS-\d{8}-[0-9A-F]{4})/)?.[1];
     expect(mail.text).toContain(`受付番号: ${id}`);
     expect(mail.html).toContain(`受付番号 ${id}`);
   });

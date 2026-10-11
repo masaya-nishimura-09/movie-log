@@ -25,7 +25,7 @@ afterEach(() => {
 describe("sendContactMail", () => {
   it("sends the mail through Resend with the sender as reply-to", async () => {
     fetchMock.mockResolvedValue(Response.json({ id: "1" }));
-    vi.stubEnv("CONTACT_FROM_EMAIL", "Cinelog <contact@example.com>");
+    vi.stubEnv("CONTACT_FROM_EMAIL", "Cinestamp <contact@example.com>");
     await sendContactMail(input, context);
     const [url, init] = fetchMock.mock.calls[0] ?? [];
     expect(url).toBe("https://api.resend.com/emails");
@@ -36,11 +36,11 @@ describe("sendContactMail", () => {
     });
     const body = JSON.parse(init.body);
     expect(body).toMatchObject({
-      from: "Cinelog <contact@example.com>",
+      from: "Cinestamp <contact@example.com>",
       to: ["support@example.com"],
       reply_to: "user@example.com",
     });
-    expect(body.subject).toMatch(/^\[Cinelog お問い合わせ\] #CL-20261011-/);
+    expect(body.subject).toMatch(/^\[Cinestamp お問い合わせ\] #CS-20261011-/);
     expect(body.html).toContain("Hello");
     expect(body.text).toContain("Hello");
   });
@@ -53,7 +53,7 @@ describe("sendContactMail", () => {
     delete process.env.CONTACT_FROM_EMAIL;
     await sendContactMail(input, context);
     expect(JSON.parse(fetchMock.mock.calls[0]?.[1].body).from).toBe(
-      "Cinelog <onboarding@resend.dev>",
+      "Cinestamp <onboarding@resend.dev>",
     );
   });
 
