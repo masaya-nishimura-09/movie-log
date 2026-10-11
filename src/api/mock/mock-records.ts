@@ -15,6 +15,15 @@ const initialRecords: RecordResponse[] = demo
     ? initialRecordsEn
     : initialRecordsJa;
 
-const store = globalThis as { mockRecords?: RecordResponse[] };
+const demoUserId = "1";
+
+const store = globalThis as {
+  mockRecords?: RecordResponse[];
+  mockRecordOwners?: Map<string, string>;
+};
 store.mockRecords ??= initialRecords;
+store.mockRecordOwners ??= new Map(
+  initialRecords.map((record) => [record.record_id, demoUserId]),
+);
 export const mockRecords = store.mockRecords;
+export const mockRecordOwners = store.mockRecordOwners;

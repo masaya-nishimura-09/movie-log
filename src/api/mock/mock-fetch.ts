@@ -1,4 +1,4 @@
-import { mockRecords } from "@/api/mock/mock-records";
+import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
 import { mockAccounts, toUserResponse } from "@/api/mock/mock-user";
 import { isTokenExpired } from "@/lib/auth/token-cookies";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
@@ -53,7 +53,27 @@ function matches(record: RecordResponse, filter: Filter): boolean {
   );
 }
 
-function listRecords(params: URLSearchParams): Response {
+type Account = (typeof mockAccounts)[number];
+
+function ownedRecords(account: Account): RecordResponse[] {
+  return mockRecords.filter(
+    (record) => mockRecordOwners.get(record.record_id) === account.user_id,
+  );
+}
+
+function findOwnedIndex(account: Account, id: string): number {
+  return mockRecords.findIndex(
+    (record) =>
+      record.record_id === id && mockRecordOwners.get(id) === account.user_id,
+  );
+}
+
+const errorKeyword = "__error__";
+const tooManyKeyword = "__too_many__";
+const withdrawErrorName = "__withdraw_error__";
+const deleteErrorMemo = "__delete_error__";
+
+function listRecords(account: Account, params: URLSearchParams): Response {
   const filter: Filter = {
     score: params.get("score"),
     platform: params.get("platform"),
@@ -61,6 +81,9 @@ function listRecords(params: URLSearchParams): Response {
     genres: params.getAll("genres"),
     title: params.get("title") ?? "",
   };
+  if (filter.title === errorKeyword) {
+    return error(500, "INTERNAL_SERVER_ERROR");
+  }
   const sortField = params.get("sort_field") ?? "watched_at";
   const sortOrder = params.get("sort_order") ?? "desc";
   const page = Number(params.get("page") ?? "1");
@@ -70,7 +93,8 @@ function listRecords(params: URLSearchParams): Response {
   }
   const compare = comparators[sortField];
 
-  const filtered = mockRecords
+  const records = ownedRecords(account);
+  const filtered = records
     .filter((record) => matches(record, filter))
     .sort(
       (a, b) =>
@@ -80,20 +104,18 @@ function listRecords(params: URLSearchParams): Response {
   return Response.json({
     records: filtered.slice((page - 1) * perPage, page * perPage),
     filtered_count: filtered.length,
-    total_count: mockRecords.length,
+    total_count: records.length,
   });
 }
 
-function getRecord(id: string): Response {
-  const record = mockRecords.find((r) => r.record_id === id);
+function getRecord(account: Account, id: string): Response {
+  const record = mockRecords[findOwnedIndex(account, id)];
   if (!record) return error(404, "RECORD_NOT_FOUND");
   return Response.json(record);
 }
 
 const accessTokenLifetime = 60 * 60;
 const refreshTokenPrefix = "mock-refresh-";
-
-type Account = (typeof mockAccounts)[number];
 
 function issueTokens(account: Account): Response {
   const encode = (value: object) =>
@@ -160,7 +182,9 @@ function register(init: RequestInit): Response {
   const { name, email, password } = readJson(init) as UserBody;
   if (emailTaken(email)) return error(409, "USER_ALREADY_EXISTS");
   const account: Account = {
-    user_id: String(mockAccounts.length + 1),
+    user_id: String(
+      Math.max(0, ...mockAccounts.map((a) => Number(a.user_id))) + 1,
+    ),
     username: String(name),
     email: String(email),
     password: String(password),
@@ -181,6 +205,13 @@ function updateUser(account: Account, init: RequestInit): Response {
 }
 
 function deleteUser(account: Account): Response {
+  if (account.username === withdrawErrorName) {
+    return error(500, "INTERNAL_SERVER_ERROR");
+  }
+  for (const record of ownedRecords(account)) {
+    mockRecords.splice(mockRecords.indexOf(record), 1);
+    mockRecordOwners.delete(record.record_id);
+  }
   mockAccounts.splice(mockAccounts.indexOf(account), 1);
   return new Response(null, { status: 204 });
 }
@@ -190,7 +221,7 @@ type RecordBody = Omit<
   "record_id" | "created_at" | "updated_at"
 >;
 
-function createRecord(init: RequestInit): Response {
+function createRecord(account: Account, init: RequestInit): Response {
   const now = new Date().toISOString();
   const lastId = Math.max(0, ...mockRecords.map((r) => Number(r.record_id)));
   const record: RecordResponse = {
@@ -200,11 +231,16 @@ function createRecord(init: RequestInit): Response {
     updated_at: now,
   };
   mockRecords.push(record);
+  mockRecordOwners.set(record.record_id, account.user_id);
   return Response.json(record, { status: 201 });
 }
 
-function updateRecord(id: string, init: RequestInit): Response {
-  const index = mockRecords.findIndex((r) => r.record_id === id);
+function updateRecord(
+  account: Account,
+  id: string,
+  init: RequestInit,
+): Response {
+  const index = findOwnedIndex(account, id);
   const current = mockRecords[index];
   if (!current) return error(404, "RECORD_NOT_FOUND");
   const record: RecordResponse = {
@@ -217,10 +253,14 @@ function updateRecord(id: string, init: RequestInit): Response {
   return Response.json(record);
 }
 
-function deleteRecord(id: string): Response {
-  const index = mockRecords.findIndex((r) => r.record_id === id);
+function deleteRecord(account: Account, id: string): Response {
+  const index = findOwnedIndex(account, id);
   if (index === -1) return error(404, "RECORD_NOT_FOUND");
+  if (mockRecords[index]?.memo === deleteErrorMemo) {
+    return error(500, "INTERNAL_SERVER_ERROR");
+  }
   mockRecords.splice(index, 1);
+  mockRecordOwners.delete(id);
   return new Response(null, { status: 204 });
 }
 
@@ -288,6 +328,14 @@ export async function mockFetch(
   const method = init.method ?? "GET";
   const [resource, id, sub] = url.pathname.split("/").filter(Boolean);
 
+  const values = Object.values(readJson(init));
+  if (values.includes(errorKeyword)) {
+    return error(500, "INTERNAL_SERVER_ERROR");
+  }
+  if (values.includes(tooManyKeyword)) {
+    return error(429, "TOO_MANY_REQUESTS");
+  }
+
   if (method === "POST" && resource === "auth") {
     if (id === "login") return login(init);
     if (id === "refresh") return refresh(init);
@@ -306,13 +354,13 @@ export async function mockFetch(
     if (method === "DELETE") return deleteUser(account);
   }
   if (resource === "records" && id === undefined) {
-    if (method === "GET") return listRecords(url.searchParams);
-    if (method === "POST") return createRecord(init);
+    if (method === "GET") return listRecords(account, url.searchParams);
+    if (method === "POST") return createRecord(account, init);
   }
   if (resource === "records" && id !== undefined && sub === undefined) {
-    if (method === "GET") return getRecord(id);
-    if (method === "PUT") return updateRecord(id, init);
-    if (method === "DELETE") return deleteRecord(id);
+    if (method === "GET") return getRecord(account, id);
+    if (method === "PUT") return updateRecord(account, id, init);
+    if (method === "DELETE") return deleteRecord(account, id);
   }
   if (method === "POST" && resource === "media" && id === undefined) {
     return uploadMedia(init);

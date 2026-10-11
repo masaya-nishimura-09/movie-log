@@ -107,7 +107,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 | 言語           | TypeScript                                           |
 | スタイル       | Tailwind CSS、shadcn/ui（Base UI）、react-day-picker |
 | バリデーション | Zod                                                  |
-| テスト         | Vitest                                               |
+| テスト         | Vitest、Cypress                                      |
 | ボット対策     | Cloudflare Turnstile                                 |
 | お問い合わせ   | Resend                                               |
 | 開発ツール     | Biome、pnpm                                          |
@@ -135,7 +135,7 @@ pnpm dev
 
 ### モックモード
 
-`USE_MOCK=true` を設定すると、API を使わずにモックデータで動作します。メールアドレス `demo@example.com`、パスワード `password` でログインできます。モックデータはメモリ上に保持され、サーバーを再起動すると初期状態に戻ります。
+`USE_MOCK=true` を設定すると、API を使わずにモックデータで動作します。メールアドレス `demo@example.com`、パスワード `password` でログインできます。モックデータはメモリ上に保持され、サーバーを再起動すると初期状態に戻ります。記録はアカウントごとに分かれていて、初期データの記録はデモ用のアカウントのものです。新しく登録したアカウントは、記録が 0 件の状態から始まります。エラーの表示を確かめるため、次の値で失敗を返します。タイトル検索に `__error__` と入れると、記録の一覧が 500 を返します。送信する項目のどれかが `__error__` なら 500、`__too_many__` なら 429 を返します（例：ログインのパスワード、記録のタイトル）。表示名が `__withdraw_error__` のアカウントは、退会が 500 で失敗します。メモが `__delete_error__` の記録は、削除が 500 で失敗します。
 
 ### 環境変数
 
@@ -157,19 +157,23 @@ pnpm dev
 
 ### スクリプト
 
-| コマンド          | 説明                                 |
-|-------------------|--------------------------------------|
-| `pnpm dev`        | 開発サーバーの起動                   |
-| `pnpm build`      | 本番用のビルド                       |
-| `pnpm start`      | ビルドしたアプリの起動               |
-| `pnpm lint`       | Biome によるチェック                 |
-| `pnpm fix`        | lint の指摘の自動修正                |
-| `pnpm format`     | Biome による整形                     |
-| `pnpm typecheck`  | TypeScript の型チェック              |
-| `pnpm test`       | Vitest によるテストの実行            |
-| `pnpm test:watch` | ファイルの変更を監視してテストを実行 |
+| コマンド            | 説明                                    |
+|---------------------|-----------------------------------------|
+| `pnpm dev`          | 開発サーバーの起動                      |
+| `pnpm build`        | 本番用のビルド                          |
+| `pnpm start`        | ビルドしたアプリの起動                  |
+| `pnpm lint`         | Biome によるチェック                    |
+| `pnpm fix`          | lint の指摘の自動修正                   |
+| `pnpm format`       | Biome による整形                        |
+| `pnpm typecheck`    | TypeScript の型チェック                 |
+| `pnpm test`         | Vitest によるテストの実行               |
+| `pnpm test:watch`   | ファイルの変更を監視してテストを実行    |
+| `pnpm test:e2e`     | Cypress による E2E テストの実行         |
+| `pnpm cypress:open` | Cypress の画面を開いて E2E テストを実行 |
 
 単体テストは、対象のファイルの隣に `*.test.ts` として置いています（例：`src/lib/url/build-href.test.ts`）。
+
+E2E テストは `cypress/e2e/` に、画面ごとのフォルダに分けて置いています。`pnpm test:e2e` は、本番用にビルドしたアプリをモックモードでポート 3300 に起動し、Chrome で実行します（Chrome のインストールが必要）。
 
 ## ディレクトリ構成
 

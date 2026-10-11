@@ -9,9 +9,11 @@
     "lint": "biome check",
     "fix": "biome check --write",
     "format": "biome format --write",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "tsc --noEmit && tsc --noEmit -p cypress",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "test:e2e": "next build && start-server-and-test 'USE_MOCK=true MOCK_DATASET=default MOCK_LANGUAGE=ja next start -p 3300' http://localhost:3300 'cypress run --browser chrome'",
+    "cypress:open": "next build && start-server-and-test 'USE_MOCK=true MOCK_DATASET=default MOCK_LANGUAGE=ja next start -p 3300' http://localhost:3300 'cypress open'"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
@@ -34,7 +36,9 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "cypress": "^16.1.1",
     "shadcn": "^4.21.4",
+    "start-server-and-test": "^3.0.13",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^5.0.3"

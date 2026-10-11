@@ -118,7 +118,7 @@ Font weights depend on the role of the text: 400 for body text,
 | Language       | TypeScript                                          |
 | Styling        | Tailwind CSS, shadcn/ui (Base UI), react-day-picker |
 | Validation     | Zod                                                 |
-| Testing        | Vitest                                              |
+| Testing        | Vitest, Cypress                                     |
 | Bot protection | Cloudflare Turnstile                                |
 | Contact        | Resend                                              |
 | Tooling        | Biome, pnpm                                         |
@@ -150,6 +150,11 @@ The app starts on `http://localhost:3000`.
 When `USE_MOCK=true`, the app runs on mock data without the API.
 Log in with `demo@example.com` and the password `password`.
 Mock data is kept in memory and resets when the server restarts.
+Records belong to each account, and the initial records belong to the demo account, so a newly registered account starts with no records.
+To check how errors are shown, some values make the mock fail.
+Searching for the title `__error__` makes the record list return 500.
+If any submitted field is `__error__`, the request returns 500, and if it is `__too_many__`, it returns 429 (for example, the login password or a record title).
+An account whose display name is `__withdraw_error__` fails to withdraw with 500, and a record whose memo is `__delete_error__` fails to delete with 500.
 
 ### Environment Variables
 
@@ -171,19 +176,23 @@ Set the following environment variables in `.env.local`.
 
 ### Scripts
 
-| Command           | Description                                  |
-|-------------------|----------------------------------------------|
-| `pnpm dev`        | Start the development server                 |
-| `pnpm build`      | Build for production                         |
-| `pnpm start`      | Start the production build                   |
-| `pnpm lint`       | Check the code with Biome                    |
-| `pnpm fix`        | Fix lint issues                              |
-| `pnpm format`     | Format the code with Biome                   |
-| `pnpm typecheck`  | Run the TypeScript type check                |
-| `pnpm test`       | Run the tests with Vitest                    |
-| `pnpm test:watch` | Run the tests and rerun them on file changes |
+| Command             | Description                                  |
+|---------------------|----------------------------------------------|
+| `pnpm dev`          | Start the development server                 |
+| `pnpm build`        | Build for production                         |
+| `pnpm start`        | Start the production build                   |
+| `pnpm lint`         | Check the code with Biome                    |
+| `pnpm fix`          | Fix lint issues                              |
+| `pnpm format`       | Format the code with Biome                   |
+| `pnpm typecheck`    | Run the TypeScript type check                |
+| `pnpm test`         | Run the tests with Vitest                    |
+| `pnpm test:watch`   | Run the tests and rerun them on file changes |
+| `pnpm test:e2e`     | Run the end-to-end tests with Cypress        |
+| `pnpm cypress:open` | Open Cypress and run the end-to-end tests    |
 
 Unit tests sit next to the file they test as `*.test.ts` (for example, `src/lib/url/build-href.test.ts`).
+
+End-to-end tests live in `cypress/e2e/`, in one folder per screen. `pnpm test:e2e` builds the app for production, starts it in mock mode on port 3300, and runs the tests in Chrome (Chrome must be installed).
 
 ## Project Structure
 
