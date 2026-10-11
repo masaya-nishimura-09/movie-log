@@ -1,11 +1,8 @@
-import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { sendContactAction } from "@/actions/contact/send-contact";
-import { buttonVariants } from "@/components/atoms/button";
+import { BackButton } from "@/components/molecules/back-button";
 import { ContactForm } from "@/components/organisms/contact-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
-import { cn } from "@/lib/style/cn";
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -36,13 +33,11 @@ export default async function ContactPage() {
         dict={dict.contact}
         counterTemplate={dict.characterCount}
       />
-      <Link
-        href={`/${lang}/about`}
-        className={cn(buttonVariants({ variant: "outline" }), "self-center")}
-      >
-        <ArrowLeft aria-hidden />
-        {dict.contact.back}
-      </Link>
+      <BackButton
+        fallbackHref={`/${lang}`}
+        label={dict.contact.back}
+        className="self-center"
+      />
     </div>
   );
 }
