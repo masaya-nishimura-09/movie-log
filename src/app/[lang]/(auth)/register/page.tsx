@@ -17,7 +17,7 @@ export default async function RegisterPage() {
   return (
     <div className="flex flex-col gap-6">
       <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="text-2xl [&>svg]:size-7" />
+        <Logo name={dict.brand.name} className="h-8" />
       </div>
       <div className="flex flex-col gap-1.5">
         <h1 className="font-bold text-foreground text-xl">

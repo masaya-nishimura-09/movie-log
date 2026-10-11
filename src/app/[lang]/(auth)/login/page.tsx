@@ -18,7 +18,7 @@ export default async function LoginPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col items-center gap-2 text-center">
         <h1>
-          <Logo name={dict.brand.name} className="text-2xl [&>svg]:size-7" />
+          <Logo name={dict.brand.name} className="h-8" />
         </h1>
         <p className="text-[13px] text-foreground-sub">{dict.brand.tagline}</p>
       </div>
