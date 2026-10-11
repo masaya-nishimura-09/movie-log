@@ -3,6 +3,7 @@ import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { siteUrl } from "@/lib/env";
 import { cn } from "@/lib/style/cn";
 
 const poppins = Poppins({
@@ -23,6 +24,7 @@ export const viewport: Viewport = {
 export async function generateMetadata(): Promise<Metadata> {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return {
+    metadataBase: new URL(siteUrl),
     title: {
       default: dict.metadata.title,
       template: `%s | ${dict.metadata.title}`,
