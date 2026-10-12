@@ -33,7 +33,7 @@
       "text": "Love films, and people keep asking you what to watch. The right pick for someone else rarely comes to mind on the spot. Filter the films you have seen by platform and mood, and the answer is right there.",
       "alt": "Records filtered to the Netflix platform and the Moving mood"
     },
-    "closing": "Start with the last film you saw. A title and a date take about thirty seconds."
+    "closing": "Start with the last film you saw. A title, the date, a score, and where you watched are all you need."
   },
   "about": {
     "title": "About",
@@ -345,7 +345,7 @@
   },
   "emptyState": {
     "title": "No records yet",
-    "description": "Start with the last film you watched. A title and a date take about 30 seconds.",
+    "description": "Start with the last film you watched. A title, the date, a score, and where you watched are all you need.",
     "action": "Log your first film"
   },
   "recordCard": {
