@@ -70,7 +70,7 @@ export function Landing({ lang, dict }: LandingProps) {
   const registerHref = `/${lang}/register`;
 
   return (
-    <main className="shell flex flex-1 flex-col bg-sidebar text-foreground">
+    <main className="shell flex flex-1 flex-col bg-sidebar text-foreground [word-break:auto-phrase]">
       <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
         <Logo name={dict.brand.name} />
         <nav className="flex items-center gap-2">

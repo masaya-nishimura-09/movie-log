@@ -1,31 +1,31 @@
 {
   "metadata": {
     "title": "Cinestamp",
-    "description": "Remember every film you have watched."
+    "description": "A film logbook you can search by mood. Keep the date, where you watched, a score, and how it felt."
   },
   "brand": {
     "name": "Cinestamp",
     "tagline": "Remember every film you have watched."
   },
   "landing": {
-    "headline": "Remember every film you have watched.",
-    "lead": "The date, a score, the mood, a memo. Keep how a film felt, right next to its poster.",
+    "headline": "A film logbook you can search by mood.",
+    "lead": "Log the date, where you watched, a score, and how it felt. Your records stay private, and only you can read them.",
     "start": "Sign up to start",
     "login": "Log in",
     "listAlt": "A grid of posters for the films you have logged",
     "detailAlt": "One film's record, with the watched date and platform under the poster",
     "features": [
       {
+        "title": "Find films by mood",
+        "text": "Tag films as poignant, absurd or bitter ending, among 18 mood tags. Later, filter for the mood you are in tonight."
+      },
+      {
         "title": "Keep it with the poster",
         "text": "The watched date, score and platform sit with the poster on a single card."
       },
       {
-        "title": "Film details fill in for you",
-        "text": "Type a title and the release year, genres and credits come from TMDB."
-      },
-      {
-        "title": "A logbook just for you",
-        "text": "Your records are not shown to anyone else. Available in Japanese and English."
+        "title": "Log where you watched",
+        "text": "Choose from 30 options, from cinemas and discs to Netflix and MUBI."
       }
     ],
     "recommend": {
