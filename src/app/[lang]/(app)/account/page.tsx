@@ -1,9 +1,13 @@
 import { Info } from "lucide-react";
 import type { Metadata } from "next";
-import { updateAccountAction } from "@/actions/user/update-account";
+import { updateEmailAction } from "@/actions/user/update-email";
+import { updatePasswordAction } from "@/actions/user/update-password";
+import { updateUsernameAction } from "@/actions/user/update-username";
 import { withdrawAction } from "@/actions/user/withdraw";
 import { getCurrentUser } from "@/api/user/get-current-user";
-import { AccountForm } from "@/components/organisms/account-form";
+import { AccountEmailForm } from "@/components/organisms/account-email-form";
+import { AccountPasswordForm } from "@/components/organisms/account-password-form";
+import { AccountUsernameForm } from "@/components/organisms/account-username-form";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { WithdrawSection } from "@/components/organisms/withdraw-section";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -32,12 +36,22 @@ export default async function AccountPage() {
           <Info className="mt-0.5 size-4.5 shrink-0" aria-hidden />
           {dict.account.notice}
         </p>
-        <AccountForm
-          action={updateAccountAction.bind(null, lang)}
+        <AccountUsernameForm
+          action={updateUsernameAction}
+          user={user}
+          dict={dict.account}
+          counterTemplate={dict.characterCount}
+        />
+        <AccountEmailForm
+          action={updateEmailAction}
           user={user}
           dict={dict.account}
           passwordDict={dict.passwordInput}
-          counterTemplate={dict.characterCount}
+        />
+        <AccountPasswordForm
+          action={updatePasswordAction.bind(null, lang)}
+          dict={dict.account}
+          passwordDict={dict.passwordInput}
         />
         <WithdrawSection
           action={withdrawAction.bind(null, lang)}

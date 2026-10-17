@@ -39,11 +39,12 @@ describe("API の失敗", () => {
   });
 
   it("アカウント設定：サーバーエラーでは、保存できなかったことを表示する", () => {
-    cy.register().then(({ password }) => {
+    cy.register().then(() => {
       cy.visit("/ja/account");
       cy.get("#username").clear().type("__error__");
-      cy.get("#password").type(password);
-      cy.contains("button", ja.account.save).click();
+      cy.contains("form", ja.account.usernameTitle)
+        .contains("button", ja.account.save)
+        .click();
       cy.get("[role=alert]").should("have.text", ja.account.unexpectedError);
     });
   });

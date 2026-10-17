@@ -172,7 +172,13 @@ function authenticate(init: RequestInit): Account | Response {
   );
 }
 
-type UserBody = { name?: unknown; email?: unknown; password?: unknown };
+type UserBody = {
+  name?: unknown;
+  email?: unknown;
+  password?: unknown;
+  old_password?: unknown;
+  new_password?: unknown;
+};
 
 function emailTaken(email: unknown, except?: Account): boolean {
   return mockAccounts.some((a) => a.email === email && a !== except);
@@ -193,14 +199,30 @@ function register(init: RequestInit): Response {
   return Response.json(toUserResponse(account), { status: 201 });
 }
 
-function updateUser(account: Account, init: RequestInit): Response {
-  const { name, email, password } = readJson(init) as UserBody;
+function updateUsername(account: Account, init: RequestInit): Response {
+  const { name } = readJson(init) as UserBody;
+  account.username = String(name);
+  return Response.json(toUserResponse(account));
+}
+
+function updateEmail(account: Account, init: RequestInit): Response {
+  const { email, password } = readJson(init) as UserBody;
+  if (account.password !== password) {
+    return error(400, "INVALID_CURRENT_PASSWORD");
+  }
   if (emailTaken(email, account)) return error(409, "USER_ALREADY_EXISTS");
-  Object.assign(account, {
-    username: String(name),
-    email: String(email),
-    password: String(password),
-  });
+  account.email = String(email);
+  return Response.json(toUserResponse(account));
+}
+
+function updatePassword(account: Account, init: RequestInit): Response {
+  const { old_password: oldPassword, new_password: newPassword } = readJson(
+    init,
+  ) as UserBody;
+  if (account.password !== oldPassword) {
+    return error(400, "INVALID_CURRENT_PASSWORD");
+  }
+  account.password = String(newPassword);
   return Response.json(toUserResponse(account));
 }
 
@@ -350,8 +372,12 @@ export async function mockFetch(
 
   if (resource === "users" && id === undefined) {
     if (method === "GET") return Response.json(toUserResponse(account));
-    if (method === "PUT") return updateUser(account, init);
     if (method === "DELETE") return deleteUser(account);
+  }
+  if (method === "PUT" && resource === "users") {
+    if (id === "username") return updateUsername(account, init);
+    if (id === "email") return updateEmail(account, init);
+    if (id === "password") return updatePassword(account, init);
   }
   if (resource === "records" && id === undefined) {
     if (method === "GET") return listRecords(account, url.searchParams);

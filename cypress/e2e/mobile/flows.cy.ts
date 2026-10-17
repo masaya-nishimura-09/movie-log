@@ -47,11 +47,12 @@ describe("スマホの画面での操作", () => {
   });
 
   it("アカウントの表示名を変更できる", () => {
-    cy.register().then(({ username, password }) => {
+    cy.register().then(({ username }) => {
       cy.get("nav").contains("a", ja.bottomNav.account).click();
       cy.get("#username").clear().type(`${username}-mobile`);
-      cy.get("#password").type(password);
-      cy.contains("button", ja.account.save).click();
+      cy.contains("form", ja.account.usernameTitle)
+        .contains("button", ja.account.save)
+        .click();
       cy.contains(ja.account.saved).should("be.visible");
     });
   });

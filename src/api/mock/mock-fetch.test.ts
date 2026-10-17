@@ -141,7 +141,7 @@ describe("mockFetch: ユーザー", () => {
     });
   });
 
-  it("gets, updates and deletes the current user", async () => {
+  it("gets and deletes the current user", async () => {
     const headers = await register();
     const current = await mockFetch("/users/", { headers });
     expect(await current.json()).toEqual({
@@ -149,44 +149,105 @@ describe("mockFetch: ユーザー", () => {
       username: "tester",
       email: "tester@example.com",
     });
+    const deleted = await mockFetch("/users/", { method: "DELETE", headers });
+    expect(deleted.status).toBe(204);
+    const login = await mockFetch(
+      "/auth/login",
+      post({ email: "tester@example.com", password: "password" }),
+    );
+    expect(login.status).toBe(401);
+  });
+
+  it("updates the username", async () => {
+    const headers = await register();
     const updated = await mockFetch(
-      "/users/",
+      "/users/username",
+      post({ name: "renamed" }, "PUT", headers),
+    );
+    expect(await updated.json()).toEqual({
+      user_id: "2",
+      username: "renamed",
+      email: "tester@example.com",
+    });
+  });
+
+  it("updates the email with the current password", async () => {
+    const headers = await register();
+    const updated = await mockFetch(
+      "/users/email",
       post(
-        {
-          name: "renamed",
-          email: "renamed@example.com",
-          password: "password2",
-        },
+        { email: "renamed@example.com", password: "password" },
         "PUT",
         headers,
       ),
     );
     expect(await updated.json()).toEqual({
       user_id: "2",
-      username: "renamed",
+      username: "tester",
       email: "renamed@example.com",
     });
-    const deleted = await mockFetch("/users/", { method: "DELETE", headers });
-    expect(deleted.status).toBe(204);
-    const login = await mockFetch(
-      "/auth/login",
-      post({ email: "renamed@example.com", password: "password2" }),
+    expect((await tokens("renamed@example.com")).access_token).toBeDefined();
+  });
+
+  it("rejects an email change with a wrong current password", async () => {
+    const headers = await register();
+    const response = await mockFetch(
+      "/users/email",
+      post({ email: "renamed@example.com", password: "wrong" }, "PUT", headers),
     );
-    expect(login.status).toBe(401);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toMatchObject({
+      code: "INVALID_CURRENT_PASSWORD",
+    });
   });
 
   it("rejects an email used by another user", async () => {
     const headers = await register();
     const response = await mockFetch(
-      "/users/",
+      "/users/email",
+      post({ email: "demo@example.com", password: "password" }, "PUT", headers),
+    );
+    expect(await response.json()).toMatchObject({
+      code: "USER_ALREADY_EXISTS",
+    });
+  });
+
+  it("updates the password with the current password", async () => {
+    const headers = await register();
+    const updated = await mockFetch(
+      "/users/password",
       post(
-        { name: "tester", email: "demo@example.com", password: "password" },
+        { old_password: "password", new_password: "password2" },
         "PUT",
         headers,
       ),
     );
+    expect(updated.status).toBe(200);
+    const oldLogin = await mockFetch(
+      "/auth/login",
+      post({ email: "tester@example.com", password: "password" }),
+    );
+    expect(oldLogin.status).toBe(401);
+    const newLogin = await mockFetch(
+      "/auth/login",
+      post({ email: "tester@example.com", password: "password2" }),
+    );
+    expect(newLogin.status).toBe(200);
+  });
+
+  it("rejects a password change with a wrong current password", async () => {
+    const headers = await register();
+    const response = await mockFetch(
+      "/users/password",
+      post(
+        { old_password: "wrong", new_password: "password2" },
+        "PUT",
+        headers,
+      ),
+    );
+    expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
-      code: "USER_ALREADY_EXISTS",
+      code: "INVALID_CURRENT_PASSWORD",
     });
   });
 
