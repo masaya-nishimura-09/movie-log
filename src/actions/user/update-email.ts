@@ -1,20 +1,16 @@
 "use server";
 
-import { redirect } from "next/navigation";
+import { revalidatePath } from "next/cache";
 import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
-import { updateUser } from "@/api/user/update-user";
-import type { Locale } from "@/i18n/locales";
-import { endSession, startSession } from "@/lib/auth/session";
-import { userInputSchema } from "@/schemas/user/user-input";
+import { updateEmail } from "@/api/user/update-email";
+import { emailChangeInputSchema } from "@/schemas/user/user-input";
 
-export async function updateAccountAction(
-  lang: Locale,
+export async function updateEmailAction(
   _previous: ActionResult<null> | undefined,
   formData: FormData,
 ): Promise<ActionResult<null>> {
-  const input = userInputSchema.safeParse({
-    username: formData.get("username"),
+  const input = emailChangeInputSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
   });
@@ -23,22 +19,25 @@ export async function updateAccountAction(
   }
 
   try {
-    await updateUser(input.data);
+    await updateEmail(input.data);
   } catch (error) {
     if (error instanceof ApiError && error.code === "USER_ALREADY_EXISTS") {
       return { success: false, messageKey: "userAlreadyExists" };
+    }
+    if (
+      error instanceof ApiError &&
+      error.code === "INVALID_CURRENT_PASSWORD"
+    ) {
+      return { success: false, messageKey: "invalidCurrentPassword" };
+    }
+    if (error instanceof ApiError && error.code === "TOO_MANY_REQUESTS") {
+      return { success: false, messageKey: "tooManyRequests" };
     }
     if (error instanceof ApiError) {
       return { success: false, messageKey: "unexpectedError" };
     }
     throw error;
   }
-
-  try {
-    await startSession(input.data);
-  } catch {
-    await endSession();
-    redirect(`/${lang}/login`);
-  }
+  revalidatePath("/", "layout");
   return { success: true, data: null };
 }

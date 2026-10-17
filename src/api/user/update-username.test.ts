@@ -15,23 +15,15 @@ beforeEach(() => {
   apiFetch.mockReset();
 });
 
-const { updateUser } = await import("@/api/user/update-user");
+const { updateUsername } = await import("@/api/user/update-username");
 
-describe("updateUser", () => {
-  it("puts the user to /users/", async () => {
+describe("updateUsername", () => {
+  it("puts the name to /users/username", async () => {
     apiFetch.mockResolvedValue(undefined);
-    await updateUser({
-      username: "tester",
-      email: "user@example.com",
-      password: "password",
-    });
+    await updateUsername({ username: "tester" });
     const [path, , init] = apiFetch.mock.calls[0] ?? [];
-    expect(path).toBe("/users/");
+    expect(path).toBe("/users/username");
     expect(init.method).toBe("PUT");
-    expect(JSON.parse(init.body)).toEqual({
-      name: "tester",
-      email: "user@example.com",
-      password: "password",
-    });
+    expect(JSON.parse(init.body)).toEqual({ name: "tester" });
   });
 });

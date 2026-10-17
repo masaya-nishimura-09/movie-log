@@ -10,42 +10,71 @@ function loginWith(email: string, password: string) {
   cy.contains("button", ja.login.submit).click();
 }
 
+function section(title: string) {
+  return cy.contains("form", title);
+}
+
 describe("アカウント設定", () => {
   it("今の表示名とメールアドレスが入った状態で開く", () => {
     cy.login();
     cy.visit("/ja/account");
     cy.get("#username").should("have.value", "Demo User");
     cy.get("#email").should("have.value", demoAccount.email);
-    cy.get("#password").should("have.value", "");
+    cy.get("#emailPassword").should("have.value", "");
+    cy.get("#oldPassword").should("have.value", "");
+    cy.get("#newPassword").should("have.value", "");
   });
 
   it("表示名を変えて保存すると、保存したことを表示する", () => {
-    cy.register().then(({ username, password }) => {
+    cy.register().then(({ username }) => {
       cy.visit("/ja/account");
       cy.get("#username").clear().type(`${username}-renamed`);
-      cy.get("#password").type(password);
-      cy.contains("button", account.save).click();
+      section(account.usernameTitle).contains("button", account.save).click();
       cy.contains(account.saved).should("be.visible");
+      cy.get("#username").should("have.value", `${username}-renamed`);
+      cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
+      cy.contains(`${username}-renamed`).should("be.visible");
       cy.reload();
       cy.get("#username").should("have.value", `${username}-renamed`);
     });
   });
 
-  it("メールアドレスとパスワードを変えると、新しい内容でログインできる", () => {
+  it("表示名が空だと、エラーを表示する", () => {
+    cy.login();
+    cy.visit("/ja/account");
+    cy.get("#username").clear();
+    section(account.usernameTitle).contains("button", account.save).click();
+    cy.contains(account.usernameError).should("be.visible");
+  });
+
+  it("メールアドレスを変えると、新しいメールアドレスでログインできる", () => {
     cy.register().then(({ email, password }) => {
       const newEmail = `new-${email}`;
-      const newPassword = "new-password-456";
       cy.visit("/ja/account");
       cy.get("#email").clear().type(newEmail);
-      cy.get("#password").type(newPassword);
-      cy.contains("button", account.save).click();
+      cy.get("#emailPassword").type(password);
+      section(account.emailTitle).contains("button", account.save).click();
       cy.contains(account.saved).should("be.visible");
+      cy.get("#emailPassword").should("have.value", "");
 
       cy.clearCookies();
       loginWith(email, password);
       cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
-      loginWith(newEmail, newPassword);
+      loginWith(newEmail, password);
       cy.location("pathname").should("eq", "/ja/records");
+    });
+  });
+
+  it("今のパスワードが違うと、メールアドレスを変えられない", () => {
+    cy.register().then(() => {
+      cy.visit("/ja/account");
+      cy.get("#email").clear().type("other@example.com");
+      cy.get("#emailPassword").type("wrong-password");
+      section(account.emailTitle).contains("button", account.save).click();
+      cy.get("[role=alert]").should(
+        "have.text",
+        account.invalidCurrentPassword,
+      );
     });
   });
 
@@ -53,22 +82,63 @@ describe("アカウント設定", () => {
     cy.register().then(({ password }) => {
       cy.visit("/ja/account");
       cy.get("#email").clear().type(demoAccount.email);
-      cy.get("#password").type(password);
-      cy.contains("button", account.save).click();
+      cy.get("#emailPassword").type(password);
+      section(account.emailTitle).contains("button", account.save).click();
       cy.get("[role=alert]").should("have.text", account.userAlreadyExists);
     });
   });
 
-  it("入力の形式が正しくないと、項目ごとにエラーを表示する", () => {
+  it("メールアドレスの形式が正しくないと、エラーを表示する", () => {
     cy.login();
     cy.visit("/ja/account");
-    cy.get("#username").clear();
     cy.get("#email").clear().type("not-an-email");
-    cy.get("#password").type("short");
-    cy.contains("button", account.save).click();
-    cy.contains(account.usernameError).should("be.visible");
+    cy.get("#emailPassword").type("short");
+    section(account.emailTitle).contains("button", account.save).click();
     cy.contains(account.emailError).should("be.visible");
     cy.contains(account.passwordError).should("be.visible");
+  });
+
+  it("パスワードを変えると、新しいパスワードでログインできる", () => {
+    cy.register().then(({ email, password }) => {
+      const newPassword = "new-password-456";
+      cy.visit("/ja/account");
+      cy.get("#oldPassword").type(password);
+      cy.get("#newPassword").type(newPassword);
+      section(account.passwordTitle).contains("button", account.save).click();
+      cy.contains(account.saved).should("be.visible");
+      cy.get("#oldPassword").should("have.value", "");
+      cy.get("#newPassword").should("have.value", "");
+
+      cy.clearCookies();
+      loginWith(email, password);
+      cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
+      loginWith(email, newPassword);
+      cy.location("pathname").should("eq", "/ja/records");
+    });
+  });
+
+  it("今のパスワードが違うと、パスワードを変えられない", () => {
+    cy.register().then(() => {
+      cy.visit("/ja/account");
+      cy.get("#oldPassword").type("wrong-password");
+      cy.get("#newPassword").type("new-password-456");
+      section(account.passwordTitle).contains("button", account.save).click();
+      cy.get("[role=alert]").should(
+        "have.text",
+        account.invalidCurrentPassword,
+      );
+    });
+  });
+
+  it("パスワードの形式が正しくないと、項目ごとにエラーを表示する", () => {
+    cy.login();
+    cy.visit("/ja/account");
+    cy.get("#oldPassword").type("short");
+    cy.get("#newPassword").type("short");
+    section(account.passwordTitle).contains("button", account.save).click();
+    cy.get("[role=alert]")
+      .should("have.length", 2)
+      .and("contain.text", account.passwordError);
   });
 
   it("取り消すを押すと、入力を元に戻す", () => {
