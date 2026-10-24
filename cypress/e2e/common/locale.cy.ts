@@ -27,8 +27,8 @@ describe("言語", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", en.login.submit).click();
-    cy.location("pathname").should("eq", "/en/records");
-    cy.contains("h1", en.recordList.heading).should("be.visible");
+    cy.location("pathname").should("eq", "/en/home");
+    cy.contains("h1", en.home.heading).should("be.visible");
 
     const title = `E2E English ${Date.now()}`;
     cy.visit("/en/records/new");

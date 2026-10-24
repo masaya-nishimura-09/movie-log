@@ -23,7 +23,15 @@ describe("このアプリについて", () => {
     cy.location("pathname").should("eq", "/ja/records");
   });
 
-  it("アカウントメニューから開ける", () => {
+  it("サイドバーから開ける", () => {
+    cy.login();
+    cy.visit("/ja/records");
+    cy.contains(`nav[aria-label="${ja.nav.label}"] a`, ja.header.about).click();
+    cy.location("pathname").should("eq", "/ja/about");
+  });
+
+  it("1024px 未満では、アカウントメニューから開ける", () => {
+    cy.viewport(800, 800);
     cy.login();
     cy.visit("/ja/records");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();

@@ -94,7 +94,7 @@ describe("ホーム", () => {
     cy.location("search").should("match", /^\?mood=\w+$/);
   });
 
-  const reminder = "main section:first-of-type";
+  const reminder = "main h1 + section";
 
   it("一番上に「過去の記録から」として、記録を2本、鑑賞日と一文を添えて出す", () => {
     cy.visit("/ja/home");
@@ -103,7 +103,9 @@ describe("ホーム", () => {
       cy.get("a[href^='/ja/records/']")
         .should("have.length", 2)
         .each(($card) => {
-          expect($card.text()).to.match(/\d{4}年\d{1,2}月\d{1,2}日に鑑賞/);
+          expect($card[0]?.innerText).to.match(
+            /\d{4}年\d{1,2}月\d{1,2}日に鑑賞/,
+          );
           expect($card.find("span.border-l-2")).to.have.length(1);
         });
     });

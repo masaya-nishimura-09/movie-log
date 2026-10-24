@@ -9,17 +9,22 @@ describe("記録の作成", () => {
   });
 
   it("ほかの一番上のページと同じく、戻るのバーを出さず、同じ位置に見出しを出す", () => {
+    const textBox = ($heading: JQuery<HTMLElement>) => {
+      const range = document.createRange();
+      range.selectNodeContents($heading[0] as Node);
+      return range.getBoundingClientRect();
+    };
     cy.visit("/ja/records");
     cy.get("h1:visible").then(($listHeading) => {
-      const list = $listHeading[0]?.getBoundingClientRect();
+      const list = textBox($listHeading);
       cy.visit("/ja/records/new");
       cy.get(`main a[aria-label="${form.back}"]`).should("not.exist");
       cy.get("h1:visible")
         .should("have.text", form.createTitle)
         .then(($heading) => {
-          const heading = $heading[0]?.getBoundingClientRect();
-          expect(heading?.left).to.eq(list?.left);
-          expect(heading?.top).to.eq(list?.top);
+          const heading = textBox($heading);
+          expect(heading.left).to.be.closeTo(list.left, 1);
+          expect(heading.top).to.be.closeTo(list.top, 1);
         });
     });
   });

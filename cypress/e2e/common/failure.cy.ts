@@ -51,7 +51,7 @@ describe("API の失敗", () => {
 
   it("退会：サーバーエラーでは、退会できなかったことを表示する", () => {
     register("__withdraw_error__");
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
     cy.visit("/ja/account");
     cy.contains("button", ja.account.withdrawAction).click();
     cy.contains("button", ja.account.withdrawConfirm).click();

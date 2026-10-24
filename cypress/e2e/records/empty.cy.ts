@@ -3,6 +3,7 @@ import ja from "../../../src/i18n/dictionaries/ja.json";
 describe("記録が0件のとき", () => {
   it("まだ記録がないことと、はじめての記録へのボタンを表示する", () => {
     cy.register();
+    cy.visit("/ja/records");
     cy.contains(ja.emptyState.title).should("be.visible");
     cy.contains(ja.emptyState.description).should("be.visible");
     cy.contains(/件中 \d+件を表示/).should("not.exist");
