@@ -269,10 +269,14 @@
   },
   "bottomNav": {
     "label": "メインメニュー",
+    "home": "ホーム",
     "articles": "記事",
     "records": "鑑賞記録",
     "newRecord": "記録する",
     "account": "アカウント"
+  },
+  "home": {
+    "heading": "ホーム"
   },
   "login": {
     "email": "メールアドレス",

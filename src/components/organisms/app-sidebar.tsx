@@ -2,6 +2,7 @@
 
 import {
   FileText,
+  House,
   Info,
   LayoutGrid,
   type LucideIcon,
@@ -57,6 +58,12 @@ export function AppSidebar({ lang, dict, linkDict }: AppSidebarProps) {
     label: string;
     Icon: LucideIcon;
   }[] = [
+    {
+      key: "home",
+      href: `/${lang}/home`,
+      label: dict.home,
+      Icon: House,
+    },
     {
       key: "newRecord",
       href: `/${lang}/records/new`,

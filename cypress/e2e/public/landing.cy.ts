@@ -36,9 +36,9 @@ describe("トップページ", () => {
     }
   });
 
-  it("ログインしていると記録の一覧に移る", () => {
+  it("ログインしているとホームに移る", () => {
     cy.login();
     cy.visit("/ja");
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
   });
 });

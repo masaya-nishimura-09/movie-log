@@ -61,7 +61,7 @@ describe("アカウント設定", () => {
       loginWith(email, password);
       cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
       loginWith(newEmail, password);
-      cy.location("pathname").should("eq", "/ja/records");
+      cy.location("pathname").should("eq", "/ja/home");
     });
   });
 
@@ -113,7 +113,7 @@ describe("アカウント設定", () => {
       loginWith(email, password);
       cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
       loginWith(email, newPassword);
-      cy.location("pathname").should("eq", "/ja/records");
+      cy.location("pathname").should("eq", "/ja/home");
     });
   });
 

@@ -13,7 +13,7 @@ describe("スマホの画面での操作", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
   });
 
   it("新規登録できる", () => {
@@ -48,7 +48,7 @@ describe("スマホの画面での操作", () => {
 
   it("アカウントの表示名を変更できる", () => {
     cy.register().then(({ username }) => {
-      cy.get("nav").contains("a", ja.bottomNav.account).click();
+      cy.get("nav:visible").contains("a", ja.bottomNav.account).click();
       cy.get("#username").clear().type(`${username}-mobile`);
       cy.contains("form", ja.account.usernameTitle)
         .contains("button", ja.account.save)
@@ -70,7 +70,7 @@ describe("スマホの画面での操作", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
     cy.contains("[role=menuitem]", ja.header.logout).click();
     cy.location("pathname").should("eq", "/ja/login");

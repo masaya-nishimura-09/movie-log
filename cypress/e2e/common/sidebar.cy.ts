@@ -15,10 +15,11 @@ describe("サイドバー", () => {
     cy.viewport(1280, 800);
   });
 
-  it("記録する、鑑賞記録、記事を同じ形で並べ、文字をアイコンの横に出す", () => {
+  it("ホーム、記録する、鑑賞記録、記事を同じ形で並べ、文字をアイコンの横に出す", () => {
     cy.visit("/ja/records");
     cy.get(mainItems).then(($links) => {
       expect([...$links].map((link) => link.textContent)).to.deep.equal([
+        nav.home,
         nav.newRecord,
         nav.records,
         nav.articles,
@@ -44,9 +45,12 @@ describe("サイドバー", () => {
     cy.location("pathname").should("eq", "/ja/records");
     item(nav.newRecord).click();
     cy.location("pathname").should("eq", "/ja/records/new");
+    item(nav.home).click();
+    cy.location("pathname").should("eq", "/ja/home");
   });
 
   for (const [path, label] of [
+    ["/ja/home", nav.home],
     ["/ja/records", nav.records],
     ["/ja/records/1", nav.records],
     ["/ja/records/1/edit", nav.records],

@@ -7,7 +7,7 @@ describe("ログアウト", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
     cy.contains("[role=menuitem]", ja.header.logout).click();
     cy.location("pathname").should("eq", "/ja/login");

@@ -19,6 +19,10 @@ describe("appSectionOf", () => {
     }
   });
 
+  it("treats the home page as home", () => {
+    expect(appSectionOf("/ja/home", "ja")).toBe("home");
+  });
+
   it("treats the new record page as its own section", () => {
     expect(appSectionOf("/ja/records/new", "ja")).toBe("newRecord");
   });

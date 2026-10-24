@@ -269,10 +269,14 @@
   },
   "bottomNav": {
     "label": "Main menu",
+    "home": "Home",
     "articles": "Articles",
     "records": "Films",
     "newRecord": "Log",
     "account": "Account"
+  },
+  "home": {
+    "heading": "Home"
   },
   "login": {
     "email": "Email",

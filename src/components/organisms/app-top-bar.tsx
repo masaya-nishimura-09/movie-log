@@ -38,7 +38,7 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
       <Link
-        href={`/${lang}/records`}
+        href={`/${lang}/home`}
         className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-49"
       >
         <Logo name={brandName} />

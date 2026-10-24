@@ -10,7 +10,7 @@ export default async function Page() {
     getDictionary(),
     cookies(),
   ]);
-  if (store.get(refreshTokenCookie)?.value) redirect(`/${lang}/records`);
+  if (store.get(refreshTokenCookie)?.value) redirect(`/${lang}/home`);
 
   return <Landing lang={lang} dict={dict} />;
 }
