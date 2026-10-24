@@ -131,9 +131,9 @@ export default async function HomePage() {
                   {d.seeAll}
                 </TextLink>
               </div>
-              <ul className="grid gap-2 md:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
                 {recentArticles.map((article) => (
-                  <li key={article.articleId}>
+                  <li key={article.articleId} className="min-w-0">
                     <Link
                       href={`/${lang}/records/${article.record.recordId}/articles/${article.articleId}`}
                       className="flex flex-col gap-1 rounded-2xl bg-card px-5 py-4 outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
