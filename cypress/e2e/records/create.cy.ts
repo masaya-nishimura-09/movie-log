@@ -8,6 +8,22 @@ describe("記録の作成", () => {
     cy.login();
   });
 
+  it("ほかの一番上のページと同じく、戻るのバーを出さず、同じ位置に見出しを出す", () => {
+    cy.visit("/ja/records");
+    cy.get("h1:visible").then(($listHeading) => {
+      const list = $listHeading[0]?.getBoundingClientRect();
+      cy.visit("/ja/records/new");
+      cy.get(`main a[aria-label="${form.back}"]`).should("not.exist");
+      cy.get("h1:visible")
+        .should("have.text", form.createTitle)
+        .then(($heading) => {
+          const heading = $heading[0]?.getBoundingClientRect();
+          expect(heading?.left).to.eq(list?.left);
+          expect(heading?.top).to.eq(list?.top);
+        });
+    });
+  });
+
   it("3つのステップを入力して保存すると、詳細画面に移る", () => {
     const title = `E2E 作成 ${Date.now()}`;
     cy.createRecord(title);

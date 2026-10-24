@@ -88,7 +88,7 @@ export function RecordCreateForm({
 
   return (
     <form onSubmit={submit} noValidate className="flex w-full flex-1 flex-col">
-      <header className="flex flex-col gap-3.5 bg-background px-4 pt-4 pb-3.5 md:px-10 md:pt-6 md:pb-0">
+      <header className="flex flex-col gap-3.5 bg-background px-4 pt-4 pb-3.5 md:px-7 md:pt-5 md:pb-0">
         <ol className="flex gap-2">
           {steps.map((label, index) => (
             <li
@@ -124,7 +124,7 @@ export function RecordCreateForm({
         </p>
       </header>
 
-      <div className="flex-1 px-4 py-5.5 md:flex-none md:px-10 md:pb-2">
+      <div className="flex-1 px-4 py-5.5 md:flex-none md:px-7 md:pb-2">
         <div className="rounded-[18px] bg-card p-4.5 md:p-5.5">
           {failure && (
             <FormAlert className="mb-4.5">
@@ -205,7 +205,7 @@ export function RecordCreateForm({
         </div>
       </div>
 
-      <footer className="flex items-center gap-2 px-4 pt-3 pb-4 md:mx-10 md:mb-8 md:px-0 md:pt-2 md:pb-0">
+      <footer className="flex items-center gap-2 px-4 pt-3 pb-4 md:mx-7 md:mb-8 md:px-0 md:pt-2 md:pb-0">
         {step > 0 && (
           <Button
             type="button"

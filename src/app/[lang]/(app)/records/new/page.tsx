@@ -5,7 +5,6 @@ import {
   searchMoviesAction,
 } from "@/actions/movie/movie-assist";
 import { createRecordAction } from "@/actions/record/save-record";
-import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordCreateForm } from "@/components/organisms/record-create-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { emptyFormValues, maxReleaseYear } from "@/lib/record/to-form-values";
@@ -22,11 +21,9 @@ export default async function NewRecordPage() {
 
   return (
     <>
-      <PageTopBar
-        backHref={`/${lang}/records`}
-        backLabel={dict.recordForm.back}
-        title={dict.recordForm.createTitle}
-      />
+      <h1 className="px-4 pt-5 font-bold text-2xl text-foreground md:px-7 md:pt-6">
+        {dict.recordForm.createTitle}
+      </h1>
       <RecordCreateForm
         lang={lang}
         action={createRecordAction.bind(null, lang)}
