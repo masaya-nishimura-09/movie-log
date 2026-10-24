@@ -6,20 +6,72 @@ describe("スマホの画面", () => {
     cy.login();
   });
 
-  it("下のナビで記録の一覧、記録する、アカウントに移れる", () => {
+  const menu = `button[aria-label="${ja.header.openMenu}"]`;
+  const drawer = "[role=dialog]";
+
+  it("下のバーを出さない", () => {
     cy.visit("/ja/records");
-    cy.get("nav:visible")
-      .contains("a", ja.bottomNav.records)
-      .should("have.attr", "aria-current", "page");
-    cy.get("nav:visible").contains("a", ja.bottomNav.newRecord).click();
-    cy.location("pathname").should("eq", "/ja/records/new");
-    cy.get("nav:visible").contains("a", ja.bottomNav.account).click();
-    cy.location("pathname").should("eq", "/ja/account");
-    cy.get("nav:visible")
-      .contains("a", ja.bottomNav.account)
-      .should("have.attr", "aria-current", "page");
-    cy.get("nav:visible").contains("a", ja.bottomNav.records).click();
+    cy.get("nav.fixed").should("not.exist");
+  });
+
+  it("ハンバーガーで、すべての項目が並ぶメニューを開き、現在の項目を強調する", () => {
+    cy.visit("/ja/records");
+    cy.get(drawer).should("not.exist");
+    cy.get(menu).click();
+    cy.get(drawer).within(() => {
+      for (const label of [
+        ja.nav.home,
+        ja.nav.newRecord,
+        ja.nav.records,
+        ja.nav.articles,
+        ja.header.about,
+        ja.header.contact,
+      ]) {
+        cy.contains("a", label).should("be.visible");
+      }
+      cy.get('a[aria-current="page"]')
+        .should("have.length", 1)
+        .and("contain.text", ja.nav.records);
+    });
+  });
+
+  it("項目を押すと、そのページに移り、メニューが閉じる", () => {
+    cy.visit("/ja/records");
+    for (const [label, path] of [
+      [ja.nav.newRecord, "/ja/records/new"],
+      [ja.nav.articles, "/ja/articles"],
+      [ja.nav.home, "/ja/home"],
+      [ja.nav.records, "/ja/records"],
+    ] as const) {
+      cy.get(menu).click();
+      cy.get(drawer).contains("a", label).click();
+      cy.location("pathname").should("eq", path);
+      cy.get(drawer).should("not.exist");
+    }
+  });
+
+  it("閉じるボタンと Escape でメニューを閉じる", () => {
+    cy.visit("/ja/records");
+    cy.get(menu).click();
+    cy.get(drawer).find("button").contains("Close").click({ force: true });
+    cy.get(drawer).should("not.exist");
+    cy.get(menu).click();
+    cy.get("body").type("{esc}");
+    cy.get(drawer).should("not.exist");
     cy.location("pathname").should("eq", "/ja/records");
+  });
+
+  it("アカウントメニューからアカウント設定に移れる", () => {
+    cy.visit("/ja/records");
+    cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
+    cy.contains("[role=menuitem]", ja.header.account).click();
+    cy.location("pathname").should("eq", "/ja/account");
+  });
+
+  it("768px 以上では、ハンバーガーを出さない", () => {
+    cy.viewport(800, 800);
+    cy.visit("/ja/records");
+    cy.get(menu).should("not.be.visible");
   });
 
   it("検索のシートからタイトルで検索できる", () => {

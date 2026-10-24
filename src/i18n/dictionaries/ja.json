@@ -265,15 +265,15 @@
     "about": "このアプリについて",
     "logout": "ログアウト",
     "openSearch": "検索",
-    "contact": "お問い合わせ"
+    "contact": "お問い合わせ",
+    "openMenu": "メニューを開く"
   },
-  "bottomNav": {
+  "nav": {
     "label": "メインメニュー",
     "home": "ホーム",
     "articles": "記事",
     "records": "鑑賞記録",
-    "newRecord": "記録する",
-    "account": "アカウント"
+    "newRecord": "記録する"
   },
   "home": {
     "heading": "ホーム"

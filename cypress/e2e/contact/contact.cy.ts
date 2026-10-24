@@ -43,7 +43,7 @@ describe("お問い合わせ", () => {
     cy.login();
     cy.visit("/ja/records");
     cy.contains(
-      `nav[aria-label="${ja.bottomNav.label}"] a`,
+      `nav[aria-label="${ja.nav.label}"] a`,
       ja.header.contact,
     ).click();
     cy.location("pathname").should("eq", "/ja/contact");

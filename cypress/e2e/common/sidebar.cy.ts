@@ -1,6 +1,6 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
 
-const nav = ja.bottomNav;
+const nav = ja.nav;
 const sidebar = `nav[aria-label="${nav.label}"]`;
 
 const mainItems = `${sidebar} > div:first-child a`;
@@ -146,7 +146,7 @@ describe("サイドバー", () => {
     cy.contains("[role=menuitem]", ja.header.contact).should("not.be.visible");
   });
 
-  it("1024px 未満では、下端のリンクを出さず、アカウントメニューから開ける", () => {
+  it("768〜1023px では、下端のリンクを出さず、アカウントメニューから開ける", () => {
     cy.viewport(800, 800);
     cy.visit("/ja/records");
     cy.contains(`${sidebar} a`, ja.header.about).should("not.be.visible");
@@ -155,11 +155,11 @@ describe("サイドバー", () => {
     cy.contains("[role=menuitem]", ja.header.contact).should("be.visible");
   });
 
-  it("スマホでは表示せず、下のナビを使う", () => {
+  it("スマホでは表示せず、ハンバーガーを出す", () => {
     cy.viewport("iphone-x");
     cy.visit("/ja/records");
     cy.get(sidebar).should("not.be.visible");
-    cy.get("nav.fixed").should("be.visible");
+    cy.get(`button[aria-label="${ja.header.openMenu}"]`).should("be.visible");
   });
 
   it("英語の画面でも表示する", () => {

@@ -132,7 +132,7 @@ for (const [lang, t] of locales) {
           "eq",
           `${t.recordList.heading} | ${t.metadata.title}`,
         );
-        shows(t.recordList.heading, t.bottomNav.newRecord);
+        shows(t.recordList.heading, t.nav.newRecord);
         cy.contains(
           pattern(`${t.recordList.summary} ・ ${t.recordList.activeFilters}`),
         ).should("exist");
@@ -342,11 +342,13 @@ for (const [lang, t] of locales) {
       shows(t.emptyState.title, t.emptyState.description, t.emptyState.action);
     });
 
-    it("スマホの下のナビと、絞り込みのシート", () => {
+    it("スマホのメニューと、絞り込みのシート", () => {
       cy.viewport("iphone-x");
       cy.login(demoAccount);
       cy.visit(`/${lang}/records`);
-      shows(t.bottomNav.records, t.bottomNav.newRecord, t.bottomNav.account);
+      cy.get(`button[aria-label="${t.header.openMenu}"]`).click();
+      shows(t.nav.home, t.nav.records, t.nav.newRecord, t.nav.articles);
+      cy.get("body").type("{esc}");
       cy.get(`[aria-label="${t.header.openSearch}"]`).should("exist");
       cy.get(`button[aria-label="${t.recordFilter.open}"]`).click();
       cy.get("[role=dialog]").within(() => {

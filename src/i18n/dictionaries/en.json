@@ -265,15 +265,15 @@
     "about": "About this app",
     "logout": "Log out",
     "openSearch": "Search",
-    "contact": "Contact"
+    "contact": "Contact",
+    "openMenu": "Open menu"
   },
-  "bottomNav": {
+  "nav": {
     "label": "Main menu",
     "home": "Home",
     "articles": "Articles",
     "records": "Films",
-    "newRecord": "Log",
-    "account": "Account"
+    "newRecord": "Log"
   },
   "home": {
     "heading": "Home"

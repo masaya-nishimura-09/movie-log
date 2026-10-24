@@ -11,6 +11,7 @@ import {
 } from "@/components/molecules/sheet";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { AccountMenu } from "@/components/organisms/account-menu";
+import { AppNavDrawer } from "@/components/organisms/app-nav-drawer";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 
@@ -19,12 +20,19 @@ type AppTopBarProps = {
   brandName: string;
   username: string;
   dict: Dictionary["header"];
+  navDict: Dictionary["nav"];
 };
 
 const roundIcon =
   "grid size-9 place-items-center rounded-full text-foreground-sub outline-none hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
-export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
+export function AppTopBar({
+  lang,
+  brandName,
+  username,
+  dict,
+  navDict,
+}: AppTopBarProps) {
   const search = (
     <Suspense>
       <RecordSearchForm
@@ -37,6 +45,13 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
+      <AppNavDrawer
+        lang={lang}
+        dict={navDict}
+        linkDict={dict}
+        openLabel={dict.openMenu}
+        className={`${roundIcon} md:hidden`}
+      />
       <Link
         href={`/${lang}/home`}
         className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-49"

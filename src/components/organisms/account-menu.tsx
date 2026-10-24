@@ -37,14 +37,14 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
         </DropdownMenuItem>
         <DropdownMenuItem
           render={<Link href={`/${lang}/about`} />}
-          className="lg:hidden"
+          className="hidden md:flex lg:hidden"
         >
           <Info aria-hidden />
           {dict.about}
         </DropdownMenuItem>
         <DropdownMenuItem
           render={<Link href={`/${lang}/contact`} />}
-          className="lg:hidden"
+          className="hidden md:flex lg:hidden"
         >
           <Mail aria-hidden />
           {dict.contact}

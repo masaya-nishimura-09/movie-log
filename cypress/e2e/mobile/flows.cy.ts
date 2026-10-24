@@ -48,7 +48,8 @@ describe("スマホの画面での操作", () => {
 
   it("アカウントの表示名を変更できる", () => {
     cy.register().then(({ username }) => {
-      cy.get("nav:visible").contains("a", ja.bottomNav.account).click();
+      cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
+      cy.contains("[role=menuitem]", ja.header.account).click();
       cy.get("#username").clear().type(`${username}-mobile`);
       cy.contains("form", ja.account.usernameTitle)
         .contains("button", ja.account.save)
