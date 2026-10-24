@@ -15,21 +15,24 @@ import type { Dictionary } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 
-type RecordFilterSheetProps = {
+type FilterSheetProps = {
   activeCount: number;
   resultCount: number;
   clearHref: string;
-  dict: Dictionary["recordFilter"];
+  dict: Pick<
+    Dictionary["recordFilter"],
+    "open" | "title" | "clearAll" | "showResults"
+  >;
   children: ReactNode;
 };
 
-export function RecordFilterSheet({
+export function FilterSheet({
   activeCount,
   resultCount,
   clearHref,
   dict,
   children,
-}: RecordFilterSheetProps) {
+}: FilterSheetProps) {
   return (
     <Sheet>
       <SheetTrigger

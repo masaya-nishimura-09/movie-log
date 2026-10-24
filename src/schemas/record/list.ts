@@ -5,7 +5,11 @@ import {
   platformSchema,
   scoreSchema,
 } from "@/schemas/record/enums";
-import { recordResponseSchema, recordSchema } from "@/schemas/record/record";
+import {
+  type MovieRecord,
+  recordResponseSchema,
+  recordSchema,
+} from "@/schemas/record/record";
 
 export const recordSortSchema = z.enum([
   "watchedAtDesc",
@@ -54,3 +58,8 @@ const recordListSchema = z.object({
 });
 
 export type RecordList = z.infer<typeof recordListSchema>;
+
+export type RecordOption = Pick<
+  MovieRecord,
+  "recordId" | "title" | "releaseYear"
+>;

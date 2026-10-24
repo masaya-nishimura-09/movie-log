@@ -63,6 +63,13 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 - タイトル検索、並べ替え、ページネーション
 - スコア、プラットフォーム、気分、ジャンルによる絞り込み（スコアとプラットフォームは 1 つ、気分とジャンルは指定したすべてを含む記録のみ）
 
+**記事**
+
+- 鑑賞記録ごとの記事の作成・表示・更新・削除
+- 太字、斜体、見出し、小見出し、箇条書き、番号付きリスト、引用を使える本文のエディタ
+- 見出しから作る目次（読んでいる位置の見出しを強調）
+- タイトルと本文のキーワード検索、記録による絞り込み、並べ替え、ページネーション
+
 **アカウント**
 
 - ユーザー登録、ログイン、ログアウト（トークンは自動で更新）
@@ -106,6 +113,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 | フレームワーク | Next.js（App Router）、React                         |
 | 言語           | TypeScript                                           |
 | スタイル       | Tailwind CSS、shadcn/ui（Base UI）、react-day-picker |
+| エディタ       | Tiptap                                               |
 | バリデーション | Zod                                                  |
 | テスト         | Vitest、Cypress                                      |
 | ボット対策     | Cloudflare Turnstile                                 |
@@ -186,7 +194,7 @@ src/
   hooks/              # React のカスタムフック
   schemas/            # Zod スキーマ
   i18n/               # 言語設定、辞書
-  lib/                # 補助関数（auth、contact、date、log、navigation、record、style、text、turnstile、url）
+  lib/                # 補助関数（article、auth、contact、date、log、navigation、record、style、text、turnstile、url）
   styles/             # グローバルスタイル、色の定義
   proxy.ts            # 言語の振り分け、トークンの更新
   instrumentation.ts  # 未処理のサーバーエラーのログ出力
@@ -194,20 +202,24 @@ src/
 
 ## ページ
 
-| パス                    | 内容                 | ログイン |
-|-------------------------|----------------------|----------|
-| /:lang                  | ランディングページ   | 不要     |
-| /:lang/login            | ログイン             | 不要     |
-| /:lang/register         | ユーザー登録         | 不要     |
-| /:lang/about            | このアプリについて   | 不要     |
-| /:lang/contact          | お問い合わせ         | 不要     |
-| /:lang/terms            | 利用規約             | 不要     |
-| /:lang/privacy          | プライバシーポリシー | 不要     |
-| /:lang/records          | 鑑賞記録の一覧       | 必要     |
-| /:lang/records/new      | 鑑賞記録の作成       | 必要     |
-| /:lang/records/:id      | 鑑賞記録の詳細       | 必要     |
-| /:lang/records/:id/edit | 鑑賞記録の編集       | 必要     |
-| /:lang/account          | アカウント設定       | 必要     |
+| パス                                        | 内容                 | ログイン |
+|---------------------------------------------|----------------------|----------|
+| /:lang                                      | ランディングページ   | 不要     |
+| /:lang/login                                | ログイン             | 不要     |
+| /:lang/register                             | ユーザー登録         | 不要     |
+| /:lang/about                                | このアプリについて   | 不要     |
+| /:lang/contact                              | お問い合わせ         | 不要     |
+| /:lang/terms                                | 利用規約             | 不要     |
+| /:lang/privacy                              | プライバシーポリシー | 不要     |
+| /:lang/records                              | 鑑賞記録の一覧       | 必要     |
+| /:lang/records/new                          | 鑑賞記録の作成       | 必要     |
+| /:lang/records/:id                          | 鑑賞記録の詳細       | 必要     |
+| /:lang/records/:id/edit                     | 鑑賞記録の編集       | 必要     |
+| /:lang/records/:id/articles/new             | 記事の作成           | 必要     |
+| /:lang/records/:id/articles/:articleId      | 記事の詳細           | 必要     |
+| /:lang/records/:id/articles/:articleId/edit | 記事の編集           | 必要     |
+| /:lang/articles                             | 記事の一覧           | 必要     |
+| /:lang/account                              | アカウント設定       | 必要     |
 
 ## クレジット
 

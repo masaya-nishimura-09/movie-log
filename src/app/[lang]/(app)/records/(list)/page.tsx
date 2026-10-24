@@ -7,6 +7,7 @@ import { EmptyState } from "@/components/molecules/empty-state";
 import { FilterButton } from "@/components/molecules/filter-button";
 import { Pagination } from "@/components/molecules/pagination";
 import { ActiveFilterList } from "@/components/organisms/active-filter-list";
+import { FilterSheet } from "@/components/organisms/filter-sheet";
 import {
   GenreOptions,
   MoodOptions,
@@ -15,7 +16,6 @@ import {
   ScoreOptions,
   SortOptions,
 } from "@/components/organisms/record-filter-panel";
-import { RecordFilterSheet } from "@/components/organisms/record-filter-sheet";
 import { RecordGrid } from "@/components/organisms/record-grid";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import {
@@ -52,6 +52,7 @@ export default async function RecordsPage({
     query.moodTags.length +
     query.genres.length +
     (query.keyword === "" ? 0 : 1);
+  const listHref = buildHref(basePath, values);
   const pageHref = (page: number) =>
     buildHref(basePath, {
       ...values,
@@ -89,14 +90,14 @@ export default async function RecordsPage({
         </div>
         {list.totalCount > 0 && (
           <div className="md:hidden">
-            <RecordFilterSheet
+            <FilterSheet
               activeCount={activeCount}
               resultCount={list.filteredCount}
               clearHref={clearHref}
               dict={dict.recordFilter}
             >
               {panel}
-            </RecordFilterSheet>
+            </FilterSheet>
           </div>
         )}
       </div>
@@ -185,7 +186,12 @@ export default async function RecordsPage({
           }
         />
       ) : (
-        <RecordGrid lang={lang} records={list.records} dict={dict} />
+        <RecordGrid
+          lang={lang}
+          records={list.records}
+          dict={dict}
+          fromHref={listHref === basePath ? undefined : listHref}
+        />
       )}
 
       {list.pageCount > 1 && (
@@ -194,12 +200,12 @@ export default async function RecordsPage({
           nextHref={
             list.page < list.pageCount ? pageHref(list.page + 1) : undefined
           }
-          status={interpolate(dict.recordList.pageStatus, {
+          status={interpolate(dict.pagination.status, {
             current: list.page,
             total: list.pageCount,
           })}
-          previousLabel={dict.recordList.previousPage}
-          nextLabel={dict.recordList.nextPage}
+          previousLabel={dict.pagination.previous}
+          nextLabel={dict.pagination.next}
         />
       )}
     </main>

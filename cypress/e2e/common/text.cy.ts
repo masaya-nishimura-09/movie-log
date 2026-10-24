@@ -167,9 +167,9 @@ for (const [lang, t] of locales) {
 
       it("ページ送り", () => {
         cy.visit(`/${lang}/records`);
-        cy.contains(pattern(t.recordList.pageStatus)).should("exist");
-        cy.get(`[aria-label="${t.recordList.previousPage}"]`).should("exist");
-        cy.get(`[aria-label="${t.recordList.nextPage}"]`).should("exist");
+        cy.contains(pattern(t.pagination.status)).should("exist");
+        cy.get(`[aria-label="${t.pagination.previous}"]`).should("exist");
+        cy.get(`[aria-label="${t.pagination.next}"]`).should("exist");
       });
 
       it("一致する記録がないとき", () => {

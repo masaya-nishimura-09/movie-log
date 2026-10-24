@@ -5,34 +5,38 @@ import {
   type LucideIcon,
   MapPin,
 } from "lucide-react";
-import type { ReactNode } from "react";
 import { GenreTag } from "@/components/atoms/genre-tag";
 import { LocalDate } from "@/components/atoms/local-date";
 import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
+import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
 import { RecordPoster } from "@/components/molecules/record-poster";
+import { RecordArticleSection } from "@/components/organisms/record-article-section";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { languageName } from "@/lib/record/language-options";
 import { interpolate } from "@/lib/text/interpolate";
+import type { ArticleSummary } from "@/schemas/article/article";
 import type { MovieRecord } from "@/schemas/record/record";
 
 type RecordDetailProps = {
   lang: Locale;
   record: MovieRecord;
+  articles: ArticleSummary[];
+  articleTotal: number;
+  articleFromHref?: string;
   dict: Dictionary;
 };
 
-function SectionLabel({ children }: { children: ReactNode }) {
-  return (
-    <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em] 2xl:text-sm">
-      {children}
-    </h2>
-  );
-}
-
-export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
+export function RecordDetail({
+  lang,
+  record,
+  articles,
+  articleTotal,
+  articleFromHref,
+  dict,
+}: RecordDetailProps) {
   const d = dict.recordDetail;
   const regionNames = new Intl.DisplayNames(lang, { type: "region" });
   const year =
@@ -207,28 +211,10 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
           </div>
         </div>
 
-        <div className="md:hidden">{watchedCard}</div>
-
-        <section className="flex flex-col gap-2.5">
-          <SectionLabel>{d.memo}</SectionLabel>
-          {record.memo !== "" ? (
-            <p className="whitespace-pre-wrap text-pretty rounded-2xl bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
-              {record.memo}
-            </p>
-          ) : (
-            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-              {d.memoEmpty}
-              <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
-                {d.memoAdd}
-              </TextLink>
-            </p>
-          )}
-        </section>
-
         <section className="@container flex min-w-0 flex-col gap-3">
           <SectionLabel>{d.credits}</SectionLabel>
           {record.credits.length > 0 ? (
-            <dl className="grid @2xl:grid-cols-2 gap-x-7 gap-y-2.5 2xl:gap-x-10 2xl:gap-y-3.5">
+            <dl className="grid @2xl:grid-cols-2 gap-x-7 gap-y-2.5 rounded-2xl bg-card px-5.5 py-5 2xl:gap-x-10 2xl:gap-y-3.5 2xl:px-7 2xl:py-6">
               {record.credits.map((credit, index) => (
                 <div
                   key={`${credit.creditRole}-${credit.personName}-${index}`}
@@ -252,6 +238,33 @@ export function RecordDetail({ lang, record, dict }: RecordDetailProps) {
             </p>
           )}
         </section>
+
+        <div className="md:hidden">{watchedCard}</div>
+
+        <section className="flex flex-col gap-2.5">
+          <SectionLabel>{d.memo}</SectionLabel>
+          {record.memo !== "" ? (
+            <p className="whitespace-pre-wrap text-pretty rounded-2xl bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
+              {record.memo}
+            </p>
+          ) : (
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
+              {d.memoEmpty}
+              <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
+                {d.memoAdd}
+              </TextLink>
+            </p>
+          )}
+        </section>
+
+        <RecordArticleSection
+          lang={lang}
+          recordId={record.recordId}
+          articles={articles}
+          total={articleTotal}
+          fromHref={articleFromHref}
+          dict={d}
+        />
       </div>
     </article>
   );

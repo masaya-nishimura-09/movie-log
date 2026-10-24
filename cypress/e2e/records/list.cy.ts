@@ -117,7 +117,7 @@ describe("記録の一覧", () => {
 
   it("ページ送りで次のページと前のページに移れる", () => {
     cy.visit("/ja/records");
-    cy.get(`a[aria-label="${list.previousPage}"]`).should(
+    cy.get(`a[aria-label="${ja.pagination.previous}"]`).should(
       "have.attr",
       "aria-disabled",
       "true",
@@ -126,13 +126,13 @@ describe("記録の一覧", () => {
       .first()
       .then(([card]) => {
         const firstTitle = cardTitle(card);
-        cy.get(`a[aria-label="${list.nextPage}"]`).click();
+        cy.get(`a[aria-label="${ja.pagination.next}"]`).click();
         cy.location("search").should("eq", "?page=2");
         cy.contains(/^2 \/ \d+$/).should("be.visible");
         cards()
           .first()
           .then(([next]) => expect(cardTitle(next)).not.to.eq(firstTitle));
-        cy.get(`a[aria-label="${list.previousPage}"]`).click();
+        cy.get(`a[aria-label="${ja.pagination.previous}"]`).click();
         cy.location("search").should("eq", "");
         cy.contains(/^1 \/ \d+$/).should("be.visible");
       });
@@ -140,7 +140,7 @@ describe("記録の一覧", () => {
 
   it("最後のページでは次のページに進めない", () => {
     cy.visit("/ja/records?page=999");
-    cy.get(`a[aria-label="${list.nextPage}"]`).should(
+    cy.get(`a[aria-label="${ja.pagination.next}"]`).should(
       "have.attr",
       "aria-disabled",
       "true",

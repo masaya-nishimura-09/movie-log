@@ -1,25 +1,27 @@
-"use client";
-
 import { Search } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import { recordQueryKeys } from "@/lib/record/parse-record-query";
 import { cn } from "@/lib/style/cn";
 
 type SearchFormProps = {
   action: string;
+  name: string;
+  keyword: string;
+  hidden?: Record<string, string | undefined>;
   label: string;
   placeholder: string;
+  maxLength?: number;
   className?: string;
 };
 
 export function SearchForm({
   action,
+  name,
+  keyword,
+  hidden = {},
   label,
   placeholder,
+  maxLength,
   className,
 }: SearchFormProps) {
-  const keyword = useSearchParams().get(recordQueryKeys.keyword) ?? "";
-
   return (
     <form
       action={action}
@@ -32,12 +34,18 @@ export function SearchForm({
       <input
         key={keyword}
         type="search"
-        name={recordQueryKeys.keyword}
+        name={name}
         defaultValue={keyword}
         aria-label={label}
         placeholder={placeholder}
+        maxLength={maxLength}
         className="min-w-0 flex-1 bg-transparent text-foreground text-sm outline-none placeholder:text-placeholder"
       />
+      {Object.entries(hidden).map(([key, value]) =>
+        value === undefined || value === "" ? null : (
+          <input key={key} type="hidden" name={key} value={value} />
+        ),
+      )}
     </form>
   );
 }

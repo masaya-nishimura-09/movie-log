@@ -257,6 +257,7 @@
     "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
   },
   "header": {
+    "articles": "記事",
     "searchPlaceholder": "タイトルで検索",
     "searchLabel": "タイトルで検索",
     "themeToggle": "テーマを切り替える",
@@ -268,6 +269,7 @@
     "contact": "お問い合わせ"
   },
   "bottomNav": {
+    "articles": "記事",
     "records": "鑑賞記録",
     "newRecord": "記録する",
     "account": "アカウント"
@@ -318,10 +320,12 @@
     "summary": "{total}件中 {shown}件を表示",
     "activeFilters": "絞り込み {count}件",
     "noMatch": "条件に合う記録がありません",
-    "clearFilters": "条件を解除する",
-    "previousPage": "前のページ",
-    "nextPage": "次のページ",
-    "pageStatus": "{current} / {total}"
+    "clearFilters": "条件を解除する"
+  },
+  "pagination": {
+    "status": "{current} / {total}",
+    "previous": "前のページ",
+    "next": "次のページ"
   },
   "recordFilter": {
     "open": "絞り込み",
@@ -362,6 +366,10 @@
     "memo": "メモ",
     "memoEmpty": "メモはまだありません。",
     "memoAdd": "メモを書く",
+    "articles": "記事",
+    "articlesEmpty": "記事はまだありません。",
+    "articlesAdd": "記事を作成",
+    "articlesMore": "もっと見る",
     "credits": "クレジット",
     "creditsEmpty": "クレジットはまだありません。",
     "creditsAdd": "クレジットを足す",
@@ -480,6 +488,85 @@
     "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
     "saved": "保存しました",
     "withdrawFailed": "退会できませんでした。時間をおいてやり直してください"
+  },
+  "articleForm": {
+    "createTitle": "記事を作成",
+    "editTitle": "記事を編集",
+    "required": "必須",
+    "back": "もどる",
+    "title": "タイトル",
+    "content": "本文",
+    "save": "保存",
+    "cancel": "やめる",
+    "invalidInput": "入力内容を確認してください",
+    "notFound": "この記事は削除されています",
+    "recordNotFound": "この記録は削除されています",
+    "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
+    "errors": {
+      "title": "1〜255文字で入力してください",
+      "content": "本文が長すぎます",
+      "contentRequired": "本文を入力してください"
+    }
+  },
+  "articleList": {
+    "heading": "記事",
+    "summary": "{total}件中 {shown}件を表示",
+    "activeFilters": "絞り込み {count}件",
+    "noMatch": "条件に合う記事がありません",
+    "clearFilters": "条件を解除する",
+    "emptyTitle": "まだ記事がありません",
+    "emptyDescription": "記録の詳細から、その映画の記事を書けます。",
+    "emptyAction": "鑑賞記録を見る",
+    "searchLabel": "タイトルと本文で検索",
+    "searchPlaceholder": "タイトルと本文で検索",
+    "filterOpen": "絞り込み",
+    "filterTitle": "絞り込み",
+    "clearAll": "すべて解除",
+    "record": "映画",
+    "remove": "{label} を解除",
+    "showResults": "{count}件を表示",
+    "noRecords": "記録がありません",
+    "unknownRecord": "不明な記録",
+    "columnIndex": "#",
+    "columnTitle": "タイトル",
+    "columnRecord": "映画",
+    "columnCreatedAt": "作成日",
+    "columnUpdatedAt": "更新日",
+    "sort": {
+      "label": "並び替え",
+      "updatedAtDesc": "更新日が新しい順",
+      "updatedAtAsc": "更新日が古い順",
+      "createdAtDesc": "作成日が新しい順",
+      "createdAtAsc": "作成日が古い順",
+      "titleAsc": "タイトル順"
+    }
+  },
+  "articleDetail": {
+    "backToList": "記事の一覧にもどる",
+    "toc": "目次",
+    "tocTop": "ページの先頭へ",
+    "edit": "編集",
+    "delete": "削除",
+    "createdAt": "作成日時",
+    "updatedAt": "最終更新"
+  },
+  "deleteArticle": {
+    "title": "この記事を削除しますか？",
+    "description": "「{title}」が消えます。取り消しできません。",
+    "cancel": "やめる",
+    "confirm": "削除する",
+    "unexpectedError": "削除できませんでした。時間をおいてやり直してください"
+  },
+  "articleEditor": {
+    "toolbar": "書式",
+    "bold": "太字",
+    "italic": "斜体",
+    "heading": "見出し",
+    "subheading": "小見出し",
+    "bulletList": "箇条書き",
+    "orderedList": "番号付きリスト",
+    "blockquote": "引用",
+    "body": "本文"
   },
   "characterCount": "{current} / {max}",
   "enums": {

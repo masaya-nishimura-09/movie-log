@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { deleteRecordAction } from "@/actions/record/delete-record";
+import { getRecordArticles } from "@/api/article/get-record-articles";
 import { getRecord } from "@/api/record/get-record";
 import { buttonVariants } from "@/components/atoms/button";
 import { DeleteRecordDialog } from "@/components/organisms/delete-record-dialog";
@@ -10,6 +11,7 @@ import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordDetail } from "@/components/organisms/record-detail";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
+import { fromKey, safeFromHref, withFrom } from "@/lib/url/back-href";
 
 export async function generateMetadata({
   params,
@@ -21,19 +23,24 @@ export async function generateMetadata({
 
 export default async function RecordPage({
   params,
+  searchParams,
 }: PageProps<"/[lang]/records/[id]">) {
   const { id } = await params;
-  const [lang, dict, record] = await Promise.all([
+  const [lang, dict, record, recordArticles, query] = await Promise.all([
     getLocale(),
     getDictionary(),
     getRecord(id),
+    getRecordArticles(id),
+    searchParams,
   ]);
   if (!record) notFound();
+  const from = safeFromHref(query[fromKey], `/${lang}/records`);
+  const backHref = from ?? `/${lang}/records`;
 
   return (
     <>
       <PageTopBar
-        backHref={`/${lang}/records`}
+        backHref={backHref}
         backLabel={dict.recordDetail.back}
         actions={
           <>
@@ -59,7 +66,18 @@ export default async function RecordPage({
           </>
         }
       />
-      <RecordDetail lang={lang} record={record} dict={dict} />
+      <RecordDetail
+        lang={lang}
+        record={record}
+        articles={recordArticles.articles}
+        articleTotal={recordArticles.total}
+        articleFromHref={
+          from === undefined
+            ? undefined
+            : withFrom(`/${lang}/records/${id}`, from)
+        }
+        dict={dict}
+      />
     </>
   );
 }

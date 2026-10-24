@@ -25,6 +25,11 @@ describe("getRecord", () => {
     expect(apiFetch.mock.calls[0]?.[0]).toBe("/records/1");
   });
 
+  it("returns undefined without asking the API when the ID is not a number", async () => {
+    await expect(getRecord("abc")).resolves.toBeUndefined();
+    expect(apiFetch).not.toHaveBeenCalled();
+  });
+
   it("returns undefined when the record does not exist", async () => {
     apiFetch.mockRejectedValue(new ApiError(404, "RECORD_NOT_FOUND"));
     await expect(getRecord("2")).resolves.toBeUndefined();
