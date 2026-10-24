@@ -1,7 +1,7 @@
 import { Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Logo } from "@/components/atoms/logo";
+import { Logo, LogoMark } from "@/components/atoms/logo";
 import { RecordSearchForm } from "@/components/molecules/record-search-form";
 import {
   Sheet,
@@ -54,9 +54,14 @@ export function AppTopBar({
       />
       <Link
         href={`/${lang}/home`}
-        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-49"
+        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-9 lg:w-49"
       >
-        <Logo name={brandName} />
+        <span className="contents md:max-lg:hidden">
+          <Logo name={brandName} />
+        </span>
+        <span className="hidden md:max-lg:contents">
+          <LogoMark name={brandName} />
+        </span>
       </Link>
       <div className="hidden max-w-xl flex-1 md:block">{search}</div>
       <div className="ml-auto flex items-center gap-1.5">

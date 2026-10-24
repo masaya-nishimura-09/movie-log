@@ -96,8 +96,8 @@ describe("サイドバー", () => {
     });
   });
 
-  it("1024px 以上では、検索欄の左端を枠の左端に揃える", () => {
-    for (const width of [1280, 1600]) {
+  it("768px 以上では、検索欄の左端を枠の左端に揃える", () => {
+    for (const width of [800, 1000, 1280, 1600]) {
       cy.viewport(width, 800);
       cy.visit("/ja/records");
       cy.get("header form").then(($form) => {
@@ -136,6 +136,21 @@ describe("サイドバー", () => {
         );
       });
     });
+  });
+
+  it("768〜1023px では、ロゴを切手のマークだけにする", () => {
+    for (const [width, mark] of [
+      [800, true],
+      [1280, false],
+    ] as const) {
+      cy.viewport(width, 800);
+      cy.visit("/ja/records");
+      cy.get("header a")
+        .first()
+        .find("svg:visible")
+        .should("have.length", 1)
+        .and("have.attr", "viewBox", mark ? "0 0 110 110" : "0 0 634.9 110");
+    }
   });
 
   it("1024px 以上では、アカウントメニューにこのアプリについてとお問い合わせを出さない", () => {

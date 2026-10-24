@@ -27,3 +27,28 @@ export function Logo({
     </span>
   );
 }
+
+export function LogoMark({
+  name,
+  className,
+}: {
+  name: string;
+  className?: string;
+}) {
+  return (
+    <span className="inline-flex">
+      <svg
+        viewBox="0 0 110 110"
+        aria-hidden="true"
+        className={cn("size-6", className)}
+      >
+        <StampShapes
+          stampClassName="fill-foreground"
+          cClassName="fill-background"
+          playClassName="fill-(--brown)"
+        />
+      </svg>
+      <span className="sr-only">{name}</span>
+    </span>
+  );
+}
