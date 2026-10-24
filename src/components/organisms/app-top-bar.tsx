@@ -1,7 +1,6 @@
-import { FileText, Plus, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
 import { RecordSearchForm } from "@/components/molecules/record-search-form";
 import {
@@ -14,26 +13,18 @@ import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { AccountMenu } from "@/components/organisms/account-menu";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { cn } from "@/lib/style/cn";
 
 type AppTopBarProps = {
   lang: Locale;
   brandName: string;
   username: string;
-  newRecordLabel: string;
   dict: Dictionary["header"];
 };
 
 const roundIcon =
   "grid size-9 place-items-center rounded-full text-foreground-sub outline-none hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
-export function AppTopBar({
-  lang,
-  brandName,
-  username,
-  newRecordLabel,
-  dict,
-}: AppTopBarProps) {
+export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
   const search = (
     <Suspense>
       <RecordSearchForm
@@ -48,7 +39,7 @@ export function AppTopBar({
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
       <Link
         href={`/${lang}/records`}
-        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring lg:w-49"
       >
         <Logo name={brandName} />
       </Link>
@@ -69,26 +60,6 @@ export function AppTopBar({
             {search}
           </SheetContent>
         </Sheet>
-        <Link
-          href={`/${lang}/articles`}
-          className={cn(
-            buttonVariants({ variant: "ghost", size: "sm" }),
-            "hidden md:inline-flex",
-          )}
-        >
-          <FileText aria-hidden />
-          {dict.articles}
-        </Link>
-        <Link
-          href={`/${lang}/records/new`}
-          className={cn(
-            buttonVariants({ size: "sm" }),
-            "mr-1 hidden md:inline-flex",
-          )}
-        >
-          <Plus aria-hidden />
-          {newRecordLabel}
-        </Link>
         <ThemeToggle label={dict.themeToggle} className={roundIcon} />
         <AccountMenu lang={lang} username={username} dict={dict} />
       </div>

@@ -35,11 +35,17 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
           <UserRound aria-hidden />
           {dict.account}
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link href={`/${lang}/about`} />}>
+        <DropdownMenuItem
+          render={<Link href={`/${lang}/about`} />}
+          className="lg:hidden"
+        >
           <Info aria-hidden />
           {dict.about}
         </DropdownMenuItem>
-        <DropdownMenuItem render={<Link href={`/${lang}/contact`} />}>
+        <DropdownMenuItem
+          render={<Link href={`/${lang}/contact`} />}
+          className="lg:hidden"
+        >
           <Mail aria-hidden />
           {dict.contact}
         </DropdownMenuItem>

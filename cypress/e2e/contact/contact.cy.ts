@@ -39,7 +39,18 @@ describe("お問い合わせ", () => {
     cy.location("pathname").should("eq", "/ja/contact");
   });
 
-  it("アカウントメニューからお問い合わせを開ける", () => {
+  it("サイドバーからお問い合わせを開ける", () => {
+    cy.login();
+    cy.visit("/ja/records");
+    cy.contains(
+      `nav[aria-label="${ja.bottomNav.label}"] a`,
+      ja.header.contact,
+    ).click();
+    cy.location("pathname").should("eq", "/ja/contact");
+  });
+
+  it("1024px 未満では、アカウントメニューからお問い合わせを開ける", () => {
+    cy.viewport(800, 800);
     cy.login();
     cy.visit("/ja/records");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();

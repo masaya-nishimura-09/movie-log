@@ -8,17 +8,17 @@ describe("スマホの画面", () => {
 
   it("下のナビで記録の一覧、記録する、アカウントに移れる", () => {
     cy.visit("/ja/records");
-    cy.get("nav")
+    cy.get("nav:visible")
       .contains("a", ja.bottomNav.records)
       .should("have.attr", "aria-current", "page");
-    cy.get("nav").contains("a", ja.bottomNav.newRecord).click();
+    cy.get("nav:visible").contains("a", ja.bottomNav.newRecord).click();
     cy.location("pathname").should("eq", "/ja/records/new");
-    cy.get("nav").contains("a", ja.bottomNav.account).click();
+    cy.get("nav:visible").contains("a", ja.bottomNav.account).click();
     cy.location("pathname").should("eq", "/ja/account");
-    cy.get("nav")
+    cy.get("nav:visible")
       .contains("a", ja.bottomNav.account)
       .should("have.attr", "aria-current", "page");
-    cy.get("nav").contains("a", ja.bottomNav.records).click();
+    cy.get("nav:visible").contains("a", ja.bottomNav.records).click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 
