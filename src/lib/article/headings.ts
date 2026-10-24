@@ -7,7 +7,7 @@ export type ArticleHeading = {
   node: JSONContent;
 };
 
-function plainText(node: JSONContent): string {
+export function plainText(node: JSONContent): string {
   return node.text ?? (node.content ?? []).map(plainText).join("");
 }
 
@@ -31,4 +31,19 @@ export function extractHeadings(content: JSONContent): ArticleHeading[] {
 
   visit(content);
   return headings;
+}
+
+export function firstParagraphText(content: JSONContent): string {
+  function find(node: JSONContent): string | undefined {
+    if (node.type === "paragraph") {
+      const text = plainText(node).trim();
+      return text === "" ? undefined : text;
+    }
+    for (const child of node.content ?? []) {
+      const found = find(child);
+      if (found !== undefined) return found;
+    }
+    return undefined;
+  }
+  return find(content) ?? "";
 }

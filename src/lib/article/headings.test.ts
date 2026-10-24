@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { extractHeadings } from "@/lib/article/headings";
+import { extractHeadings, firstParagraphText } from "@/lib/article/headings";
 
 const heading = (text: string, level = 2) => ({
   type: "heading",
@@ -88,5 +88,49 @@ describe("extractHeadings", () => {
         content: [{ type: "paragraph" }],
       }),
     ).toEqual([]);
+  });
+});
+
+describe("firstParagraphText", () => {
+  it("returns the text of the first paragraph that has text, skipping headings", () => {
+    expect(
+      firstParagraphText({
+        type: "doc",
+        content: [
+          heading("見出し"),
+          { type: "paragraph" },
+          {
+            type: "paragraph",
+            content: [
+              { type: "text", text: "太い", marks: [{ type: "bold" }] },
+              { type: "text", text: "本文" },
+            ],
+          },
+          { type: "paragraph", content: [{ type: "text", text: "次" }] },
+        ],
+      }),
+    ).toBe("太い本文");
+  });
+
+  it("finds a paragraph inside a list or a quote", () => {
+    expect(
+      firstParagraphText({
+        type: "doc",
+        content: [
+          {
+            type: "blockquote",
+            content: [
+              { type: "paragraph", content: [{ type: "text", text: "引用" }] },
+            ],
+          },
+        ],
+      }),
+    ).toBe("引用");
+  });
+
+  it("returns an empty string when there is no text", () => {
+    expect(
+      firstParagraphText({ type: "doc", content: [heading("だけ")] }),
+    ).toBe("");
   });
 });

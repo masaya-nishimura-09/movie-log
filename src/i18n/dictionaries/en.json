@@ -276,7 +276,20 @@
     "newRecord": "Log"
   },
   "home": {
-    "heading": "Home"
+    "heading": "Home",
+    "reminderHeading": "From your past logs",
+    "watchedOn": "Watched on {date}",
+    "fromMemo": "Your note then",
+    "fromArticle": "From \"{title}\"",
+    "otherMoods": "Find by another mood",
+    "recent": "Recent logs",
+    "recentArticles": "Recent articles",
+    "moods": "Pick by mood",
+    "seeAll": "See all",
+    "shelfPrev": "Previous in {title}",
+    "shelfNext": "Next in {title}",
+    "emptyTitle": "No logs yet",
+    "emptyDescription": "Log the films you watch, and old logs and mood shelves will show up here"
   },
   "login": {
     "email": "Email",
