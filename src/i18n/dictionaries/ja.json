@@ -375,6 +375,7 @@
   },
   "recordDetail": {
     "back": "一覧にもどる",
+    "backToHome": "ホームにもどる",
     "edit": "編集",
     "delete": "削除",
     "scoreCaption": "SCORE",
@@ -560,6 +561,7 @@
   },
   "articleDetail": {
     "backToList": "記事の一覧にもどる",
+    "backToHome": "ホームにもどる",
     "toc": "目次",
     "tocTop": "ページの先頭へ",
     "edit": "編集",

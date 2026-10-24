@@ -375,6 +375,7 @@
   },
   "recordDetail": {
     "back": "Back to list",
+    "backToHome": "Back to home",
     "edit": "Edit",
     "delete": "Delete",
     "scoreCaption": "SCORE",
@@ -560,6 +561,7 @@
   },
   "articleDetail": {
     "backToList": "Back to articles",
+    "backToHome": "Back to home",
     "toc": "Contents",
     "tocTop": "Back to top",
     "edit": "Edit",

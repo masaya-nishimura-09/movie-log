@@ -131,6 +131,37 @@ describe("ホーム", () => {
     cy.location("search").should("match", /^\?mood=\w+$/);
   });
 
+  it("ホームで開いた記録から、もどるでホームにもどる", () => {
+    for (const selector of [
+      `${reminder} a[href*='/ja/records/']`,
+      "main section:has(h2) a[href*='/ja/records/']:not([href*='/articles/'])",
+    ]) {
+      cy.visit("/ja/home");
+      cy.get(selector).first().click();
+      cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+      cy.contains("header a", ja.recordDetail.backToHome).click();
+      cy.location("pathname").should("eq", "/ja/home");
+    }
+  });
+
+  it("ホームで開いた記事から、もどるでホームにもどる", () => {
+    cy.visit("/ja/home");
+    shelf(home.recentArticles).find("li a").first().click();
+    cy.location("pathname").should(
+      "match",
+      /^\/ja\/records\/\d+\/articles\/\d+$/,
+    );
+    cy.contains("header a", ja.articleDetail.backToHome).click();
+    cy.location("pathname").should("eq", "/ja/home");
+  });
+
+  it("記録の一覧から開いた記録は、今までどおり一覧にもどる", () => {
+    cy.visit("/ja/records");
+    cy.get("main ul > li > a").first().click();
+    cy.contains("header a", ja.recordDetail.back).click();
+    cy.location("pathname").should("eq", "/ja/records");
+  });
+
   it("記録がないと、棚の代わりに記録するへの案内を出す", () => {
     cy.register();
     cy.visit("/ja/home");

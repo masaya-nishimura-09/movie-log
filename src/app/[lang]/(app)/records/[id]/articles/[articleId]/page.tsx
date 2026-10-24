@@ -12,7 +12,7 @@ import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { articleFrom, isFromArticleList } from "@/lib/article/article-from";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
-import { fromKey, withFrom } from "@/lib/url/back-href";
+import { fromKey, pathOf, withFrom } from "@/lib/url/back-href";
 
 export async function generateMetadata({
   params,
@@ -44,7 +44,9 @@ export default async function ArticlePage({
         backLabel={
           from && isFromArticleList(from, lang)
             ? dict.articleDetail.backToList
-            : record.title
+            : from && pathOf(from) === `/${lang}/home`
+              ? dict.articleDetail.backToHome
+              : record.title
         }
         actions={
           <>

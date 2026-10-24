@@ -20,6 +20,7 @@ import { pickMoodShelves, pickRecent, pickReminder } from "@/lib/home/shelves";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
 import { firstSentence } from "@/lib/text/excerpt";
 import { interpolate } from "@/lib/text/interpolate";
+import { withFrom } from "@/lib/url/back-href";
 import { buildHref } from "@/lib/url/build-href";
 import type { ArticleSummary } from "@/schemas/article/article";
 import { moodTagSchema } from "@/schemas/record/enums";
@@ -84,6 +85,7 @@ export default async function HomePage() {
     }));
   const moodShelves = pickMoodShelves(records);
   const recentArticles = articles.slice(0, recentArticleCount);
+  const homePath = `/${lang}/home`;
 
   return (
     <div className="flex flex-1 flex-col gap-8 px-4 pt-5 pb-7 md:px-7 md:pt-6">
@@ -119,6 +121,7 @@ export default async function HomePage() {
             records={pickRecent(records)}
             more={{ href: `/${lang}/records`, label: d.seeAll }}
             dict={dict}
+            fromHref={homePath}
           />
 
           {recentArticles.length > 0 && (
@@ -135,7 +138,10 @@ export default async function HomePage() {
                 {recentArticles.map((article) => (
                   <li key={article.articleId} className="min-w-0">
                     <Link
-                      href={`/${lang}/records/${article.record.recordId}/articles/${article.articleId}`}
+                      href={withFrom(
+                        `/${lang}/records/${article.record.recordId}/articles/${article.articleId}`,
+                        homePath,
+                      )}
                       className="flex flex-col gap-1 rounded-2xl bg-card px-5 py-4 outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
                     >
                       <span className="truncate font-medium text-[15px] text-foreground">
@@ -176,6 +182,7 @@ export default async function HomePage() {
                     label: d.seeAll,
                   }}
                   dict={dict}
+                  fromHref={homePath}
                 />
               ))}
             </section>

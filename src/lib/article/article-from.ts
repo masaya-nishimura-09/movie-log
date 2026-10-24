@@ -1,5 +1,5 @@
 import type { Locale } from "@/i18n/locales";
-import { safeFromHref } from "@/lib/url/back-href";
+import { pathOf, safeFromHref } from "@/lib/url/back-href";
 
 function articleListPath(lang: Locale): string {
   return `/${lang}/articles`;
@@ -13,9 +13,10 @@ export function articleFrom(
   return safeFromHref(value, [
     articleListPath(lang),
     `/${lang}/records/${recordId}`,
+    `/${lang}/home`,
   ]);
 }
 
 export function isFromArticleList(from: string, lang: Locale): boolean {
-  return from.split("?")[0] === articleListPath(lang);
+  return pathOf(from) === articleListPath(lang);
 }

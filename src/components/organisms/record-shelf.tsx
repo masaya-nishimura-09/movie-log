@@ -13,6 +13,7 @@ type RecordShelfProps = {
   more?: { href: string; label: string };
   dict: Pick<Dictionary, "enums" | "recordCard" | "home">;
   headingLevel?: "h2" | "h3";
+  fromHref?: string;
 };
 
 export function RecordShelf({
@@ -22,6 +23,7 @@ export function RecordShelf({
   more,
   dict,
   headingLevel: Heading = "h2",
+  fromHref,
 }: RecordShelfProps) {
   return (
     <ShelfScroller
@@ -43,7 +45,12 @@ export function RecordShelf({
           key={record.recordId}
           className="flex w-36 shrink-0 snap-start md:w-44"
         >
-          <RecordItemCard lang={lang} record={record} dict={dict} />
+          <RecordItemCard
+            lang={lang}
+            record={record}
+            dict={dict}
+            fromHref={fromHref}
+          />
         </li>
       ))}
     </ShelfScroller>

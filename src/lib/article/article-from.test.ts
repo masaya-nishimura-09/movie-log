@@ -2,6 +2,11 @@ import { describe, expect, it } from "vitest";
 import { articleFrom, isFromArticleList } from "@/lib/article/article-from";
 
 describe("articleFrom", () => {
+  it("accepts the home", () => {
+    expect(articleFrom("/ja/home", "ja", "3")).toBe("/ja/home");
+    expect(articleFrom("/en/home", "ja", "3")).toBeUndefined();
+  });
+
   it("accepts the article list and the article's own record", () => {
     expect(articleFrom("/ja/articles?keyword=%E9%9F%B3", "ja", "3")).toBe(
       "/ja/articles?keyword=%E9%9F%B3",

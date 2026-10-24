@@ -31,3 +31,7 @@ export function safeFromHref(
 export function withFrom(href: string, from: string | undefined): string {
   return from === undefined ? href : buildHref(href, { [fromKey]: from });
 }
+
+export function pathOf(href: string): string {
+  return href.split("?")[0] ?? href;
+}

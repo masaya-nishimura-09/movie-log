@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { fromKey, safeFromHref, withFrom } from "@/lib/url/back-href";
+import { fromKey, pathOf, safeFromHref, withFrom } from "@/lib/url/back-href";
 
 const path = "/ja/articles";
 
@@ -99,5 +99,12 @@ describe("withFrom", () => {
     const href = withFrom("/ja/records/3/articles/9", from);
     const raw = new URL(href, "http://x").searchParams.get(fromKey) ?? "";
     expect(safeFromHref(raw, "/ja/articles")).toBe(from);
+  });
+});
+
+describe("pathOf", () => {
+  it("drops the query", () => {
+    expect(pathOf("/ja/home")).toBe("/ja/home");
+    expect(pathOf("/ja/records?q=a&page=2")).toBe("/ja/records");
   });
 });

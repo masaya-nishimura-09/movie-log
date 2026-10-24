@@ -11,7 +11,7 @@ import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordDetail } from "@/components/organisms/record-detail";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
-import { fromKey, safeFromHref, withFrom } from "@/lib/url/back-href";
+import { fromKey, pathOf, safeFromHref, withFrom } from "@/lib/url/back-href";
 
 export async function generateMetadata({
   params,
@@ -34,14 +34,19 @@ export default async function RecordPage({
     searchParams,
   ]);
   if (!record) notFound();
-  const from = safeFromHref(query[fromKey], `/${lang}/records`);
+  const homePath = `/${lang}/home`;
+  const from = safeFromHref(query[fromKey], [`/${lang}/records`, homePath]);
   const backHref = from ?? `/${lang}/records`;
 
   return (
     <>
       <PageTopBar
         backHref={backHref}
-        backLabel={dict.recordDetail.back}
+        backLabel={
+          from && pathOf(from) === homePath
+            ? dict.recordDetail.backToHome
+            : dict.recordDetail.back
+        }
         actions={
           <>
             <Link

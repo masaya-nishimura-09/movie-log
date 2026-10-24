@@ -4,6 +4,7 @@ import { RecordPoster } from "@/components/molecules/record-poster";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { interpolateNode } from "@/lib/text/interpolate-node";
+import { withFrom } from "@/lib/url/back-href";
 import type { MovieRecord } from "@/schemas/record/record";
 
 export type ReminderExcerpt = {
@@ -38,7 +39,10 @@ export function HomeReminder({
         {items.map(({ record, excerpt }) => (
           <li key={record.recordId} className="flex">
             <Link
-              href={`/${lang}/records/${record.recordId}`}
+              href={withFrom(
+                `/${lang}/records/${record.recordId}`,
+                `/${lang}/home`,
+              )}
               className="flex w-full gap-4 rounded-[18px] bg-card p-4 outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring md:gap-6 md:p-5"
             >
               <RecordPoster
