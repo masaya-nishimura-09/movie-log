@@ -32,7 +32,7 @@ Cypress.Commands.add("login", (account = demoAccount) => {
     cy.get("#email").type(account.email);
     cy.get("#password").type(account.password, { log: false });
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.location("pathname").should("eq", "/ja/home");
   });
 });
 
@@ -49,7 +49,7 @@ Cypress.Commands.add("register", () => {
   cy.get("#password").type(account.password, { log: false });
   cy.get("input[name=agreedToTerms]").check();
   cy.contains("button", ja.register.submit).click();
-  cy.location("pathname").should("eq", "/ja/records");
+  cy.location("pathname").should("eq", "/ja/home");
   return cy.wrap(account);
 });
 

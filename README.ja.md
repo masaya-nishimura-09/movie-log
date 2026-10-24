@@ -211,6 +211,7 @@ src/
 | /:lang/contact                              | お問い合わせ         | 不要     |
 | /:lang/terms                                | 利用規約             | 不要     |
 | /:lang/privacy                              | プライバシーポリシー | 不要     |
+| /:lang/home                                 | ホーム               | 必要     |
 | /:lang/records                              | 鑑賞記録の一覧       | 必要     |
 | /:lang/records/new                          | 鑑賞記録の作成       | 必要     |
 | /:lang/records/:id                          | 鑑賞記録の詳細       | 必要     |

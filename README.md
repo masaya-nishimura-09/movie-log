@@ -230,6 +230,7 @@ src/
 | /:lang/contact                              | Contact form     | Not required |
 | /:lang/terms                                | Terms of use     | Not required |
 | /:lang/privacy                              | Privacy policy   | Not required |
+| /:lang/home                                 | Home             | Required     |
 | /:lang/records                              | Record list      | Required     |
 | /:lang/records/new                          | New record       | Required     |
 | /:lang/records/:id                          | Record details   | Required     |

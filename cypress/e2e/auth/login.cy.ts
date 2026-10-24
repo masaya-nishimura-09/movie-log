@@ -7,8 +7,8 @@ describe("ログイン", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/records");
-    cy.contains("h1", ja.recordList.heading).should("be.visible");
+    cy.location("pathname").should("eq", "/ja/home");
+    cy.contains("h1", ja.home.heading).should("be.visible");
   });
 
   it("パスワードが違うとエラーを表示する", () => {

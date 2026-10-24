@@ -42,9 +42,12 @@ describe("記事の一覧", () => {
     cy.viewport(1280, 800);
   });
 
-  it("上のバーの「記事」から、一覧に移る", () => {
+  it("サイドバーの「記事」から、一覧に移る", () => {
     cy.visit("/ja/records");
-    cy.contains("header a", ja.header.articles).click();
+    cy.contains(
+      `nav[aria-label="${ja.bottomNav.label}"] a`,
+      ja.bottomNav.articles,
+    ).click();
     cy.location("pathname").should("eq", "/ja/articles");
     cy.get("h1").should("have.text", list.heading);
   });
@@ -440,22 +443,23 @@ describe("記事の一覧(スマホ)", () => {
   it("下のナビに「記事」があり、押すと一覧に移り、現在の項目になる", () => {
     cy.visit("/ja/records");
     cy.get("nav.fixed a").should("have.length", 4);
-    cy.contains("nav a", ja.bottomNav.articles).click();
+    cy.contains("nav.fixed a", ja.bottomNav.articles).click();
     cy.location("pathname").should("eq", "/ja/articles");
-    cy.contains("nav a", ja.bottomNav.articles).should(
+    cy.contains("nav.fixed a", ja.bottomNav.articles).should(
       "have.attr",
       "aria-current",
       "page",
     );
-    cy.contains("nav a", ja.bottomNav.records).should(
+    cy.contains("nav.fixed a", ja.bottomNav.records).should(
       "not.have.attr",
       "aria-current",
     );
   });
 
-  it("上のバーの「記事」は、スマホでは出さない", () => {
+  it("サイドバーは、スマホでは出さない", () => {
+    cy.viewport("iphone-x");
     cy.visit("/ja/records");
-    cy.contains("header a", ja.header.articles).should("not.be.visible");
+    cy.get(`nav[aria-label="${ja.bottomNav.label}"]`).should("not.be.visible");
   });
 
   it("行の左の数字は出さない", () => {

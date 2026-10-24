@@ -257,7 +257,6 @@
     "unexpectedError": "Your message could not be sent. Try again later"
   },
   "header": {
-    "articles": "Articles",
     "searchPlaceholder": "Search by title",
     "searchLabel": "Search by title",
     "themeToggle": "Toggle theme",
@@ -269,10 +268,15 @@
     "contact": "Contact"
   },
   "bottomNav": {
+    "label": "Main menu",
+    "home": "Home",
     "articles": "Articles",
     "records": "Films",
     "newRecord": "Log",
     "account": "Account"
+  },
+  "home": {
+    "heading": "Home"
   },
   "login": {
     "email": "Email",

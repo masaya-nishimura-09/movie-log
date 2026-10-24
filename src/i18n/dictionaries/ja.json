@@ -257,7 +257,6 @@
     "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
   },
   "header": {
-    "articles": "記事",
     "searchPlaceholder": "タイトルで検索",
     "searchLabel": "タイトルで検索",
     "themeToggle": "テーマを切り替える",
@@ -269,10 +268,15 @@
     "contact": "お問い合わせ"
   },
   "bottomNav": {
+    "label": "メインメニュー",
+    "home": "ホーム",
     "articles": "記事",
     "records": "鑑賞記録",
     "newRecord": "記録する",
     "account": "アカウント"
+  },
+  "home": {
+    "heading": "ホーム"
   },
   "login": {
     "email": "メールアドレス",
