@@ -1,6 +1,12 @@
 "use client";
 
-import { LayoutGrid, type LucideIcon, Plus, UserRound } from "lucide-react";
+import {
+  FileText,
+  LayoutGrid,
+  type LucideIcon,
+  Plus,
+  UserRound,
+} from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -44,6 +50,11 @@ export function BottomNav({ lang, dict }: BottomNavProps) {
           href={`/${lang}/records`}
           label={dict.records}
           Icon={LayoutGrid}
+        />
+        <NavTab
+          href={`/${lang}/articles`}
+          label={dict.articles}
+          Icon={FileText}
         />
         <Link
           href={`/${lang}/records/new`}

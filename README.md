@@ -72,6 +72,13 @@ UI components are organized into atoms, molecules, and organisms.
 - Filtering by score, platform, mood, and genre
   (one score and one platform; moods and genres match only records that have all of them)
 
+**Articles**
+
+- Create, view, update, and delete articles for each viewing record
+- A body editor with bold, italic, headings, subheadings, bulleted lists, numbered lists, and quotes
+- A table of contents built from the headings, highlighting the heading being read
+- Keyword search over titles and bodies, filtering by record, sorting, and pagination
+
 **Accounts**
 
 - Registration, login, and logout, with automatic token refresh
@@ -117,6 +124,7 @@ Font weights depend on the role of the text: 400 for body text,
 | Framework      | Next.js (App Router), React                         |
 | Language       | TypeScript                                          |
 | Styling        | Tailwind CSS, shadcn/ui (Base UI), react-day-picker |
+| Editor         | Tiptap                                              |
 | Validation     | Zod                                                 |
 | Testing        | Vitest, Cypress                                     |
 | Bot protection | Cloudflare Turnstile                                |
@@ -205,7 +213,7 @@ src/
   hooks/              # Custom React hooks
   schemas/            # Zod schemas
   i18n/               # Locales and dictionaries
-  lib/                # Helpers (auth, contact, date, log, navigation, record, style, text, turnstile, url)
+  lib/                # Helpers (article, auth, contact, date, log, navigation, record, style, text, turnstile, url)
   styles/             # Global styles and color tokens
   proxy.ts            # Language routing and token refresh
   instrumentation.ts  # Logging of unhandled server errors
@@ -213,20 +221,24 @@ src/
 
 ## Pages
 
-| Path                    | Description        | Login        |
-|-------------------------|--------------------|--------------|
-| /:lang                  | Landing page       | Not required |
-| /:lang/login            | Login              | Not required |
-| /:lang/register         | Registration       | Not required |
-| /:lang/about            | About the app      | Not required |
-| /:lang/contact          | Contact form       | Not required |
-| /:lang/terms            | Terms of use       | Not required |
-| /:lang/privacy          | Privacy policy     | Not required |
-| /:lang/records          | Record list        | Required     |
-| /:lang/records/new      | New record         | Required     |
-| /:lang/records/:id      | Record details     | Required     |
-| /:lang/records/:id/edit | Record editing     | Required     |
-| /:lang/account          | Account settings   | Required     |
+| Path                                        | Description      | Login        |
+|---------------------------------------------|------------------|--------------|
+| /:lang                                      | Landing page     | Not required |
+| /:lang/login                                | Login            | Not required |
+| /:lang/register                             | Registration     | Not required |
+| /:lang/about                                | About the app    | Not required |
+| /:lang/contact                              | Contact form     | Not required |
+| /:lang/terms                                | Terms of use     | Not required |
+| /:lang/privacy                              | Privacy policy   | Not required |
+| /:lang/records                              | Record list      | Required     |
+| /:lang/records/new                          | New record       | Required     |
+| /:lang/records/:id                          | Record details   | Required     |
+| /:lang/records/:id/edit                     | Record editing   | Required     |
+| /:lang/records/:id/articles/new             | New article      | Required     |
+| /:lang/records/:id/articles/:articleId      | Article details  | Required     |
+| /:lang/records/:id/articles/:articleId/edit | Article editing  | Required     |
+| /:lang/articles                             | Article list     | Required     |
+| /:lang/account                              | Account settings | Required     |
 
 ## Credits
 

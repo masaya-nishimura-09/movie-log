@@ -17,6 +17,7 @@ declare global {
       login(account?: { email: string; password: string }): Chainable<void>;
       register(): Chainable<Account>;
       createRecord(title: string): Chainable<void>;
+      createArticle(title: string, text?: string): Chainable<void>;
       fillRecordBasics(
         title: string,
         options?: RecordBasicsOptions,
@@ -72,4 +73,15 @@ Cypress.Commands.add("createRecord", (title) => {
   cy.contains("button", ja.recordForm.next).click();
   cy.contains("button", ja.recordForm.save).click();
   cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+});
+
+Cypress.Commands.add("createArticle", (title, text = "本文") => {
+  cy.contains("a", ja.recordDetail.articlesAdd).click();
+  cy.get("#title").type(title);
+  cy.get("[role=textbox]").click().type(text);
+  cy.contains("button", ja.articleForm.save).click();
+  cy.location("pathname").should(
+    "match",
+    /^\/ja\/records\/\d+\/articles\/\d+$/,
+  );
 });

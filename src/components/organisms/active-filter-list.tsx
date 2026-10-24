@@ -1,8 +1,6 @@
-import { X } from "lucide-react";
-import Link from "next/link";
+import { ActiveFilterChips } from "@/components/molecules/active-filter-chips";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
-import { interpolate } from "@/lib/text/interpolate";
 import {
   buildHref,
   type QueryValues,
@@ -79,29 +77,12 @@ export function ActiveFilterList({
     })),
   ];
 
-  if (items.length === 0) return null;
-
   return (
-    <div className="flex flex-wrap items-center justify-end gap-1.5">
-      {items.map((item) => (
-        <Link
-          key={item.href}
-          href={item.href}
-          scroll={false}
-          aria-label={interpolate(dict.remove, { label: item.label })}
-          className="inline-flex h-8 items-center gap-1.5 rounded-full bg-selected px-2.75 font-medium text-selected-foreground text-xs hover:brightness-97"
-        >
-          {item.label}
-          <X className="size-3.75" aria-hidden />
-        </Link>
-      ))}
-      <Link
-        href={clearHref}
-        scroll={false}
-        className="px-1.5 font-medium text-muted-foreground text-xs underline-offset-4 hover:underline"
-      >
-        {dict.clearAll}
-      </Link>
-    </div>
+    <ActiveFilterChips
+      items={items}
+      clearHref={clearHref}
+      removeTemplate={dict.remove}
+      clearAllLabel={dict.clearAll}
+    />
   );
 }

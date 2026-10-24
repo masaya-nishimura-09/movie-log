@@ -1,6 +1,6 @@
-import type { ReactNode } from "react";
 import { FilterChipLink } from "@/components/molecules/filter-chip-link";
 import { FilterRadioLink } from "@/components/molecules/filter-radio-link";
+import { FilterSection } from "@/components/molecules/filter-section";
 import { SortSelect } from "@/components/molecules/sort-select";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
@@ -29,17 +29,6 @@ type RecordFilterPanelProps = {
 };
 
 const visiblePlatformCount = 6;
-
-function Section({ title, children }: { title: string; children: ReactNode }) {
-  return (
-    <section className="flex flex-col gap-2.25">
-      <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">
-        {title}
-      </h2>
-      {children}
-    </section>
-  );
-}
 
 type FilterOptionsProps = Omit<RecordFilterPanelProps, "dict" | "sortDict">;
 
@@ -204,13 +193,13 @@ export function RecordFilterPanel({
 }: RecordFilterPanelProps) {
   return (
     <div className="flex flex-col gap-8">
-      <Section title={sortDict.label}>
+      <FilterSection title={sortDict.label}>
         <SortOptions {...props} sortDict={sortDict} />
-      </Section>
-      <Section title={dict.score}>
+      </FilterSection>
+      <FilterSection title={dict.score}>
         <ScoreOptions {...props} />
-      </Section>
-      <Section title={dict.platform}>
+      </FilterSection>
+      <FilterSection title={dict.platform}>
         <PlatformOptions
           {...props}
           collapsed
@@ -218,13 +207,13 @@ export function RecordFilterPanel({
             count: platformSchema.options.length,
           })}
         />
-      </Section>
-      <Section title={dict.moodTag}>
+      </FilterSection>
+      <FilterSection title={dict.moodTag}>
         <MoodOptions {...props} />
-      </Section>
-      <Section title={dict.genre}>
+      </FilterSection>
+      <FilterSection title={dict.genre}>
         <GenreOptions {...props} />
-      </Section>
+      </FilterSection>
     </div>
   );
 }

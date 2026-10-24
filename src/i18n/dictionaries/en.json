@@ -257,6 +257,7 @@
     "unexpectedError": "Your message could not be sent. Try again later"
   },
   "header": {
+    "articles": "Articles",
     "searchPlaceholder": "Search by title",
     "searchLabel": "Search by title",
     "themeToggle": "Toggle theme",
@@ -268,6 +269,7 @@
     "contact": "Contact"
   },
   "bottomNav": {
+    "articles": "Articles",
     "records": "Films",
     "newRecord": "Log",
     "account": "Account"
@@ -318,10 +320,12 @@
     "summary": "Showing {shown} of {total}",
     "activeFilters": "{count} filters",
     "noMatch": "No records match these filters",
-    "clearFilters": "Clear filters",
-    "previousPage": "Previous page",
-    "nextPage": "Next page",
-    "pageStatus": "{current} / {total}"
+    "clearFilters": "Clear filters"
+  },
+  "pagination": {
+    "status": "{current} / {total}",
+    "previous": "Previous page",
+    "next": "Next page"
   },
   "recordFilter": {
     "open": "Filters",
@@ -362,6 +366,10 @@
     "memo": "Memo",
     "memoEmpty": "No memo yet.",
     "memoAdd": "Add a memo",
+    "articles": "Articles",
+    "articlesEmpty": "No articles yet.",
+    "articlesAdd": "Write an article",
+    "articlesMore": "See more",
     "credits": "Credits",
     "creditsEmpty": "No credits yet.",
     "creditsAdd": "Add credits",
@@ -480,6 +488,85 @@
     "unexpectedError": "Couldn't save. Please try again later",
     "saved": "Saved",
     "withdrawFailed": "Couldn't delete your account. Please try again later"
+  },
+  "articleForm": {
+    "createTitle": "New article",
+    "editTitle": "Edit article",
+    "required": "Required",
+    "back": "Back",
+    "title": "Title",
+    "content": "Body",
+    "save": "Save",
+    "cancel": "Discard",
+    "invalidInput": "Please check your input",
+    "notFound": "This article has been deleted",
+    "recordNotFound": "This record has been deleted",
+    "unexpectedError": "Couldn't save. Please try again later",
+    "errors": {
+      "title": "Enter 1 to 255 characters",
+      "content": "The body is too long",
+      "contentRequired": "Enter the body"
+    }
+  },
+  "articleList": {
+    "heading": "Articles",
+    "summary": "Showing {shown} of {total}",
+    "activeFilters": "{count} filters",
+    "noMatch": "No articles match",
+    "clearFilters": "Clear filters",
+    "emptyTitle": "No articles yet",
+    "emptyDescription": "You can write an article about a film from the record page.",
+    "emptyAction": "View your records",
+    "searchLabel": "Search titles and bodies",
+    "searchPlaceholder": "Search titles and bodies",
+    "filterOpen": "Filters",
+    "filterTitle": "Filters",
+    "clearAll": "Clear all",
+    "record": "Film",
+    "remove": "Remove {label}",
+    "showResults": "Show {count}",
+    "noRecords": "No records",
+    "unknownRecord": "Unknown record",
+    "columnIndex": "#",
+    "columnTitle": "Title",
+    "columnRecord": "Film",
+    "columnCreatedAt": "Created",
+    "columnUpdatedAt": "Updated",
+    "sort": {
+      "label": "Sort by",
+      "updatedAtDesc": "Recently updated",
+      "updatedAtAsc": "Least recently updated",
+      "createdAtDesc": "Newest created",
+      "createdAtAsc": "Oldest created",
+      "titleAsc": "Title"
+    }
+  },
+  "articleDetail": {
+    "backToList": "Back to articles",
+    "toc": "Contents",
+    "tocTop": "Back to top",
+    "edit": "Edit",
+    "delete": "Delete",
+    "createdAt": "Created",
+    "updatedAt": "Last updated"
+  },
+  "deleteArticle": {
+    "title": "Delete this article?",
+    "description": "\"{title}\" will be deleted. This cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "unexpectedError": "Couldn't delete. Please try again later"
+  },
+  "articleEditor": {
+    "toolbar": "Formatting",
+    "bold": "Bold",
+    "italic": "Italic",
+    "heading": "Heading",
+    "subheading": "Subheading",
+    "bulletList": "Bulleted list",
+    "orderedList": "Numbered list",
+    "blockquote": "Quote",
+    "body": "Body"
   },
   "characterCount": "{current} / {max}",
   "enums": {

@@ -1,9 +1,9 @@
-import { Plus, Search } from "lucide-react";
+import { FileText, Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
 import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
-import { SearchForm } from "@/components/molecules/search-form";
+import { RecordSearchForm } from "@/components/molecules/record-search-form";
 import {
   Sheet,
   SheetContent,
@@ -36,7 +36,7 @@ export function AppTopBar({
 }: AppTopBarProps) {
   const search = (
     <Suspense>
-      <SearchForm
+      <RecordSearchForm
         action={`/${lang}/records`}
         label={dict.searchLabel}
         placeholder={dict.searchPlaceholder}
@@ -69,6 +69,16 @@ export function AppTopBar({
             {search}
           </SheetContent>
         </Sheet>
+        <Link
+          href={`/${lang}/articles`}
+          className={cn(
+            buttonVariants({ variant: "ghost", size: "sm" }),
+            "hidden md:inline-flex",
+          )}
+        >
+          <FileText aria-hidden />
+          {dict.articles}
+        </Link>
         <Link
           href={`/${lang}/records/new`}
           className={cn(
