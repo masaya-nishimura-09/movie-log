@@ -1,3 +1,4 @@
+import en from "../../../src/i18n/dictionaries/en.json";
 import ja from "../../../src/i18n/dictionaries/ja.json";
 
 describe("スマホの画面", () => {
@@ -53,12 +54,31 @@ describe("スマホの画面", () => {
   it("閉じるボタンと Escape でメニューを閉じる", () => {
     cy.visit("/ja/records");
     cy.get(menu).click();
-    cy.get(drawer).find("button").contains("Close").click({ force: true });
+    cy.get(drawer)
+      .find("button")
+      .contains(ja.header.close)
+      .click({ force: true });
     cy.get(drawer).should("not.exist");
     cy.get(menu).click();
     cy.get("body").type("{esc}");
     cy.get(drawer).should("not.exist");
     cy.location("pathname").should("eq", "/ja/records");
+  });
+
+  it("メニュー、検索、絞り込みの閉じるボタンを、画面の言語で読み上げる", () => {
+    for (const [lang, dict, opener] of [
+      ["ja", ja, ja.header.openMenu],
+      ["ja", ja, ja.header.openSearch],
+      ["ja", ja, ja.recordFilter.open],
+      ["en", en, en.header.openMenu],
+    ] as const) {
+      cy.visit(`/${lang}/records`);
+      cy.get(`button[aria-label="${opener}"]`).click();
+      cy.get("[role=dialog] button .sr-only").should(
+        "have.text",
+        dict.header.close,
+      );
+    }
   });
 
   it("アカウントメニューからアカウント設定に移れる", () => {

@@ -50,6 +50,7 @@ export function AppTopBar({
         dict={navDict}
         linkDict={dict}
         openLabel={dict.openMenu}
+        closeLabel={dict.close}
         className={`${roundIcon} md:hidden`}
       />
       <Link
@@ -74,6 +75,7 @@ export function AppTopBar({
           </SheetTrigger>
           <SheetContent
             side="top"
+            closeLabel={dict.close}
             className="shell rounded-b-[20px] bg-sidebar p-4 pt-12"
           >
             <SheetTitle className="sr-only">{dict.searchLabel}</SheetTitle>

@@ -266,7 +266,8 @@
     "logout": "ログアウト",
     "openSearch": "検索",
     "contact": "お問い合わせ",
-    "openMenu": "メニューを開く"
+    "openMenu": "メニューを開く",
+    "close": "閉じる"
   },
   "nav": {
     "label": "メインメニュー",

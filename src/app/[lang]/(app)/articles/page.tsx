@@ -110,6 +110,7 @@ export default async function ArticlesPage({
               activeCount={activeCount}
               resultCount={list.filteredCount}
               clearHref={clearHref}
+              closeLabel={dict.header.close}
               dict={{
                 open: dict.articleList.filterOpen,
                 title: dict.articleList.filterTitle,

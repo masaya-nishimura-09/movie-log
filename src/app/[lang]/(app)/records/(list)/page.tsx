@@ -94,6 +94,7 @@ export default async function RecordsPage({
               activeCount={activeCount}
               resultCount={list.filteredCount}
               clearHref={clearHref}
+              closeLabel={dict.header.close}
               dict={dict.recordFilter}
             >
               {panel}

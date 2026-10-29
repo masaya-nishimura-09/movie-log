@@ -266,7 +266,8 @@
     "logout": "Log out",
     "openSearch": "Search",
     "contact": "Contact",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "close": "Close"
   },
   "nav": {
     "label": "Main menu",

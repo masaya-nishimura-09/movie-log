@@ -12,11 +12,13 @@ import { AppNav, type AppNavProps } from "@/components/organisms/app-nav";
 
 type AppNavDrawerProps = AppNavProps & {
   openLabel: string;
+  closeLabel: string;
   className?: string;
 };
 
 export function AppNavDrawer({
   openLabel,
+  closeLabel,
   className,
   ...props
 }: AppNavDrawerProps) {
@@ -29,6 +31,7 @@ export function AppNavDrawer({
       </SheetTrigger>
       <SheetContent
         side="left"
+        closeLabel={closeLabel}
         className="shell w-72 rounded-r-2xl bg-sidebar px-4 pt-14 pb-[calc(1.5rem+env(safe-area-inset-bottom))]"
       >
         <SheetTitle className="sr-only">{props.dict.label}</SheetTitle>

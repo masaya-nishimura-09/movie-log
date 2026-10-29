@@ -19,6 +19,7 @@ type FilterSheetProps = {
   activeCount: number;
   resultCount: number;
   clearHref: string;
+  closeLabel: string;
   dict: Pick<
     Dictionary["recordFilter"],
     "open" | "title" | "clearAll" | "showResults"
@@ -30,6 +31,7 @@ export function FilterSheet({
   activeCount,
   resultCount,
   clearHref,
+  closeLabel,
   dict,
   children,
 }: FilterSheetProps) {
@@ -48,6 +50,7 @@ export function FilterSheet({
       </SheetTrigger>
       <SheetContent
         side="bottom"
+        closeLabel={closeLabel}
         className="max-h-[85dvh] rounded-t-[20px] bg-card"
       >
         <SheetHeader className="flex-row items-center justify-between border-b pr-12">
