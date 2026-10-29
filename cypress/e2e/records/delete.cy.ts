@@ -6,7 +6,7 @@ describe("記録の削除", () => {
     cy.login();
   });
 
-  it("確認のダイアログに、タイトルと視聴日を表示する", () => {
+  it("確認のダイアログに、タイトルと鑑賞日を表示する", () => {
     const title = `E2E 削除の説明 ${Date.now()}`;
     cy.createRecord(title);
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();

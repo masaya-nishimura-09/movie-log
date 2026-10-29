@@ -139,7 +139,7 @@ describe("記録の作成", () => {
       .should("match", /^https:\/\/image\.tmdb\.org\//);
   });
 
-  it("カレンダーから視聴日を選べる", () => {
+  it("カレンダーから鑑賞日を選べる", () => {
     const first = new Date();
     first.setDate(1);
     cy.visit("/ja/records/new");
@@ -148,7 +148,7 @@ describe("記録の作成", () => {
     cy.get("#watchedAt").should("have.text", longDate(first));
   });
 
-  it("「今日」を押すと視聴日が今日になる", () => {
+  it("「今日」を押すと鑑賞日が今日になる", () => {
     cy.visit("/ja/records/new");
     cy.contains("button", form.yesterday).click();
     cy.contains("button", form.today).click();

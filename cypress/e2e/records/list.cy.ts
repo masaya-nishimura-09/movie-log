@@ -51,7 +51,7 @@ describe("記録の一覧", () => {
     cy.login();
   });
 
-  it("件数と、視聴日が新しい順の一覧を表示する", () => {
+  it("件数と、鑑賞日が新しい順の一覧を表示する", () => {
     cy.visit("/ja/records");
     cy.contains("h1", list.heading).should("be.visible");
     cy.contains(/^\d+件中 \d+件を表示$/).should("be.visible");
@@ -62,7 +62,7 @@ describe("記録の一覧", () => {
     });
   });
 
-  it("並べ替え：視聴日が古い順", () => {
+  it("並べ替え：鑑賞日が古い順", () => {
     cy.visit("/ja/records");
     cy.get(`button[aria-label="${ja.recordSort.label}"]:visible`).click();
     cy.contains("[role=option]", ja.recordSort.watchedAtAsc).click();
@@ -108,7 +108,7 @@ describe("記録の一覧", () => {
     });
   });
 
-  it("並べ替え：視聴日が新しい順に戻すと、URL から sort が消える", () => {
+  it("並べ替え：鑑賞日が新しい順に戻すと、URL から sort が消える", () => {
     cy.visit("/ja/records?sort=titleAsc");
     cy.get(`button[aria-label="${ja.recordSort.label}"]:visible`).click();
     cy.contains("[role=option]", ja.recordSort.watchedAtDesc).click();
