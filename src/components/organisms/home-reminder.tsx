@@ -18,7 +18,6 @@ type HomeReminderProps = {
     record: MovieRecord;
     excerpt: ReminderExcerpt | undefined;
   }[];
-  moodLinks: { label: string; href: string }[];
   dict: Dictionary["home"];
   noPosterLabel: string;
 };
@@ -26,7 +25,6 @@ type HomeReminderProps = {
 export function HomeReminder({
   lang,
   items,
-  moodLinks,
   dict,
   noPosterLabel,
 }: HomeReminderProps) {
@@ -83,23 +81,6 @@ export function HomeReminder({
           </li>
         ))}
       </ul>
-      {moodLinks.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <p className="text-foreground-sub text-sm">{dict.otherMoods}</p>
-          <ul className="flex flex-wrap gap-2">
-            {moodLinks.map((mood) => (
-              <li key={mood.href}>
-                <Link
-                  href={mood.href}
-                  className="inline-flex h-8 items-center rounded-full bg-mood-tag px-3 text-foreground-sub text-xs outline-none transition-colors hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring"
-                >
-                  {mood.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
     </section>
   );
 }

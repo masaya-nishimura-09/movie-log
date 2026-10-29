@@ -124,11 +124,9 @@ describe("ホーム", () => {
     });
   });
 
-  it("ほかの気分で探すから、その雰囲気タグの絞り込みに移る", () => {
+  it("過去の記録の下に、雰囲気タグの一覧を出さない", () => {
     cy.visit("/ja/home");
-    cy.contains(home.otherMoods).parent().find("a").first().click();
-    cy.location("pathname").should("eq", "/ja/records");
-    cy.location("search").should("match", /^\?mood=\w+$/);
+    cy.get(`${reminder} a[href*='mood=']`).should("not.exist");
   });
 
   it("ホームで開いた記録から、もどるでホームにもどる", () => {

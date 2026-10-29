@@ -24,7 +24,6 @@ import { interpolate } from "@/lib/text/interpolate";
 import { withFrom } from "@/lib/url/back-href";
 import { buildHref } from "@/lib/url/build-href";
 import type { ArticleSummary } from "@/schemas/article/article";
-import { moodTagSchema } from "@/schemas/record/enums";
 import type { MovieRecord } from "@/schemas/record/record";
 
 const recentArticleCount = 4;
@@ -73,20 +72,6 @@ export default async function HomePage() {
       excerpt: await reminderExcerpt(record, articles, d),
     })),
   );
-  const moodLinks = moodTagSchema.options
-    .map((moodTag) => ({
-      moodTag,
-      count: records.filter((record) => record.moodTags.includes(moodTag))
-        .length,
-    }))
-    .filter(({ count }) => count > 0)
-    .sort((a, b) => b.count - a.count)
-    .map(({ moodTag }) => ({
-      label: dict.enums.moodTag[moodTag],
-      href: buildHref(`/${lang}/records`, {
-        [recordQueryKeys.moodTag]: moodTag,
-      }),
-    }));
   const moodShelves = pickMoodShelves(records);
   const recentArticles = articles.slice(0, recentArticleCount);
   const homePath = `/${lang}/home`;
@@ -113,7 +98,6 @@ export default async function HomePage() {
             <HomeReminder
               lang={lang}
               items={reminderItems}
-              moodLinks={moodLinks}
               dict={d}
               noPosterLabel={dict.recordCard.noPoster}
             />
