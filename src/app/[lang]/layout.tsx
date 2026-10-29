@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Poppins } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
+import { TimeZoneCookie } from "@/components/atoms/time-zone-cookie";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { siteUrl } from "@/lib/env";
 import { cn } from "@/lib/style/cn";
@@ -64,6 +65,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
       )}
     >
       <body className="flex min-h-full flex-col">
+        <TimeZoneCookie />
         <Providers>{children}</Providers>
       </body>
     </html>

@@ -16,6 +16,7 @@ import { RecordShelf } from "@/components/organisms/record-shelf";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { firstParagraphText } from "@/lib/article/headings";
+import { getTimeZone } from "@/lib/date/get-time-zone";
 import { pickMoodShelves, pickRecent, pickReminder } from "@/lib/home/shelves";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
 import { firstSentence } from "@/lib/text/excerpt";
@@ -62,7 +63,10 @@ export default async function HomePage() {
     getAllArticles(),
   ]);
   const d = dict.home;
-  const reminder = pickReminder(records, Temporal.Now.plainDateISO());
+  const reminder = pickReminder(
+    records,
+    Temporal.Now.plainDateISO(await getTimeZone()),
+  );
   const reminderItems = await Promise.all(
     reminder.map(async (record) => ({
       record,
