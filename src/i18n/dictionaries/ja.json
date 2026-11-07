@@ -542,7 +542,12 @@
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
     "saved": "保存しました",
-    "withdrawFailed": "退会できませんでした。時間をおいてやり直してください"
+    "withdrawFailed": "退会できませんでした。時間をおいてやり直してください",
+    "exportTitle": "データの書き出し",
+    "exportDescription": "鑑賞記録をCSVファイルに書き出します。表計算ソフトで開けます。",
+    "exportAction": "鑑賞記録をCSVで書き出す",
+    "exporting": "書き出し中",
+    "exportFailed": "書き出せませんでした。時間をおいてやり直してください"
   },
   "articleForm": {
     "createTitle": "記事を作成",

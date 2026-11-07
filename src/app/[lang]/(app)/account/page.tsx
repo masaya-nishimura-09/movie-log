@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import type { Metadata } from "next";
+import { exportRecordsAction } from "@/actions/record/export-records";
 import { updateEmailAction } from "@/actions/user/update-email";
 import { updatePasswordAction } from "@/actions/user/update-password";
 import { updateUsernameAction } from "@/actions/user/update-username";
@@ -8,6 +9,7 @@ import { getCurrentUser } from "@/api/user/get-current-user";
 import { AccountEmailForm } from "@/components/organisms/account-email-form";
 import { AccountPasswordForm } from "@/components/organisms/account-password-form";
 import { AccountUsernameForm } from "@/components/organisms/account-username-form";
+import { ExportSection } from "@/components/organisms/export-section";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { WithdrawSection } from "@/components/organisms/withdraw-section";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -52,6 +54,12 @@ export default async function AccountPage() {
           action={updatePasswordAction.bind(null, lang)}
           dict={dict.account}
           passwordDict={dict.passwordInput}
+        />
+        <ExportSection
+          lang={lang}
+          action={exportRecordsAction}
+          dict={dict.account}
+          csvDict={{ recordForm: dict.recordForm, enums: dict.enums }}
         />
         <WithdrawSection
           action={withdrawAction.bind(null, lang)}

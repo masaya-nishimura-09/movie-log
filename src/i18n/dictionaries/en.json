@@ -542,7 +542,12 @@
     "tooManyRequests": "Too many attempts. Please wait a while and try again",
     "unexpectedError": "Couldn't save. Please try again later",
     "saved": "Saved",
-    "withdrawFailed": "Couldn't delete your account. Please try again later"
+    "withdrawFailed": "Couldn't delete your account. Please try again later",
+    "exportTitle": "Export data",
+    "exportDescription": "Exports your film log as a CSV file that opens in spreadsheet apps.",
+    "exportAction": "Export the film log as CSV",
+    "exporting": "Exporting",
+    "exportFailed": "Couldn't export. Please try again later"
   },
   "articleForm": {
     "createTitle": "New article",
