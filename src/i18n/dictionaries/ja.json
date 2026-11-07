@@ -409,7 +409,10 @@
     "attachmentPosition": "{number} / {total}",
     "attachmentPrev": "前の画像",
     "attachmentNext": "次の画像",
-    "attachmentsLimit": "添付できるのは{max}枚までです"
+    "attachmentsLimit": "添付できるのは{max}枚までです",
+    "articlesInfo": "メモは短い感想を書く欄、記事はエディタで長く書く文章です。1つの記録に何本でも書けます。",
+    "infoLabel": "{name}の説明",
+    "attachmentsInfo": "パンフレットやチラシ、描いた絵などの画像を10枚まで貼れます。"
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",

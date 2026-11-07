@@ -223,6 +223,21 @@ describe("記録の詳細", () => {
     });
   });
 
+  it("記事と添付の (i) を押すと、それぞれの説明を出す", () => {
+    cy.visit("/ja/records/1");
+    for (const [name, text] of [
+      [detail.articles, detail.articlesInfo],
+      [detail.attachments, detail.attachmentsInfo],
+    ]) {
+      cy.get(
+        `button[aria-label="${detail.infoLabel.replace("{name}", name)}"]`,
+      ).click();
+      cy.contains(text).should("be.visible");
+      cy.get("body").type("{esc}");
+      cy.contains(text).should("not.exist");
+    }
+  });
+
   it("一覧のカードから詳細に移り、一覧にもどれる", () => {
     cy.visit("/ja/records");
     cy.get("main ul > li > a").first().click();

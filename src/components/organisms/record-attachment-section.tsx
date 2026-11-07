@@ -6,6 +6,7 @@ import { type ChangeEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { MaskingTape } from "@/components/atoms/masking-tape";
 import { SectionLabel } from "@/components/atoms/section-label";
+import { InfoTip } from "@/components/molecules/info-tip";
 import { AttachmentViewer } from "@/components/organisms/attachment-viewer";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { interpolate } from "@/lib/text/interpolate";
@@ -72,7 +73,14 @@ export function RecordAttachmentSection({
 
   return (
     <section className="flex flex-col gap-2.5">
-      <SectionLabel>{dict.attachments}</SectionLabel>
+      <div className="flex items-center gap-1">
+        <SectionLabel>{dict.attachments}</SectionLabel>
+        <InfoTip
+          label={interpolate(dict.infoLabel, { name: dict.attachments })}
+        >
+          {dict.attachmentsInfo}
+        </InfoTip>
+      </div>
       {attachments.length > 0 || addButton ? (
         <ul className="grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-2.5 2xl:grid-cols-[repeat(auto-fill,minmax(140px,1fr))] 2xl:gap-3.5">
           {attachments.map((attachment, index) => (

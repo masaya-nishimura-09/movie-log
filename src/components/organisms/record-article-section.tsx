@@ -4,10 +4,12 @@ import { LocalDate } from "@/components/atoms/local-date";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
 import { ArticleNoteCard } from "@/components/molecules/article-note-card";
+import { InfoTip } from "@/components/molecules/info-tip";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { articleQueryKeys } from "@/lib/article/parse-article-query";
 import { cn } from "@/lib/style/cn";
+import { interpolate } from "@/lib/text/interpolate";
 import { withFrom } from "@/lib/url/back-href";
 import { buildHref } from "@/lib/url/build-href";
 import type { ArticleSummary } from "@/schemas/article/article";
@@ -32,7 +34,12 @@ export function RecordArticleSection({
   return (
     <section className="flex flex-col gap-2.5">
       <div className="flex items-center justify-between gap-3">
-        <SectionLabel>{dict.articles}</SectionLabel>
+        <div className="flex items-center gap-1">
+          <SectionLabel>{dict.articles}</SectionLabel>
+          <InfoTip label={interpolate(dict.infoLabel, { name: dict.articles })}>
+            {dict.articlesInfo}
+          </InfoTip>
+        </div>
         {articles.length > 0 && (
           <TextLink
             href={withFrom(

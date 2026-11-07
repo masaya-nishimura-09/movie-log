@@ -409,7 +409,10 @@
     "attachmentPosition": "{number} / {total}",
     "attachmentPrev": "Previous image",
     "attachmentNext": "Next image",
-    "attachmentsLimit": "You can attach up to {max} images"
+    "attachmentsLimit": "You can attach up to {max} images",
+    "articlesInfo": "The memo is for a short note; articles are longer writing in the editor. A log can have as many articles as you like.",
+    "infoLabel": "About {name}",
+    "attachmentsInfo": "Paste up to 10 images, such as pamphlets, flyers, or your drawings."
   },
   "deleteRecord": {
     "title": "Delete this record?",
