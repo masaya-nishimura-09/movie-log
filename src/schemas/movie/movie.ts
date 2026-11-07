@@ -31,6 +31,8 @@ const maxCast = 5;
 export type MovieValues = Pick<
   RecordFormValues,
   | "title"
+  | "originalTitle"
+  | "overview"
   | "releaseYear"
   | "runtime"
   | "genres"
@@ -43,6 +45,8 @@ export type MovieValues = Pick<
 export const movieResponseSchema = z
   .object({
     title: z.string(),
+    original_title: z.string(),
+    overview: z.string(),
     genres: z.array(z.string()),
     poster_url: z.string(),
     release_year: z.number().int(),
@@ -63,6 +67,8 @@ export const movieResponseSchema = z
     const cast = credits.filter((c) => c.creditRole === "cast");
     return {
       title: r.title,
+      originalTitle: r.original_title,
+      overview: r.overview,
       releaseYear: r.release_year || undefined,
       runtime: r.runtime,
       genres: r.genres.flatMap((genre) => {

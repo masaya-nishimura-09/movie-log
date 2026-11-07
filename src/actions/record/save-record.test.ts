@@ -45,11 +45,12 @@ afterEach(() => {
 });
 
 describe("createRecordAction", () => {
-  it("creates the record from the form and moves to it", async () => {
+  it("creates the record from the form and returns its ID", async () => {
     createRecord.mockResolvedValue({ recordId: "42" });
-    await expect(createRecordAction("en", undefined, form())).rejects.toThrow(
-      "REDIRECT /en/records/42",
-    );
+    await expect(createRecordAction(undefined, form())).resolves.toEqual({
+      success: true,
+      data: "42",
+    });
     expect(createRecord).toHaveBeenCalledWith(
       expect.objectContaining({
         title: "Arrival",
@@ -65,7 +66,6 @@ describe("createRecordAction", () => {
 
   it("returns field errors for invalid input", async () => {
     const result = await createRecordAction(
-      "ja",
       undefined,
       form({ title: "", watchedAt: "2026-10-12T00:00:00Z", score: "6" }),
     );
@@ -87,15 +87,16 @@ describe("createRecordAction", () => {
   for (const [error, messageKey] of cases) {
     it(`returns ${messageKey} for ${error.code}`, async () => {
       createRecord.mockRejectedValue(error);
-      await expect(
-        createRecordAction("ja", undefined, form()),
-      ).resolves.toEqual({ success: false, messageKey });
+      await expect(createRecordAction(undefined, form())).resolves.toEqual({
+        success: false,
+        messageKey,
+      });
     });
   }
 
   it("rethrows errors that are not API errors", async () => {
     createRecord.mockRejectedValue(new Error("network"));
-    await expect(createRecordAction("ja", undefined, form())).rejects.toThrow(
+    await expect(createRecordAction(undefined, form())).rejects.toThrow(
       "network",
     );
   });

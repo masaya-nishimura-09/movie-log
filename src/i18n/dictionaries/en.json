@@ -390,11 +390,37 @@
     "watchedAt": "Watched on",
     "platform": "Platform",
     "createdAt": "Logged",
-    "updatedAt": "Last updated"
+    "updatedAt": "Last updated",
+    "tabRecord": "Log",
+    "tabMovie": "Film info",
+    "moodTags": "Mood",
+    "attachments": "Attachments",
+    "attachmentsEmpty": "No attachments yet.",
+    "attachmentOpen": "Open attachment {number}",
+    "overview": "Synopsis",
+    "overviewEmpty": "No synopsis yet.",
+    "overviewAdd": "Add a synopsis",
+    "originalTitle": "Original title",
+    "attachmentsAdd": "Attach images",
+    "attachmentsUploading": "Uploading",
+    "attachmentsUploadError": "Couldn't attach. Use a JPEG, PNG, or WebP up to 5 MB",
+    "attachmentClose": "Close",
+    "attachmentDelete": "Delete",
+    "attachmentPosition": "{number} / {total}",
+    "attachmentPrev": "Previous image",
+    "attachmentNext": "Next image",
+    "attachmentsLimit": "You can attach up to {max} images"
   },
   "deleteRecord": {
     "title": "Delete this record?",
     "description": "\"{title}\" ({date}) and its memo will be deleted. This cannot be undone.",
+    "cancel": "Cancel",
+    "confirm": "Delete",
+    "unexpectedError": "Couldn't delete. Please try again later"
+  },
+  "deleteAttachment": {
+    "title": "Delete this image?",
+    "description": "The attached image will be deleted. This cannot be undone.",
     "cancel": "Cancel",
     "confirm": "Delete",
     "unexpectedError": "Couldn't delete. Please try again later"
@@ -464,13 +490,25 @@
       "credits": "Names must be 100 characters or fewer",
       "posterUrl": "Enter a URL starting with http or https",
       "moodTags": "Invalid mood tag",
-      "memo": "Enter 1000 characters or fewer"
+      "memo": "Enter 1000 characters or fewer",
+      "originalTitle": "Enter 255 characters or fewer",
+      "overview": "Enter 2000 characters or fewer"
     },
     "movieSuggestions": "Film suggestions",
     "titleHint": "Type 2+ characters to see TMDB suggestions. Picking one fills in the film info",
     "uploadPoster": "Upload image",
     "uploadingPoster": "Uploading",
-    "posterUploadError": "Couldn't upload. Use a JPEG, PNG, or WebP up to 5 MB"
+    "posterUploadError": "Couldn't upload. Use a JPEG, PNG, or WebP up to 5 MB",
+    "originalTitle": "Original title",
+    "overview": "Synopsis",
+    "attachments": "Attachments",
+    "attachmentsHint": "Images such as pamphlets, flyers, or your drawings. JPEG, PNG, or WebP up to 5 MB, up to 10 images",
+    "attachmentsAdd": "Choose images",
+    "attachmentRemove": "Remove image {number}",
+    "attachmentsInvalid": "Choose JPEG, PNG, or WebP images up to 5 MB",
+    "attachmentsLimit": "You can attach up to {max} images",
+    "attachmentsUploadFailed": "The record was saved, but some images couldn't be attached",
+    "uploadingAttachments": "Attaching images"
   },
   "account": {
     "back": "Back",

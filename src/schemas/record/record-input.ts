@@ -9,6 +9,8 @@ import {
 
 export const recordInputSchema = z.object({
   title: z.string().min(1).max(255),
+  originalTitle: z.string().max(255),
+  overview: z.string().max(2000),
   watchedAt: z.iso.datetime().refine((at) => Date.parse(at) <= Date.now()),
   score: z.coerce.number().pipe(scoreSchema),
   platform: platformSchema,
@@ -39,6 +41,8 @@ export type RecordInputField = keyof RecordInput;
 export function toRecordRequest(input: RecordInput) {
   return {
     title: input.title,
+    original_title: input.originalTitle,
+    overview: input.overview,
     release_year: input.releaseYear,
     runtime: input.runtime,
     genres: input.genres,

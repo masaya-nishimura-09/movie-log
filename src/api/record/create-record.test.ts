@@ -17,6 +17,8 @@ beforeEach(() => {
 
 const input = {
   title: "Arrival",
+  originalTitle: "Story of Your Life",
+  overview: "Linguists meet aliens.",
   watchedAt: "2026-10-01T12:00:00Z",
   score: 5 as const,
   platform: "netflix" as const,
@@ -42,6 +44,8 @@ describe("createRecord", () => {
     expect(init.method).toBe("POST");
     expect(JSON.parse(init.body)).toMatchObject({
       title: "Arrival",
+      original_title: "Story of Your Life",
+      overview: "Linguists meet aliens.",
       release_year: 2016,
       watched_at: "2026-10-01T12:00:00Z",
       credits: [{ person_name: "Amy Adams", credit_role: "cast" }],

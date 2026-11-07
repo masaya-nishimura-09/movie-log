@@ -1,5 +1,6 @@
 import type { MockArticle } from "@/api/mock/mock-article-factory";
 import { mockArticles } from "@/api/mock/mock-articles";
+import { mockAttachments } from "@/api/mock/mock-attachments";
 import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
 import { mockAccounts, toUserResponse } from "@/api/mock/mock-user";
 import { isTokenExpired } from "@/lib/auth/token-cookies";
@@ -9,6 +10,7 @@ import type {
 } from "@/schemas/article/article";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
 import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
+import { maxAttachments } from "@/schemas/record/attachment";
 import { moodTagSchema } from "@/schemas/record/enums";
 import type { RecordResponse } from "@/schemas/record/record";
 
@@ -131,6 +133,78 @@ function getRecord(account: Account, id: string): Response {
   const record = mockRecords[findOwnedIndex(account, id)];
   if (!record) return error(404, "RECORD_NOT_FOUND");
   return Response.json(record);
+}
+
+function toAttachmentResponse({
+  attachment_id,
+  image_url,
+  created_at,
+}: (typeof mockAttachments)[number]) {
+  return { attachment_id, image_url, created_at };
+}
+
+function listAttachments(account: Account, id: string): Response {
+  if (findOwnedIndex(account, id) === -1) {
+    return error(404, "RECORD_NOT_FOUND");
+  }
+  return Response.json({
+    attachments: mockAttachments
+      .filter((attachment) => attachment.record_id === id)
+      .map(toAttachmentResponse),
+  });
+}
+
+async function addAttachment(
+  account: Account,
+  id: string,
+  init: RequestInit,
+): Promise<Response> {
+  if (findOwnedIndex(account, id) === -1) {
+    return error(404, "RECORD_NOT_FOUND");
+  }
+  const file = init.body instanceof FormData ? init.body.get("file") : null;
+  if (
+    !(file instanceof File) ||
+    file.size === 0 ||
+    file.size > posterMaxBytes ||
+    !posterContentTypes.includes(file.type)
+  ) {
+    return error(400, "INVALID_INPUT");
+  }
+  if (
+    mockAttachments.filter((a) => a.record_id === id).length >= maxAttachments
+  ) {
+    return error(400, "INVALID_INPUT");
+  }
+  const base64 = Buffer.from(await file.arrayBuffer()).toString("base64");
+  const lastId = Math.max(
+    0,
+    ...mockAttachments.map((a) => Number(a.attachment_id)),
+  );
+  const attachment = {
+    attachment_id: String(lastId + 1),
+    record_id: id,
+    image_url: `data:${file.type};base64,${base64}`,
+    created_at: new Date().toISOString(),
+  };
+  mockAttachments.push(attachment);
+  return Response.json(toAttachmentResponse(attachment), { status: 201 });
+}
+
+function deleteAttachment(
+  account: Account,
+  id: string,
+  attachmentId: string,
+): Response {
+  if (findOwnedIndex(account, id) === -1) {
+    return error(404, "RECORD_NOT_FOUND");
+  }
+  const index = mockAttachments.findIndex(
+    (a) => a.record_id === id && a.attachment_id === attachmentId,
+  );
+  if (index === -1) return error(404, "ATTACHMENT_NOT_FOUND");
+  mockAttachments.splice(index, 1);
+  return new Response(null, { status: 204 });
 }
 
 function recordSummaryOf(recordId: string) {
@@ -300,9 +374,14 @@ function listArticles(account: Account, params: URLSearchParams): Response {
   });
 }
 
-function removeArticlesOf(recordId: string) {
+function removeRecordContents(recordId: string) {
   for (let i = mockArticles.length - 1; i >= 0; i--) {
     if (mockArticles[i]?.record_id === recordId) mockArticles.splice(i, 1);
+  }
+  for (let i = mockAttachments.length - 1; i >= 0; i--) {
+    if (mockAttachments[i]?.record_id === recordId) {
+      mockAttachments.splice(i, 1);
+    }
   }
 }
 
@@ -425,7 +504,7 @@ function deleteUser(account: Account): Response {
   for (const record of ownedRecords(account)) {
     mockRecords.splice(mockRecords.indexOf(record), 1);
     mockRecordOwners.delete(record.record_id);
-    removeArticlesOf(record.record_id);
+    removeRecordContents(record.record_id);
   }
   mockAccounts.splice(mockAccounts.indexOf(account), 1);
   return new Response(null, { status: 204 });
@@ -476,7 +555,7 @@ function deleteRecord(account: Account, id: string): Response {
   }
   mockRecords.splice(index, 1);
   mockRecordOwners.delete(id);
-  removeArticlesOf(id);
+  removeRecordContents(id);
   return new Response(null, { status: 204 });
 }
 
@@ -508,8 +587,8 @@ function getMovie(id: string): Response {
   return Response.json({
     id: Number(record.record_id),
     title: record.title,
-    original_title: record.title,
-    overview: "",
+    original_title: record.original_title || record.title,
+    overview: record.overview ?? "",
     genres: record.genres,
     poster_url: record.poster_url,
     release_year: record.release_year,
@@ -542,7 +621,7 @@ export async function mockFetch(
 ): Promise<Response> {
   const url = new URL(path, "http://mock");
   const method = init.method ?? "GET";
-  const [resource, id, sub] = url.pathname.split("/").filter(Boolean);
+  const [resource, id, sub, subId] = url.pathname.split("/").filter(Boolean);
 
   const values = Object.values(readJson(init));
   if (values.includes(errorKeyword)) {
@@ -586,6 +665,17 @@ export async function mockFetch(
     !/^\d+$/.test(id)
   ) {
     return error(400, "INVALID_INPUT");
+  }
+  if (resource === "records" && id !== undefined && sub === "attachments") {
+    if (method === "GET" && subId === undefined) {
+      return listAttachments(account, id);
+    }
+    if (method === "POST" && subId === undefined) {
+      return addAttachment(account, id, init);
+    }
+    if (method === "DELETE" && subId !== undefined) {
+      return deleteAttachment(account, id, subId);
+    }
   }
   if (resource === "records" && id !== undefined && sub === undefined) {
     if (method === "GET") return getRecord(account, id);

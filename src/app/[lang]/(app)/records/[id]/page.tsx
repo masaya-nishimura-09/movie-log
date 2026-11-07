@@ -2,9 +2,14 @@ import { Pencil } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import {
+  addAttachmentAction,
+  deleteAttachmentAction,
+} from "@/actions/record/attachment";
 import { deleteRecordAction } from "@/actions/record/delete-record";
 import { getRecordArticles } from "@/api/article/get-record-articles";
 import { getRecord } from "@/api/record/get-record";
+import { getRecordAttachments } from "@/api/record/get-record-attachments";
 import { buttonVariants } from "@/components/atoms/button";
 import { DeleteRecordDialog } from "@/components/organisms/delete-record-dialog";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
@@ -26,13 +31,15 @@ export default async function RecordPage({
   searchParams,
 }: PageProps<"/[lang]/records/[id]">) {
   const { id } = await params;
-  const [lang, dict, record, recordArticles, query] = await Promise.all([
-    getLocale(),
-    getDictionary(),
-    getRecord(id),
-    getRecordArticles(id),
-    searchParams,
-  ]);
+  const [lang, dict, record, recordArticles, attachments, query] =
+    await Promise.all([
+      getLocale(),
+      getDictionary(),
+      getRecord(id),
+      getRecordArticles(id),
+      getRecordAttachments(id),
+      searchParams,
+    ]);
   if (!record) notFound();
   const homePath = `/${lang}/home`;
   const from = safeFromHref(query[fromKey], [`/${lang}/records`, homePath]);
@@ -76,6 +83,9 @@ export default async function RecordPage({
         record={record}
         articles={recordArticles.articles}
         articleTotal={recordArticles.total}
+        attachments={attachments}
+        addAttachment={addAttachmentAction.bind(null, id)}
+        deleteAttachment={deleteAttachmentAction.bind(null, id)}
         articleFromHref={
           from === undefined
             ? undefined

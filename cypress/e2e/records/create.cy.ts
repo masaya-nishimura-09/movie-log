@@ -70,12 +70,14 @@ describe("記録の作成", () => {
     cy.get("input[name='credits.2.personName']").type("削除する行");
     cy.get(`button[aria-label="${form.removeCredit}"]`).eq(2).click();
     cy.get("input[name='credits.2.personName']").should("not.exist");
-    cy.get("input[type=file]").selectFile("cypress/fixtures/poster.png", {
+    cy.get("input[type=file]:not([multiple])").selectFile("cypress/fixtures/poster.png", {
       force: true,
     });
     cy.get("#posterUrl")
       .invoke("val")
       .should("match", /^https:\/\/mock\.invalid\/posters\//);
+    cy.get("#originalTitle").type("Story of Your Life");
+    cy.get("#overview").type("言語学者が宇宙からの来訪者と対話する。");
     cy.contains("button", form.next).click();
 
     cy.contains("label", ja.enums.moodTag.moving).click();
@@ -94,11 +96,14 @@ describe("記録の作成", () => {
       cy.contains(
         new Intl.DisplayNames("ja", { type: "region" }).of("US") ?? "US",
       ).should("exist");
-      cy.contains(ja.enums.genre.drama).should("exist");
-      cy.contains(ja.enums.genre.science_fiction).should("exist");
       cy.contains(ja.enums.moodTag.moving).should("exist");
       cy.contains(ja.enums.moodTag.dark).should("exist");
       cy.contains("言語学者が主人公の SF").should("exist");
+      cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
+      cy.contains("Story of Your Life").should("exist");
+      cy.contains("言語学者が宇宙からの来訪者と対話する。").should("exist");
+      cy.contains(ja.enums.genre.drama).should("exist");
+      cy.contains(ja.enums.genre.science_fiction).should("exist");
       cy.contains("dd", "Denis Villeneuve")
         .prev("dt")
         .should("have.text", ja.enums.creditRole.director);
@@ -108,6 +113,52 @@ describe("記録の作成", () => {
       cy.contains("削除する行").should("not.exist");
       cy.get("img[src^='https://mock.invalid/posters/']").should("exist");
     });
+  });
+
+  it("感想のステップで画像を選ぶと、保存した記録に添付される", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 新規添付 ${Date.now()}`);
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.get("form input[type=file][multiple]").selectFile(
+      [
+        "cypress/fixtures/poster.png",
+        "cypress/fixtures/not-image.txt",
+        "cypress/fixtures/poster.png",
+      ],
+      { force: true },
+    );
+    cy.contains("[role=alert]", form.attachmentsInvalid).should("be.visible");
+    cy.get("form li img").should("have.length", 2);
+    cy.get(
+      `button[aria-label="${form.attachmentRemove.replace("{number}", "2")}"]`,
+    ).click();
+    cy.get("form li img").should("have.length", 1);
+    cy.contains("button", form.save).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.contains("main h2", ja.recordDetail.attachments)
+      .parent()
+      .find("img[src^='data:image/png']")
+      .should("have.length", 1);
+  });
+
+  it("画像は10枚までしか選べない", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 新規添付上限 ${Date.now()}`);
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.get("form input[type=file][multiple]").selectFile(
+      Array.from({ length: 11 }, () => "cypress/fixtures/poster.png"),
+      { force: true },
+    );
+    cy.contains(
+      "[role=alert]",
+      form.attachmentsLimit.replace("{max}", "10"),
+    ).should("be.visible");
+    cy.get("form li img").should("have.length", 10);
+    cy.get("form input[type=file][multiple]").should("not.exist");
   });
 
   it("タイトルの候補を選ぶと、映画の情報が自動で入る", () => {
@@ -120,6 +171,8 @@ describe("記録の作成", () => {
       .click();
     cy.contains("label", ja.enums.platform.netflix).click();
     cy.contains("button", form.next).click();
+    cy.get("#originalTitle").should("have.value", "À bout de souffle");
+    cy.get("#overview").invoke("val").should("contain", "自動車泥棒のミシェル");
     cy.get("#releaseYear").should("have.value", "1960");
     cy.get("#runtime").should("have.value", "90");
     cy.get(`button[aria-label="${form.language}"]`).should(
@@ -193,7 +246,7 @@ describe("記録の作成", () => {
     cy.visit("/ja/records/new");
     cy.fillRecordBasics("アップロードテスト", { score: 3 });
     cy.contains("button", form.next).click();
-    cy.get("input[type=file]").selectFile(
+    cy.get("input[type=file]:not([multiple])").selectFile(
       {
         contents: "cypress/fixtures/not-image.txt",
         fileName: "not-image.png",
@@ -281,11 +334,11 @@ describe("記録の作成（候補とアップロード）", () => {
         res.setDelay(1500);
       });
     });
-    cy.get("input[type=file]").selectFile("cypress/fixtures/poster.png", {
+    cy.get("input[type=file]:not([multiple])").selectFile("cypress/fixtures/poster.png", {
       force: true,
     });
     cy.contains(form.uploadingPoster).should("be.visible");
-    cy.get("input[type=file]").should("be.disabled");
+    cy.get("input[type=file]:not([multiple])").should("be.disabled");
     cy.contains(form.uploadPoster).should("be.visible");
   });
 
@@ -293,7 +346,7 @@ describe("記録の作成（候補とアップロード）", () => {
     cy.visit("/ja/records/new");
     cy.fillRecordBasics("大きい画像テスト", { score: 3 });
     cy.contains("button", form.next).click();
-    cy.get("input[type=file]").selectFile(
+    cy.get("input[type=file]:not([multiple])").selectFile(
       {
         contents: Cypress.Buffer.alloc(5 * 1024 * 1024 + 1),
         fileName: "large.png",

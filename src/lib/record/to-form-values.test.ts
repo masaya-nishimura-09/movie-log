@@ -9,6 +9,8 @@ import type { MovieRecord } from "@/schemas/record/record";
 const record: MovieRecord = {
   recordId: "1",
   title: "Arrival",
+  originalTitle: "Story of Your Life",
+  overview: "Linguists meet aliens.",
   releaseYear: 2016,
   runtime: 116,
   genres: ["drama"],
@@ -29,6 +31,8 @@ describe("emptyFormValues", () => {
   it("returns the values for a new record", () => {
     expect(emptyFormValues()).toEqual({
       title: "",
+      originalTitle: "",
+      overview: "",
       watchedAt: "",
       runtime: 0,
       genres: [],

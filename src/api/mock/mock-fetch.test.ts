@@ -9,6 +9,7 @@ beforeEach(async () => {
   delete store.mockRecords;
   delete store.mockRecordOwners;
   delete store.mockArticles;
+  delete store.mockAttachments;
   delete store.mockAccounts;
   vi.resetModules();
   vi.stubEnv("MOCK_DATASET", "");
@@ -470,6 +471,100 @@ describe("mockFetch: 記録", () => {
     expect(mood_tag_counts).toContainEqual({ mood_tag: "moving", count: 2 });
     expect(mood_tag_counts).toContainEqual({ mood_tag: "dark", count: 1 });
     expect(mood_tag_counts).toContainEqual({ mood_tag: "cozy", count: 0 });
+  });
+
+  it("lists the attachments of the current user's record, and none of another user's", async () => {
+    const demo = await mockFetch("/records/1/attachments", {
+      headers: await auth(),
+    });
+    const { attachments } = await demo.json();
+    expect(attachments.length).toBeGreaterThan(0);
+    expect(attachments[0]).toEqual({
+      attachment_id: expect.any(String),
+      image_url: expect.stringMatching(/^\/mock-attachments\//),
+      created_at: expect.any(String),
+    });
+    const other = await mockFetch("/records/1/attachments", {
+      headers: await register(),
+    });
+    expect(other.status).toBe(404);
+  });
+
+  it("adds an image to the current user's record and deletes it", async () => {
+    const headers = await auth();
+    const body = new FormData();
+    body.set("file", new File(["png"], "a.png", { type: "image/png" }));
+    const added = await mockFetch("/records/1/attachments", {
+      method: "POST",
+      headers,
+      body,
+    });
+    expect(added.status).toBe(201);
+    const attachment = await added.json();
+    expect(attachment.image_url).toBe(
+      `data:image/png;base64,${Buffer.from("png").toString("base64")}`,
+    );
+    const listed = await mockFetch("/records/1/attachments", { headers });
+    expect((await listed.json()).attachments).toContainEqual(attachment);
+    const deleted = await mockFetch(
+      `/records/1/attachments/${attachment.attachment_id}`,
+      { method: "DELETE", headers },
+    );
+    expect(deleted.status).toBe(204);
+    const again = await mockFetch(
+      `/records/1/attachments/${attachment.attachment_id}`,
+      { method: "DELETE", headers },
+    );
+    expect(await again.json()).toMatchObject({ code: "ATTACHMENT_NOT_FOUND" });
+  });
+
+  it("accepts up to 10 attachments on a record", async () => {
+    const headers = await register();
+    const { record_id } = await (
+      await mockFetch("/records/", post(newRecord, "POST", headers))
+    ).json();
+    const attach = () => {
+      const body = new FormData();
+      body.set("file", new File(["x"], "a.png", { type: "image/png" }));
+      return mockFetch(`/records/${record_id}/attachments`, {
+        method: "POST",
+        headers,
+        body,
+      });
+    };
+    for (let i = 0; i < 10; i++) expect((await attach()).status).toBe(201);
+    expect((await attach()).status).toBe(400);
+  });
+
+  it("rejects a non-image attachment and another user's record", async () => {
+    const body = new FormData();
+    body.set("file", new File(["x"], "a.gif", { type: "image/gif" }));
+    const invalid = await mockFetch("/records/1/attachments", {
+      method: "POST",
+      headers: await auth(),
+      body,
+    });
+    expect(invalid.status).toBe(400);
+    const other = await register();
+    const png = new FormData();
+    png.set("file", new File(["x"], "a.png", { type: "image/png" }));
+    for (const init of [
+      { method: "POST", headers: other, body: png },
+      { method: "DELETE", headers: other },
+    ]) {
+      const path =
+        init.method === "POST"
+          ? "/records/1/attachments"
+          : "/records/1/attachments/1";
+      expect((await mockFetch(path, init)).status).toBe(404);
+    }
+  });
+
+  it("removes the attachments together with the record", async () => {
+    const headers = await auth();
+    await mockFetch("/records/1", { method: "DELETE", headers });
+    const store = globalThis as { mockAttachments?: { record_id: string }[] };
+    expect(store.mockAttachments?.some((a) => a.record_id === "1")).toBe(false);
   });
 });
 

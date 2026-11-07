@@ -1,10 +1,14 @@
 "use client";
 
+import { Toast } from "@base-ui/react/toast";
 import { ArrowLeft, ArrowRight } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
+import { FormField } from "@/components/molecules/form-field";
+import { PendingAttachmentsField } from "@/components/molecules/pending-attachments-field";
 import { RecordBasicsFields } from "@/components/organisms/record-basics-fields";
 import { RecordImpressionFields } from "@/components/organisms/record-impression-fields";
 import { RecordMovieFields } from "@/components/organisms/record-movie-fields";
@@ -22,9 +26,13 @@ import type { RecordFormValues } from "@/schemas/record/record-form";
 type RecordCreateFormProps = {
   lang: Locale;
   action: (
-    previous: ActionResult<never> | undefined,
+    previous: ActionResult<string> | undefined,
     formData: FormData,
-  ) => Promise<ActionResult<never>>;
+  ) => Promise<ActionResult<string>>;
+  addAttachment: (
+    recordId: string,
+    formData: FormData,
+  ) => Promise<ActionResult<null>>;
   searchMovies: (title: string) => Promise<MovieSuggestion[]>;
   getMovie: (movieId: string) => Promise<MovieValues | undefined>;
   uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
@@ -40,6 +48,8 @@ const fieldSteps: Record<string, number> = {
   watchedAt: 0,
   score: 0,
   platform: 0,
+  originalTitle: 1,
+  overview: 1,
   releaseYear: 1,
   runtime: 1,
   language: 1,
@@ -54,6 +64,7 @@ const fieldSteps: Record<string, number> = {
 export function RecordCreateForm({
   lang,
   action,
+  addAttachment,
   searchMovies,
   getMovie,
   uploadPoster,
@@ -65,7 +76,36 @@ export function RecordCreateForm({
 }: RecordCreateFormProps) {
   const [step, setStep] = useState(0);
   const steps = [dict.stepBasics, dict.stepMovieInfo, dict.stepImpression];
-  const { failure, pending, submit } = useFormSubmit(action, convertWatchedAt);
+  const { state, failure, pending, submit } = useFormSubmit(
+    action,
+    convertWatchedAt,
+  );
+  const [files, setFiles] = useState<File[]>([]);
+  const [uploading, setUploading] = useState(false);
+  const router = useRouter();
+  const toastManager = Toast.useToastManager();
+  const savedId = state?.success ? state.data : undefined;
+  const pendingFiles = useRef(files);
+  pendingFiles.current = files;
+  const afterSave = useRef({ router, toastManager, addAttachment });
+  afterSave.current = { router, toastManager, addAttachment };
+
+  useEffect(() => {
+    if (savedId === undefined) return;
+    const { router, toastManager, addAttachment } = afterSave.current;
+    setUploading(true);
+    (async () => {
+      let ok = true;
+      for (const file of pendingFiles.current) {
+        const formData = new FormData();
+        formData.set("file", file);
+        const result = await addAttachment(savedId, formData);
+        if (!result.success) ok = false;
+      }
+      if (!ok) toastManager.add({ title: dict.attachmentsUploadFailed });
+      router.push(`/${lang}/records/${savedId}`);
+    })();
+  }, [savedId, lang, dict.attachmentsUploadFailed]);
   const movie = useMovieAssist(values, getMovie);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
 
@@ -174,6 +214,7 @@ export function RecordCreateForm({
               values={movie.values}
               maxReleaseYear={maxReleaseYear}
               uploadPoster={uploadPoster}
+              counterTemplate={counterTemplate}
               dict={dict}
               enums={enums}
             />
@@ -201,6 +242,13 @@ export function RecordCreateForm({
               enums={enums}
               counterTemplate={counterTemplate}
             />
+            <FormField label={dict.attachments} hint={dict.attachmentsHint}>
+              <PendingAttachmentsField
+                files={files}
+                onChange={setFiles}
+                dict={dict}
+              />
+            </FormField>
           </div>
         </div>
       </div>
@@ -230,10 +278,10 @@ export function RecordCreateForm({
           <Button
             key="save"
             type="submit"
-            disabled={pending}
+            disabled={pending || savedId !== undefined}
             className="ml-auto h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
           >
-            {dict.save}
+            {uploading ? dict.uploadingAttachments : dict.save}
           </Button>
         )}
       </footer>

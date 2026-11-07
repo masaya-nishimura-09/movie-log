@@ -16,9 +16,11 @@ import {
 } from "@/components/molecules/alert-dialog";
 
 type DeleteDialogProps = {
-  action: () => Promise<ActionResult<never>>;
+  action: () => Promise<ActionResult<null>>;
   description: string;
   triggerLabel: string;
+  triggerClassName?: string;
+  iconOnly?: boolean;
   dict: {
     title: string;
     cancel: string;
@@ -31,6 +33,8 @@ export function DeleteDialog({
   action,
   description,
   triggerLabel,
+  triggerClassName,
+  iconOnly = false,
   dict,
 }: DeleteDialogProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
@@ -43,12 +47,12 @@ export function DeleteDialog({
             variant="destructive"
             size="sm"
             aria-label={triggerLabel}
-            className="px-2.5 md:px-3.5"
+            className={triggerClassName ?? "px-2.5 md:px-3.5"}
           />
         }
       >
         <Trash2 className="size-4.5" aria-hidden />
-        <span className="hidden md:inline">{triggerLabel}</span>
+        {!iconOnly && <span className="hidden md:inline">{triggerLabel}</span>}
       </AlertDialogTrigger>
       <AlertDialogContent className="rounded-[18px] p-6">
         <AlertDialogHeader className="text-left">

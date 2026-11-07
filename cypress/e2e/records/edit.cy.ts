@@ -23,6 +23,12 @@ describe("記録の編集", () => {
     cy.get("#releaseYear").should("have.value", "2020");
   });
 
+  it("原題とあらすじも、今の内容が入った状態で開く", () => {
+    cy.visit("/ja/records/1/edit");
+    cy.get("#originalTitle").should("have.value", "À bout de souffle");
+    cy.get("#overview").invoke("val").should("contain", "自動車泥棒のミシェル");
+  });
+
   it("すべての項目を変えて保存すると、詳細画面に反映される", () => {
     const title = `E2E 編集 ${Date.now()}`;
     const yesterday = new Date();
@@ -37,6 +43,8 @@ describe("記録の編集", () => {
       .contains("label", "2")
       .click();
     cy.contains("label", ja.enums.platform.hulu).click();
+    cy.get("#originalTitle").clear().type("The Matrix");
+    cy.get("#overview").clear().type("仮想現実から目覚める話。");
     cy.get("#releaseYear").clear().type("1999");
     cy.get("#runtime").clear().type("136");
     cy.get(`button[aria-label="${form.language}"]`).click();
@@ -57,11 +65,14 @@ describe("記録の編集", () => {
       cy.contains("1999年").should("exist");
       cy.contains("136分").should("exist");
       cy.contains("英語").should("exist");
-      cy.contains(ja.enums.genre.action).should("exist");
       cy.contains(ja.enums.moodTag.tense).should("exist");
       cy.contains("2回目に観たときの感想").should("exist");
-      cy.contains("dd", "Lana Wachowski").should("exist");
       cy.get("img[src='https://example.com/poster.jpg']").should("exist");
+      cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
+      cy.contains("The Matrix").should("exist");
+      cy.contains("仮想現実から目覚める話。").should("exist");
+      cy.contains(ja.enums.genre.action).should("exist");
+      cy.contains("dd", "Lana Wachowski").should("exist");
     });
   });
 
@@ -96,6 +107,7 @@ describe("記録の編集", () => {
     cy.get("input[name='credits.0.personName']").type("外す監督");
     cy.contains("button", form.next).click();
     cy.contains("button", form.save).click();
+    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
     cy.contains("dd", "外す監督").should("exist");
 
     cy.contains("a", ja.recordDetail.edit).click();
@@ -103,6 +115,7 @@ describe("記録の編集", () => {
     cy.get(`button[aria-label="${form.removeCredit}"]`).first().click();
     cy.contains("button", form.saveChanges).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
     cy.contains(ja.recordDetail.creditsEmpty).should("be.visible");
     cy.get("main").contains(ja.enums.genre.drama).should("not.exist");
   });
@@ -113,7 +126,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.login();
   });
 
-  it("画面の制限を越えた値を送ると、13項目すべてのエラーを表示する", () => {
+  it("画面の制限を越えた値を送ると、15項目すべてのエラーを表示する", () => {
     cy.createRecord(`E2E 全エラー ${Date.now()}`);
     cy.contains("a", ja.recordDetail.edit).click();
     cy.get("#title").clear();
@@ -141,6 +154,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
         set("watchedAt", "2999-01-01");
         set("language", "");
         set("credits.0.personName", "a".repeat(101));
+        set("originalTitle", "a".repeat(256));
         for (const input of formElement.querySelectorAll<HTMLInputElement>(
           "input[name=score], input[name=platform]",
         )) {
@@ -148,6 +162,9 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
         }
         const memo = formElement.querySelector<HTMLTextAreaElement>("#memo");
         if (memo) memo.value = "a".repeat(1001);
+        const overview =
+          formElement.querySelector<HTMLTextAreaElement>("#overview");
+        if (overview) overview.value = "a".repeat(2001);
         add("countries", "usa");
         add("genres", "unknown");
         add("moodTags", "unknown");

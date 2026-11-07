@@ -4,6 +4,8 @@ import type { RecordFormValues } from "@/schemas/record/record-form";
 export function emptyFormValues(): RecordFormValues {
   return {
     title: "",
+    originalTitle: "",
+    overview: "",
     watchedAt: "",
     runtime: 0,
     genres: [],
@@ -19,6 +21,8 @@ export function emptyFormValues(): RecordFormValues {
 export function toFormValues(record: MovieRecord): RecordFormValues {
   return {
     title: record.title,
+    originalTitle: record.originalTitle,
+    overview: record.overview,
     watchedAt: record.watchedAt,
     releaseYear: record.releaseYear,
     runtime: record.runtime,

@@ -44,6 +44,8 @@ describe("movieSuggestionsResponseSchema", () => {
 describe("movieResponseSchema", () => {
   const response = {
     title: "メッセージ",
+    original_title: "Arrival",
+    overview: "言語学者が宇宙船と対話する。",
     genres: ["drama", "science_fiction", "unknown"],
     poster_url: "https://image.tmdb.org/t/p/w500/a.jpg",
     release_year: 2016,
@@ -66,6 +68,8 @@ describe("movieResponseSchema", () => {
   it("converts the movie to form values", () => {
     expect(movieResponseSchema.parse(response)).toEqual({
       title: "メッセージ",
+      originalTitle: "Arrival",
+      overview: "言語学者が宇宙船と対話する。",
       releaseYear: 2016,
       runtime: 116,
       genres: ["drama", "science_fiction"],

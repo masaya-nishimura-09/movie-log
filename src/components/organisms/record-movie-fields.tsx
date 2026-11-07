@@ -1,6 +1,7 @@
 import type { ActionResult } from "@/actions/action-result";
 import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { Input } from "@/components/atoms/input";
+import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { CountryInput } from "@/components/molecules/country-input";
 import { CreditRows } from "@/components/molecules/credit-rows";
 import { FormField } from "@/components/molecules/form-field";
@@ -27,6 +28,7 @@ type RecordMovieFieldsProps = {
   errors?: RecordFieldErrors;
   maxReleaseYear: number;
   uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
+  counterTemplate: string;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   split?: boolean;
@@ -38,6 +40,7 @@ export function RecordMovieFields({
   errors,
   maxReleaseYear,
   uploadPoster,
+  counterTemplate,
   dict,
   enums,
   split = false,
@@ -56,6 +59,33 @@ export function RecordMovieFields({
       )}
     >
       <div className={split ? "flex flex-col gap-4.5" : "contents"}>
+        <FormField
+          label={dict.originalTitle}
+          error={fieldError(errors, dict, "originalTitle")}
+          htmlFor="originalTitle"
+        >
+          <Input
+            id="originalTitle"
+            name="originalTitle"
+            maxLength={255}
+            defaultValue={values.originalTitle}
+          />
+        </FormField>
+
+        <FormField
+          label={dict.overview}
+          error={fieldError(errors, dict, "overview")}
+          htmlFor="overview"
+        >
+          <CountedTextarea
+            id="overview"
+            name="overview"
+            maxLength={2000}
+            defaultValue={values.overview}
+            counterTemplate={counterTemplate}
+          />
+        </FormField>
+
         <div className="grid grid-cols-2 gap-4">
           <FormField
             label={dict.releaseYear}

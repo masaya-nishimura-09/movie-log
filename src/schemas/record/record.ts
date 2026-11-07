@@ -17,6 +17,8 @@ export type Credit = z.infer<typeof creditSchema>;
 export const recordSchema = z.object({
   recordId: z.string(),
   title: z.string(),
+  originalTitle: z.string(),
+  overview: z.string(),
   releaseYear: z.number().int(),
   runtime: z.number().int(),
   genres: z.array(genreSchema),
@@ -39,6 +41,8 @@ export const recordResponseSchema = z
   .object({
     record_id: z.string(),
     title: z.string(),
+    original_title: z.string().default(""),
+    overview: z.string().default(""),
     release_year: z.number().int(),
     runtime: z.number().int(),
     genres: z.array(genreSchema),
@@ -63,6 +67,8 @@ export const recordResponseSchema = z
     (r): MovieRecord => ({
       recordId: r.record_id,
       title: r.title,
+      originalTitle: r.original_title,
+      overview: r.overview,
       releaseYear: r.release_year,
       runtime: r.runtime,
       genres: r.genres,

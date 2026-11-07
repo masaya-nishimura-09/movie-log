@@ -6,6 +6,8 @@ import {
 
 const validInput = {
   title: "Arrival",
+  originalTitle: "Story of Your Life",
+  overview: "Linguists meet aliens.",
   watchedAt: "2026-10-01T12:00:00Z",
   score: "5",
   platform: "netflix",
@@ -79,10 +81,33 @@ describe("recordInputSchema", () => {
   });
 });
 
+describe("recordInputSchema: 原題とあらすじ", () => {
+  it("accepts an original title up to 255 characters and an overview up to 2000", () => {
+    expect(
+      issuePaths({
+        originalTitle: "a".repeat(255),
+        overview: "a".repeat(2000),
+      }),
+    ).toEqual([]);
+    expect(
+      issuePaths({
+        originalTitle: "a".repeat(256),
+        overview: "a".repeat(2001),
+      }),
+    ).toEqual(["originalTitle", "overview"]);
+  });
+
+  it("accepts an empty original title and overview", () => {
+    expect(issuePaths({ originalTitle: "", overview: "" })).toEqual([]);
+  });
+});
+
 describe("toRecordRequest", () => {
   it("converts the input to the API's snake_case fields", () => {
     expect(toRecordRequest(recordInputSchema.parse(validInput))).toEqual({
       title: "Arrival",
+      original_title: "Story of Your Life",
+      overview: "Linguists meet aliens.",
       release_year: 2016,
       runtime: 116,
       genres: ["drama", "science_fiction"],

@@ -4,6 +4,7 @@ import {
   getMovieAction,
   searchMoviesAction,
 } from "@/actions/movie/movie-assist";
+import { addAttachmentAction } from "@/actions/record/attachment";
 import { createRecordAction } from "@/actions/record/save-record";
 import { RecordCreateForm } from "@/components/organisms/record-create-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -26,7 +27,8 @@ export default async function NewRecordPage() {
       </h1>
       <RecordCreateForm
         lang={lang}
-        action={createRecordAction.bind(null, lang)}
+        action={createRecordAction}
+        addAttachment={addAttachmentAction}
         searchMovies={searchMoviesAction.bind(null, lang)}
         getMovie={getMovieAction.bind(null, lang)}
         uploadPoster={uploadPosterAction}

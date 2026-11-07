@@ -216,6 +216,7 @@ describe("記録の一覧", () => {
     cy.get("[role=dialog]").contains("a", ja.enums.genre.crime).click();
     cy.location("search").should("eq", "?genre=drama&genre=crime");
     cards().first().click();
+    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
     cy.get("main").within(() => {
       cy.contains(ja.enums.genre.drama).should("exist");
       cy.contains(ja.enums.genre.crime).should("exist");

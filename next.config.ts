@@ -4,7 +4,7 @@ const isDev = process.env.NODE_ENV === "development";
 
 const contentSecurityPolicy = [
   "default-src 'self'",
-  "img-src 'self' https: data: blob:",
+  `img-src 'self' https: data: blob:${isDev ? " http://localhost:9000" : ""}`,
   "style-src 'self' 'unsafe-inline'",
   `script-src 'self' 'unsafe-inline' https://challenges.cloudflare.com${isDev ? " 'unsafe-eval'" : ""}`,
   "frame-src https://challenges.cloudflare.com",

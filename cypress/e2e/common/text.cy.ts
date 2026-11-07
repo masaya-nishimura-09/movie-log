@@ -181,8 +181,13 @@ for (const [lang, t] of locales) {
         cy.visit(`/${lang}/records/1`);
         shows(
           t.recordDetail.scoreCaption,
+          t.recordDetail.tabRecord,
+          t.recordDetail.tabMovie,
+          t.recordDetail.moodTags,
           t.recordDetail.memo,
-          t.recordDetail.credits,
+          t.recordDetail.articles,
+          t.recordDetail.attachments,
+          t.recordDetail.attachmentsAdd,
           t.recordDetail.watchedAt,
           t.recordDetail.platform,
           t.recordDetail.createdAt,
@@ -195,6 +200,16 @@ for (const [lang, t] of locales) {
           t.recordForm.language,
           fill(t.recordDetail.releaseYear, { year: 1960 }),
           fill(t.recordDetail.runtime, { minutes: 90 }),
+        );
+        cy.get(
+          `[aria-label="${fill(t.recordDetail.attachmentOpen, { number: 1 })}"]`,
+        ).should("exist");
+        cy.contains("[role=tab]", t.recordDetail.tabMovie).click();
+        shows(
+          t.recordDetail.originalTitle,
+          t.recordDetail.overview,
+          t.recordForm.genres,
+          t.recordDetail.credits,
         );
         cy.get(
           `[aria-label="${fill(t.recordCard.score, { score: 4 })}"]`,
@@ -230,6 +245,9 @@ for (const [lang, t] of locales) {
         cy.contains("button", t.recordForm.next).click();
         shows(
           t.recordForm.movieInfoHint,
+          t.recordForm.originalTitle,
+          t.recordForm.overview,
+          fill(t.characterCount, { current: 0, max: 2000 }),
           t.recordForm.releaseYear,
           fill(t.recordForm.releaseYearHint, {
             max: new Date().getFullYear() + 5,
@@ -277,6 +295,9 @@ for (const [lang, t] of locales) {
           t.recordForm.moodTags,
           t.recordForm.moodTagsHint,
           t.recordForm.memo,
+          t.recordForm.attachments,
+          t.recordForm.attachmentsHint,
+          t.recordForm.attachmentsAdd,
           t.recordForm.save,
           fill(t.characterCount, { current: 0, max: 1000 }),
         );

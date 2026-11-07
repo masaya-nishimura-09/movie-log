@@ -16,6 +16,8 @@ export function readRecordForm(formData: FormData) {
 
   return {
     title: text("title"),
+    originalTitle: text("originalTitle").trim(),
+    overview: text("overview"),
     watchedAt: text("watchedAt"),
     score: text("score"),
     platform: text("platform"),

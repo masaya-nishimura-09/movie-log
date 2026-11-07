@@ -4,6 +4,9 @@ import type { RecordResponse } from "@/schemas/record/record";
 export const initialRecordsEn: RecordResponse[] = [
   mock(1, {
     title: "Breathless",
+    original_title: "À bout de souffle",
+    overview:
+      "After shooting a policeman, the small-time car thief Michel flees to Paris. He hides out with Patricia, his American girlfriend, and asks her to run away with him to Italy, but she cannot make up her mind.",
     release_year: 1960,
     runtime: 90,
     genres: ["drama", "crime", "romance"],

@@ -4,6 +4,9 @@ import type { RecordResponse } from "@/schemas/record/record";
 export const initialRecordsJa: RecordResponse[] = [
   mock(1, {
     title: "勝手にしやがれ",
+    original_title: "À bout de souffle",
+    overview:
+      "自動車泥棒のミシェルは、追ってきた警官を撃ってパリへ逃げる。アメリカ人の恋人パトリシアの部屋に転がり込み、一緒にイタリアへ逃げようと誘うが、彼女の気持ちは揺れ動く。",
     release_year: 1960,
     runtime: 90,
     genres: ["drama", "crime", "romance"],

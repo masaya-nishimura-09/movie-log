@@ -17,6 +17,8 @@ beforeEach(() => {
 
 const input = {
   title: "Arrival",
+  originalTitle: "Story of Your Life",
+  overview: "Linguists meet aliens.",
   watchedAt: "2026-10-01T12:00:00Z",
   score: 5 as const,
   platform: "netflix" as const,

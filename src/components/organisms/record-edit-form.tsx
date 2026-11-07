@@ -104,6 +104,7 @@ export function RecordEditForm({
             values={movie.values}
             maxReleaseYear={maxReleaseYear}
             uploadPoster={uploadPoster}
+            counterTemplate={counterTemplate}
             dict={dict}
             enums={enums}
           />

@@ -27,6 +27,23 @@ describe("readRecordForm", () => {
     });
   });
 
+  it("trims the original title and keeps the overview as written", () => {
+    const values = readRecordForm(
+      formData([
+        ["originalTitle", "  Story of Your Life  "],
+        ["overview", "  Linguists meet aliens.\n"],
+      ]),
+    );
+    expect(values).toMatchObject({
+      originalTitle: "Story of Your Life",
+      overview: "  Linguists meet aliens.\n",
+    });
+    expect(readRecordForm(formData([]))).toMatchObject({
+      originalTitle: "",
+      overview: "",
+    });
+  });
+
   it("orders credits by their index and drops rows without a name", () => {
     const values = readRecordForm(
       formData([

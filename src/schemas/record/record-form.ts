@@ -4,6 +4,8 @@ import { recordSchema } from "@/schemas/record/record";
 export const recordFormValuesSchema = recordSchema
   .pick({
     title: true,
+    originalTitle: true,
+    overview: true,
     releaseYear: true,
     runtime: true,
     genres: true,
