@@ -4,7 +4,8 @@
 
 [English](README.md) | **日本語**
 
-映画鑑賞記録アプリ「Cinestamp」の Web アプリです。<br/>観た映画ごとに、ポスター、鑑賞日、スコア、気分、メモを記録できます。
+映画鑑賞記録アプリ「Cinestamp」の Web アプリです。\
+観た映画ごとに、ポスター、鑑賞日、スコア、気分、メモを記録できます。
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-0a2947?logo=nextdotjs&logoColor=f3e4c9)
 ![React](https://img.shields.io/badge/React-19-0a2947?logo=react&logoColor=f3e4c9)
@@ -12,27 +13,26 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-0a2947?logo=tailwindcss&logoColor=f3e4c9)
 ![pnpm](https://img.shields.io/badge/pnpm-11-0a2947?logo=pnpm&logoColor=f3e4c9)
 
-<img src=".github/assets/hero-ja.webp" alt="PC とスマホで表示した鑑賞記録の一覧" width="820">
+![PC とスマホで表示した鑑賞記録の一覧](.github/assets/hero-ja.webp)
 
 </div>
 
-本リポジトリでは、Cinestamp の Web アプリを管理しています。データの取得と保存には [Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api) を利用し、モックデータを使えば API なしでも動作します。[モバイルアプリ](https://github.com/masaya-nishimura-09/movie-log-mobile)もあります。
+本リポジトリでは、Cinestamp の Web アプリを管理しています。
+データの取得と保存には
+[Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
+を利用し、モックデータを使えば API なしでも動作します。
+[モバイルアプリ](https://github.com/masaya-nishimura-09/movie-log-mobile)もあります。
 
 ## 概要
 
-記録にはプラットフォームと気分が残るため、観た映画をこれらの条件で絞り込めます。「Netflix で観られる、感動する映画はない？」と聞かれたときも、すぐに答えを見つけられます。
+記録にはプラットフォームと気分が残るため、観た映画をこれらの条件で絞り込めます。
+「Netflix で観られる、感動する映画はない？」と聞かれたときも、すぐに答えを見つけられます。
 
-<p align="center">
-  <img src=".github/assets/recommend-ja.webp" alt="プラットフォーム「Netflix」と気分「感動系」で絞り込んだ鑑賞記録の一覧" width="820">
-</p>
+![プラットフォーム「Netflix」と気分「感動系」で絞り込んだ鑑賞記録の一覧](.github/assets/recommend-ja.webp)
 
-<p align="center">
-  <img src=".github/assets/mobile-ja.webp" alt="スマホで表示した鑑賞記録の一覧、詳細、絞り込み" width="760">
-</p>
+![スマホで表示した鑑賞記録の一覧、詳細、絞り込み](.github/assets/mobile-ja.webp)
 
-<p align="center">
-  <img src=".github/assets/dark-ja.webp" alt="ダークテーマで表示した鑑賞記録の一覧" width="760">
-</p>
+![ダークテーマで表示した鑑賞記録の一覧](.github/assets/dark-ja.webp)
 
 ## アーキテクチャ
 
@@ -45,50 +45,65 @@ flowchart LR
     browser --> turnstile
 ```
 
-ブラウザから API へは直接アクセスしません。Server Components と Server Actions がサーバー側で API を呼び出し、アクセストークンとリフレッシュトークンは HTTP-only の Cookie に保存します。言語の振り分け、ログイン画面へのリダイレクト、トークンの更新は `src/proxy.ts` が担います。
+ブラウザから API へは直接アクセスしません。
+Server Components と Server Actions がサーバー側で API を呼び出し、
+アクセストークンとリフレッシュトークンは HTTP-only の Cookie に保存します。
+言語の振り分け、ログイン画面へのリダイレクト、トークンの更新は `src/proxy.ts` が担います。
 
 UI コンポーネントは、atoms、molecules、organisms の 3 層に分けています。
 
 ## 主な機能
 
-**鑑賞記録**
+### 鑑賞記録
 
 - 鑑賞記録の作成・表示・更新・削除
-- TMDB を利用した映画情報（公開年、上映時間、言語、制作国、ジャンル、クレジット、ポスター）の入力
+- TMDB を利用した映画情報（原題、あらすじ、公開年、上映時間、言語、制作国、ジャンル、
+  クレジット、ポスター）の入力
 - ポスター画像のアップロード
 - カレンダーによる鑑賞日の選択（「今日」「昨日」の入力にも対応）
+- パンフレットやチラシ、描いた絵などの画像の添付（1 件の記録につき 10 枚まで、
+  作成時にも後からでも追加でき、前後のボタンで 1 枚ずつ表示）
+- 記録のタブ（雰囲気、メモ、記事、添付）と映画情報のタブ（原題、あらすじ、ジャンル、
+  クレジット）に分けた詳細画面
 
-**記録の検索**
+### ホーム
+
+- 最近の記録と、最近書いた記事
+- 記録の多い雰囲気タグ 3 つまでについて、その雰囲気の記録を横に並べた一覧
+
+### 記録の検索
 
 - タイトル検索、並べ替え、ページネーション
-- スコア、プラットフォーム、気分、ジャンルによる絞り込み（スコアとプラットフォームは 1 つ、気分とジャンルは指定したすべてを含む記録のみ）
+- スコア、プラットフォーム、気分、ジャンルによる絞り込み
+  （スコアとプラットフォームは 1 つ、気分とジャンルは指定したすべてを含む記録のみ）
 
-**記事**
+### 記事
 
 - 鑑賞記録ごとの記事の作成・表示・更新・削除
 - 太字、斜体、見出し、小見出し、箇条書き、番号付きリスト、引用を使える本文のエディタ
 - 見出しから作る目次（読んでいる位置の見出しを強調）
 - タイトルと本文のキーワード検索、記録による絞り込み、並べ替え、ページネーション
 
-**アカウント**
+### アカウント
 
 - ユーザー登録、ログイン、ログアウト（トークンは自動で更新）
 - アカウント情報の変更と退会
+- 鑑賞記録の CSV と、記事の Markdown（ZIP にまとめたもの）の書き出し
 - Cloudflare Turnstile による、ログインとユーザー登録の自動送信の防止
 
-**お問い合わせ**
+### お問い合わせ
 
 - Resend を利用した、メールで届くお問い合わせフォーム
 - Cloudflare Turnstile と非表示の入力欄による、自動送信の防止
 
-**画面**
+### 画面
 
 - 日本語と英語（ブラウザの言語設定から自動で選択）
 - ライトテーマとダークテーマ
 - スマホと PC の両方に対応したレイアウト
 - リンクを共有したときのプレビューカード（Open Graph）
 
-**セキュリティと運用**
+### セキュリティと運用
 
 - Content-Security-Policy をはじめとするセキュリティヘッダーの付与
 - 利用者単位のレート制限のための、クライアント IP と内部シークレットの API への送信
@@ -104,7 +119,8 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 ![Sage](https://img.shields.io/badge/Sage-d3d4c0-d3d4c0)
 ![Brown](https://img.shields.io/badge/Brown-8b5e3c-8b5e3c)
 
-ほかの色は、すべて `src/styles/globals.css` でこの 4 色を混ぜて作っています。文字の太さは役割で使い分けており、本文は 400、押せる要素は 500、見出し・主要なボタン・スコアは 700 です。
+ほかの色は、すべて `src/styles/globals.css` でこの 4 色を混ぜて作っています。
+文字の太さは役割で使い分けており、本文は 400、押せる要素は 500、見出し・主要なボタン・スコアは 700 です。
 
 ## 技術スタック
 
@@ -126,7 +142,8 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 
 - Node.js 20.9 以上
 - pnpm
-- [Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)（モックモードでは不要）
+- [Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
+  （モックモードでは不要）
 
 ### インストール
 
@@ -143,7 +160,18 @@ pnpm dev
 
 ### モックモード
 
-`USE_MOCK=true` を設定すると、API を使わずにモックデータで動作します。メールアドレス `demo@example.com`、パスワード `password` でログインできます。モックデータはメモリ上に保持され、サーバーを再起動すると初期状態に戻ります。記録はアカウントごとに分かれていて、初期データの記録はデモ用のアカウントのものです。新しく登録したアカウントは、記録が 0 件の状態から始まります。エラーの表示を確かめるため、次の値で失敗を返します。タイトル検索に `__error__` と入れると、記録の一覧が 500 を返します。送信する項目のどれかが `__error__` なら 500、`__too_many__` なら 429 を返します（例：ログインのパスワード、記録のタイトル）。表示名が `__withdraw_error__` のアカウントは、退会が 500 で失敗します。メモが `__delete_error__` の記録は、削除が 500 で失敗します。
+`USE_MOCK=true` を設定すると、API を使わずにモックデータで動作します。
+メールアドレス `demo@example.com`、パスワード `password` でログインできます。
+モックデータはメモリ上に保持され、サーバーを再起動すると初期状態に戻ります。
+記録はアカウントごとに分かれていて、初期データの記録はデモ用のアカウントのものです。
+新しく登録したアカウントは、記録が 0 件の状態から始まります。
+
+エラーの表示を確かめるため、次の値で失敗を返します。
+タイトル検索に `__error__` と入れると、記録の一覧が 500 を返します。
+送信する項目のどれかが `__error__` なら 500、`__too_many__` なら 429 を返します
+（例：ログインのパスワード、記録のタイトル）。
+表示名が `__withdraw_error__` のアカウントは、退会が 500 で失敗します。
+メモが `__delete_error__` の記録は、削除が 500 で失敗します。
 
 ### 環境変数
 
@@ -179,13 +207,16 @@ pnpm dev
 | `pnpm test:e2e`     | Cypress による E2E テストの実行         |
 | `pnpm cypress:open` | Cypress の画面を開いて E2E テストを実行 |
 
-単体テストは、対象のファイルの隣に `*.test.ts` として置いています（例：`src/lib/url/build-href.test.ts`）。
+単体テストは、対象のファイルの隣に `*.test.ts` として置いています
+（例：`src/lib/url/build-href.test.ts`）。
 
-E2E テストは `cypress/e2e/` に、画面ごとのフォルダに分けて置いています。`pnpm test:e2e` は、本番用にビルドしたアプリをモックモードでポート 3300 に起動し、Chrome で実行します（Chrome のインストールが必要）。
+E2E テストは `cypress/e2e/` に、画面ごとのフォルダに分けて置いています。
+`pnpm test:e2e` は、本番用にビルドしたアプリをモックモードでポート 3300 に起動し、
+Chrome で実行します（Chrome のインストールが必要）。
 
 ## ディレクトリ構成
 
-```
+```text
 src/
   app/                # ルーティング（[lang]/(app)、(auth)、(legal)）
   actions/            # Server Actions
@@ -194,7 +225,7 @@ src/
   hooks/              # React のカスタムフック
   schemas/            # Zod スキーマ
   i18n/               # 言語設定、辞書
-  lib/                # 補助関数（article、auth、contact、date、log、navigation、record、style、text、turnstile、url）
+  lib/                # 機能ごとの補助関数（article、record、url など）
   styles/             # グローバルスタイル、色の定義
   proxy.ts            # 言語の振り分け、トークンの更新
   instrumentation.ts  # 未処理のサーバーエラーのログ出力
@@ -224,4 +255,5 @@ src/
 
 ## クレジット
 
-本アプリケーションは TMDB および TMDB API を使用していますが、TMDB による推奨、認定、その他の承認を受けたものではありません。
+本アプリケーションは TMDB および TMDB API を使用していますが、
+TMDB による推奨、認定、その他の承認を受けたものではありません。
