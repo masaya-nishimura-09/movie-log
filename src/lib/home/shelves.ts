@@ -1,34 +1,15 @@
 import { type MoodTag, moodTagSchema } from "@/schemas/record/enums";
-import type { MovieRecord } from "@/schemas/record/record";
+import type { MoodCount } from "@/schemas/record/mood-count";
 
-export type MoodShelf = { moodTag: MoodTag; records: MovieRecord[] };
-
-const recentLimit = 12;
 const moodShelfLimit = 3;
 const moodShelfMinRecords = 2;
-const moodShelfSize = 12;
 
-function byWatchedAtDesc(a: MovieRecord, b: MovieRecord): number {
-  return b.watchedAt.localeCompare(a.watchedAt);
-}
-
-export function pickRecent(records: MovieRecord[]): MovieRecord[] {
-  return [...records].sort(byWatchedAtDesc).slice(0, recentLimit);
-}
-
-export function pickMoodShelves(records: MovieRecord[]): MoodShelf[] {
+export function pickShelfMoods(counts: MoodCount[]): MoodTag[] {
+  const countOf = new Map(counts.map(({ moodTag, count }) => [moodTag, count]));
   return moodTagSchema.options
-    .map((moodTag) => ({
-      moodTag,
-      records: records
-        .filter((record) => record.moodTags.includes(moodTag))
-        .sort(byWatchedAtDesc),
-    }))
-    .filter((shelf) => shelf.records.length >= moodShelfMinRecords)
-    .sort((a, b) => b.records.length - a.records.length)
+    .map((moodTag) => ({ moodTag, count: countOf.get(moodTag) ?? 0 }))
+    .filter(({ count }) => count >= moodShelfMinRecords)
+    .sort((a, b) => b.count - a.count)
     .slice(0, moodShelfLimit)
-    .map((shelf) => ({
-      ...shelf,
-      records: shelf.records.slice(0, moodShelfSize),
-    }));
+    .map(({ moodTag }) => moodTag);
 }

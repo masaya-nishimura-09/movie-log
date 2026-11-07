@@ -9,6 +9,7 @@ import type {
 } from "@/schemas/article/article";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
 import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
+import { moodTagSchema } from "@/schemas/record/enums";
 import type { RecordResponse } from "@/schemas/record/record";
 
 function error(status: number, code: ApiErrorResponse["code"]): Response {
@@ -112,6 +113,17 @@ function listRecords(account: Account, params: URLSearchParams): Response {
     records: filtered.slice((page - 1) * perPage, page * perPage),
     filtered_count: filtered.length,
     total_count: records.length,
+  });
+}
+
+function countMoodTags(account: Account): Response {
+  const records = ownedRecords(account);
+  return Response.json({
+    mood_tag_counts: [...moodTagSchema.options].sort().map((moodTag) => ({
+      mood_tag: moodTag,
+      count: records.filter((record) => record.mood_tags.includes(moodTag))
+        .length,
+    })),
   });
 }
 
@@ -564,6 +576,9 @@ export async function mockFetch(
   if (resource === "records" && id === undefined) {
     if (method === "GET") return listRecords(account, url.searchParams);
     if (method === "POST") return createRecord(account, init);
+  }
+  if (method === "GET" && resource === "records" && id === "mood-counts") {
+    return countMoodTags(account);
   }
   if (
     (resource === "records" || resource === "articles") &&

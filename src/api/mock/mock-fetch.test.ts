@@ -453,6 +453,24 @@ describe("mockFetch: 記録", () => {
     });
     expect(response.status).toBe(500);
   });
+
+  it("counts the records of the current user by mood, every mood in alphabetical order", async () => {
+    const headers = await register();
+    for (const mood_tags of [["moving", "dark"], ["moving"]]) {
+      await mockFetch(
+        "/records/",
+        post({ ...newRecord, mood_tags }, "POST", headers),
+      );
+    }
+    const response = await mockFetch("/records/mood-counts", { headers });
+    const { mood_tag_counts } = await response.json();
+    const moods = mood_tag_counts.map((c: { mood_tag: string }) => c.mood_tag);
+    expect(moods).toHaveLength(18);
+    expect(moods).toEqual([...moods].sort());
+    expect(mood_tag_counts).toContainEqual({ mood_tag: "moving", count: 2 });
+    expect(mood_tag_counts).toContainEqual({ mood_tag: "dark", count: 1 });
+    expect(mood_tag_counts).toContainEqual({ mood_tag: "cozy", count: 0 });
+  });
 });
 
 const initialArticleCount = 6 + extraArticleCount;
