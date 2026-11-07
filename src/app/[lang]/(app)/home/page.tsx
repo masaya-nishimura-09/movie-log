@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getAllArticles } from "@/api/article/get-all-articles";
+import { getArticles } from "@/api/article/get-articles";
 import { getMoodCounts } from "@/api/record/get-mood-counts";
 import { getRecords } from "@/api/record/get-records";
 import { buttonVariants } from "@/components/atoms/button";
@@ -42,17 +42,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function HomePage() {
-  const [lang, dict, recent, moodShelves, articles] = await Promise.all([
+  const [lang, dict, recent, moodShelves, recentArticles] = await Promise.all([
     getLocale(),
     getDictionary(),
     getRecords(latestRecordsQuery),
     getMoodCounts().then((counts) =>
       Promise.all(pickShelfMoods(counts).map(getMoodShelf)),
     ),
-    getAllArticles(),
+    getArticles(
+      { recordId: undefined, keyword: "", sort: "updatedAtDesc", page: 1 },
+      recentArticleCount,
+    ).then(({ articles }) => articles),
   ]);
   const d = dict.home;
-  const recentArticles = articles.slice(0, recentArticleCount);
   const homePath = `/${lang}/home`;
 
   return (
