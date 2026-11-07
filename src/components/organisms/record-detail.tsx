@@ -8,6 +8,7 @@ import {
 import type { ActionResult } from "@/actions/action-result";
 import { GenreTag } from "@/components/atoms/genre-tag";
 import { LocalDate } from "@/components/atoms/local-date";
+import { MaskingTape } from "@/components/atoms/masking-tape";
 import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { SectionLabel } from "@/components/atoms/section-label";
@@ -253,66 +254,60 @@ export function RecordDetail({
 
   return (
     <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(180px,min(520px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(180px,min(320px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] 2xl:grid-cols-[minmax(180px,min(440px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)]">
-      <div className="flex gap-4 md:flex-col md:gap-3.5">
-        <div className="contents md:relative md:block md:rounded-2xl md:bg-card">
+      <div className="flex gap-4 md:flex-col md:gap-5">
+        <div className="relative w-29 shrink-0 self-start pt-1.5 md:w-full md:self-auto md:pt-2.5">
           <RecordPoster
             posterUrl={record.posterUrl}
             noPosterLabel={dict.recordCard.noPoster}
             sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
-            className="w-29 shrink-0 self-start rounded-xl md:w-full md:self-auto md:rounded-t-2xl md:rounded-b-none"
+            className="rounded-[3px] shadow-[0_10px_24px_-12px_rgb(10_41_71/0.55)]"
           />
-          <div className="flex min-w-0 flex-col gap-3 md:hidden">
-            <ScoreBadge
-              score={record.score}
-              size="md"
-              label={scoreLabel}
-              caption={d.scoreCaption}
-            />
-            <h1 className="font-bold text-foreground text-xl leading-[1.35]">
-              {record.title}
-            </h1>
-            <p className="flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-foreground-sub leading-relaxed">
-              {meta.map((item) => (
-                <span key={item.key}>{item.node}</span>
-              ))}
-            </p>
-          </div>
-          <div aria-hidden className="relative hidden h-0 md:block">
-            <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
-            <span className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-background [clip-path:inset(0_0_0_50%)]" />
-            <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
-          </div>
-          <div className="hidden flex-col gap-3 px-4 py-4 md:flex">
-            <div className="flex items-center justify-between gap-3">
-              <span className="shrink-0 -rotate-3 rounded-sm border-2 border-primary/60 px-2 py-0.5 font-bold text-primary/80 text-xs tabular-nums tracking-wider 2xl:text-sm">
-                <LocalDate
-                  date={record.watchedAt}
-                  locale={lang}
-                  dateStyle="medium"
-                />
-              </span>
-              <span className="min-w-0 truncate text-foreground-sub text-sm 2xl:text-base">
-                {platformLabel}
-              </span>
-            </div>
-            <div className="flex flex-col gap-1 text-muted-foreground text-xs 2xl:text-sm">
-              <span>
-                {d.createdAt}{" "}
-                <LocalDate
-                  date={record.createdAt}
-                  locale={lang}
-                  dateStyle="dateTime"
-                />
-              </span>
-              <span>
-                {d.updatedAt}{" "}
-                <LocalDate
-                  date={record.updatedAt}
-                  locale={lang}
-                  dateStyle="dateTime"
-                />
-              </span>
-            </div>
+          <MaskingTape className="top-0 h-3.5 w-11 md:top-0 md:h-5.5 md:w-24 2xl:w-32" />
+        </div>
+        <div className="flex min-w-0 flex-col gap-3 md:hidden">
+          <ScoreBadge
+            score={record.score}
+            size="md"
+            label={scoreLabel}
+            caption={d.scoreCaption}
+          />
+          <h1 className="font-bold text-foreground text-xl leading-[1.35]">
+            {record.title}
+          </h1>
+          <p className="flex flex-wrap gap-x-3 gap-y-1 text-[13px] text-foreground-sub leading-relaxed">
+            {meta.map((item) => (
+              <span key={item.key}>{item.node}</span>
+            ))}
+          </p>
+        </div>
+        <div className="hidden flex-col gap-2 px-0.5 md:flex">
+          <p className="flex flex-wrap items-baseline gap-x-2 text-sm 2xl:text-base">
+            <span className="font-bold text-foreground tabular-nums">
+              <LocalDate
+                date={record.watchedAt}
+                locale={lang}
+                dateStyle="medium"
+              />
+            </span>
+            <span className="text-foreground-sub">{platformLabel}</span>
+          </p>
+          <div className="flex flex-col gap-1 text-muted-foreground text-xs 2xl:text-sm">
+            <span>
+              {d.createdAt}{" "}
+              <LocalDate
+                date={record.createdAt}
+                locale={lang}
+                dateStyle="dateTime"
+              />
+            </span>
+            <span>
+              {d.updatedAt}{" "}
+              <LocalDate
+                date={record.updatedAt}
+                locale={lang}
+                dateStyle="dateTime"
+              />
+            </span>
           </div>
         </div>
       </div>

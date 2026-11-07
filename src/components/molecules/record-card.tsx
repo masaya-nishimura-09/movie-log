@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { MaskingTape } from "@/components/atoms/masking-tape";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { RecordPoster } from "@/components/molecules/record-poster";
 import type { Score } from "@/schemas/record/enums";
@@ -28,43 +29,25 @@ export function RecordCard({
   return (
     <Link
       href={href}
-      className="group relative flex w-full flex-col rounded-[14px] bg-card outline-none transition-transform duration-200 focus-visible:ring-2 focus-visible:ring-ring active:scale-[0.99]"
+      className="group relative flex w-full flex-col gap-2.5 rounded-md pt-2 outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-4 focus-visible:ring-offset-background"
     >
-      <RecordPoster
-        posterUrl={posterUrl}
-        noPosterLabel={noPosterLabel}
-        sizes="(min-width: 768px) 190px, 50vw"
-        className="rounded-t-[14px]"
-        badge={<ScoreBadge score={score} size="sm" label={scoreLabel} />}
-      />
-      <span
-        aria-hidden
-        className="pointer-events-none absolute top-0 left-0 size-0 bg-background transition-all duration-200 [clip-path:polygon(0_0,100%_0,0_100%)] group-hover:size-[28px]"
-      />
-      <svg
-        aria-hidden="true"
-        role="presentation"
-        viewBox="0 0 19 19"
-        className="pointer-events-none absolute top-0 left-0 size-0 fill-card transition-all duration-200 [filter:drop-shadow(2px_2px_2px_rgb(0_0_0/0.3))] group-hover:size-[28px]"
-      >
-        <path d="M18 1 L1 18 Q0 19 2 19 L11 19 A8 8 0 0 0 19 11 L19 2 Q19 0 18 1 Z" />
-      </svg>
-      <div aria-hidden className="relative h-0">
-        <div className="absolute inset-x-3 top-0 border-input border-t border-dashed" />
-        <span className="absolute -top-2.5 -left-2.5 size-5 rounded-full bg-background [clip-path:inset(0_0_0_50%)]" />
-        <span className="absolute -top-2.5 -right-2.5 size-5 rounded-full bg-background [clip-path:inset(0_50%_0_0)]" />
+      <div className="relative transition-transform duration-200 group-hover:-translate-y-1 group-active:translate-y-0">
+        <RecordPoster
+          posterUrl={posterUrl}
+          noPosterLabel={noPosterLabel}
+          sizes="(min-width: 768px) 190px, 50vw"
+          className="rounded-[3px] shadow-[0_6px_14px_-8px_rgb(10_41_71/0.55)] transition-shadow duration-200 group-hover:shadow-[0_14px_22px_-10px_rgb(10_41_71/0.6)]"
+          badge={<ScoreBadge score={score} size="sm" label={scoreLabel} />}
+        />
+        <MaskingTape className="in-[li:nth-child(3n)]:-rotate-1 in-[li:nth-child(3n+2)]:rotate-2" />
       </div>
-      <div className="flex h-22 flex-col gap-1.25 px-3 py-2.75">
+      <div className="flex flex-col gap-1 px-0.5">
         <span className="line-clamp-2 h-[2lh] text-pretty font-bold text-foreground text-sm leading-[1.4]">
           {title}
         </span>
-        <div className="flex items-center justify-between gap-2">
-          <span className="min-w-0 truncate text-[11px] text-muted-foreground">
-            {meta}
-          </span>
-          <span className="shrink-0 -rotate-6 rounded-sm border-2 border-primary/60 px-1.5 py-px font-bold text-[10px] text-primary/80 tabular-nums tracking-wider">
-            {watchedStamp}
-          </span>
+        <div className="flex items-center justify-between gap-2 text-[11px] text-muted-foreground">
+          <span className="min-w-0 truncate">{meta}</span>
+          <span className="shrink-0 tabular-nums">{watchedStamp}</span>
         </div>
       </div>
     </Link>
