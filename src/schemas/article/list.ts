@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  articleResponseSchema,
   articleSummaryResponseSchema,
   articleSummarySchema,
 } from "@/schemas/article/article";
@@ -37,6 +38,17 @@ export const articleListResponseSchema = z
     articles: r.articles,
     filteredCount: r.filtered_count,
     totalCount: r.total_count,
+  }));
+
+export const articleContentListResponseSchema = z
+  .object({
+    articles: z.array(articleResponseSchema),
+    filtered_count: countSchema,
+    total_count: countSchema,
+  })
+  .transform((r) => ({
+    articles: r.articles,
+    filteredCount: r.filtered_count,
   }));
 
 const articleListSchema = z.object({

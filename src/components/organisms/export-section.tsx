@@ -1,25 +1,28 @@
 "use client";
 
+import { strToU8, zipSync } from "fflate";
 import { Download } from "lucide-react";
 import { useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { articleFiles } from "@/lib/export/article-markdown";
 import { toRecordsCsv } from "@/lib/export/records-csv";
+import type { Article } from "@/schemas/article/article";
 import type { MovieRecord } from "@/schemas/record/record";
 
 type ExportSectionProps = {
   lang: Locale;
-  action: () => Promise<ActionResult<MovieRecord[]>>;
+  exportRecords: () => Promise<ActionResult<MovieRecord[]>>;
+  exportArticles: () => Promise<ActionResult<Article[]>>;
   dict: Dictionary["account"];
   csvDict: Pick<Dictionary, "recordForm" | "enums">;
+  releaseYearTemplate: string;
 };
 
-function download(text: string, fileName: string) {
-  const url = URL.createObjectURL(
-    new Blob([text], { type: "text/csv;charset=utf-8" }),
-  );
+function download(data: BlobPart, fileName: string, type: string) {
+  const url = URL.createObjectURL(new Blob([data], { type }));
   const link = document.createElement("a");
   link.href = url;
   link.download = fileName;
@@ -29,23 +32,52 @@ function download(text: string, fileName: string) {
 
 export function ExportSection({
   lang,
-  action,
+  exportRecords,
+  exportArticles,
   dict,
   csvDict,
+  releaseYearTemplate,
 }: ExportSectionProps) {
   const [failed, setFailed] = useState(false);
   const [pending, startTransition] = useTransition();
+  const [running, setRunning] = useState<"records" | "articles">();
+  const today = () => new Date().toLocaleDateString("sv-SE");
 
-  const exportRecords = () => {
+  const run = (kind: "records" | "articles") => {
+    setRunning(kind);
     startTransition(async () => {
-      const result = await action();
-      setFailed(!result.success);
-      if (!result.success) return;
-      const today = new Date().toLocaleDateString("sv-SE");
-      download(
-        toRecordsCsv(result.data, lang, csvDict),
-        `cinestamp-records-${today}.csv`,
-      );
+      if (kind === "records") {
+        const result = await exportRecords();
+        setFailed(!result.success);
+        if (result.success) {
+          download(
+            toRecordsCsv(result.data, lang, csvDict),
+            `cinestamp-records-${today()}.csv`,
+            "text/csv;charset=utf-8",
+          );
+        }
+      } else {
+        const result = await exportArticles();
+        setFailed(!result.success);
+        if (result.success) {
+          const files = articleFiles(result.data, {
+            movie: dict.exportMovie,
+            createdAt: dict.exportCreatedAt,
+            updatedAt: dict.exportUpdatedAt,
+            releaseYear: releaseYearTemplate,
+          });
+          download(
+            zipSync(
+              Object.fromEntries(
+                files.map((file) => [file.name, strToU8(file.text)]),
+              ),
+            ),
+            `cinestamp-articles-${today()}.zip`,
+            "application/zip",
+          );
+        }
+      }
+      setRunning(undefined);
     });
   };
 
@@ -57,16 +89,26 @@ export function ExportSection({
       <p className="text-[13px] text-foreground-sub">
         {dict.exportDescription}
       </p>
-      <Button
-        variant="outline"
-        size="sm"
-        className="mt-2"
-        disabled={pending}
-        onClick={exportRecords}
-      >
-        <Download className="size-4" aria-hidden />
-        {pending ? dict.exporting : dict.exportAction}
-      </Button>
+      <div className="mt-2 flex flex-wrap gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          onClick={() => run("records")}
+        >
+          <Download className="size-4" aria-hidden />
+          {running === "records" ? dict.exporting : dict.exportAction}
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          disabled={pending}
+          onClick={() => run("articles")}
+        >
+          <Download className="size-4" aria-hidden />
+          {running === "articles" ? dict.exporting : dict.exportArticlesAction}
+        </Button>
+      </div>
       {failed && (
         <p role="alert" className="text-destructive-foreground text-sm">
           {dict.exportFailed}

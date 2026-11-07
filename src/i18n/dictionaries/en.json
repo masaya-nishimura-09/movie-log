@@ -544,10 +544,14 @@
     "saved": "Saved",
     "withdrawFailed": "Couldn't delete your account. Please try again later",
     "exportTitle": "Export data",
-    "exportDescription": "Exports your film log as a CSV file that opens in spreadsheet apps.",
+    "exportDescription": "Exports your film log as a CSV file, and each article as a Markdown file bundled in a ZIP.",
     "exportAction": "Export the film log as CSV",
     "exporting": "Exporting",
-    "exportFailed": "Couldn't export. Please try again later"
+    "exportFailed": "Couldn't export. Please try again later",
+    "exportArticlesAction": "Export articles as Markdown (ZIP)",
+    "exportMovie": "Film",
+    "exportCreatedAt": "Created",
+    "exportUpdatedAt": "Updated"
   },
   "articleForm": {
     "createTitle": "New article",

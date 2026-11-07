@@ -571,6 +571,24 @@ describe("mockFetch: 記録", () => {
 const initialArticleCount = 6 + extraArticleCount;
 
 describe("mockFetch: 記事", () => {
+  it("includes the bodies in the list only with include_content=true", async () => {
+    const headers = await auth();
+    const withBody = await (
+      await mockFetch("/articles/?include_content=true&per_page=1", {
+        headers,
+      })
+    ).json();
+    expect(withBody.articles[0].content).toMatchObject({ type: "doc" });
+    const withoutBody = await (
+      await mockFetch("/articles/?per_page=1", { headers })
+    ).json();
+    expect(withoutBody.articles[0]).not.toHaveProperty("content");
+    const invalid = await mockFetch("/articles/?include_content=yes", {
+      headers,
+    });
+    expect(invalid.status).toBe(400);
+  });
+
   const content = {
     type: "doc",
     content: [{ type: "paragraph", content: [{ type: "text", text: "本文" }] }],

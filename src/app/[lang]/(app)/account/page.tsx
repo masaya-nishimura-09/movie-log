@@ -1,5 +1,6 @@
 import { Info } from "lucide-react";
 import type { Metadata } from "next";
+import { exportArticlesAction } from "@/actions/article/export-articles";
 import { exportRecordsAction } from "@/actions/record/export-records";
 import { updateEmailAction } from "@/actions/user/update-email";
 import { updatePasswordAction } from "@/actions/user/update-password";
@@ -57,9 +58,11 @@ export default async function AccountPage() {
         />
         <ExportSection
           lang={lang}
-          action={exportRecordsAction}
+          exportRecords={exportRecordsAction}
+          exportArticles={exportArticlesAction}
           dict={dict.account}
           csvDict={{ recordForm: dict.recordForm, enums: dict.enums }}
+          releaseYearTemplate={dict.recordDetail.releaseYear}
         />
         <WithdrawSection
           action={withdrawAction.bind(null, lang)}

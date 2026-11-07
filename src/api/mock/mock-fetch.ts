@@ -328,7 +328,9 @@ function listArticles(account: Account, params: URLSearchParams): Response {
   const sortOrder = params.get("sort_order") ?? "desc";
   const page = Number(params.get("page") ?? "1");
   const perPage = Number(params.get("per_page") ?? "20");
+  const includeContent = params.get("include_content") ?? "false";
   if (
+    !["true", "false"].includes(includeContent) ||
     !isArticleSortField(sortField) ||
     !["asc", "desc"].includes(sortOrder) ||
     !Number.isInteger(page) ||
@@ -368,7 +370,7 @@ function listArticles(account: Account, params: URLSearchParams): Response {
   return Response.json({
     articles: sorted
       .slice((page - 1) * perPage, page * perPage)
-      .map(toArticleSummary),
+      .map(includeContent === "true" ? toArticleResponse : toArticleSummary),
     filtered_count: filtered.length,
     total_count: owned.length,
   });
