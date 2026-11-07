@@ -3,6 +3,7 @@ import { buttonVariants } from "@/components/atoms/button";
 import { LocalDate } from "@/components/atoms/local-date";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
+import { ArticleNoteCard } from "@/components/molecules/article-note-card";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { articleQueryKeys } from "@/lib/article/parse-article-query";
@@ -45,31 +46,27 @@ export function RecordArticleSection({
         )}
       </div>
       {articles.length > 0 ? (
-        <ul className="flex flex-col gap-2">
+        <ul className="grid @2xl:grid-cols-2 grid-cols-1 gap-4">
           {articles.map((article) => (
-            <li key={article.articleId}>
-              <Link
+            <li key={article.articleId} className="min-w-0">
+              <ArticleNoteCard
                 href={withFrom(
                   `/${lang}/records/${recordId}/articles/${article.articleId}`,
                   fromHref,
                 )}
-                className="flex items-baseline justify-between gap-4 rounded-2xl bg-card px-5.5 py-4 text-[15px] text-foreground outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring 2xl:px-7 2xl:py-5 2xl:text-lg"
-              >
-                <span className="min-w-0 truncate font-medium">
-                  {article.title}
-                </span>
-                <span className="shrink-0 text-muted-foreground text-xs tabular-nums 2xl:text-sm">
+                title={article.title}
+                date={
                   <LocalDate
                     date={article.updatedAt}
                     locale={lang}
                     dateStyle="medium"
                   />
-                </span>
-              </Link>
+                }
+              />
             </li>
           ))}
           {total > articles.length && (
-            <li>
+            <li className="col-span-full">
               <Link
                 href={buildHref(`/${lang}/articles`, {
                   [articleQueryKeys.record]: recordId,

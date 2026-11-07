@@ -2,7 +2,6 @@ import { createElement } from "react";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import { ArticleList } from "@/components/organisms/article-list";
-import ja from "@/i18n/dictionaries/ja.json";
 import type { ArticleRecord, ArticleSummary } from "@/schemas/article/article";
 
 const defaultRecord: ArticleRecord = {
@@ -26,15 +25,16 @@ const article = (
 
 function html(
   articles: ArticleSummary[],
-  startIndex = 0,
-  fromHref = "/ja/articles",
+  {
+    dateField = "updatedAt",
+    fromHref = "/ja/articles",
+  }: { dateField?: "createdAt" | "updatedAt"; fromHref?: string } = {},
 ) {
   return renderToStaticMarkup(
     createElement(ArticleList, {
       lang: "ja",
       articles,
-      startIndex,
-      dict: ja.articleList,
+      dateField,
       noPosterLabel: "ポスター未登録",
       yearTemplate: "{year}年",
       fromHref,
@@ -43,19 +43,6 @@ function html(
 }
 
 describe("ArticleList", () => {
-  it("shows the column headers", () => {
-    const markup = html([article("5", "感想")]);
-    for (const label of [
-      ja.articleList.columnIndex,
-      ja.articleList.columnTitle,
-      ja.articleList.columnRecord,
-      ja.articleList.columnCreatedAt,
-      ja.articleList.columnUpdatedAt,
-    ]) {
-      expect(markup).toContain(`>${label}<`);
-    }
-  });
-
   it("links each article to its page under the record that comes with it", () => {
     const markup = html([
       article("5", "感想"),
@@ -65,11 +52,13 @@ describe("ArticleList", () => {
     expect(markup).toContain('href="/ja/records/9/articles/6?from=');
   });
 
-  it("shows the article title, the record title and the release year", () => {
+  it("shows the article title, then the record title with the release year", () => {
     const markup = html([article("5", "感想")]);
     expect(markup).toContain("感想");
-    expect(markup).toContain("勝手にしやがれ");
-    expect(markup).toContain("1960年");
+    expect(markup).toContain("勝手にしやがれ ・ 1960年");
+    expect(markup.indexOf("感想")).toBeLessThan(
+      markup.indexOf("勝手にしやがれ"),
+    );
   });
 
   it("shows each article's own record", () => {
@@ -82,22 +71,17 @@ describe("ArticleList", () => {
         releaseYear: 1963,
       }),
     ]);
-    expect(markup).toContain("勝手にしやがれ");
-    expect(markup).toContain("軽蔑");
-    expect(markup).toContain("1963年");
+    expect(markup).toContain("勝手にしやがれ ・ 1960年");
+    expect(markup).toContain("軽蔑 ・ 1963年");
   });
 
-  it("shows the created and updated dates", () => {
-    const markup = html([article("5", "感想")]);
-    expect(markup).toContain('dateTime="2026-10-01T12:00:00Z"');
-    expect(markup).toContain('dateTime="2026-10-02T12:00:00Z"');
-  });
-
-  it("numbers the rows from the given start index", () => {
-    const markup = html([article("1", "一番目"), article("2", "二番目")], 20);
-    expect(markup).toContain(">21<");
-    expect(markup).toContain(">22<");
-    expect(markup).not.toContain(">1<");
+  it("shows the updated date, or the created date when the list is sorted by it", () => {
+    const updated = html([article("5", "感想")]);
+    expect(updated).toContain('dateTime="2026-10-02T12:00:00Z"');
+    expect(updated).not.toContain('dateTime="2026-10-01T12:00:00Z"');
+    const created = html([article("5", "感想")], { dateField: "createdAt" });
+    expect(created).toContain('dateTime="2026-10-01T12:00:00Z"');
+    expect(created).not.toContain('dateTime="2026-10-02T12:00:00Z"');
   });
 
   it("keeps the order of the articles", () => {
@@ -107,7 +91,7 @@ describe("ArticleList", () => {
 
   it("shows the placeholder when the record has no poster", () => {
     const markup = html([article("5", "感想")]);
-    expect(markup).toContain('aria-label="ポスター未登録"');
+    expect(markup.match(/aria-label="ポスター未登録"/g)).toHaveLength(1);
     expect(markup).not.toContain("<img");
   });
 
@@ -122,49 +106,18 @@ describe("ArticleList", () => {
     expect(markup).not.toContain('aria-label="ポスター未登録"');
   });
 
-  it("shows the poster on both layouts, next to the record and never next to the article title", () => {
-    const markup = html([article("5", "感想")]);
-    expect(markup.match(/aria-label="ポスター未登録"/g)).toHaveLength(2);
-    const titleStart = markup.lastIndexOf("<span", markup.indexOf("感想"));
-    expect(markup.slice(0, titleStart).lastIndexOf("ポスター未登録")).toBe(-1);
-  });
-
   it("omits the release year when it is unknown", () => {
     const markup = html([
       article("5", "感想", { ...defaultRecord, releaseYear: 0 }),
     ]);
+    expect(markup).toContain(">勝手にしやがれ<");
     expect(markup).not.toContain("年");
   });
 
-  it("hides the row number on narrow screens and shows it from the md width", () => {
-    const markup = html([article("5", "感想")]);
-    expect(markup).toMatch(/class="hidden[^"]*md:block[^"]*">1</);
-  });
-
-  it("puts the release year with the record, not under the article title", () => {
-    const markup = html([article("5", "感想")]);
-    const titleEnd = markup.indexOf("感想");
-    const firstRecord = markup.indexOf("勝手にしやがれ");
-    const firstYear = markup.indexOf("1960年");
-    expect(firstRecord).toBeGreaterThan(titleEnd);
-    expect(firstYear).toBeGreaterThan(firstRecord);
-    expect(
-      markup.slice(titleEnd, markup.indexOf("</span>", titleEnd)),
-    ).not.toContain("年");
-  });
-
-  it("shows the updated date with the article title on narrow screens", () => {
-    expect(html([article("5", "感想")])).toMatch(
-      /md:hidden[^>]*><time[^>]*dateTime="2026-10-02T12:00:00Z"/,
-    );
-  });
-
   it("passes the address of the list to the article so that it can go back to it", () => {
-    const markup = html(
-      [article("5", "感想")],
-      0,
-      "/ja/articles?keyword=%E9%9F%B3&page=2",
-    );
+    const markup = html([article("5", "感想")], {
+      fromHref: "/ja/articles?keyword=%E9%9F%B3&page=2",
+    });
     expect(markup).toContain(
       'href="/ja/records/2/articles/5?from=%2Fja%2Farticles%3Fkeyword%3D%25E9%259F%25B3%26page%3D2"',
     );
@@ -176,7 +129,7 @@ describe("ArticleList", () => {
     );
   });
 
-  it("renders only the header for no articles", () => {
+  it("renders no cards for no articles", () => {
     expect(html([])).not.toContain("<li");
   });
 

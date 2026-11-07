@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { articlePerPage, getArticles } from "@/api/article/get-articles";
+import { getArticles } from "@/api/article/get-articles";
 import { getRecordOptions } from "@/api/record/get-record-options";
 import { buttonVariants } from "@/components/atoms/button";
 import { EmptyState } from "@/components/molecules/empty-state";
@@ -190,8 +190,9 @@ export default async function ArticlesPage({
         <ArticleList
           lang={lang}
           articles={list.articles}
-          startIndex={(list.page - 1) * articlePerPage}
-          dict={dict.articleList}
+          dateField={
+            query.sort.startsWith("createdAt") ? "createdAt" : "updatedAt"
+          }
           noPosterLabel={dict.recordCard.noPoster}
           yearTemplate={dict.recordDetail.releaseYear}
           fromHref={buildHref(basePath, values)}

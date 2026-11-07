@@ -6,6 +6,7 @@ import { getRecords } from "@/api/record/get-records";
 import { buttonVariants } from "@/components/atoms/button";
 import { LocalDate } from "@/components/atoms/local-date";
 import { TextLink } from "@/components/atoms/text-link";
+import { ArticleNoteCard } from "@/components/molecules/article-note-card";
 import { EmptyState } from "@/components/molecules/empty-state";
 import { RecordShelf } from "@/components/organisms/record-shelf";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -94,31 +95,28 @@ export default async function HomePage() {
                   {d.seeAll}
                 </TextLink>
               </div>
-              <ul className="grid grid-cols-1 gap-2 md:grid-cols-2">
+              <ul className="grid grid-cols-1 gap-4 md:grid-cols-2">
                 {recentArticles.map((article) => (
                   <li key={article.articleId} className="min-w-0">
-                    <Link
+                    <ArticleNoteCard
                       href={withFrom(
                         `/${lang}/records/${article.record.recordId}/articles/${article.articleId}`,
                         homePath,
                       )}
-                      className="flex flex-col gap-1 rounded-2xl bg-card px-5 py-4 outline-none transition-colors hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
-                    >
-                      <span className="truncate font-medium text-[15px] text-foreground">
-                        {article.title}
-                      </span>
-                      <span className="flex items-center gap-2 text-muted-foreground text-xs">
-                        <span className="truncate">{article.record.title}</span>
-                        <span aria-hidden>・</span>
-                        <span className="shrink-0 tabular-nums">
-                          <LocalDate
-                            date={article.updatedAt}
-                            locale={lang}
-                            dateStyle="medium"
-                          />
-                        </span>
-                      </span>
-                    </Link>
+                      title={article.title}
+                      date={
+                        <LocalDate
+                          date={article.updatedAt}
+                          locale={lang}
+                          dateStyle="medium"
+                        />
+                      }
+                      movie={{
+                        title: article.record.title,
+                        posterUrl: article.record.posterUrl,
+                        noPosterLabel: dict.recordCard.noPoster,
+                      }}
+                    />
                   </li>
                 ))}
               </ul>

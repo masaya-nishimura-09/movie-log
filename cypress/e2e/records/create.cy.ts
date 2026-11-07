@@ -70,9 +70,12 @@ describe("記録の作成", () => {
     cy.get("input[name='credits.2.personName']").type("削除する行");
     cy.get(`button[aria-label="${form.removeCredit}"]`).eq(2).click();
     cy.get("input[name='credits.2.personName']").should("not.exist");
-    cy.get("input[type=file]:not([multiple])").selectFile("cypress/fixtures/poster.png", {
-      force: true,
-    });
+    cy.get("input[type=file]:not([multiple])").selectFile(
+      "cypress/fixtures/poster.png",
+      {
+        force: true,
+      },
+    );
     cy.get("#posterUrl")
       .invoke("val")
       .should("match", /^https:\/\/mock\.invalid\/posters\//);
@@ -334,9 +337,12 @@ describe("記録の作成（候補とアップロード）", () => {
         res.setDelay(1500);
       });
     });
-    cy.get("input[type=file]:not([multiple])").selectFile("cypress/fixtures/poster.png", {
-      force: true,
-    });
+    cy.get("input[type=file]:not([multiple])").selectFile(
+      "cypress/fixtures/poster.png",
+      {
+        force: true,
+      },
+    );
     cy.contains(form.uploadingPoster).should("be.visible");
     cy.get("input[type=file]:not([multiple])").should("be.disabled");
     cy.contains(form.uploadPoster).should("be.visible");

@@ -55,77 +55,31 @@ describe("記事の一覧", () => {
     cy.contains("p", "3件中 3件を表示").should("be.visible");
   });
 
-  it("Spotifyのように、列の見出しの行と、番号つきの行で並べる", () => {
+  it("記事をノートのページのようなカードで並べ、日付、タイトル、映画と年、ポスターを出す", () => {
     cy.visit("/ja/articles");
-    for (const label of [
-      list.columnIndex,
-      list.columnTitle,
-      list.columnRecord,
-      list.columnCreatedAt,
-      list.columnUpdatedAt,
-    ]) {
-      cy.contains("[aria-hidden=true] span", label).should("be.visible");
-    }
     rows().should("have.length", 3);
-    rows().eq(0).find("a > span").first().should("have.text", "1");
-    rows().eq(2).find("a > span").first().should("have.text", "3");
-  });
-
-  it("各行に、ポスター、記事のタイトル、映画のタイトル、作成日、更新日を表示する", () => {
-    cy.visit("/ja/articles");
     rows()
       .first()
       .within(() => {
+        cy.get("a").should("have.length", 1);
         cy.contains("Cherry 台詞の記事").should("be.visible");
-        cy.contains(recordB).should("be.visible");
-        cy.contains("2020年").should("be.visible");
-        cy.get("time:visible").should("have.length", 2);
-        cy.get(`svg[aria-label="${ja.recordCard.noPoster}"]`).should("exist");
+        cy.contains(`${recordB} ・ 2020年`).should("be.visible");
+        cy.get("time:visible").should("have.length", 1);
+        cy.get(`svg[aria-label="${ja.recordCard.noPoster}"]`).should(
+          "be.visible",
+        );
       });
   });
 
-  it("年とポスターは、記事のタイトルではなく、映画の列に並ぶ", () => {
+  it("広い画面では、カードを2列に並べる", () => {
     cy.visit("/ja/articles");
-    cy.contains("[aria-hidden=true] span", list.columnRecord).then(
-      ($header) => {
-        const filmLeft = $header[0]?.getBoundingClientRect().left ?? 0;
-        rows()
-          .first()
-          .within(() => {
-            cy.get("span:visible")
-              .filter((_, el) => el.textContent === "Cherry 台詞の記事")
-              .should("have.length", 1)
-              .then(($title) => {
-                expect($title[0]?.getBoundingClientRect().right).to.be.lessThan(
-                  filmLeft,
-                );
-              });
-            cy.get("span:visible")
-              .filter((_, el) => el.textContent === "2020年")
-              .should("have.length", 1)
-              .then(($year) => {
-                expect($year[0]?.getBoundingClientRect().left).to.be.at.least(
-                  filmLeft,
-                );
-              });
-            cy.get("span:visible")
-              .filter((_, el) => el.textContent === recordB)
-              .should("have.length", 1)
-              .then(($film) => {
-                expect($film[0]?.getBoundingClientRect().left).to.be.at.least(
-                  filmLeft,
-                );
-              });
-            cy.get(`svg[aria-label="${ja.recordCard.noPoster}"]:visible`)
-              .should("have.length", 1)
-              .then(($poster) => {
-                expect($poster[0]?.getBoundingClientRect().left).to.be.at.least(
-                  filmLeft - 1,
-                );
-              });
-          });
-      },
-    );
+    rows().then(($rows) => {
+      const [first, second] = [...$rows].map((row) =>
+        row.getBoundingClientRect(),
+      );
+      expect(second?.top).to.equal(first?.top);
+      expect(second?.left).to.be.greaterThan(first?.right ?? 0);
+    });
   });
 
   it("既定では、更新の新しい順に並べる", () => {
@@ -342,13 +296,9 @@ describe("記事の一覧", () => {
     });
   });
 
-  it("英語の画面では、見出し、列、並び替えが英語になる", () => {
+  it("英語の画面では、見出し、件数、並び替えが英語になる", () => {
     cy.visit("/en/articles");
     cy.get("h1").should("have.text", en.articleList.heading);
-    cy.contains(
-      "[aria-hidden=true] span",
-      en.articleList.columnUpdatedAt,
-    ).should("be.visible");
     cy.contains("p", "Showing 3 of 3").should("be.visible");
     cy.get(`button[aria-label="${en.articleList.sort.label}"]`).should(
       "be.visible",
@@ -396,7 +346,7 @@ describe("記事の一覧(記事がない・変化する)", () => {
     titles().should("deep.equal", ["古い記事を直した"]);
   });
 
-  it("12件ごとに分かれ、ページを行き来でき、番号が続く", () => {
+  it("12件ごとに分かれ、ページを行き来できる", () => {
     cy.register();
     const record = `E2E 一覧のページ ${Date.now()}`;
     cy.createRecord(record);
@@ -417,7 +367,6 @@ describe("記事の一覧(記事がない・変化する)", () => {
     cy.location("search").should("eq", "?sort=createdAtAsc&page=2");
     rows().should("have.length", 1);
     rows().first().should("contain.text", "記事 13");
-    rows().first().find("a > span").first().should("have.text", "13");
     cy.contains("nav span", "2 / 2").should("be.visible");
     cy.get(`a[aria-label="${ja.pagination.next}"]`).should(
       "have.attr",
@@ -460,51 +409,23 @@ describe("記事の一覧(スマホ)", () => {
     cy.get(`nav[aria-label="${ja.nav.label}"]`).should("not.be.visible");
   });
 
-  it("行の左の数字は出さない", () => {
+  it("カードを1列に並べ、小さなポスターを右上に出し、横にはみ出さない", () => {
     cy.visit("/ja/articles");
-    rows().first().should("be.visible");
-    rows()
-      .first()
-      .find("span")
-      .filter((_, el) => el.textContent === "1")
-      .as("number");
-    cy.get("@number").should("have.length", 1);
-    cy.get("@number").should("not.be.visible");
-  });
-
-  it("列の見出しの行は出さず、1行目に記事のタイトルと更新日、2行目に小さなポスターと映画と年を出し、横にはみ出さない", () => {
-    cy.visit("/ja/articles");
-    cy.contains("[aria-hidden=true] span", list.columnTitle).should(
-      "not.be.visible",
-    );
+    rows().then(($rows) => {
+      const [first, second] = [...$rows].map((row) =>
+        row.getBoundingClientRect(),
+      );
+      expect(second?.top).to.be.greaterThan(first?.bottom ?? 0);
+    });
     rows()
       .first()
       .within(() => {
-        cy.get("span:visible")
-          .filter((_, el) => el.textContent === "Cherry 台詞の記事")
-          .should("have.length", 1)
-          .then(($title) => {
-            cy.get("time:visible").should("have.length", 1);
-            cy.get("time:visible").then(($date) => {
-              const title = $title[0]?.getBoundingClientRect();
-              const date = $date[0]?.getBoundingClientRect();
-              expect(date?.left).to.be.greaterThan(title?.right ?? 0);
-              expect(
-                Math.abs((date?.top ?? 0) - (title?.top ?? 0)),
-              ).to.be.lessThan(12);
-            });
-            cy.contains("span:visible", `${recordB}`).then(($film) => {
-              expect($film[0]?.getBoundingClientRect().top).to.be.greaterThan(
-                $title[0]?.getBoundingClientRect().bottom ?? 0,
-              );
-              expect($film[0]?.textContent).to.contain("2020年");
-            });
-          });
+        cy.contains("Cherry 台詞の記事").should("be.visible");
         cy.get(`svg[aria-label="${ja.recordCard.noPoster}"]:visible`)
           .should("have.length", 1)
           .then(($poster) => {
             expect($poster[0]?.getBoundingClientRect().width).to.be.lessThan(
-              30,
+              50,
             );
           });
       });

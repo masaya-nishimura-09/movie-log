@@ -579,11 +579,6 @@
     "showResults": "Show {count}",
     "noRecords": "No records",
     "unknownRecord": "Unknown record",
-    "columnIndex": "#",
-    "columnTitle": "Title",
-    "columnRecord": "Film",
-    "columnCreatedAt": "Created",
-    "columnUpdatedAt": "Updated",
     "sort": {
       "label": "Sort by",
       "updatedAtDesc": "Recently updated",

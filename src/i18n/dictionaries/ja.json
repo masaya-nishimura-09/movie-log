@@ -579,11 +579,6 @@
     "showResults": "{count}件を表示",
     "noRecords": "記録がありません",
     "unknownRecord": "不明な記録",
-    "columnIndex": "#",
-    "columnTitle": "タイトル",
-    "columnRecord": "映画",
-    "columnCreatedAt": "作成日",
-    "columnUpdatedAt": "更新日",
     "sort": {
       "label": "並び替え",
       "updatedAtDesc": "更新日が新しい順",
