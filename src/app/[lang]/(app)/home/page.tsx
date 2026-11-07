@@ -1,53 +1,19 @@
-import { Temporal } from "@js-temporal/polyfill";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllArticles } from "@/api/article/get-all-articles";
-import { getArticle } from "@/api/article/get-article";
 import { getAllRecords } from "@/api/record/get-all-records";
 import { buttonVariants } from "@/components/atoms/button";
 import { LocalDate } from "@/components/atoms/local-date";
 import { TextLink } from "@/components/atoms/text-link";
 import { EmptyState } from "@/components/molecules/empty-state";
-import {
-  HomeReminder,
-  type ReminderExcerpt,
-} from "@/components/organisms/home-reminder";
 import { RecordShelf } from "@/components/organisms/record-shelf";
-import type { Dictionary } from "@/i18n/get-dictionary";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
-import { firstParagraphText } from "@/lib/article/headings";
-import { getTimeZone } from "@/lib/date/get-time-zone";
-import { pickMoodShelves, pickRecent, pickReminder } from "@/lib/home/shelves";
+import { pickMoodShelves, pickRecent } from "@/lib/home/shelves";
 import { recordQueryKeys } from "@/lib/record/parse-record-query";
-import { firstSentence } from "@/lib/text/excerpt";
-import { interpolate } from "@/lib/text/interpolate";
 import { withFrom } from "@/lib/url/back-href";
 import { buildHref } from "@/lib/url/build-href";
-import type { ArticleSummary } from "@/schemas/article/article";
-import type { MovieRecord } from "@/schemas/record/record";
 
 const recentArticleCount = 4;
-
-async function reminderExcerpt(
-  record: MovieRecord,
-  articles: ArticleSummary[],
-  dict: Dictionary["home"],
-): Promise<ReminderExcerpt | undefined> {
-  if (record.memo.trim() !== "") {
-    return { text: firstSentence(record.memo), source: dict.fromMemo };
-  }
-  const summary = articles.find(
-    (article) => article.record.recordId === record.recordId,
-  );
-  const article = summary && (await getArticle(summary.articleId));
-  const text = article && firstSentence(firstParagraphText(article.content));
-  return article && text
-    ? {
-        text,
-        source: interpolate(dict.fromArticle, { title: article.title }),
-      }
-    : undefined;
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const dict = await getDictionary();
@@ -62,16 +28,6 @@ export default async function HomePage() {
     getAllArticles(),
   ]);
   const d = dict.home;
-  const reminder = pickReminder(
-    records,
-    Temporal.Now.plainDateISO(await getTimeZone()),
-  );
-  const reminderItems = await Promise.all(
-    reminder.map(async (record) => ({
-      record,
-      excerpt: await reminderExcerpt(record, articles, d),
-    })),
-  );
   const moodShelves = pickMoodShelves(records);
   const recentArticles = articles.slice(0, recentArticleCount);
   const homePath = `/${lang}/home`;
@@ -94,15 +50,6 @@ export default async function HomePage() {
         </div>
       ) : (
         <>
-          {reminderItems.length > 0 && (
-            <HomeReminder
-              lang={lang}
-              items={reminderItems}
-              dict={d}
-              noPosterLabel={dict.recordCard.noPoster}
-            />
-          )}
-
           <RecordShelf
             lang={lang}
             title={d.recent}

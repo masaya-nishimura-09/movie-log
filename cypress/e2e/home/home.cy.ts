@@ -94,52 +94,12 @@ describe("ホーム", () => {
     cy.location("search").should("match", /^\?mood=\w+$/);
   });
 
-  const reminder = "main h1 + section";
-
-  it("一番上に「過去の記録から」として、記録を2本、鑑賞日と一文を添えて出す", () => {
-    cy.visit("/ja/home");
-    cy.get(reminder).find("h2").should("have.text", home.reminderHeading);
-    cy.get(reminder).within(() => {
-      cy.get("a[href^='/ja/records/']")
-        .should("have.length", 2)
-        .each(($card) => {
-          expect($card[0]?.innerText).to.match(
-            /\d{4}年\d{1,2}月\d{1,2}日に鑑賞/,
-          );
-          expect($card.find("span.border-l-2")).to.have.length(1);
-        });
-    });
-  });
-
-  it("同じ日のうちは、開き直しても同じ記録を出す", () => {
-    cy.visit("/ja/home");
-    cy.get(`${reminder} a[href^='/ja/records/']`).then(($cards) => {
-      const hrefs = [...$cards].map((card) => card.getAttribute("href"));
-      cy.reload();
-      cy.get(`${reminder} a[href^='/ja/records/']`).should(($again) => {
-        expect(
-          [...$again].map((card) => card.getAttribute("href")),
-        ).to.deep.equal(hrefs);
-      });
-    });
-  });
-
-  it("過去の記録の下に、雰囲気タグの一覧を出さない", () => {
-    cy.visit("/ja/home");
-    cy.get(`${reminder} a[href*='mood=']`).should("not.exist");
-  });
-
   it("ホームで開いた記録から、もどるでホームにもどる", () => {
-    for (const selector of [
-      `${reminder} a[href*='/ja/records/']`,
-      "main section:has(h2) a[href*='/ja/records/']:not([href*='/articles/'])",
-    ]) {
-      cy.visit("/ja/home");
-      cy.get(selector).first().click();
-      cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-      cy.contains("header a", ja.recordDetail.backToHome).click();
-      cy.location("pathname").should("eq", "/ja/home");
-    }
+    cy.visit("/ja/home");
+    shelf(home.recent).find("li a").first().click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.contains("header a", ja.recordDetail.backToHome).click();
+    cy.location("pathname").should("eq", "/ja/home");
   });
 
   it("ホームで開いた記事から、もどるでホームにもどる", () => {

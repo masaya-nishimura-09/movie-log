@@ -1,6 +1,5 @@
-import { Temporal } from "@js-temporal/polyfill";
 import { describe, expect, it } from "vitest";
-import { pickMoodShelves, pickRecent, pickReminder } from "@/lib/home/shelves";
+import { pickMoodShelves, pickRecent } from "@/lib/home/shelves";
 import type { MoodTag } from "@/schemas/record/enums";
 import type { MovieRecord } from "@/schemas/record/record";
 
@@ -30,50 +29,6 @@ function record(
 }
 
 const ids = (records: MovieRecord[]) => records.map((r) => r.recordId);
-
-describe("pickReminder", () => {
-  const records = ["3", "1", "4", "2", "5"].map((id) =>
-    record(id, "2026-01-01T00:00:00Z"),
-  );
-  const day = (date: string) => Temporal.PlainDate.from(date);
-
-  it("shows two records a day in ID order, moving two ahead each day", () => {
-    const first = day("2026-10-24");
-    const start = first.since(day("1970-01-01")).days;
-    const pages = [0, 1, 2].map((offset) =>
-      ids(pickReminder(records, first.add({ days: offset }))),
-    );
-    const order = ["1", "2", "3", "4", "5"];
-    pages.forEach((page, offset) => {
-      const index = ((start + offset) * 2) % order.length;
-      expect(page).toEqual([order[index], order[(index + 1) % order.length]]);
-    });
-  });
-
-  it("goes around every record and wraps at the end", () => {
-    const seen = new Set(
-      [0, 1, 2, 3, 4].flatMap((offset) =>
-        ids(pickReminder(records, day("2026-10-24").add({ days: offset }))),
-      ),
-    );
-    expect([...seen].sort()).toEqual(["1", "2", "3", "4", "5"]);
-  });
-
-  it("shows the same records all day long", () => {
-    expect(ids(pickReminder(records, day("2026-10-24")))).toEqual(
-      ids(pickReminder(records, day("2026-10-24"))),
-    );
-  });
-
-  it("shows the only record once, and nothing without records", () => {
-    expect(
-      ids(
-        pickReminder([record("9", "2026-01-01T00:00:00Z")], day("2026-10-24")),
-      ),
-    ).toEqual(["9"]);
-    expect(pickReminder([], day("2026-10-24"))).toEqual([]);
-  });
-});
 
 describe("pickRecent", () => {
   it("picks the twelve most recently watched records", () => {
