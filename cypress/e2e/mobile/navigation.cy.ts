@@ -9,41 +9,39 @@ describe("スマホの画面", () => {
 
   const newRecord = `a[aria-label="${ja.header.newRecord}"]`;
 
-  it("下のバーとハンバーガーを出さず、ヘッダーにロゴ、検索、記録する、テーマ、アカウントを並べる", () => {
+  it("ヘッダーに、ロゴ、検索、記録する、テーマ、アカウントを並べる", () => {
     cy.visit("/ja/records");
     cy.get("nav.fixed").should("not.exist");
-    cy.get("header button[aria-label]").then(($buttons) => {
-      expect(
-        [...$buttons].map((b) => b.getAttribute("aria-label")),
-      ).to.deep.equal([
-        ja.header.openSearch,
-        ja.header.themeToggle,
-        ja.header.accountMenu,
-      ]);
-    });
     cy.get("header")
       .first()
       .within(() => {
-        cy.get(`a[href="/ja/records"]`).should("be.visible");
-        cy.get(`button[aria-label="${ja.header.openSearch}"]`).should(
-          "be.visible",
-        );
-        cy.get(newRecord).should("be.visible");
-        cy.get(`button[aria-label="${ja.header.themeToggle}"]`).should(
-          "be.visible",
-        );
-        cy.get(`[aria-label="${ja.header.accountMenu}"]`).should("be.visible");
+        cy.get('a[href="/ja/records"]').should("be.visible");
+        cy.get("a:visible, button:visible").then(($items) => {
+          expect(
+            [...$items].map((item) =>
+              item.getAttribute("href") === "/ja/records"
+                ? "logo"
+                : item.getAttribute("aria-label"),
+            ),
+          ).to.deep.equal([
+            "logo",
+            ja.header.openSearch,
+            ja.header.newRecord,
+            ja.header.themeToggle,
+            ja.header.accountMenu,
+          ]);
+        });
       });
     cy.document().then((doc) => {
       expect(doc.documentElement.scrollWidth).to.be.at.most(375);
     });
   });
 
-  it("＋のボタンで記録の作成に移り、ロゴで一覧に戻る", () => {
-    cy.visit("/ja/records");
+  it("ヘッダーの＋で記録の作成に移り、ロゴで一覧に戻る", () => {
+    cy.visit("/ja/records/1");
     cy.get(newRecord).click();
     cy.location("pathname").should("eq", "/ja/records/new");
-    cy.get("header a").first().click();
+    cy.get('header a[href="/ja/records"]').first().click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 
@@ -69,7 +67,7 @@ describe("スマホの画面", () => {
     cy.location("pathname").should("eq", "/ja/account");
   });
 
-  it("768px 以上では、＋のボタンではなく文字付きの記録するボタンを出す", () => {
+  it("768px 以上では、＋のアイコンではなく、文字付きの記録するボタンを出す", () => {
     cy.viewport(800, 800);
     cy.visit("/ja/records");
     cy.get(newRecord).should("not.be.visible");
@@ -82,7 +80,7 @@ describe("スマホの画面", () => {
       "not.exist",
     );
     cy.get(`button[aria-label="${ja.header.openSearch}"]`).click();
-    cy.get(`input[aria-label="${ja.header.searchLabel}"]:visible`).type(
+    cy.get(`[role=dialog] input[aria-label="${ja.header.searchLabel}"]`).type(
       "勝手にしやがれ{enter}",
     );
     cy.location("search").should("contain", "q=");
