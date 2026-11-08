@@ -398,7 +398,7 @@
   },
   "deleteRecord": {
     "title": "Delete this record?",
-    "description": "\"{title}\" ({date}) and its memo will be deleted. This cannot be undone.",
+    "description": "\"{title}\" ({date}) and its note and attachments will be deleted. This cannot be undone.",
     "cancel": "Cancel",
     "confirm": "Delete",
     "unexpectedError": "Couldn't delete. Please try again later"
@@ -511,7 +511,7 @@
     "cancel": "Discard",
     "save": "Save changes",
     "withdrawTitle": "Delete account",
-    "withdrawDescription": "All your records and memos will be deleted. This cannot be undone.",
+    "withdrawDescription": "All your records, notes and attachments will be deleted. This cannot be undone.",
     "withdrawAction": "Delete account",
     "withdrawConfirmTitle": "Delete your account?",
     "withdrawConfirm": "Delete",

@@ -398,7 +398,7 @@
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",
-    "description": "「{title}」（{date}）とメモが消えます。取り消しできません。",
+    "description": "「{title}」（{date}）と、そのノートや添付が消えます。取り消しできません。",
     "cancel": "やめる",
     "confirm": "削除する",
     "unexpectedError": "削除できませんでした。時間をおいてやり直してください"
@@ -511,7 +511,7 @@
     "cancel": "取り消す",
     "save": "変更を保存",
     "withdrawTitle": "退会する",
-    "withdrawDescription": "記録とメモがすべて消えます。取り消しはできません。",
+    "withdrawDescription": "記録、ノート、添付がすべて消えます。取り消しはできません。",
     "withdrawAction": "退会の手続きへ",
     "withdrawConfirmTitle": "本当に退会しますか？",
     "withdrawConfirm": "退会する",
