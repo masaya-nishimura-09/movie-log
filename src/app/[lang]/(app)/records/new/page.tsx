@@ -37,6 +37,7 @@ export default async function NewRecordPage() {
         dict={dict.recordForm}
         enums={dict.enums}
         counterTemplate={dict.characterCount}
+        editorDict={dict.noteEditor}
       />
     </>
   );

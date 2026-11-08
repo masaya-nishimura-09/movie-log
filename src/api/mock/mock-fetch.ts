@@ -1,13 +1,8 @@
-import type { MockArticle } from "@/api/mock/mock-article-factory";
-import { mockArticles } from "@/api/mock/mock-articles";
 import { mockAttachments } from "@/api/mock/mock-attachments";
+import { mockNotes } from "@/api/mock/mock-notes";
 import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
 import { mockAccounts, toUserResponse } from "@/api/mock/mock-user";
 import { isTokenExpired } from "@/lib/auth/token-cookies";
-import type {
-  ArticleResponse,
-  ArticleSummaryResponse,
-} from "@/schemas/article/article";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
 import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
 import { maxAttachments } from "@/schemas/record/attachment";
@@ -52,14 +47,25 @@ function allOf(selected: string[], values: string[]): boolean {
   return selected.every((value) => values.includes(value));
 }
 
+function noteText(recordId: string): string {
+  const note = mockNotes.get(recordId);
+  return note ? plainText(note.content) : "";
+}
+
 function matches(record: RecordResponse, filter: Filter): boolean {
+  const keyword = filter.title.toLowerCase();
   return (
     (filter.score === null || filter.score === String(record.score)) &&
     (filter.platform === null || filter.platform === record.platform) &&
     allOf(filter.mood_tags, record.mood_tags) &&
     allOf(filter.genres, record.genres) &&
-    record.title.toLowerCase().includes(filter.title.toLowerCase())
+    (record.title.toLowerCase().includes(keyword) ||
+      noteText(record.record_id).toLowerCase().includes(keyword))
   );
+}
+
+function withNote(record: RecordResponse) {
+  return { ...record, note: mockNotes.get(record.record_id) ?? null };
 }
 
 type Account = (typeof mockAccounts)[number];
@@ -80,7 +86,6 @@ function findOwnedIndex(account: Account, id: string): number {
 const errorKeyword = "__error__";
 const tooManyKeyword = "__too_many__";
 const withdrawErrorName = "__withdraw_error__";
-const deleteErrorMemo = "__delete_error__";
 const deleteErrorTitle = "__delete_error__";
 
 function listRecords(account: Account, params: URLSearchParams): Response {
@@ -98,7 +103,12 @@ function listRecords(account: Account, params: URLSearchParams): Response {
   const sortOrder = params.get("sort_order") ?? "desc";
   const page = Number(params.get("page") ?? "1");
   const perPage = Number(params.get("per_page") ?? "20");
-  if (!isSortField(sortField) || !["asc", "desc"].includes(sortOrder)) {
+  const includeNote = params.get("include_note") ?? "false";
+  if (
+    !isSortField(sortField) ||
+    !["asc", "desc"].includes(sortOrder) ||
+    !["true", "false"].includes(includeNote)
+  ) {
     return error(400, "INVALID_INPUT");
   }
   const compare = comparators[sortField];
@@ -112,7 +122,9 @@ function listRecords(account: Account, params: URLSearchParams): Response {
     );
 
   return Response.json({
-    records: filtered.slice((page - 1) * perPage, page * perPage),
+    records: filtered
+      .slice((page - 1) * perPage, page * perPage)
+      .map((record) => (includeNote === "true" ? withNote(record) : record)),
     filtered_count: filtered.length,
     total_count: records.length,
   });
@@ -132,7 +144,7 @@ function countMoodTags(account: Account): Response {
 function getRecord(account: Account, id: string): Response {
   const record = mockRecords[findOwnedIndex(account, id)];
   if (!record) return error(404, "RECORD_NOT_FOUND");
-  return Response.json(record);
+  return Response.json(withNote(record));
 }
 
 function toAttachmentResponse({
@@ -207,179 +219,13 @@ function deleteAttachment(
   return new Response(null, { status: 204 });
 }
 
-function recordSummaryOf(recordId: string) {
-  const record = mockRecords.find((r) => r.record_id === recordId);
-  return {
-    record_id: recordId,
-    title: record?.title ?? "",
-    release_year: record?.release_year ?? 0,
-    poster_url: record?.poster_url ?? "",
-  };
-}
-
-function toArticleResponse(article: MockArticle): ArticleResponse {
-  const { record_id: recordId, ...rest } = article;
-  return { ...rest, record: recordSummaryOf(recordId) };
-}
-
-function toArticleSummary(article: MockArticle): ArticleSummaryResponse {
-  const { content: _content, ...summary } = toArticleResponse(article);
-  return summary;
-}
-
-type ArticleBody = Pick<MockArticle, "title" | "content">;
-
-function isArticleBody(body: unknown): body is ArticleBody {
-  const { title, content } = body as Partial<ArticleBody>;
-  return (
-    typeof title === "string" &&
-    title.length >= 1 &&
-    title.length <= 255 &&
-    typeof content === "object" &&
-    content !== null &&
-    !Array.isArray(content) &&
-    (content as { type?: unknown }).type === "doc"
-  );
-}
-
 function plainText(node: unknown): string {
   const { text, content } = node as { text?: string; content?: unknown[] };
   return `${text ?? ""}${(content ?? []).map(plainText).join(" ")}`;
 }
 
-function findOwnedArticleIndex(account: Account, id: string): number {
-  return mockArticles.findIndex(
-    (article) =>
-      article.article_id === id &&
-      mockRecordOwners.get(article.record_id) === account.user_id,
-  );
-}
-
-function createArticle(account: Account, init: RequestInit): Response {
-  const body = readJson(init);
-  const recordId = String(body.record_id ?? "");
-  if (recordId === "") return error(400, "INVALID_INPUT");
-  if (findOwnedIndex(account, recordId) === -1) {
-    return error(404, "RECORD_NOT_FOUND");
-  }
-  if (!isArticleBody(body)) return error(400, "INVALID_INPUT");
-  const now = new Date().toISOString();
-  const lastId = Math.max(0, ...mockArticles.map((a) => Number(a.article_id)));
-  const article: MockArticle = {
-    article_id: String(lastId + 1),
-    record_id: recordId,
-    title: body.title,
-    content: body.content,
-    created_at: now,
-    updated_at: now,
-  };
-  mockArticles.push(article);
-  return Response.json(toArticleResponse(article), { status: 201 });
-}
-
-function getArticle(account: Account, id: string): Response {
-  const article = mockArticles[findOwnedArticleIndex(account, id)];
-  if (!article) return error(404, "ARTICLE_NOT_FOUND");
-  return Response.json(toArticleResponse(article));
-}
-
-function updateArticle(
-  account: Account,
-  id: string,
-  init: RequestInit,
-): Response {
-  const index = findOwnedArticleIndex(account, id);
-  const current = mockArticles[index];
-  if (!current) return error(404, "ARTICLE_NOT_FOUND");
-  const body = readJson(init);
-  if (!isArticleBody(body)) return error(400, "INVALID_INPUT");
-  const article: MockArticle = {
-    ...current,
-    title: body.title,
-    content: body.content,
-    updated_at: new Date().toISOString(),
-  };
-  mockArticles[index] = article;
-  return Response.json(toArticleResponse(article));
-}
-
-function deleteArticle(account: Account, id: string): Response {
-  const index = findOwnedArticleIndex(account, id);
-  const article = mockArticles[index];
-  if (!article) return error(404, "ARTICLE_NOT_FOUND");
-  if (article.title === deleteErrorTitle) {
-    return error(500, "INTERNAL_SERVER_ERROR");
-  }
-  mockArticles.splice(index, 1);
-  return new Response(null, { status: 204 });
-}
-
-type ArticleSortField = "created_at" | "updated_at" | "title";
-
-function isArticleSortField(value: string): value is ArticleSortField {
-  return ["created_at", "updated_at", "title"].includes(value);
-}
-
-function listArticles(account: Account, params: URLSearchParams): Response {
-  const keyword = params.get("keyword") ?? "";
-  if (keyword === errorKeyword) return error(500, "INTERNAL_SERVER_ERROR");
-  const recordId = params.get("record_id");
-  const sortField = params.get("sort_field") ?? "created_at";
-  const sortOrder = params.get("sort_order") ?? "desc";
-  const page = Number(params.get("page") ?? "1");
-  const perPage = Number(params.get("per_page") ?? "20");
-  const includeContent = params.get("include_content") ?? "false";
-  if (
-    !["true", "false"].includes(includeContent) ||
-    !isArticleSortField(sortField) ||
-    !["asc", "desc"].includes(sortOrder) ||
-    !Number.isInteger(page) ||
-    page < 1 ||
-    !Number.isInteger(perPage) ||
-    perPage < 1 ||
-    perPage > 100 ||
-    (recordId !== null && !/^[1-9]\d*$/.test(recordId)) ||
-    keyword.length > 255
-  ) {
-    return error(400, "INVALID_INPUT");
-  }
-
-  const owned = mockArticles.filter(
-    (article) => mockRecordOwners.get(article.record_id) === account.user_id,
-  );
-  const needle = keyword.toLowerCase();
-  const filtered = owned
-    .filter((article) => recordId === null || article.record_id === recordId)
-    .filter(
-      (article) =>
-        needle === "" ||
-        article.title.toLowerCase().includes(needle) ||
-        plainText(article.content).toLowerCase().includes(needle),
-    );
-  const compare = (a: MockArticle, b: MockArticle) =>
-    sortField === "title"
-      ? a.title.localeCompare(b.title, "ja")
-      : a[sortField].localeCompare(b[sortField]);
-  const byId = (a: MockArticle, b: MockArticle) =>
-    Number(b.article_id) - Number(a.article_id);
-  const sorted = [...filtered].sort(
-    (a, b) =>
-      (sortOrder === "asc" ? compare(a, b) : compare(b, a)) || byId(a, b),
-  );
-
-  return Response.json({
-    articles: sorted
-      .slice((page - 1) * perPage, page * perPage)
-      .map(includeContent === "true" ? toArticleResponse : toArticleSummary),
-    filtered_count: filtered.length,
-    total_count: owned.length,
-  });
-}
-
 function removeRecordContents(recordId: string) {
-  for (let i = mockArticles.length - 1; i >= 0; i--) {
-    if (mockArticles[i]?.record_id === recordId) mockArticles.splice(i, 1);
-  }
+  mockNotes.delete(recordId);
   for (let i = mockAttachments.length - 1; i >= 0; i--) {
     if (mockAttachments[i]?.record_id === recordId) {
       mockAttachments.splice(i, 1);
@@ -515,20 +361,40 @@ function deleteUser(account: Account): Response {
 type RecordBody = Omit<
   RecordResponse,
   "record_id" | "created_at" | "updated_at"
->;
+> & { note?: object | null };
+
+function saveNote(
+  recordId: string,
+  note: object | null | undefined,
+  now: string,
+) {
+  if (note === undefined) return;
+  if (note === null) {
+    mockNotes.delete(recordId);
+    return;
+  }
+  const current = mockNotes.get(recordId);
+  mockNotes.set(recordId, {
+    content: note,
+    created_at: current?.created_at ?? now,
+    updated_at: now,
+  });
+}
 
 function createRecord(account: Account, init: RequestInit): Response {
   const now = new Date().toISOString();
   const lastId = Math.max(0, ...mockRecords.map((r) => Number(r.record_id)));
+  const { note, ...body } = readJson(init) as RecordBody;
   const record: RecordResponse = {
-    ...(readJson(init) as RecordBody),
+    ...body,
     record_id: String(lastId + 1),
     created_at: now,
     updated_at: now,
   };
   mockRecords.push(record);
   mockRecordOwners.set(record.record_id, account.user_id);
-  return Response.json(record, { status: 201 });
+  saveNote(record.record_id, note, now);
+  return Response.json(withNote(record), { status: 201 });
 }
 
 function updateRecord(
@@ -539,20 +405,23 @@ function updateRecord(
   const index = findOwnedIndex(account, id);
   const current = mockRecords[index];
   if (!current) return error(404, "RECORD_NOT_FOUND");
+  const now = new Date().toISOString();
+  const { note, ...body } = readJson(init) as RecordBody;
   const record: RecordResponse = {
-    ...(readJson(init) as RecordBody),
+    ...body,
     record_id: id,
     created_at: current.created_at,
-    updated_at: new Date().toISOString(),
+    updated_at: now,
   };
   mockRecords[index] = record;
-  return Response.json(record);
+  saveNote(id, note, now);
+  return Response.json(withNote(record));
 }
 
 function deleteRecord(account: Account, id: string): Response {
   const index = findOwnedIndex(account, id);
   if (index === -1) return error(404, "RECORD_NOT_FOUND");
-  if (mockRecords[index]?.memo === deleteErrorMemo) {
+  if (mockRecords[index]?.title === deleteErrorTitle) {
     return error(500, "INTERNAL_SERVER_ERROR");
   }
   mockRecords.splice(index, 1);
@@ -661,11 +530,7 @@ export async function mockFetch(
   if (method === "GET" && resource === "records" && id === "mood-counts") {
     return countMoodTags(account);
   }
-  if (
-    (resource === "records" || resource === "articles") &&
-    id !== undefined &&
-    !/^\d+$/.test(id)
-  ) {
+  if (resource === "records" && id !== undefined && !/^\d+$/.test(id)) {
     return error(400, "INVALID_INPUT");
   }
   if (resource === "records" && id !== undefined && sub === "attachments") {
@@ -683,15 +548,6 @@ export async function mockFetch(
     if (method === "GET") return getRecord(account, id);
     if (method === "PUT") return updateRecord(account, id, init);
     if (method === "DELETE") return deleteRecord(account, id);
-  }
-  if (resource === "articles" && id === undefined) {
-    if (method === "GET") return listArticles(account, url.searchParams);
-    if (method === "POST") return createArticle(account, init);
-  }
-  if (resource === "articles" && id !== undefined && sub === undefined) {
-    if (method === "GET") return getArticle(account, id);
-    if (method === "PUT") return updateArticle(account, id, init);
-    if (method === "DELETE") return deleteArticle(account, id);
   }
   if (method === "POST" && resource === "media" && id === undefined) {
     return uploadMedia(init);

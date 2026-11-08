@@ -36,7 +36,6 @@ export function toRecordsCsv(
     f.language,
     f.credits,
     f.overview,
-    f.memo,
     f.posterUrl,
   ];
   const rows = records.map((record) => [
@@ -58,7 +57,6 @@ export function toRecordsCsv(
       ),
     ),
     record.overview,
-    record.memo,
     record.posterUrl,
   ]);
   return `﻿${[header, ...rows]

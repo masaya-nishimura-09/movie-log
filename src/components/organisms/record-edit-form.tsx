@@ -32,6 +32,7 @@ type RecordEditFormProps = {
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   counterTemplate: string;
+  editorDict: Dictionary["noteEditor"];
 };
 
 function Panel({ title, children }: { title: string; children: ReactNode }) {
@@ -55,6 +56,7 @@ export function RecordEditForm({
   dict,
   enums,
   counterTemplate,
+  editorDict,
 }: RecordEditFormProps) {
   const { failure, pending, submit } = useFormSubmit(action, convertWatchedAt);
   const movie = useMovieAssist(values, getMovie);
@@ -71,31 +73,20 @@ export function RecordEditForm({
         </FormAlert>
       )}
       <div className="grid items-start gap-4 lg:grid-cols-2">
-        <div className="flex flex-col gap-4">
-          <Panel title={dict.watchSection}>
-            <RecordBasicsFields
-              lang={lang}
-              errors={failure?.errors}
-              title={movie.title}
-              onTitleChange={movie.setTitle}
-              searchMovies={searchMovies}
-              onMovieSelect={movie.select}
-              values={values}
-              dict={dict}
-              enums={enums}
-              counterTemplate={counterTemplate}
-            />
-          </Panel>
-          <Panel title={dict.stepImpression}>
-            <RecordImpressionFields
-              errors={failure?.errors}
-              values={values}
-              dict={dict}
-              enums={enums}
-              counterTemplate={counterTemplate}
-            />
-          </Panel>
-        </div>
+        <Panel title={dict.watchSection}>
+          <RecordBasicsFields
+            lang={lang}
+            errors={failure?.errors}
+            title={movie.title}
+            onTitleChange={movie.setTitle}
+            searchMovies={searchMovies}
+            onMovieSelect={movie.select}
+            values={values}
+            dict={dict}
+            enums={enums}
+            counterTemplate={counterTemplate}
+          />
+        </Panel>
         <Panel title={dict.movieSection}>
           <RecordMovieFields
             errors={failure?.errors}
@@ -110,6 +101,15 @@ export function RecordEditForm({
           />
         </Panel>
       </div>
+      <Panel title={dict.stepImpression}>
+        <RecordImpressionFields
+          errors={failure?.errors}
+          values={values}
+          dict={dict}
+          enums={enums}
+          editorDict={editorDict}
+        />
+      </Panel>
 
       <div className="mb-6 flex justify-end gap-2">
         <Link

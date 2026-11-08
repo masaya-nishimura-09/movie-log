@@ -6,6 +6,9 @@ import {
   platformSchema,
   scoreSchema,
 } from "@/schemas/record/enums";
+import { noteContentSchema } from "@/schemas/record/note";
+
+const noteMaxBytes = 100 * 1024;
 
 export const recordInputSchema = z.object({
   title: z.string().min(1).max(255),
@@ -31,7 +34,14 @@ export const recordInputSchema = z.object({
   ),
   posterUrl: z.union([z.literal(""), z.url({ protocol: /^https?$/ })]),
   moodTags: z.array(moodTagSchema),
-  memo: z.string().max(1000),
+  note: noteContentSchema
+    .refine((content) => content.type === "doc")
+    .refine(
+      (content) =>
+        new TextEncoder().encode(JSON.stringify(content)).length <=
+        noteMaxBytes,
+    )
+    .nullable(),
 });
 
 export type RecordInput = z.infer<typeof recordInputSchema>;
@@ -57,6 +67,6 @@ export function toRecordRequest(input: RecordInput) {
     platform: input.platform,
     score: input.score,
     mood_tags: input.moodTags,
-    memo: input.memo,
+    note: input.note,
   };
 }

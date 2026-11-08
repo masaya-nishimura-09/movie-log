@@ -7,7 +7,6 @@ import {
   deleteAttachmentAction,
 } from "@/actions/record/attachment";
 import { deleteRecordAction } from "@/actions/record/delete-record";
-import { getRecordArticles } from "@/api/article/get-record-articles";
 import { getRecord } from "@/api/record/get-record";
 import { getRecordAttachments } from "@/api/record/get-record-attachments";
 import { buttonVariants } from "@/components/atoms/button";
@@ -16,7 +15,7 @@ import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordDetail } from "@/components/organisms/record-detail";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
-import { fromKey, pathOf, safeFromHref, withFrom } from "@/lib/url/back-href";
+import { fromKey, safeFromHref } from "@/lib/url/back-href";
 
 export async function generateMetadata({
   params,
@@ -31,29 +30,22 @@ export default async function RecordPage({
   searchParams,
 }: PageProps<"/[lang]/records/[id]">) {
   const { id } = await params;
-  const [lang, dict, record, recordArticles, attachments, query] =
-    await Promise.all([
-      getLocale(),
-      getDictionary(),
-      getRecord(id),
-      getRecordArticles(id),
-      getRecordAttachments(id),
-      searchParams,
-    ]);
+  const [lang, dict, record, attachments, query] = await Promise.all([
+    getLocale(),
+    getDictionary(),
+    getRecord(id),
+    getRecordAttachments(id),
+    searchParams,
+  ]);
   if (!record) notFound();
-  const homePath = `/${lang}/home`;
-  const from = safeFromHref(query[fromKey], [`/${lang}/records`, homePath]);
+  const from = safeFromHref(query[fromKey], [`/${lang}/records`]);
   const backHref = from ?? `/${lang}/records`;
 
   return (
     <>
       <PageTopBar
         backHref={backHref}
-        backLabel={
-          from && pathOf(from) === homePath
-            ? dict.recordDetail.backToHome
-            : dict.recordDetail.back
-        }
+        backLabel={dict.recordDetail.back}
         actions={
           <>
             <Link
@@ -81,16 +73,9 @@ export default async function RecordPage({
       <RecordDetail
         lang={lang}
         record={record}
-        articles={recordArticles.articles}
-        articleTotal={recordArticles.total}
         attachments={attachments}
         addAttachment={addAttachmentAction.bind(null, id)}
         deleteAttachment={deleteAttachmentAction.bind(null, id)}
-        articleFromHref={
-          from === undefined
-            ? undefined
-            : withFrom(`/${lang}/records/${id}`, from)
-        }
         dict={dict}
       />
     </>

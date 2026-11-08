@@ -8,21 +8,6 @@ describe("appSectionOf", () => {
     }
   });
 
-  it("treats the article list and the article pages under a record as articles", () => {
-    for (const path of [
-      "/ja/articles",
-      "/ja/records/1/articles/2",
-      "/ja/records/1/articles/2/edit",
-      "/ja/records/1/articles/new",
-    ]) {
-      expect(appSectionOf(path, "ja"), path).toBe("articles");
-    }
-  });
-
-  it("treats the home page as home", () => {
-    expect(appSectionOf("/ja/home", "ja")).toBe("home");
-  });
-
   it("treats the new record page as its own section", () => {
     expect(appSectionOf("/ja/records/new", "ja")).toBe("newRecord");
   });

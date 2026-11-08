@@ -54,7 +54,7 @@ export function AppTopBar({
         className={`${roundIcon} md:hidden`}
       />
       <Link
-        href={`/${lang}/home`}
+        href={`/${lang}/records`}
         className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-9 lg:w-49"
       >
         <span className="contents md:max-lg:hidden">

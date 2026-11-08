@@ -1,14 +1,6 @@
 "use client";
 
-import {
-  FileText,
-  House,
-  Info,
-  LayoutGrid,
-  type LucideIcon,
-  Mail,
-  Plus,
-} from "lucide-react";
+import { Info, LayoutGrid, type LucideIcon, Mail, Plus } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -98,13 +90,6 @@ export function AppNav({
     label: string;
     Icon: LucideIcon;
   }[] = [
-    { key: "home", href: `/${lang}/home`, label: dict.home, Icon: House },
-    {
-      key: "newRecord",
-      href: `/${lang}/records/new`,
-      label: dict.newRecord,
-      Icon: Plus,
-    },
     {
       key: "records",
       href: `/${lang}/records`,
@@ -112,10 +97,10 @@ export function AppNav({
       Icon: LayoutGrid,
     },
     {
-      key: "articles",
-      href: `/${lang}/articles`,
-      label: dict.articles,
-      Icon: FileText,
+      key: "newRecord",
+      href: `/${lang}/records/new`,
+      label: dict.newRecord,
+      Icon: Plus,
     },
   ];
 

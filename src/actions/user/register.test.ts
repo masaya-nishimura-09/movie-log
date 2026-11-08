@@ -37,7 +37,7 @@ beforeEach(() => {
 describe("registerAction", () => {
   it("registers, logs in and moves to the records", async () => {
     await expect(registerAction("en", undefined, form())).rejects.toThrow(
-      "REDIRECT /en/home",
+      "REDIRECT /en/records",
     );
     expect(registerUser).toHaveBeenCalledWith({
       username: "tester",

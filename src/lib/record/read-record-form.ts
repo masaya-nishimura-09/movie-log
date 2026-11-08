@@ -1,3 +1,16 @@
+import type { JSONContent } from "@tiptap/react";
+import { hasText } from "@/lib/note/has-text";
+
+function readNote(value: string): unknown {
+  if (value === "") return null;
+  try {
+    const content: JSONContent = JSON.parse(value);
+    return hasText(content) ? content : null;
+  } catch {
+    return undefined;
+  }
+}
+
 export function readRecordForm(formData: FormData) {
   const text = (name: string) => String(formData.get(name) ?? "");
   const texts = (name: string) => formData.getAll(name).map(String);
@@ -32,6 +45,6 @@ export function readRecordForm(formData: FormData) {
       .filter((row) => row.personName !== ""),
     posterUrl: text("posterUrl").trim(),
     moodTags: texts("moodTags"),
-    memo: text("memo"),
+    note: readNote(text("note")),
   };
 }

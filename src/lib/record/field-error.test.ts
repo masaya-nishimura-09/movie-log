@@ -11,7 +11,7 @@ describe("fieldError", () => {
 
   it("returns undefined for a field without an error", () => {
     expect(
-      fieldError({ title: ["too_small"] }, ja.recordForm, "memo"),
+      fieldError({ title: ["too_small"] }, ja.recordForm, "note"),
     ).toBeUndefined();
     expect(fieldError(undefined, ja.recordForm, "title")).toBeUndefined();
   });
