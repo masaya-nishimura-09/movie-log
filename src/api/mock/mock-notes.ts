@@ -16,17 +16,9 @@ function initialNotes(): Map<string, NoteResponse> {
     const article = articles.find((a) => a.record_id === record.record_id);
     const memo = mockMemos.get(record);
     if (article) {
-      notes.set(record.record_id, {
-        content: article.content,
-        created_at: article.created_at,
-        updated_at: article.updated_at,
-      });
+      notes.set(record.record_id, article.content);
     } else if (memo) {
-      notes.set(record.record_id, {
-        content: doc(paragraph(memo)),
-        created_at: record.created_at,
-        updated_at: record.updated_at,
-      });
+      notes.set(record.record_id, doc(paragraph(memo)));
     }
   }
   return notes;

@@ -88,22 +88,11 @@ describe("recordDetailResponseSchema", () => {
     updated_at: "2026-10-02T12:00:00Z",
   };
 
-  it("converts the note to camelCase", () => {
+  it("returns the note content as it is", () => {
     const content = { type: "doc", content: [] };
     expect(
-      recordDetailResponseSchema.parse({
-        ...response,
-        note: {
-          content,
-          created_at: "2026-10-03T12:00:00Z",
-          updated_at: "2026-10-04T12:00:00Z",
-        },
-      }).note,
-    ).toEqual({
-      content,
-      createdAt: "2026-10-03T12:00:00Z",
-      updatedAt: "2026-10-04T12:00:00Z",
-    });
+      recordDetailResponseSchema.parse({ ...response, note: content }).note,
+    ).toEqual(content);
   });
 
   it("treats a missing or null note as no note", () => {

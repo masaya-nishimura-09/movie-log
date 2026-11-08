@@ -137,12 +137,8 @@ describe("noteToMarkdown and noteFiles", () => {
     score: 4 as const,
     moodTags: [],
     createdAt: "2026-10-04T12:00:00Z",
-    updatedAt: "2026-10-04T12:00:00Z",
-    note: {
-      content: doc(paragraph(text("本文"))),
-      createdAt: "2026-10-04T12:00:00Z",
-      updatedAt: "2026-10-05T16:00:00Z",
-    },
+    updatedAt: "2026-10-05T16:00:00Z",
+    note: doc(paragraph(text("本文"))),
     ...overrides,
   });
   const labels = {

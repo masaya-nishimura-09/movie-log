@@ -154,7 +154,7 @@ export function RecordDetail({
         <SectionLabel>{d.note}</SectionLabel>
         {record.note ? (
           <NoteSheet
-            content={record.note.content}
+            content={record.note}
             readMoreLabel={d.noteReadMore}
             showLessLabel={d.noteShowLess}
           />

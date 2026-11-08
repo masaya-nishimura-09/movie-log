@@ -379,7 +379,7 @@ describe("mockFetch: 記録", () => {
     expect(await titles("platform=hulu")).toEqual(["Beta", "Gamma"]);
     expect(await titles("mood_tags=moving&mood_tags=dark")).toEqual(["Alpha"]);
     expect(await titles("genres=crime")).toEqual(["Alpha", "Gamma"]);
-    expect(await titles("title=ALP")).toEqual(["Alpha"]);
+    expect(await titles("keyword=ALP")).toEqual(["Alpha"]);
     expect((await list(headers, "score=5")).body).toMatchObject({
       filtered_count: 2,
       total_count: 3,
@@ -450,15 +450,11 @@ describe("mockFetch: 記録", () => {
         post({ ...newRecord, note: note("最初") }, "POST", headers),
       )
     ).json();
-    expect(created.note).toMatchObject({ content: note("最初") });
+    expect(created.note).toEqual(note("最初"));
     const got = await (
       await mockFetch(`/records/${created.record_id}`, { headers })
     ).json();
-    expect(got.note).toEqual({
-      content: note("最初"),
-      created_at: expect.any(String),
-      updated_at: expect.any(String),
-    });
+    expect(got.note).toEqual(note("最初"));
     const listed = (await list(headers)).body.records[0];
     expect(listed).not.toHaveProperty("note");
     await mockFetch(
@@ -468,16 +464,7 @@ describe("mockFetch: 記録", () => {
     const updated = await (
       await mockFetch(`/records/${created.record_id}`, { headers })
     ).json();
-    expect(updated.note.content).toEqual(note("二回目"));
-    expect(updated.note.created_at).toBe(got.note.created_at);
-    await mockFetch(
-      `/records/${created.record_id}`,
-      post({ ...newRecord }, "PUT", headers),
-    );
-    const kept = await (
-      await mockFetch(`/records/${created.record_id}`, { headers })
-    ).json();
-    expect(kept.note.content).toEqual(note("二回目"));
+    expect(updated.note).toEqual(note("二回目"));
     await mockFetch(
       `/records/${created.record_id}`,
       post({ ...newRecord, note: null }, "PUT", headers),
@@ -486,6 +473,18 @@ describe("mockFetch: 記録", () => {
       await mockFetch(`/records/${created.record_id}`, { headers })
     ).json();
     expect(cleared.note).toBeNull();
+    await mockFetch(
+      `/records/${created.record_id}`,
+      post({ ...newRecord, note: note("三回目") }, "PUT", headers),
+    );
+    await mockFetch(
+      `/records/${created.record_id}`,
+      post({ ...newRecord }, "PUT", headers),
+    );
+    const omitted = await (
+      await mockFetch(`/records/${created.record_id}`, { headers })
+    ).json();
+    expect(omitted.note).toBeNull();
   });
 
   it("finds records by the text of their notes, and includes notes only with include_note=true", async () => {
@@ -511,7 +510,10 @@ describe("mockFetch: 記録", () => {
       ),
     );
     await mockFetch("/records/", post(newRecord, "POST", headers));
-    const found = await list(headers, `title=${encodeURIComponent("宇宙船")}`);
+    const found = await list(
+      headers,
+      `keyword=${encodeURIComponent("宇宙船")}`,
+    );
     expect(found.body.records.map((r: { title: string }) => r.title)).toEqual([
       "別の題名",
     ]);
@@ -543,7 +545,7 @@ describe("mockFetch: 記録", () => {
     const got = await (
       await mockFetch("/records/1", { headers: await auth() })
     ).json();
-    expect(got.note.content).toMatchObject({ type: "doc" });
+    expect(got.note).toMatchObject({ type: "doc" });
   });
 
   it("fails to delete a record titled __delete_error__", async () => {
@@ -676,7 +678,7 @@ describe("mockFetch: 記録", () => {
 
 describe("mockFetch: 失敗を返す値", () => {
   it("returns 500 for a list searched with __error__", async () => {
-    expect((await list(await auth(), "title=__error__")).status).toBe(500);
+    expect((await list(await auth(), "keyword=__error__")).status).toBe(500);
   });
 
   it("returns 500 or 429 when a submitted field is __error__ or __too_many__", async () => {

@@ -96,12 +96,12 @@ export function noteToMarkdown(
     record.releaseYear > 0
       ? ` ・ ${interpolate(labels.releaseYear, { year: record.releaseYear })}`
       : "";
-  const body = contentToMarkdown(record.note.content);
+  const body = contentToMarkdown(record.note);
   return `${[
     `# ${escapeText(record.title)}${year}`,
     [
       `- ${labels.watchedAt}: ${localDate(record.watchedAt)}`,
-      `- ${labels.updatedAt}: ${localDate(record.note.updatedAt)}`,
+      `- ${labels.updatedAt}: ${localDate(record.updatedAt)}`,
     ].join("\n"),
     ...(body === "" ? [] : [body]),
   ].join("\n\n")}\n`;

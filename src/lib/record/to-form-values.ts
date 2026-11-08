@@ -33,7 +33,7 @@ export function toFormValues(record: RecordDetail): RecordFormValues {
     platform: record.platform,
     score: record.score,
     moodTags: record.moodTags,
-    note: record.note?.content,
+    note: record.note ?? undefined,
   };
 }
 

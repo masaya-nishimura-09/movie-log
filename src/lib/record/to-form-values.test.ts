@@ -29,11 +29,7 @@ const record: RecordDetail = {
   moodTags: ["moving"],
   createdAt: "2026-10-01T12:00:00Z",
   updatedAt: "2026-10-02T12:00:00Z",
-  note: {
-    content: noteContent,
-    createdAt: "2026-10-01T12:00:00Z",
-    updatedAt: "2026-10-02T12:00:00Z",
-  },
+  note: noteContent,
 };
 
 describe("emptyFormValues", () => {

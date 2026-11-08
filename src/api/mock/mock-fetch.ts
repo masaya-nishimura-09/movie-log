@@ -49,7 +49,7 @@ function allOf(selected: string[], values: string[]): boolean {
 
 function noteText(recordId: string): string {
   const note = mockNotes.get(recordId);
-  return note ? plainText(note.content) : "";
+  return note ? plainText(note) : "";
 }
 
 function matches(record: RecordResponse, filter: Filter): boolean {
@@ -94,7 +94,7 @@ function listRecords(account: Account, params: URLSearchParams): Response {
     platform: params.get("platform"),
     mood_tags: params.getAll("mood_tags"),
     genres: params.getAll("genres"),
-    title: params.get("title") ?? "",
+    title: params.get("keyword") ?? "",
   };
   if (filter.title === errorKeyword) {
     return error(500, "INTERNAL_SERVER_ERROR");
@@ -363,22 +363,9 @@ type RecordBody = Omit<
   "record_id" | "created_at" | "updated_at"
 > & { note?: object | null };
 
-function saveNote(
-  recordId: string,
-  note: object | null | undefined,
-  now: string,
-) {
-  if (note === undefined) return;
-  if (note === null) {
-    mockNotes.delete(recordId);
-    return;
-  }
-  const current = mockNotes.get(recordId);
-  mockNotes.set(recordId, {
-    content: note,
-    created_at: current?.created_at ?? now,
-    updated_at: now,
-  });
+function saveNote(recordId: string, note: object | null | undefined) {
+  if (note) mockNotes.set(recordId, note);
+  else mockNotes.delete(recordId);
 }
 
 function createRecord(account: Account, init: RequestInit): Response {
@@ -393,7 +380,7 @@ function createRecord(account: Account, init: RequestInit): Response {
   };
   mockRecords.push(record);
   mockRecordOwners.set(record.record_id, account.user_id);
-  saveNote(record.record_id, note, now);
+  saveNote(record.record_id, note);
   return Response.json(withNote(record), { status: 201 });
 }
 
@@ -414,7 +401,7 @@ function updateRecord(
     updated_at: now,
   };
   mockRecords[index] = record;
-  saveNote(id, note, now);
+  saveNote(id, note);
   return Response.json(withNote(record));
 }
 
