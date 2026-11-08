@@ -266,12 +266,7 @@
     "logout": "Log out",
     "openSearch": "Search",
     "contact": "Contact",
-    "openMenu": "Open menu",
-    "close": "Close"
-  },
-  "nav": {
-    "label": "Main menu",
-    "records": "Films",
+    "close": "Close",
     "newRecord": "Log"
   },
   "login": {

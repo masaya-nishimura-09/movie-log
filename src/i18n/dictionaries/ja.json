@@ -266,12 +266,7 @@
     "logout": "ログアウト",
     "openSearch": "検索",
     "contact": "お問い合わせ",
-    "openMenu": "メニューを開く",
-    "close": "閉じる"
-  },
-  "nav": {
-    "label": "メインメニュー",
-    "records": "鑑賞記録",
+    "close": "閉じる",
     "newRecord": "記録する"
   },
   "login": {
