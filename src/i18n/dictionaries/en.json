@@ -1,39 +1,43 @@
 {
   "metadata": {
     "title": "Cinelier",
-    "description": "A film logbook you can search by mood. Keep the date, where you watched, a score, and how it felt."
+    "description": "A film logbook with one note for each film, searchable by mood and by what you wrote."
   },
   "brand": {
     "name": "Cinelier",
     "tagline": "Remember every film you have watched."
   },
   "landing": {
-    "headline": "A film logbook you can search by mood.",
-    "lead": "Log the date, where you watched, a score, and how it felt. Your records stay private, and only you can read them.",
+    "headline": "One note for every film you watch.",
+    "lead": "Write down what you thought, next to the date, a score, and the mood of the film. Your records stay private, and only you can read them.",
     "start": "Sign up to start",
     "login": "Log in",
     "listAlt": "A grid of posters for the films you have logged",
-    "detailAlt": "One film's record, with the watched date and platform under the poster",
     "features": [
+      {
+        "title": "A page for each film",
+        "text": "Write what you thought after watching, with headings, lists, and quotes. Export your notes as Markdown at any time."
+      },
       {
         "title": "Find films by mood",
         "text": "Tag films as poignant, absurd or bitter ending, among 18 mood tags. Later, filter for the mood you are in tonight."
       },
       {
-        "title": "Keep it with the poster",
-        "text": "The watched date, score and platform sit with the poster on a single card."
-      },
-      {
-        "title": "Log where you watched",
-        "text": "Choose from 30 options, from cinemas and discs to Netflix and MUBI."
+        "title": "Search what you wrote",
+        "text": "Search looks at your notes as well as titles, so you can find the film where you wrote about that one scene."
       }
     ],
+    "note": {
+      "title": "Your note, right next to the poster.",
+      "text": "The note you wrote sits on the same page as the date and mood. You can also attach up to 10 photos of pamphlets or flyers to each film.",
+      "alt": "One film's record, with a note of headings and text under the poster and the watched date"
+    },
     "recommend": {
       "title": "“Anything moving on Netflix?”",
       "text": "Love films, and people keep asking you what to watch. The right pick for someone else rarely comes to mind on the spot. Filter the films you have seen by platform and mood, and the answer is right there.",
       "alt": "Records filtered to the Netflix platform and the Moving mood"
     },
-    "closing": "Start with the last film you saw. A title, the date, a score, and where you watched are all you need."
+    "closing": "Start with the last film you saw. A title, the date, a score, and where you watched are all you need. You can add a note later."
   },
   "about": {
     "title": "About",

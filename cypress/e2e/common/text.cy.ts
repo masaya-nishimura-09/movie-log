@@ -23,6 +23,8 @@ for (const [lang, t] of locales) {
         t.landing.lead,
         t.landing.start,
         t.landing.login,
+        t.landing.note.title,
+        t.landing.note.text,
         t.landing.recommend.title,
         t.landing.recommend.text,
         t.landing.closing,
@@ -35,7 +37,7 @@ for (const [lang, t] of locales) {
         shows(feature.title, feature.text);
       for (const alt of [
         t.landing.listAlt,
-        t.landing.detailAlt,
+        t.landing.note.alt,
         t.landing.recommend.alt,
       ]) {
         cy.get(`img[alt="${alt}"]`).should("exist");
