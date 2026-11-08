@@ -39,6 +39,6 @@ describe("トップページ", () => {
   it("ログインしているとホームに移る", () => {
     cy.login();
     cy.visit("/ja");
-    cy.location("pathname").should("eq", "/ja/home");
+    cy.location("pathname").should("eq", "/ja/records");
   });
 });

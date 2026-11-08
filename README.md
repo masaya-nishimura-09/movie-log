@@ -66,36 +66,23 @@ UI components are organized into atoms, molecules, and organisms.
 - Up to 10 attached images per record, such as pamphlets, flyers, or drawings,
   added when creating a record or later, and viewed one by one
   with previous and next buttons
-- A record page split into a log tab (mood, memo, articles, and attachments)
+- One note per record, written in an editor with bold, italic, headings,
+  subheadings, bulleted lists, numbered lists, and quotes
+- A record page split into a log tab (mood, note, and attachments)
   and a film info tab (original title, synopsis, genres, and credits)
-
-### Home
-
-- The most recent records and the most recently written articles
-- For up to three of the moods you have logged the most,
-  a row of the records with that mood
 
 ### Finding Records
 
-- Title search, sorting, and pagination
+- Search over titles and notes, sorting, and pagination
 - Filtering by score, platform, mood, and genre
   (one score and one platform;
   moods and genres match only records that have all of them)
-
-### Articles
-
-- Create, view, update, and delete articles for each viewing record
-- A body editor with bold, italic, headings, subheadings, bulleted lists,
-  numbered lists, and quotes
-- A table of contents built from the headings, highlighting the heading being read
-- Keyword search over titles and bodies, filtering by record, sorting,
-  and pagination
 
 ### Accounts
 
 - Registration, login, and logout, with automatic token refresh
 - Account updates and deletion
-- Export of the film log as a CSV file and of articles as Markdown files
+- Export of the film log as a CSV file and of the notes as Markdown files
   in a ZIP
 - Protection against automated login and registration with Cloudflare Turnstile
 
@@ -185,7 +172,7 @@ If any submitted field is `__error__`, the request returns 500,
 and if it is `__too_many__`, it returns 429
 (for example, the login password or a record title).
 An account whose display name is `__withdraw_error__` fails to withdraw
-with 500, and a record whose memo is `__delete_error__` fails to delete
+with 500, and a record titled `__delete_error__` fails to delete
 with 500.
 
 ### Environment Variables
@@ -240,7 +227,7 @@ src/
   hooks/              # Custom React hooks
   schemas/            # Zod schemas
   i18n/               # Locales and dictionaries
-  lib/                # Helpers grouped by feature (article, record, url, ...)
+  lib/                # Helpers grouped by feature (note, record, url, ...)
   styles/             # Global styles and color tokens
   proxy.ts            # Language routing and token refresh
   instrumentation.ts  # Logging of unhandled server errors
@@ -257,15 +244,10 @@ src/
 | /:lang/contact                              | Contact form     | Not required |
 | /:lang/terms                                | Terms of use     | Not required |
 | /:lang/privacy                              | Privacy policy   | Not required |
-| /:lang/home                                 | Home             | Required     |
 | /:lang/records                              | Record list      | Required     |
 | /:lang/records/new                          | New record       | Required     |
 | /:lang/records/:id                          | Record details   | Required     |
 | /:lang/records/:id/edit                     | Record editing   | Required     |
-| /:lang/records/:id/articles/new             | New article      | Required     |
-| /:lang/records/:id/articles/:articleId      | Article details  | Required     |
-| /:lang/records/:id/articles/:articleId/edit | Article editing  | Required     |
-| /:lang/articles                             | Article list     | Required     |
 | /:lang/account                              | Account settings | Required     |
 
 ## Credits

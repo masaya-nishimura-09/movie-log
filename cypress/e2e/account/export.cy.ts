@@ -23,31 +23,32 @@ describe("データの書き出し", () => {
     });
   });
 
-  it("記事を書き出すと、記事ごとのMarkdownファイルをまとめたZIPをダウンロードする", () => {
+  it("ノートを書き出すと、ノートのある記録ごとのMarkdownファイルをまとめたZIPをダウンロードする", () => {
     cy.register();
-    const title = `E2E 記事の書き出し ${Date.now()}`;
-    cy.createRecord(title);
-    cy.createArticle("書き出す記事", "書き出す本文");
-    cy.contains("header a", title).click();
-    cy.createArticle("二本目の記事", "二本目の本文");
+    const title = `E2E ノートの書き出し ${Date.now()}`;
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(title);
+    cy.contains("button", ja.recordForm.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", ja.recordForm.next).click();
+    cy.get("[role=textbox]").click().type("書き出す本文");
+    cy.contains("button", ja.recordForm.save).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.createRecord(`E2E ノートなし ${Date.now()}`);
     cy.visit("/ja/account");
-    cy.contains("button", account.exportArticlesAction).click();
+    cy.contains("button", account.exportNotesAction).click();
     const today = new Date().toLocaleDateString("sv-SE");
     cy.readFile(
-      `${Cypress.config("downloadsFolder")}/cinelier-articles-${today}.zip`,
+      `${Cypress.config("downloadsFolder")}/cinelier-notes-${today}.zip`,
       null,
     ).then((zip: Uint8Array) => {
       const files = unzipSync(new Uint8Array(zip));
-      expect(Object.keys(files)).to.deep.equal([
-        `${today} 書き出す記事.md`,
-        `${today} 二本目の記事.md`,
-      ]);
+      expect(Object.keys(files)).to.deep.equal([`${today} ${title}.md`]);
       const markdown = strFromU8(
-        files[`${today} 書き出す記事.md`] ?? new Uint8Array(),
+        files[`${today} ${title}.md`] ?? new Uint8Array(),
       );
-      expect(markdown).to.match(/^# 書き出す記事\n\n/);
-      expect(markdown).to.contain(`- ${account.exportMovie}: ${title}`);
-      expect(markdown).to.contain(`- ${account.exportCreatedAt}: ${today}`);
+      expect(markdown).to.match(new RegExp(`^# ${title} ・ 2020年\n\n`));
+      expect(markdown).to.contain(`- ${ja.recordForm.watchedAt}: ${today}`);
       expect(markdown).to.contain("書き出す本文");
     });
   });

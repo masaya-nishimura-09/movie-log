@@ -184,8 +184,7 @@ for (const [lang, t] of locales) {
           t.recordDetail.tabRecord,
           t.recordDetail.tabMovie,
           t.recordDetail.moodTags,
-          t.recordDetail.memo,
-          t.recordDetail.articles,
+          t.recordDetail.note,
           t.recordDetail.attachments,
           t.recordDetail.attachmentsAdd,
           t.recordDetail.watchedAt,
@@ -294,12 +293,11 @@ for (const [lang, t] of locales) {
           t.recordForm.optional,
           t.recordForm.moodTags,
           t.recordForm.moodTagsHint,
-          t.recordForm.memo,
+          t.recordForm.note,
           t.recordForm.attachments,
           t.recordForm.attachmentsHint,
           t.recordForm.attachmentsAdd,
           t.recordForm.save,
-          fill(t.characterCount, { current: 0, max: 1000 }),
         );
       });
 
@@ -368,7 +366,7 @@ for (const [lang, t] of locales) {
       cy.login(demoAccount);
       cy.visit(`/${lang}/records`);
       cy.get(`button[aria-label="${t.header.openMenu}"]`).click();
-      shows(t.nav.home, t.nav.records, t.nav.newRecord, t.nav.articles);
+      shows(t.nav.records, t.nav.newRecord);
       cy.get("body").type("{esc}");
       cy.get(`[aria-label="${t.header.openSearch}"]`).should("exist");
       cy.get(`button[aria-label="${t.recordFilter.open}"]`).click();

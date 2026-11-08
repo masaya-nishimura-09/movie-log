@@ -15,14 +15,12 @@ describe("サイドバー", () => {
     cy.viewport(1280, 800);
   });
 
-  it("ホーム、記録する、鑑賞記録、記事を同じ形で並べ、文字をアイコンの横に出す", () => {
+  it("鑑賞記録と記録するを同じ形で並べ、文字をアイコンの横に出す", () => {
     cy.visit("/ja/records");
     cy.get(mainItems).then(($links) => {
       expect([...$links].map((link) => link.textContent)).to.deep.equal([
-        nav.home,
-        nav.newRecord,
         nav.records,
-        nav.articles,
+        nav.newRecord,
       ]);
       const heights = [...$links].map(
         (link) => link.getBoundingClientRect().height,
@@ -39,24 +37,16 @@ describe("サイドバー", () => {
 
   it("各項目から、それぞれのページに移る", () => {
     cy.visit("/ja/records");
-    item(nav.articles).click();
-    cy.location("pathname").should("eq", "/ja/articles");
-    item(nav.records).click();
-    cy.location("pathname").should("eq", "/ja/records");
     item(nav.newRecord).click();
     cy.location("pathname").should("eq", "/ja/records/new");
-    item(nav.home).click();
-    cy.location("pathname").should("eq", "/ja/home");
+    item(nav.records).click();
+    cy.location("pathname").should("eq", "/ja/records");
   });
 
   for (const [path, label] of [
-    ["/ja/home", nav.home],
     ["/ja/records", nav.records],
     ["/ja/records/1", nav.records],
     ["/ja/records/1/edit", nav.records],
-    ["/ja/articles", nav.articles],
-    ["/ja/records/1/articles/1", nav.articles],
-    ["/ja/records/1/articles/1/edit", nav.articles],
     ["/ja/records/new", nav.newRecord],
   ] as const) {
     it(`${path} では「${label}」だけが現在の項目になる`, () => {
@@ -72,12 +62,11 @@ describe("サイドバー", () => {
     cy.get(`${sidebar} a[aria-current="page"]`).should("not.exist");
   });
 
-  it("上のバーには、記事と記録するのリンクや、サイドバーの開閉ボタンを出さない", () => {
+  it("上のバーには、記録するのリンクや、サイドバーの開閉ボタンを出さない", () => {
     cy.visit("/ja/records");
     cy.get("header")
       .first()
       .within(() => {
-        cy.contains("a", nav.articles).should("not.exist");
         cy.contains("a", nav.newRecord).should("not.exist");
         cy.get("button[aria-controls]").should("not.exist");
       });
@@ -138,7 +127,7 @@ describe("サイドバー", () => {
     });
   });
 
-  it("768〜1023px では、ロゴを切手のマークだけにする", () => {
+  it("768〜1023px では、ロゴを楕円付きの C のマークだけにする", () => {
     for (const [width, mark] of [
       [800, true],
       [1280, false],
@@ -149,7 +138,7 @@ describe("サイドバー", () => {
         .first()
         .find("svg:visible")
         .should("have.length", 1)
-        .and("have.attr", "viewBox", mark ? "0 0 110 110" : "0 0 634.9 110");
+        .and("have.attr", "viewBox", mark ? "80 80 864 864" : "0 0 460 150");
     }
   });
 
@@ -179,6 +168,6 @@ describe("サイドバー", () => {
 
   it("英語の画面でも表示する", () => {
     cy.visit("/en/records");
-    cy.contains("nav a", "Articles").should("be.visible");
+    cy.contains("nav a", "Films").should("be.visible");
   });
 });

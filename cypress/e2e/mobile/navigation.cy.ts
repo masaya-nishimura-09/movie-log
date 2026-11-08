@@ -21,10 +21,8 @@ describe("スマホの画面", () => {
     cy.get(menu).click();
     cy.get(drawer).within(() => {
       for (const label of [
-        ja.nav.home,
-        ja.nav.newRecord,
         ja.nav.records,
-        ja.nav.articles,
+        ja.nav.newRecord,
         ja.header.about,
         ja.header.contact,
       ]) {
@@ -40,8 +38,6 @@ describe("スマホの画面", () => {
     cy.visit("/ja/records");
     for (const [label, path] of [
       [ja.nav.newRecord, "/ja/records/new"],
-      [ja.nav.articles, "/ja/articles"],
-      [ja.nav.home, "/ja/home"],
       [ja.nav.records, "/ja/records"],
     ] as const) {
       cy.get(menu).click();

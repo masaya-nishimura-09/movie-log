@@ -23,7 +23,7 @@ describe("記録の詳細", () => {
       ).should("exist");
       cy.contains(ja.enums.platform.criterion_channel).should("exist");
       cy.contains(ja.enums.moodTag.stylish).should("exist");
-      cy.contains("ジャンプカットのテンポ").should("exist");
+      cy.contains("h2", "観たきっかけ").should("exist");
       cy.contains(detail.createdAt).should("exist");
       cy.contains(detail.updatedAt).should("exist");
       openMovieTab();
@@ -43,7 +43,7 @@ describe("記録の詳細", () => {
       "aria-selected",
       "true",
     );
-    cy.contains("main h2", detail.memo).should("be.visible");
+    cy.contains("main h2", detail.note).should("be.visible");
     cy.contains("main h2", detail.credits).should("not.exist");
     openMovieTab();
     cy.contains("[role=tab]", detail.tabMovie).should(
@@ -52,16 +52,16 @@ describe("記録の詳細", () => {
       "true",
     );
     cy.contains("main h2", detail.credits).should("be.visible");
-    cy.contains("main h2", detail.memo).should("not.exist");
+    cy.contains("main h2", detail.note).should("not.exist");
     cy.contains("[role=tab]", detail.tabRecord).click();
-    cy.contains("main h2", detail.memo).should("be.visible");
+    cy.contains("main h2", detail.note).should("be.visible");
   });
 
   for (const [name, viewport] of [
     ["広い画面", [1280, 800]],
     ["スマホ", [390, 844]],
   ] as const) {
-    it(`記録のタブは雰囲気、メモ、記事、添付の順、映画情報のタブは原題、あらすじ、ジャンル、クレジットの順に並ぶ(${name})`, () => {
+    it(`記録のタブは雰囲気、ノート、添付の順、映画情報のタブは原題、あらすじ、ジャンル、クレジットの順に並ぶ(${name})`, () => {
       cy.viewport(viewport[0], viewport[1]);
       cy.visit("/ja/records/1");
       const tops = (labels: string[]) =>
@@ -76,12 +76,9 @@ describe("記録の詳細", () => {
         expect(values).to.deep.equal([...values].sort((a, b) => a - b));
       cy.get("main h1:visible").then(($title) => {
         const title = $title[0]?.getBoundingClientRect().top ?? 0;
-        tops([
-          detail.moodTags,
-          detail.memo,
-          detail.articles,
-          detail.attachments,
-        ]).then((values) => inOrder([title, ...values]));
+        tops([detail.moodTags, detail.note, detail.attachments]).then(
+          (values) => inOrder([title, ...values]),
+        );
       });
       openMovieTab();
       tops([
@@ -94,10 +91,11 @@ describe("記録の詳細", () => {
   }
 
   describe("添付", () => {
-    const section = () => cy.contains("main h2", detail.attachments).parent();
+    const section = () =>
+      cy.contains("main h2", detail.attachments).closest("section");
     const thumbnails = () =>
       section().find(
-        `button[aria-label^="${detail.attachmentOpen.split(" ")[0]}"]`,
+        `button[aria-label^="${detail.attachmentOpen.split("{number}")[0]}"]`,
       );
 
     it("添付を縮小画像で並べ、押すと大きく表示し、閉じるで戻る", () => {
@@ -223,19 +221,14 @@ describe("記録の詳細", () => {
     });
   });
 
-  it("記事と添付の (i) を押すと、それぞれの説明を出す", () => {
+  it("添付の (i) を押すと、説明を出す", () => {
     cy.visit("/ja/records/1");
-    for (const [name, text] of [
-      [detail.articles, detail.articlesInfo],
-      [detail.attachments, detail.attachmentsInfo],
-    ]) {
-      cy.get(
-        `button[aria-label="${detail.infoLabel.replace("{name}", name)}"]`,
-      ).click();
-      cy.contains(text).should("be.visible");
-      cy.get("body").type("{esc}");
-      cy.contains(text).should("not.exist");
-    }
+    cy.get(
+      `button[aria-label="${detail.infoLabel.replace("{name}", detail.attachments)}"]`,
+    ).click();
+    cy.contains(detail.attachmentsInfo).should("be.visible");
+    cy.get("body").type("{esc}");
+    cy.contains(detail.attachmentsInfo).should("not.exist");
   });
 
   it("一覧のカードから詳細に移り、一覧にもどれる", () => {
@@ -299,10 +292,10 @@ describe("記録の詳細", () => {
     });
   });
 
-  it("メモ、あらすじ、クレジットがない記録では、追加のリンクから編集画面に移る", () => {
+  it("ノート、あらすじ、クレジットがない記録では、追加のリンクから編集画面に移る", () => {
     cy.createRecord(`E2E 空の詳細 ${Date.now()}`);
-    cy.contains(detail.memoEmpty).should("be.visible");
-    cy.contains("a", detail.memoAdd).click();
+    cy.contains(detail.noteEmpty).should("be.visible");
+    cy.contains("a", detail.noteAdd).click();
     cy.location("pathname").should("match", /\/edit$/);
     cy.go("back");
     openMovieTab();

@@ -13,7 +13,7 @@ describe("スマホの画面での操作", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/home");
+    cy.location("pathname").should("eq", "/ja/records");
   });
 
   it("新規登録できる", () => {
@@ -37,7 +37,7 @@ describe("スマホの画面での操作", () => {
     cy.get("h1:visible").should("have.text", title);
 
     cy.get(`a[href$="/edit"]:visible`).first().click();
-    cy.get("#memo").type("スマホで編集");
+    cy.get("[role=textbox]").click().type("スマホで編集");
     cy.contains("button", form.saveChanges).click();
     cy.contains("スマホで編集").should("be.visible");
 
@@ -71,7 +71,7 @@ describe("スマホの画面での操作", () => {
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type(demoAccount.password);
     cy.contains("button", ja.login.submit).click();
-    cy.location("pathname").should("eq", "/ja/home");
+    cy.location("pathname").should("eq", "/ja/records");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
     cy.contains("[role=menuitem]", ja.header.logout).click();
     cy.location("pathname").should("eq", "/ja/login");
