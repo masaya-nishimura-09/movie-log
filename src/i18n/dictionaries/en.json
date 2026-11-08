@@ -393,7 +393,9 @@
     "attachmentsInfo": "Paste up to 10 images, such as pamphlets, flyers, or your drawings.",
     "note": "Note",
     "noteEmpty": "No note yet.",
-    "noteAdd": "Write a note"
+    "noteAdd": "Write a note",
+    "noteReadMore": "Read more",
+    "noteShowLess": "Show less"
   },
   "deleteRecord": {
     "title": "Delete this record?",

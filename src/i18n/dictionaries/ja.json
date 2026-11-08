@@ -393,7 +393,9 @@
     "attachmentsInfo": "パンフレットやチラシ、描いた絵などの画像を10枚まで貼れます。",
     "note": "ノート",
     "noteEmpty": "ノートはまだありません。",
-    "noteAdd": "ノートを書く"
+    "noteAdd": "ノートを書く",
+    "noteReadMore": "続きを読む",
+    "noteShowLess": "閉じる"
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",

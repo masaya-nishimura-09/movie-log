@@ -292,6 +292,29 @@ describe("記録の詳細", () => {
     });
   });
 
+  it("長いノートは冒頭だけを表示し、続きを読むで全文を広げ、閉じるで戻す", () => {
+    cy.visit("/ja/records/1");
+    const toggle = () => cy.contains("main button", /^(続きを読む|閉じる)$/);
+    const body = () =>
+      toggle()
+        .invoke("attr", "aria-controls")
+        .then((id) => cy.get(`[id="${id}"]`));
+    const height = (check: (value: number) => void) =>
+      body().should(($body) => check($body[0]?.clientHeight ?? 0));
+    toggle()
+      .should("have.text", detail.noteReadMore)
+      .and("have.attr", "aria-expanded", "false");
+    height((value) => expect(value).to.eq(256));
+    toggle().click();
+    toggle()
+      .should("have.text", detail.noteShowLess)
+      .and("have.attr", "aria-expanded", "true");
+    height((value) => expect(value).to.be.greaterThan(256));
+    body().contains("h2", "街の中の撮影").should("be.visible");
+    toggle().click();
+    height((value) => expect(value).to.eq(256));
+  });
+
   it("ノート、あらすじ、クレジットがない記録では、追加のリンクから編集画面に移る", () => {
     cy.createRecord(`E2E 空の詳細 ${Date.now()}`);
     cy.contains(detail.noteEmpty).should("be.visible");

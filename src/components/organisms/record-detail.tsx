@@ -13,7 +13,7 @@ import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
-import { NoteBody } from "@/components/molecules/note-body";
+import { NoteSheet } from "@/components/molecules/note-sheet";
 import { RecordDetailTabs } from "@/components/molecules/record-detail-tabs";
 import { RecordPoster } from "@/components/molecules/record-poster";
 import { RecordAttachmentSection } from "@/components/organisms/record-attachment-section";
@@ -153,9 +153,11 @@ export function RecordDetail({
       <section className="flex flex-col gap-2.5">
         <SectionLabel>{d.note}</SectionLabel>
         {record.note ? (
-          <div className="rounded-2xl bg-card px-5.5 py-5 2xl:px-7 2xl:py-6">
-            <NoteBody content={record.note.content} />
-          </div>
+          <NoteSheet
+            content={record.note.content}
+            readMoreLabel={d.noteReadMore}
+            showLessLabel={d.noteShowLess}
+          />
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
             {d.noteEmpty}
