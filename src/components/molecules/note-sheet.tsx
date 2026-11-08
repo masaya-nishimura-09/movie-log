@@ -24,7 +24,7 @@ export function NoteSheet({
 }: NoteSheetProps) {
   const bodyId = useId();
   const bodyRef = useRef<HTMLDivElement>(null);
-  const [overflows, setOverflows] = useState(false);
+  const [overflows, setOverflows] = useState<boolean>();
   const [expanded, setExpanded] = useState(false);
 
   useLayoutEffect(() => {
@@ -37,7 +37,7 @@ export function NoteSheet({
     return () => observer.disconnect();
   }, []);
 
-  const collapsed = overflows && !expanded;
+  const collapsed = overflows !== false && !expanded;
 
   return (
     <div className="relative rounded-[3px] bg-card px-5.5 pt-5 pb-3 shadow-[0_6px_14px_-8px_rgb(10_41_71/0.45)] 2xl:px-7">
@@ -52,7 +52,7 @@ export function NoteSheet({
         <div ref={bodyRef}>
           <NoteBody content={content} className={lineAligned} />
         </div>
-        {collapsed && (
+        {collapsed && overflows && (
           <div
             aria-hidden
             className="pointer-events-none absolute inset-x-0 bottom-0 h-16 bg-linear-to-b from-transparent to-card"
