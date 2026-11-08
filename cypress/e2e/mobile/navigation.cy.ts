@@ -7,70 +7,49 @@ describe("スマホの画面", () => {
     cy.login();
   });
 
-  const menu = `button[aria-label="${ja.header.openMenu}"]`;
-  const drawer = "[role=dialog]";
+  const newRecord = `a[aria-label="${ja.header.newRecord}"]`;
 
-  it("下のバーを出さない", () => {
+  it("ヘッダーに、ロゴ、検索、記録する、テーマ、アカウントを並べる", () => {
     cy.visit("/ja/records");
     cy.get("nav.fixed").should("not.exist");
-  });
-
-  it("ハンバーガーで、すべての項目が並ぶメニューを開き、現在の項目を強調する", () => {
-    cy.visit("/ja/records");
-    cy.get(drawer).should("not.exist");
-    cy.get(menu).click();
-    cy.get(drawer).within(() => {
-      for (const label of [
-        ja.nav.home,
-        ja.nav.newRecord,
-        ja.nav.records,
-        ja.nav.articles,
-        ja.header.about,
-        ja.header.contact,
-      ]) {
-        cy.contains("a", label).should("be.visible");
-      }
-      cy.get('a[aria-current="page"]')
-        .should("have.length", 1)
-        .and("contain.text", ja.nav.records);
+    cy.get("header")
+      .first()
+      .within(() => {
+        cy.get('a[href="/ja/records"]').should("be.visible");
+        cy.get("a:visible, button:visible").then(($items) => {
+          expect(
+            [...$items].map((item) =>
+              item.getAttribute("href") === "/ja/records"
+                ? "logo"
+                : item.getAttribute("aria-label"),
+            ),
+          ).to.deep.equal([
+            "logo",
+            ja.header.openSearch,
+            ja.header.newRecord,
+            ja.header.themeToggle,
+            ja.header.accountMenu,
+          ]);
+        });
+      });
+    cy.document().then((doc) => {
+      expect(doc.documentElement.scrollWidth).to.be.at.most(375);
     });
   });
 
-  it("項目を押すと、そのページに移り、メニューが閉じる", () => {
-    cy.visit("/ja/records");
-    for (const [label, path] of [
-      [ja.nav.newRecord, "/ja/records/new"],
-      [ja.nav.articles, "/ja/articles"],
-      [ja.nav.home, "/ja/home"],
-      [ja.nav.records, "/ja/records"],
-    ] as const) {
-      cy.get(menu).click();
-      cy.get(drawer).contains("a", label).click();
-      cy.location("pathname").should("eq", path);
-      cy.get(drawer).should("not.exist");
-    }
-  });
-
-  it("閉じるボタンと Escape でメニューを閉じる", () => {
-    cy.visit("/ja/records");
-    cy.get(menu).click();
-    cy.get(drawer)
-      .find("button")
-      .contains(ja.header.close)
-      .click({ force: true });
-    cy.get(drawer).should("not.exist");
-    cy.get(menu).click();
-    cy.get("body").type("{esc}");
-    cy.get(drawer).should("not.exist");
+  it("ヘッダーの＋で記録の作成に移り、ロゴで一覧に戻る", () => {
+    cy.visit("/ja/records/1");
+    cy.get(newRecord).click();
+    cy.location("pathname").should("eq", "/ja/records/new");
+    cy.get('header a[href="/ja/records"]').first().click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 
-  it("メニュー、検索、絞り込みの閉じるボタンを、画面の言語で読み上げる", () => {
+  it("検索と絞り込みのシートの閉じるボタンを、画面の言語で読み上げる", () => {
     for (const [lang, dict, opener] of [
-      ["ja", ja, ja.header.openMenu],
       ["ja", ja, ja.header.openSearch],
       ["ja", ja, ja.recordFilter.open],
-      ["en", en, en.header.openMenu],
+      ["en", en, en.header.openSearch],
     ] as const) {
       cy.visit(`/${lang}/records`);
       cy.get(`button[aria-label="${opener}"]`).click();
@@ -88,10 +67,11 @@ describe("スマホの画面", () => {
     cy.location("pathname").should("eq", "/ja/account");
   });
 
-  it("768px 以上では、ハンバーガーを出さない", () => {
+  it("768px 以上では、＋のアイコンではなく、文字付きの記録するボタンを出す", () => {
     cy.viewport(800, 800);
     cy.visit("/ja/records");
-    cy.get(menu).should("not.be.visible");
+    cy.get(newRecord).should("not.be.visible");
+    cy.contains("header a", ja.header.newRecord).should("be.visible");
   });
 
   it("検索のシートからタイトルで検索できる", () => {
@@ -100,7 +80,7 @@ describe("スマホの画面", () => {
       "not.exist",
     );
     cy.get(`button[aria-label="${ja.header.openSearch}"]`).click();
-    cy.get(`input[aria-label="${ja.header.searchLabel}"]:visible`).type(
+    cy.get(`[role=dialog] input[aria-label="${ja.header.searchLabel}"]`).type(
       "勝手にしやがれ{enter}",
     );
     cy.location("search").should("contain", "q=");

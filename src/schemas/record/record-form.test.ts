@@ -14,7 +14,6 @@ describe("recordFormValuesSchema", () => {
     credits: [],
     posterUrl: "",
     moodTags: [],
-    memo: "",
   };
 
   it("allows a new record without release year, platform and score", () => {

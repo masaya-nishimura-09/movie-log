@@ -257,8 +257,8 @@
     "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
   },
   "header": {
-    "searchPlaceholder": "タイトルで検索",
-    "searchLabel": "タイトルで検索",
+    "searchPlaceholder": "タイトルとノートで検索",
+    "searchLabel": "タイトルとノートで検索",
     "themeToggle": "テーマを切り替える",
     "accountMenu": "アカウントメニュー",
     "account": "アカウント設定",
@@ -266,26 +266,8 @@
     "logout": "ログアウト",
     "openSearch": "検索",
     "contact": "お問い合わせ",
-    "openMenu": "メニューを開く",
-    "close": "閉じる"
-  },
-  "nav": {
-    "label": "メインメニュー",
-    "home": "ホーム",
-    "articles": "記事",
-    "records": "鑑賞記録",
+    "close": "閉じる",
     "newRecord": "記録する"
-  },
-  "home": {
-    "heading": "ホーム",
-    "recent": "最近の記録",
-    "recentArticles": "最近書いた記事",
-    "moods": "雰囲気で選ぶ",
-    "seeAll": "すべて見る",
-    "shelfPrev": "{title}を前へ",
-    "shelfNext": "{title}を次へ",
-    "emptyTitle": "まだ記録がありません",
-    "emptyDescription": "観た映画を記録すると、ここに最近の記録や雰囲気ごとの棚が並びます"
   },
   "login": {
     "email": "メールアドレス",
@@ -371,19 +353,11 @@
   },
   "recordDetail": {
     "back": "一覧にもどる",
-    "backToHome": "ホームにもどる",
     "edit": "編集",
     "delete": "削除",
     "scoreCaption": "SCORE",
     "releaseYear": "{year}年",
     "runtime": "{minutes}分",
-    "memo": "メモ",
-    "memoEmpty": "メモはまだありません。",
-    "memoAdd": "メモを書く",
-    "articles": "記事",
-    "articlesEmpty": "記事はまだありません。",
-    "articlesAdd": "記事を作成",
-    "articlesMore": "もっと見る",
     "credits": "クレジット",
     "creditsEmpty": "クレジットはまだありません。",
     "creditsAdd": "クレジットを足す",
@@ -410,9 +384,13 @@
     "attachmentPrev": "前の画像",
     "attachmentNext": "次の画像",
     "attachmentsLimit": "添付できるのは{max}枚までです",
-    "articlesInfo": "メモは短い感想を書く欄、記事はエディタで長く書く文章です。1つの記録に何本でも書けます。",
     "infoLabel": "{name}の説明",
-    "attachmentsInfo": "パンフレットやチラシ、描いた絵などの画像を10枚まで貼れます。"
+    "attachmentsInfo": "パンフレットやチラシ、描いた絵などの画像を10枚まで貼れます。",
+    "note": "ノート",
+    "noteEmpty": "ノートはまだありません。",
+    "noteAdd": "ノートを書く",
+    "noteReadMore": "続きを読む",
+    "noteShowLess": "閉じる"
   },
   "deleteRecord": {
     "title": "この記録を削除しますか？",
@@ -470,7 +448,6 @@
     "optional": "任意",
     "moodTags": "雰囲気タグ",
     "moodTagsHint": "18種類・重複不可・0個でもOK",
-    "memo": "メモ",
     "save": "記録を保存",
     "watchSection": "鑑賞情報",
     "movieSection": "映画情報",
@@ -493,9 +470,9 @@
       "credits": "名前は100文字以内で入力してください",
       "posterUrl": "http か https で始まる URL を入れてください",
       "moodTags": "雰囲気タグが正しくありません",
-      "memo": "1000文字以内で入力してください",
       "originalTitle": "255文字以内で入力してください",
-      "overview": "2000文字以内で入力してください"
+      "overview": "2000文字以内で入力してください",
+      "note": "ノートが長すぎます"
     },
     "movieSuggestions": "映画の候補",
     "titleHint": "2文字以上で TMDB の候補を表示。選ぶと映画の情報を入力します",
@@ -511,7 +488,8 @@
     "attachmentsInvalid": "JPEG・PNG・WebP の5MBまでの画像を選んでください",
     "attachmentsLimit": "添付できるのは{max}枚までです",
     "attachmentsUploadFailed": "記録は保存しましたが、添付できなかった画像があります",
-    "uploadingAttachments": "画像を添付中"
+    "uploadingAttachments": "画像を添付中",
+    "note": "ノート"
   },
   "account": {
     "back": "もどる",
@@ -544,80 +522,14 @@
     "saved": "保存しました",
     "withdrawFailed": "退会できませんでした。時間をおいてやり直してください",
     "exportTitle": "データの書き出し",
-    "exportDescription": "鑑賞記録はCSVファイルに、記事は1本ずつMarkdownファイルにしてZIPにまとめて書き出します。",
+    "exportDescription": "鑑賞記録はCSVファイルに、ノートは記録ごとにMarkdownファイルにしてZIPにまとめて書き出します。",
     "exportAction": "鑑賞記録をCSVで書き出す",
     "exporting": "書き出し中",
     "exportFailed": "書き出せませんでした。時間をおいてやり直してください",
-    "exportArticlesAction": "記事をMarkdownで書き出す（ZIP）",
-    "exportMovie": "映画",
-    "exportCreatedAt": "作成日",
-    "exportUpdatedAt": "更新日"
+    "exportUpdatedAt": "更新日",
+    "exportNotesAction": "ノートをMarkdownで書き出す（ZIP）"
   },
-  "articleForm": {
-    "createTitle": "記事を作成",
-    "editTitle": "記事を編集",
-    "required": "必須",
-    "back": "もどる",
-    "title": "タイトル",
-    "content": "本文",
-    "save": "保存",
-    "cancel": "やめる",
-    "invalidInput": "入力内容を確認してください",
-    "notFound": "この記事は削除されています",
-    "recordNotFound": "この記録は削除されています",
-    "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
-    "errors": {
-      "title": "1〜255文字で入力してください",
-      "content": "本文が長すぎます",
-      "contentRequired": "本文を入力してください"
-    }
-  },
-  "articleList": {
-    "heading": "記事",
-    "summary": "{total}件中 {shown}件を表示",
-    "activeFilters": "絞り込み {count}件",
-    "noMatch": "条件に合う記事がありません",
-    "clearFilters": "条件を解除する",
-    "emptyTitle": "まだ記事がありません",
-    "emptyDescription": "記録の詳細から、その映画の記事を書けます。",
-    "emptyAction": "鑑賞記録を見る",
-    "searchLabel": "タイトルと本文で検索",
-    "searchPlaceholder": "タイトルと本文で検索",
-    "filterOpen": "絞り込み",
-    "filterTitle": "絞り込み",
-    "clearAll": "すべて解除",
-    "record": "映画",
-    "remove": "{label} を解除",
-    "showResults": "{count}件を表示",
-    "noRecords": "記録がありません",
-    "unknownRecord": "不明な記録",
-    "sort": {
-      "label": "並び替え",
-      "updatedAtDesc": "更新日が新しい順",
-      "updatedAtAsc": "更新日が古い順",
-      "createdAtDesc": "作成日が新しい順",
-      "createdAtAsc": "作成日が古い順",
-      "titleAsc": "タイトル順"
-    }
-  },
-  "articleDetail": {
-    "backToList": "記事の一覧にもどる",
-    "backToHome": "ホームにもどる",
-    "toc": "目次",
-    "tocTop": "ページの先頭へ",
-    "edit": "編集",
-    "delete": "削除",
-    "createdAt": "作成日時",
-    "updatedAt": "最終更新"
-  },
-  "deleteArticle": {
-    "title": "この記事を削除しますか？",
-    "description": "「{title}」が消えます。取り消しできません。",
-    "cancel": "やめる",
-    "confirm": "削除する",
-    "unexpectedError": "削除できませんでした。時間をおいてやり直してください"
-  },
-  "articleEditor": {
+  "noteEditor": {
     "toolbar": "書式",
     "bold": "太字",
     "italic": "斜体",
@@ -626,7 +538,7 @@
     "bulletList": "箇条書き",
     "orderedList": "番号付きリスト",
     "blockquote": "引用",
-    "body": "本文"
+    "body": "ノート"
   },
   "characterCount": "{current} / {max}",
   "enums": {

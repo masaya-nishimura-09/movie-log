@@ -4,8 +4,8 @@ import { demoAccount } from "../../support/commands";
 describe("新規登録", () => {
   it("登録するとホームに移り、ログインした状態になる", () => {
     cy.register().then((account) => {
-      cy.location("pathname").should("eq", "/ja/home");
-      cy.contains("h1", ja.home.heading).should("be.visible");
+      cy.location("pathname").should("eq", "/ja/records");
+      cy.contains("h1", ja.recordList.heading).should("be.visible");
       cy.visit("/ja/account");
       cy.get("#username").should("have.value", account.username);
       cy.get("#email").should("have.value", account.email);

@@ -22,7 +22,7 @@ function toParams(query: RecordQuery): URLSearchParams {
   if (query.platform !== undefined) params.set("platform", query.platform);
   for (const moodTag of query.moodTags) params.append("mood_tags", moodTag);
   for (const genre of query.genres) params.append("genres", genre);
-  if (query.keyword !== "") params.set("title", query.keyword);
+  if (query.keyword !== "") params.set("keyword", query.keyword);
   params.set("sort_field", sortParams[query.sort].field);
   params.set("sort_order", sortParams[query.sort].order);
   params.set("page", String(query.page));

@@ -41,6 +41,7 @@ type RecordCreateFormProps = {
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
   counterTemplate: string;
+  editorDict: Dictionary["noteEditor"];
 };
 
 const fieldSteps: Record<string, number> = {
@@ -58,7 +59,7 @@ const fieldSteps: Record<string, number> = {
   credits: 1,
   posterUrl: 1,
   moodTags: 2,
-  memo: 2,
+  note: 2,
 };
 
 export function RecordCreateForm({
@@ -73,6 +74,7 @@ export function RecordCreateForm({
   dict,
   enums,
   counterTemplate,
+  editorDict,
 }: RecordCreateFormProps) {
   const [step, setStep] = useState(0);
   const steps = [dict.stepBasics, dict.stepMovieInfo, dict.stepImpression];
@@ -235,12 +237,11 @@ export function RecordCreateForm({
               </span>
             </div>
             <RecordImpressionFields
-              split
               errors={failure?.errors}
               values={values}
               dict={dict}
               enums={enums}
-              counterTemplate={counterTemplate}
+              editorDict={editorDict}
             />
             <FormField label={dict.attachments} hint={dict.attachmentsHint}>
               <PendingAttachmentsField

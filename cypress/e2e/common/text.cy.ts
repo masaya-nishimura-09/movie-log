@@ -132,7 +132,7 @@ for (const [lang, t] of locales) {
           "eq",
           `${t.recordList.heading} | ${t.metadata.title}`,
         );
-        shows(t.recordList.heading, t.nav.newRecord);
+        shows(t.recordList.heading, t.header.newRecord);
         cy.contains(
           pattern(`${t.recordList.summary} ・ ${t.recordList.activeFilters}`),
         ).should("exist");
@@ -184,8 +184,7 @@ for (const [lang, t] of locales) {
           t.recordDetail.tabRecord,
           t.recordDetail.tabMovie,
           t.recordDetail.moodTags,
-          t.recordDetail.memo,
-          t.recordDetail.articles,
+          t.recordDetail.note,
           t.recordDetail.attachments,
           t.recordDetail.attachmentsAdd,
           t.recordDetail.watchedAt,
@@ -294,12 +293,11 @@ for (const [lang, t] of locales) {
           t.recordForm.optional,
           t.recordForm.moodTags,
           t.recordForm.moodTagsHint,
-          t.recordForm.memo,
+          t.recordForm.note,
           t.recordForm.attachments,
           t.recordForm.attachmentsHint,
           t.recordForm.attachmentsAdd,
           t.recordForm.save,
-          fill(t.characterCount, { current: 0, max: 1000 }),
         );
       });
 
@@ -363,13 +361,11 @@ for (const [lang, t] of locales) {
       shows(t.emptyState.title, t.emptyState.description, t.emptyState.action);
     });
 
-    it("スマホのメニューと、絞り込みのシート", () => {
+    it("スマホのヘッダーと、絞り込みのシート", () => {
       cy.viewport("iphone-x");
       cy.login(demoAccount);
       cy.visit(`/${lang}/records`);
-      cy.get(`button[aria-label="${t.header.openMenu}"]`).click();
-      shows(t.nav.home, t.nav.records, t.nav.newRecord, t.nav.articles);
-      cy.get("body").type("{esc}");
+      cy.get(`a[aria-label="${t.header.newRecord}"]`).should("be.visible");
       cy.get(`[aria-label="${t.header.openSearch}"]`).should("exist");
       cy.get(`button[aria-label="${t.recordFilter.open}"]`).click();
       cy.get("[role=dialog]").within(() => {

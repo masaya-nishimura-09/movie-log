@@ -59,11 +59,10 @@ describe("記録の削除", () => {
 
   it("削除に失敗すると、ダイアログにエラーを表示する", () => {
     cy.visit("/ja/records/new");
-    cy.fillRecordBasics(`E2E 削除失敗 ${Date.now()}`, { score: 3 });
+    cy.fillRecordBasics("__delete_error__", { score: 3 });
     cy.contains("button", ja.recordForm.next).click();
     cy.get("#releaseYear").type("2000");
     cy.contains("button", ja.recordForm.next).click();
-    cy.get("#memo").type("__delete_error__");
     cy.contains("button", ja.recordForm.save).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();

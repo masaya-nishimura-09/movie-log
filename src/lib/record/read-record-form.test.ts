@@ -44,6 +44,30 @@ describe("readRecordForm", () => {
     });
   });
 
+  it("reads the note as a document, and as no note when it has no text", () => {
+    const content = {
+      type: "doc",
+      content: [
+        { type: "paragraph", content: [{ type: "text", text: "本文" }] },
+      ],
+    };
+    expect(
+      readRecordForm(formData([["note", JSON.stringify(content)]])).note,
+    ).toEqual(content);
+    expect(
+      readRecordForm(
+        formData([
+          [
+            "note",
+            JSON.stringify({ type: "doc", content: [{ type: "paragraph" }] }),
+          ],
+        ]),
+      ).note,
+    ).toBeNull();
+    expect(readRecordForm(formData([])).note).toBeNull();
+    expect(readRecordForm(formData([["note", "{"]])).note).toBeUndefined();
+  });
+
   it("orders credits by their index and drops rows without a name", () => {
     const values = readRecordForm(
       formData([

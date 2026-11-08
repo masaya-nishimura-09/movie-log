@@ -62,6 +62,24 @@ describe("記録の一覧", () => {
     });
   });
 
+  it("検索は、タイトルだけでなくノートの文字でも探す", () => {
+    cy.visit(`/ja/records?q=${encodeURIComponent("観たきっかけ")}`);
+    cy.get("main ul > li > a").should("have.length.at.least", 1);
+    cy.contains("main ul > li > a", "勝手にしやがれ").should("exist");
+  });
+
+  it("ホームと記事の古い URL は、記録の一覧と記録の詳細に移る", () => {
+    for (const [from, to] of [
+      ["/ja/home", "/ja/records"],
+      ["/ja/articles", "/ja/records"],
+      ["/ja/records/1/articles/1", "/ja/records/1"],
+      ["/ja/records/1/articles/new", "/ja/records/1"],
+    ]) {
+      cy.visit(from);
+      cy.location("pathname").should("eq", to);
+    }
+  });
+
   it("並べ替え：鑑賞日が古い順", () => {
     cy.visit("/ja/records");
     cy.get(`button[aria-label="${ja.recordSort.label}"]:visible`).click();

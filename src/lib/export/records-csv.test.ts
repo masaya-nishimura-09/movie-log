@@ -22,7 +22,6 @@ const record: MovieRecord = {
   platform: "netflix",
   score: 5,
   moodTags: ["moving", "tense"],
-  memo: "",
   createdAt: "2026-10-01T12:00:00Z",
   updatedAt: "2026-10-01T12:00:00Z",
 };
@@ -46,7 +45,7 @@ describe("toRecordsCsv", () => {
 
   it("writes the header in the screen's language", () => {
     expect(rows(toRecordsCsv([], "ja", ja))).toEqual([
-      "タイトル,原題,鑑賞日,プラットフォーム,スコア,雰囲気タグ,公開年,上映時間,ジャンル,製作国,言語,クレジット,あらすじ,メモ,ポスター画像のURL",
+      "タイトル,原題,鑑賞日,プラットフォーム,スコア,雰囲気タグ,公開年,上映時間,ジャンル,製作国,言語,クレジット,あらすじ,ポスター画像のURL",
     ]);
   });
 
@@ -67,7 +66,6 @@ describe("toRecordsCsv", () => {
         "英語",
         "監督: Denis Villeneuve / キャスト: Amy Adams",
         "言語学者が宇宙船と対話する。",
-        "",
         "https://example.com/a.jpg",
       ].join(","),
     );
@@ -81,7 +79,11 @@ describe("toRecordsCsv", () => {
   });
 
   it("quotes values with commas, quotes and line breaks", () => {
-    const csv = toRecordsCsv([{ ...record, memo: 'a,b "c"\r\nd' }], "ja", ja);
+    const csv = toRecordsCsv(
+      [{ ...record, overview: 'a,b "c"\r\nd' }],
+      "ja",
+      ja,
+    );
     expect(csv).toContain(',"a,b ""c""\r\nd",');
   });
 

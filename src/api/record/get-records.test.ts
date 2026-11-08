@@ -65,7 +65,7 @@ describe("getRecords", () => {
     expect(sent.get("platform")).toBe("netflix");
     expect(sent.getAll("mood_tags")).toEqual(["moving", "dark"]);
     expect(sent.getAll("genres")).toEqual(["drama"]);
-    expect(sent.get("title")).toBe("Arrival");
+    expect(sent.get("keyword")).toBe("Arrival");
     expect(sent.get("page")).toBe("2");
   });
 

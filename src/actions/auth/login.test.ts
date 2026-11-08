@@ -27,7 +27,7 @@ describe("loginAction", () => {
     startSession.mockResolvedValue(undefined);
     await expect(
       loginAction("en", undefined, form("user@example.com", "password")),
-    ).rejects.toThrow("REDIRECT /en/home");
+    ).rejects.toThrow("REDIRECT /en/records");
     expect(startSession).toHaveBeenCalledWith({
       email: "user@example.com",
       password: "password",

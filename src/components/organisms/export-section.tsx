@@ -7,15 +7,14 @@ import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { articleFiles } from "@/lib/export/article-markdown";
+import { noteFiles } from "@/lib/export/note-markdown";
 import { toRecordsCsv } from "@/lib/export/records-csv";
-import type { Article } from "@/schemas/article/article";
-import type { MovieRecord } from "@/schemas/record/record";
+import type { MovieRecord, RecordDetail } from "@/schemas/record/record";
 
 type ExportSectionProps = {
   lang: Locale;
   exportRecords: () => Promise<ActionResult<MovieRecord[]>>;
-  exportArticles: () => Promise<ActionResult<Article[]>>;
+  exportNotes: () => Promise<ActionResult<RecordDetail[]>>;
   dict: Dictionary["account"];
   csvDict: Pick<Dictionary, "recordForm" | "enums">;
   releaseYearTemplate: string;
@@ -33,17 +32,17 @@ function download(data: BlobPart, fileName: string, type: string) {
 export function ExportSection({
   lang,
   exportRecords,
-  exportArticles,
+  exportNotes,
   dict,
   csvDict,
   releaseYearTemplate,
 }: ExportSectionProps) {
   const [failed, setFailed] = useState(false);
   const [pending, startTransition] = useTransition();
-  const [running, setRunning] = useState<"records" | "articles">();
+  const [running, setRunning] = useState<"records" | "notes">();
   const today = () => new Date().toLocaleDateString("sv-SE");
 
-  const run = (kind: "records" | "articles") => {
+  const run = (kind: "records" | "notes") => {
     setRunning(kind);
     startTransition(async () => {
       if (kind === "records") {
@@ -57,12 +56,11 @@ export function ExportSection({
           );
         }
       } else {
-        const result = await exportArticles();
+        const result = await exportNotes();
         setFailed(!result.success);
         if (result.success) {
-          const files = articleFiles(result.data, {
-            movie: dict.exportMovie,
-            createdAt: dict.exportCreatedAt,
+          const files = noteFiles(result.data, {
+            watchedAt: csvDict.recordForm.watchedAt,
             updatedAt: dict.exportUpdatedAt,
             releaseYear: releaseYearTemplate,
           });
@@ -72,7 +70,7 @@ export function ExportSection({
                 files.map((file) => [file.name, strToU8(file.text)]),
               ),
             ),
-            `cinelier-articles-${today()}.zip`,
+            `cinelier-notes-${today()}.zip`,
             "application/zip",
           );
         }
@@ -103,10 +101,10 @@ export function ExportSection({
           variant="outline"
           size="sm"
           disabled={pending}
-          onClick={() => run("articles")}
+          onClick={() => run("notes")}
         >
           <Download className="size-4" aria-hidden />
-          {running === "articles" ? dict.exporting : dict.exportArticlesAction}
+          {running === "notes" ? dict.exporting : dict.exportNotesAction}
         </Button>
       </div>
       {failed && (

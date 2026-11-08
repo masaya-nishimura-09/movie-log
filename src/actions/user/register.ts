@@ -49,5 +49,5 @@ export async function registerAction(
   } catch {
     redirect(`/${lang}/login`);
   }
-  redirect(`/${lang}/home`);
+  redirect(`/${lang}/records`);
 }

@@ -85,7 +85,7 @@ describe("記録の作成", () => {
 
     cy.contains("label", ja.enums.moodTag.moving).click();
     cy.contains("label", ja.enums.moodTag.dark).click();
-    cy.get("#memo").type("言語学者が主人公の SF");
+    cy.get("[role=textbox]").click().type("言語学者が主人公の SF");
     cy.contains("button", form.save).click();
 
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
@@ -141,7 +141,7 @@ describe("記録の作成", () => {
     cy.contains("button", form.save).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.contains("main h2", ja.recordDetail.attachments)
-      .parent()
+      .closest("section")
       .find("img[src^='data:image/png']")
       .should("have.length", 1);
   });

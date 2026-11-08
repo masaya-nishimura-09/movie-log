@@ -4,9 +4,14 @@ import {
   maxReleaseYear,
   toFormValues,
 } from "@/lib/record/to-form-values";
-import type { MovieRecord } from "@/schemas/record/record";
+import type { RecordDetail } from "@/schemas/record/record";
 
-const record: MovieRecord = {
+const noteContent = {
+  type: "doc",
+  content: [{ type: "paragraph", content: [{ type: "text", text: "ノート" }] }],
+};
+
+const record: RecordDetail = {
   recordId: "1",
   title: "Arrival",
   originalTitle: "Story of Your Life",
@@ -22,9 +27,9 @@ const record: MovieRecord = {
   platform: "netflix",
   score: 5,
   moodTags: ["moving"],
-  memo: "memo",
   createdAt: "2026-10-01T12:00:00Z",
   updatedAt: "2026-10-02T12:00:00Z",
+  note: noteContent,
 };
 
 describe("emptyFormValues", () => {
@@ -41,15 +46,24 @@ describe("emptyFormValues", () => {
       credits: [],
       posterUrl: "",
       moodTags: [],
-      memo: "",
     });
   });
 });
 
 describe("toFormValues", () => {
-  it("copies the editable fields of a record", () => {
-    const { recordId: _, createdAt: __, updatedAt: ___, ...editable } = record;
-    expect(toFormValues(record)).toEqual(editable);
+  it("copies the editable fields of a record, with the note's content", () => {
+    const {
+      recordId: _,
+      createdAt: __,
+      updatedAt: ___,
+      note: ____,
+      ...editable
+    } = record;
+    expect(toFormValues(record)).toEqual({ ...editable, note: noteContent });
+  });
+
+  it("leaves the note empty when the record has none", () => {
+    expect(toFormValues({ ...record, note: null }).note).toBeUndefined();
   });
 });
 

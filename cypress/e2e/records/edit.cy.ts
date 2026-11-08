@@ -54,7 +54,7 @@ describe("記録の編集", () => {
     cy.get("input[name='credits.0.personName']").type("Lana Wachowski");
     cy.get("#posterUrl").clear().type("https://example.com/poster.jpg");
     cy.contains("label", ja.enums.moodTag.tense).click();
-    cy.get("#memo").type("2回目に観たときの感想");
+    cy.get("[role=textbox]").click().type("2回目に観たときの感想");
     cy.contains("button", form.saveChanges).click();
 
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
@@ -160,8 +160,18 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
         )) {
           input.checked = false;
         }
-        const memo = formElement.querySelector<HTMLTextAreaElement>("#memo");
-        if (memo) memo.value = "a".repeat(1001);
+        set(
+          "note",
+          JSON.stringify({
+            type: "doc",
+            content: [
+              {
+                type: "paragraph",
+                content: [{ type: "text", text: "a".repeat(100 * 1024) }],
+              },
+            ],
+          }),
+        );
         const overview =
           formElement.querySelector<HTMLTextAreaElement>("#overview");
         if (overview) overview.value = "a".repeat(2001);
@@ -194,7 +204,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.location("pathname").should("eq", "/ja/records");
     cy.go(-2);
     cy.location("pathname").should("match", /\/edit$/);
-    cy.get("#memo").type("削除後の保存");
+    cy.get("[role=textbox]").click().type("削除後の保存");
     cy.contains("button", form.saveChanges).click();
     cy.contains("[role=alert]", form.notFound).should("be.visible");
   });

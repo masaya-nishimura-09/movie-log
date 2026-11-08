@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { noteContentSchema } from "@/schemas/record/note";
 import { recordSchema } from "@/schemas/record/record";
 
 export const recordFormValuesSchema = recordSchema
@@ -16,9 +17,8 @@ export const recordFormValuesSchema = recordSchema
     platform: true,
     score: true,
     moodTags: true,
-    memo: true,
   })
-  .extend({ watchedAt: z.string() })
+  .extend({ watchedAt: z.string(), note: noteContentSchema.optional() })
   .partial({ releaseYear: true, platform: true, score: true });
 
 export type RecordFormValues = z.infer<typeof recordFormValuesSchema>;

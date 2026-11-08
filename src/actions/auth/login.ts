@@ -35,5 +35,5 @@ export async function loginAction(
     }
     return { success: false, messageKey: "unexpectedError" };
   }
-  redirect(`/${lang}/home`);
+  redirect(`/${lang}/records`);
 }

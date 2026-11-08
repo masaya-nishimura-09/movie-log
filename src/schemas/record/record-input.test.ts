@@ -19,7 +19,7 @@ const validInput = {
   credits: [{ personName: "Denis Villeneuve", creditRole: "director" }],
   posterUrl: "https://example.com/arrival.jpg",
   moodTags: ["moving"],
-  memo: "",
+  note: null,
 };
 
 function issuePaths(input: Record<string, unknown>) {
@@ -102,6 +102,34 @@ describe("recordInputSchema: 原題とあらすじ", () => {
   });
 });
 
+describe("recordInputSchema: ノート", () => {
+  const note = (text: string) => ({
+    type: "doc",
+    content: [{ type: "paragraph", content: [{ type: "text", text }] }],
+  });
+
+  it("accepts no note and a note document", () => {
+    expect(issuePaths({ note: null })).toEqual([]);
+    expect(issuePaths({ note: note("本文") })).toEqual([]);
+  });
+
+  it("rejects a note that is not a document, missing, or larger than 100 KB", () => {
+    expect(issuePaths({ note: { type: "paragraph" } })).toEqual(["note"]);
+    expect(issuePaths({ note: undefined })).toEqual(["note"]);
+    expect(issuePaths({ note: note("a".repeat(100 * 1024)) })).toEqual([
+      "note",
+    ]);
+  });
+
+  it("sends the note as it is", () => {
+    expect(
+      toRecordRequest(
+        recordInputSchema.parse({ ...validInput, note: note("本文") }),
+      ).note,
+    ).toEqual(note("本文"));
+  });
+});
+
 describe("toRecordRequest", () => {
   it("converts the input to the API's snake_case fields", () => {
     expect(toRecordRequest(recordInputSchema.parse(validInput))).toEqual({
@@ -119,7 +147,7 @@ describe("toRecordRequest", () => {
       platform: "netflix",
       score: 5,
       mood_tags: ["moving"],
-      memo: "",
+      note: null,
     });
   });
 });

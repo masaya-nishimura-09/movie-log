@@ -30,7 +30,7 @@ const input = {
   credits: [{ personName: "Amy Adams", creditRole: "cast" as const }],
   posterUrl: "",
   moodTags: ["moving" as const],
-  memo: "",
+  note: null,
 };
 
 const { createRecord } = await import("@/api/record/create-record");

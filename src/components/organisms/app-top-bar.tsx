@@ -1,7 +1,8 @@
-import { Search } from "lucide-react";
+import { Plus, Search } from "lucide-react";
 import Link from "next/link";
 import { Suspense } from "react";
-import { Logo, LogoMark } from "@/components/atoms/logo";
+import { buttonVariants } from "@/components/atoms/button";
+import { Logo } from "@/components/atoms/logo";
 import { RecordSearchForm } from "@/components/molecules/record-search-form";
 import {
   Sheet,
@@ -11,28 +12,21 @@ import {
 } from "@/components/molecules/sheet";
 import { ThemeToggle } from "@/components/molecules/theme-toggle";
 import { AccountMenu } from "@/components/organisms/account-menu";
-import { AppNavDrawer } from "@/components/organisms/app-nav-drawer";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { cn } from "@/lib/style/cn";
 
 type AppTopBarProps = {
   lang: Locale;
   brandName: string;
   username: string;
   dict: Dictionary["header"];
-  navDict: Dictionary["nav"];
 };
 
 const roundIcon =
   "grid size-9 place-items-center rounded-full text-foreground-sub outline-none hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
 
-export function AppTopBar({
-  lang,
-  brandName,
-  username,
-  dict,
-  navDict,
-}: AppTopBarProps) {
+export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
   const search = (
     <Suspense>
       <RecordSearchForm
@@ -45,24 +39,11 @@ export function AppTopBar({
 
   return (
     <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
-      <AppNavDrawer
-        lang={lang}
-        dict={navDict}
-        linkDict={dict}
-        openLabel={dict.openMenu}
-        closeLabel={dict.close}
-        className={`${roundIcon} md:hidden`}
-      />
       <Link
-        href={`/${lang}/home`}
-        className="flex items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring md:w-9 lg:w-49"
+        href={`/${lang}/records`}
+        className="flex shrink-0 items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <span className="contents md:max-lg:hidden">
-          <Logo name={brandName} />
-        </span>
-        <span className="hidden md:max-lg:contents">
-          <LogoMark name={brandName} />
-        </span>
+        <Logo name={brandName} className="h-8 md:h-10" />
       </Link>
       <div className="hidden max-w-xl flex-1 md:block">{search}</div>
       <div className="ml-auto flex items-center gap-1.5">
@@ -82,6 +63,23 @@ export function AppTopBar({
             {search}
           </SheetContent>
         </Sheet>
+        <Link
+          href={`/${lang}/records/new`}
+          aria-label={dict.newRecord}
+          className={`${roundIcon} md:hidden`}
+        >
+          <Plus className="size-5" aria-hidden />
+        </Link>
+        <Link
+          href={`/${lang}/records/new`}
+          className={cn(
+            buttonVariants({ size: "sm" }),
+            "mr-1 hidden md:inline-flex",
+          )}
+        >
+          <Plus aria-hidden />
+          {dict.newRecord}
+        </Link>
         <ThemeToggle label={dict.themeToggle} className={roundIcon} />
         <AccountMenu lang={lang} username={username} dict={dict} />
       </div>

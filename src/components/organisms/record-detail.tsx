@@ -13,24 +13,20 @@ import { MoodTag } from "@/components/atoms/mood-tag";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
+import { NoteSheet } from "@/components/molecules/note-sheet";
 import { RecordDetailTabs } from "@/components/molecules/record-detail-tabs";
 import { RecordPoster } from "@/components/molecules/record-poster";
-import { RecordArticleSection } from "@/components/organisms/record-article-section";
 import { RecordAttachmentSection } from "@/components/organisms/record-attachment-section";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { languageName } from "@/lib/record/language-options";
 import { interpolate } from "@/lib/text/interpolate";
-import type { ArticleSummary } from "@/schemas/article/article";
 import type { Attachment } from "@/schemas/record/attachment";
-import type { MovieRecord } from "@/schemas/record/record";
+import type { RecordDetail as RecordDetailData } from "@/schemas/record/record";
 
 type RecordDetailProps = {
   lang: Locale;
-  record: MovieRecord;
-  articles: ArticleSummary[];
-  articleTotal: number;
-  articleFromHref?: string;
+  record: RecordDetailData;
   attachments: Attachment[];
   addAttachment?: (formData: FormData) => Promise<ActionResult<null>>;
   deleteAttachment?: (attachmentId: string) => Promise<ActionResult<null>>;
@@ -64,9 +60,6 @@ function InfoList({
 export function RecordDetail({
   lang,
   record,
-  articles,
-  articleTotal,
-  articleFromHref,
   attachments,
   addAttachment,
   deleteAttachment,
@@ -158,29 +151,22 @@ export function RecordDetail({
       )}
 
       <section className="flex flex-col gap-2.5">
-        <SectionLabel>{d.memo}</SectionLabel>
-        {record.memo !== "" ? (
-          <p className="whitespace-pre-wrap text-pretty rounded-2xl bg-card px-5.5 py-5 text-[15px] text-foreground leading-loose 2xl:px-7 2xl:py-6 2xl:text-lg">
-            {record.memo}
-          </p>
+        <SectionLabel>{d.note}</SectionLabel>
+        {record.note ? (
+          <NoteSheet
+            content={record.note}
+            readMoreLabel={d.noteReadMore}
+            showLessLabel={d.noteShowLess}
+          />
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-            {d.memoEmpty}
+            {d.noteEmpty}
             <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
-              {d.memoAdd}
+              {d.noteAdd}
             </TextLink>
           </p>
         )}
       </section>
-
-      <RecordArticleSection
-        lang={lang}
-        recordId={record.recordId}
-        articles={articles}
-        total={articleTotal}
-        fromHref={articleFromHref}
-        dict={d}
-      />
 
       <RecordAttachmentSection
         attachments={attachments}

@@ -1,9 +1,8 @@
 import { ChoiceChip } from "@/components/atoms/choice-chip";
-import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { FormField } from "@/components/molecules/form-field";
+import { NoteEditor } from "@/components/molecules/note-editor";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
-import { cn } from "@/lib/style/cn";
 import { moodTagSchema } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
@@ -12,8 +11,7 @@ type RecordImpressionFieldsProps = {
   errors?: RecordFieldErrors;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
-  counterTemplate: string;
-  split?: boolean;
+  editorDict: Dictionary["noteEditor"];
 };
 
 export function RecordImpressionFields({
@@ -21,16 +19,10 @@ export function RecordImpressionFields({
   errors,
   dict,
   enums,
-  counterTemplate,
-  split = false,
+  editorDict,
 }: RecordImpressionFieldsProps) {
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-4.5",
-        split && "xl:grid xl:grid-cols-2 xl:items-start xl:gap-8",
-      )}
-    >
+    <div className="flex flex-col gap-4.5">
       <FormField
         label={dict.moodTags}
         error={fieldError(errors, dict, "moodTags")}
@@ -55,16 +47,16 @@ export function RecordImpressionFields({
       </FormField>
 
       <FormField
-        label={dict.memo}
-        error={fieldError(errors, dict, "memo")}
-        htmlFor="memo"
+        label={dict.note}
+        error={fieldError(errors, dict, "note")}
+        htmlFor="note"
       >
-        <CountedTextarea
-          id="memo"
-          name="memo"
-          maxLength={1000}
-          defaultValue={values.memo}
-          counterTemplate={counterTemplate}
+        <NoteEditor
+          id="note"
+          name="note"
+          defaultValue={values.note}
+          dict={editorDict}
+          invalid={Boolean(errors?.note)}
         />
       </FormField>
     </div>
