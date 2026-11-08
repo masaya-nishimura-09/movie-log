@@ -66,7 +66,10 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
         <Link
           href={`/${lang}/records/new`}
           aria-label={dict.newRecord}
-          className={`${roundIcon} md:hidden`}
+          className={cn(
+            buttonVariants({ size: "icon-sm" }),
+            "rounded-full md:hidden",
+          )}
         >
           <Plus className="size-5" aria-hidden />
         </Link>
