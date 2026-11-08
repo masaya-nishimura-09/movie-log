@@ -1,10 +1,10 @@
 <div align="center">
 
-# Cinestamp
+# Cinelier
 
 [English](README.md) | **日本語**
 
-映画鑑賞記録アプリ「Cinestamp」の Web アプリです。\
+映画鑑賞記録アプリ「Cinelier」の Web アプリです。\
 観た映画ごとに、ポスター、鑑賞日、スコア、気分、メモを記録できます。
 
 ![Next.js](https://img.shields.io/badge/Next.js-16-0a2947?logo=nextdotjs&logoColor=f3e4c9)
@@ -17,9 +17,9 @@
 
 </div>
 
-本リポジトリでは、Cinestamp の Web アプリを管理しています。
+本リポジトリでは、Cinelier の Web アプリを管理しています。
 データの取得と保存には
-[Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
+[Cinelier API](https://github.com/masaya-nishimura-09/movie-log-api)
 を利用し、モックデータを使えば API なしでも動作します。
 [モバイルアプリ](https://github.com/masaya-nishimura-09/movie-log-mobile)もあります。
 
@@ -38,8 +38,8 @@
 
 ```mermaid
 flowchart LR
-    browser["ブラウザ"] --> web["Cinestamp Web<br/>(Next.js)"]
-    web --> api["Cinestamp API<br/>(Go / Gin)"]
+    browser["ブラウザ"] --> web["Cinelier Web<br/>(Next.js)"]
+    web --> api["Cinelier API<br/>(Go / Gin)"]
     web --> resend["Resend<br/>お問い合わせのメール"]
     web --> turnstile["Cloudflare Turnstile<br/>自動送信の防止"]
     browser --> turnstile
@@ -142,7 +142,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 
 - Node.js 20.9 以上
 - pnpm
-- [Cinestamp API](https://github.com/masaya-nishimura-09/movie-log-api)
+- [Cinelier API](https://github.com/masaya-nishimura-09/movie-log-api)
   （モックモードでは不要）
 
 ### インストール
@@ -179,7 +179,7 @@ pnpm dev
 
 | 変数                   | 必須/任意 | 説明                                                                 |
 |------------------------|-----------|----------------------------------------------------------------------|
-| `API_BASE_URL`         | 必須      | Cinestamp API のベース URL（モックモードでは不要）                     |
+| `API_BASE_URL`         | 必須      | Cinelier API のベース URL（モックモードでは不要）                     |
 | `USE_MOCK`             | 任意      | `true` にすると、API の代わりにモックデータを使用                    |
 | `MOCK_DATASET`         | 任意      | `demo` にすると、モックモードで架空のデモ映画を使用                  |
 | `MOCK_LANGUAGE`        | 任意      | `en` にすると、英語のモックデータを使用（それ以外は日本語）          |
@@ -187,7 +187,7 @@ pnpm dev
 | `APP_VERSION`          | 任意      | ログに記録するバージョン（Git のコミット ID など）                   |
 | `RESEND_API_KEY`       | 任意      | Resend の API キー（お問い合わせフォームを使う場合は必須）           |
 | `CONTACT_TO_EMAIL`     | 任意      | お問い合わせを受け取るメールアドレス（お問い合わせフォームを使う場合は必須） |
-| `CONTACT_FROM_EMAIL`   | 任意      | お問い合わせのメールの送信元（既定値 `Cinestamp <onboarding@resend.dev>`） |
+| `CONTACT_FROM_EMAIL`   | 任意      | お問い合わせのメールの送信元（既定値 `Cinelier <onboarding@resend.dev>`） |
 | `TURNSTILE_SITE_KEY`   | 必須      | Cloudflare Turnstile のサイトキー（モックモードでは不要）            |
 | `TURNSTILE_SECRET_KEY` | 必須      | Cloudflare Turnstile の秘密鍵（モックモードでは不要）                |
 

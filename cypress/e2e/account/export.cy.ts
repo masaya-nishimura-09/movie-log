@@ -13,7 +13,7 @@ describe("データの書き出し", () => {
     cy.contains("button", account.exportAction).click();
     const today = new Date().toLocaleDateString("sv-SE");
     cy.readFile(
-      `${Cypress.config("downloadsFolder")}/cinestamp-records-${today}.csv`,
+      `${Cypress.config("downloadsFolder")}/cinelier-records-${today}.csv`,
     ).then((csv: string) => {
       const lines = csv.replace(/^﻿/, "").trimEnd().split("\r\n");
       expect(lines).to.have.length(2);
@@ -34,7 +34,7 @@ describe("データの書き出し", () => {
     cy.contains("button", account.exportArticlesAction).click();
     const today = new Date().toLocaleDateString("sv-SE");
     cy.readFile(
-      `${Cypress.config("downloadsFolder")}/cinestamp-articles-${today}.zip`,
+      `${Cypress.config("downloadsFolder")}/cinelier-articles-${today}.zip`,
       null,
     ).then((zip: Uint8Array) => {
       const files = unzipSync(new Uint8Array(zip));

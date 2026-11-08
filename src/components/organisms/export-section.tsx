@@ -52,7 +52,7 @@ export function ExportSection({
         if (result.success) {
           download(
             toRecordsCsv(result.data, lang, csvDict),
-            `cinestamp-records-${today()}.csv`,
+            `cinelier-records-${today()}.csv`,
             "text/csv;charset=utf-8",
           );
         }
@@ -72,7 +72,7 @@ export function ExportSection({
                 files.map((file) => [file.name, strToU8(file.text)]),
               ),
             ),
-            `cinestamp-articles-${today()}.zip`,
+            `cinelier-articles-${today()}.zip`,
             "application/zip",
           );
         }

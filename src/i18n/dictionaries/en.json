@@ -1,10 +1,10 @@
 {
   "metadata": {
-    "title": "Cinestamp",
+    "title": "Cinelier",
     "description": "A film logbook you can search by mood. Keep the date, where you watched, a score, and how it felt."
   },
   "brand": {
-    "name": "Cinestamp",
+    "name": "Cinelier",
     "tagline": "Remember every film you have watched."
   },
   "landing": {
@@ -49,7 +49,7 @@
     "back": "Back",
     "terms": {
       "title": "Terms of Use",
-      "intro": "These Terms of Use (the \"Terms\") set out the conditions for using Cinestamp (the \"Service\") between the Cinestamp operator (the \"Operator\") and its users. You must agree to these Terms to use the Service.",
+      "intro": "These Terms of Use (the \"Terms\") set out the conditions for using Cinelier (the \"Service\") between the Cinelier operator (the \"Operator\") and its users. You must agree to these Terms to use the Service.",
       "sections": [
         {
           "h": "1. About the Service",
@@ -146,7 +146,7 @@
     },
     "privacy": {
       "title": "Privacy Policy",
-      "intro": "The Cinestamp operator (the \"Operator\") sets out below how it handles users' information in Cinestamp (the \"Service\").",
+      "intro": "The Cinelier operator (the \"Operator\") sets out below how it handles users' information in Cinelier (the \"Service\").",
       "sections": [
         {
           "h": "1. Information we collect",
@@ -242,7 +242,7 @@
   "contact": {
     "title": "Contact",
     "link": "Contact",
-    "intro": "Send us questions about Cinestamp or report a problem here. We will reply to the email address you enter.",
+    "intro": "Send us questions about Cinelier or report a problem here. We will reply to the email address you enter.",
     "email": "Email",
     "emailHint": "We use this to reply",
     "message": "Message",
