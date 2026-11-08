@@ -72,7 +72,7 @@ export function Landing({ lang, dict }: LandingProps) {
   return (
     <main className="shell flex flex-1 flex-col bg-sidebar text-foreground [word-break:auto-phrase]">
       <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
-        <Logo name={dict.brand.name} />
+        <Logo name={dict.brand.name} className="h-12" />
         <nav className="flex items-center gap-2">
           <Link
             href={loginHref}

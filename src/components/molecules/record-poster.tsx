@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { ReactNode } from "react";
-import { StampShapes } from "@/components/atoms/stamp-shapes";
+import { BrandShape } from "@/components/atoms/brand-shape";
+import { markShapes } from "@/components/atoms/logo-shapes";
 import { cn } from "@/lib/style/cn";
 
 type RecordPosterProps = {
@@ -11,21 +12,16 @@ type RecordPosterProps = {
   className?: string;
 };
 
-function StampPlaceholder({ label }: { label: string }) {
+function PosterPlaceholder({ label }: { label: string }) {
   return (
     <div className="flex h-full items-center justify-center bg-header">
-      <svg
-        viewBox="0 0 110 110"
-        role="img"
-        aria-label={label}
-        className="w-1/2"
-      >
-        <StampShapes
-          stampClassName="fill-foreground/20"
-          cClassName="fill-header"
-          playClassName="fill-primary/60"
-        />
-      </svg>
+      <BrandShape
+        shapes={markShapes}
+        label={label}
+        ringClassName="fill-primary/60"
+        glyphClassName="fill-foreground/20"
+        className="w-3/5"
+      />
     </div>
   );
 }
@@ -42,7 +38,7 @@ export function RecordPoster({
       className={cn("relative aspect-2/3 w-full overflow-hidden", className)}
     >
       {posterUrl === "" ? (
-        <StampPlaceholder label={noPosterLabel} />
+        <PosterPlaceholder label={noPosterLabel} />
       ) : (
         <Image
           src={posterUrl}

@@ -139,9 +139,11 @@
   --chart-4: oklch(0.371 0 0);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.75rem;
+  --logo-ring: var(--brown);
 }
 
 :root:not(.dark) .shell {
+  --logo-ring: #b98a63;
   --background: color-mix(in oklab, var(--navy) 80%, black);
   --foreground: var(--beige);
   --foreground-sub: color-mix(in oklab, var(--beige) 80%, var(--navy));
@@ -178,6 +180,7 @@
 }
 
 .dark {
+  --logo-ring: #b98a63;
   --background: color-mix(in oklab, var(--navy) 75%, black);
   --foreground: var(--beige);
   --foreground-sub: color-mix(in oklab, var(--beige) 80%, var(--navy));

@@ -1,5 +1,5 @@
-import { wordmarkPath } from "@/components/atoms/logo-paths";
-import { StampShapes } from "@/components/atoms/stamp-shapes";
+import { BrandShape } from "@/components/atoms/brand-shape";
+import { markShapes, wordmarkShapes } from "@/components/atoms/logo-shapes";
 import { cn } from "@/lib/style/cn";
 
 export function Logo({
@@ -11,18 +11,12 @@ export function Logo({
 }) {
   return (
     <span className="inline-flex">
-      <svg
-        viewBox="0 0 634.9 110"
-        aria-hidden="true"
-        className={cn("h-6 w-auto", className)}
-      >
-        <StampShapes
-          stampClassName="fill-foreground"
-          cClassName="fill-background"
-          playClassName="fill-(--brown)"
-        />
-        <path d={wordmarkPath} className="fill-foreground" />
-      </svg>
+      <BrandShape
+        shapes={wordmarkShapes}
+        ringClassName="fill-(--logo-ring)"
+        glyphClassName="fill-foreground"
+        className={cn("h-10 w-auto", className)}
+      />
       <span className="sr-only">{name}</span>
     </span>
   );
@@ -37,17 +31,12 @@ export function LogoMark({
 }) {
   return (
     <span className="inline-flex">
-      <svg
-        viewBox="0 0 110 110"
-        aria-hidden="true"
-        className={cn("size-6", className)}
-      >
-        <StampShapes
-          stampClassName="fill-foreground"
-          cClassName="fill-background"
-          playClassName="fill-(--brown)"
-        />
-      </svg>
+      <BrandShape
+        shapes={markShapes}
+        ringClassName="fill-(--logo-ring)"
+        glyphClassName="fill-foreground"
+        className={cn("size-8", className)}
+      />
       <span className="sr-only">{name}</span>
     </span>
   );
