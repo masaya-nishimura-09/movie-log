@@ -36,7 +36,24 @@ describe("トップページ", () => {
     }
   });
 
-  it("ログインしているとホームに移る", () => {
+  it("ノート、気分での絞り込み、最後の呼びかけの順に、説明を並べる", () => {
+    cy.visit("/ja");
+    cy.contains(ja.landing.closing).should("exist");
+    cy.document().then((doc) => {
+      const top = (text: string) =>
+        [...doc.querySelectorAll("h2, p")]
+          .find((el) => el.textContent === text)
+          ?.getBoundingClientRect().top ?? 0;
+      expect(top(ja.landing.note.title)).to.be.lessThan(
+        top(ja.landing.recommend.title),
+      );
+      expect(top(ja.landing.recommend.title)).to.be.lessThan(
+        top(ja.landing.closing),
+      );
+    });
+  });
+
+  it("ログインしていると記録の一覧に移る", () => {
     cy.login();
     cy.visit("/ja");
     cy.location("pathname").should("eq", "/ja/records");
