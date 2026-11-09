@@ -48,7 +48,7 @@
   },
   "legal": {
     "updatedLabel": "Last updated",
-    "updated": "October 11, 2026",
+    "updated": "November 9, 2026",
     "contactLabel": "Contact form",
     "back": "Back",
     "terms": {
@@ -58,7 +58,7 @@
         {
           "h": "1. About the Service",
           "p": [
-            "The Service is a personal log for films you have watched. You can save, list, search and edit records such as the watched date, score and memo.",
+            "The Service is a personal log for films you have watched. You can save, list, search, edit and export records such as the watched date, score, notes and images.",
             "Film information is searched through TMDB (The Movie Database).",
             "The Service is provided free of charge."
           ]
@@ -85,7 +85,7 @@
         {
           "h": "4. Your records",
           "p": [
-            "You keep the rights to the records you save, such as memos and images.",
+            "You keep the rights to the records you save, such as notes and images.",
             "With the current features, your records are not shown to other users.",
             "The Operator handles your records only as needed to provide and maintain the Service and to respond to problems.",
             "You confirm that you hold the necessary rights to any image you upload."
@@ -123,7 +123,7 @@
           "p": [
             "The Service is provided as is. We do not guarantee accuracy, continuity or that data will not be lost.",
             "Except where the Operator acts intentionally or with gross negligence, the Operator is not liable for damages arising from your use of the Service.",
-            "We recommend keeping your own copy of records that matter to you."
+            "We recommend keeping your own copy of records that matter to you. You can export your records from the account settings."
           ]
         },
         {
@@ -157,8 +157,9 @@
           "p": [
             "The Service collects the following.",
             "- Account information: display name, email address, and password (stored in a form that cannot be turned back into the original text)",
-            "- Record information: title, release year, runtime, language, countries, genres, credits, watched date, platform, score, mood tags and memo",
+            "- Record information: title, original title, synopsis, release year, runtime, language, countries, genres, credits, watched date, platform, score, mood tags and note",
             "- Poster images: the image URL you enter, or the image you upload",
+            "- Attached images: the images you upload to attach to a record, such as photos of pamphlets or flyers",
             "- Contact information: the email address and message you enter in the contact form",
             "- Information used to keep you logged in",
             "- Activity logs: access time, IP address, browser type, and your user ID when an error occurs"
@@ -168,7 +169,7 @@
           "h": "2. How we use it",
           "p": [
             "We use the information for:",
-            "- providing the Service (saving, showing, searching and editing records);",
+            "- providing the Service (saving, showing, searching, editing and exporting records);",
             "- logging in and verifying who you are;",
             "- answering inquiries;",
             "- investigating and fixing problems;",
