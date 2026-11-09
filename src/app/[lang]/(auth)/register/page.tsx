@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { registerAction } from "@/actions/user/register";
 import { Logo } from "@/components/atoms/logo";
+import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -24,7 +25,7 @@ export default async function RegisterPage() {
           {dict.register.title}
         </h1>
         <p className="text-muted-foreground text-xs">
-          {dict.register.description}
+          {phrases(dict.register.description)}
         </p>
       </div>
       <RegisterForm

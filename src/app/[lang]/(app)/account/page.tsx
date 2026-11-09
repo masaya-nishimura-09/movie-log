@@ -7,6 +7,7 @@ import { updatePasswordAction } from "@/actions/user/update-password";
 import { updateUsernameAction } from "@/actions/user/update-username";
 import { withdrawAction } from "@/actions/user/withdraw";
 import { getCurrentUser } from "@/api/user/get-current-user";
+import { phrases } from "@/components/atoms/phrases";
 import { AccountEmailForm } from "@/components/organisms/account-email-form";
 import { AccountPasswordForm } from "@/components/organisms/account-password-form";
 import { AccountUsernameForm } from "@/components/organisms/account-username-form";
@@ -37,7 +38,7 @@ export default async function AccountPage() {
       <main className="flex w-full max-w-180 flex-col gap-4 px-4 pt-5 pb-8 md:px-10 md:pt-8">
         <p className="flex gap-2.5 rounded-[14px] bg-mood px-4 py-3.5 text-[13px] text-foreground leading-relaxed">
           <Info className="mt-0.5 size-4.5 shrink-0" aria-hidden />
-          {dict.account.notice}
+          {phrases(dict.account.notice)}
         </p>
         <AccountUsernameForm
           action={updateUsernameAction}

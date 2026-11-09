@@ -4,6 +4,7 @@ import { Trash2 } from "lucide-react";
 import { useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { phrases } from "@/components/atoms/phrases";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -60,12 +61,12 @@ export function DeleteDialog({
             {dict.title}
           </AlertDialogTitle>
           <AlertDialogDescription className="text-[13px] text-foreground-sub leading-relaxed">
-            {description}
+            {phrases(description)}
           </AlertDialogDescription>
         </AlertDialogHeader>
         {state?.success === false && (
           <p role="alert" className="text-destructive-foreground text-sm">
-            {dict.unexpectedError}
+            {phrases(dict.unexpectedError)}
           </p>
         )}
         <AlertDialogFooter>

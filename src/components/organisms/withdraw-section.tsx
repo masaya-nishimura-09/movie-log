@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { phrases } from "@/components/atoms/phrases";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -29,7 +30,7 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
         {dict.withdrawTitle}
       </h2>
       <p className="text-[13px] text-foreground-sub">
-        {dict.withdrawDescription}
+        {phrases(dict.withdrawDescription)}
       </p>
       <AlertDialog>
         <AlertDialogTrigger
@@ -43,12 +44,12 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
               {dict.withdrawConfirmTitle}
             </AlertDialogTitle>
             <AlertDialogDescription className="text-[13px] text-foreground-sub leading-relaxed">
-              {dict.withdrawDescription}
+              {phrases(dict.withdrawDescription)}
             </AlertDialogDescription>
           </AlertDialogHeader>
           {state?.success === false && (
             <p role="alert" className="text-destructive-foreground text-sm">
-              {dict.withdrawFailed}
+              {phrases(dict.withdrawFailed)}
             </p>
           )}
           <AlertDialogFooter>

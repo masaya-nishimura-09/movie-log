@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { Label } from "@/components/atoms/label";
+import { phrases } from "@/components/atoms/phrases";
 import { cn } from "@/lib/style/cn";
 
 type FormFieldProps = {
@@ -42,10 +43,14 @@ export function FormField({
           className="mt-0.5 flex items-center gap-1.5 text-destructive-foreground text-xs"
           role="alert"
         >
-          {error}
+          {phrases(error)}
         </p>
       ) : (
-        hint && <p className="mt-0.5 text-muted-foreground text-xs">{hint}</p>
+        hint && (
+          <p className="mt-0.5 text-muted-foreground text-xs">
+            {phrases(hint)}
+          </p>
+        )
       )}
     </div>
   );

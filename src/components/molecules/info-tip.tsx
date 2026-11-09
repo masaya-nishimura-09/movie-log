@@ -1,6 +1,7 @@
 "use client";
 
 import { Info } from "lucide-react";
+import { phrases } from "@/components/atoms/phrases";
 import {
   Popover,
   PopoverContent,
@@ -25,7 +26,7 @@ export function InfoTip({ label, children }: InfoTipProps) {
         align="start"
         className="w-64 px-3.5 py-3 text-[13px] text-foreground leading-relaxed"
       >
-        {children}
+        {phrases(children)}
       </PopoverContent>
     </Popover>
   );

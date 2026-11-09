@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
+import { phrases } from "@/components/atoms/phrases";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { cn } from "@/lib/style/cn";
@@ -70,7 +71,7 @@ export function Landing({ lang, dict }: LandingProps) {
   const registerHref = `/${lang}/register`;
 
   return (
-    <main className="shell flex flex-1 flex-col bg-sidebar text-foreground [word-break:auto-phrase]">
+    <main className="shell flex flex-1 flex-col bg-sidebar text-foreground">
       <header className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
         <Logo name={dict.brand.name} className="h-12" />
         <nav className="flex items-center gap-2">
@@ -95,10 +96,10 @@ export function Landing({ lang, dict }: LandingProps) {
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_1.15fr] lg:py-16">
         <div className="flex flex-col gap-6">
           <h1 className="text-balance font-bold text-4xl leading-tight md:text-5xl">
-            {l.headline}
+            {phrases(l.headline)}
           </h1>
           <p className="text-foreground-sub text-lg leading-relaxed">
-            {l.lead}
+            {phrases(l.lead)}
           </p>
           <div className="flex flex-wrap gap-3">
             <Link
@@ -131,10 +132,10 @@ export function Landing({ lang, dict }: LandingProps) {
             className="flex flex-col gap-2 rounded-[18px] bg-card p-6"
           >
             <h2 className="font-bold text-card-foreground text-lg">
-              {feature.title}
+              {phrases(feature.title)}
             </h2>
             <p className="text-foreground-sub text-sm leading-relaxed">
-              {feature.text}
+              {phrases(feature.text)}
             </p>
           </div>
         ))}
@@ -143,10 +144,10 @@ export function Landing({ lang, dict }: LandingProps) {
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1.15fr_1fr] lg:py-16">
         <div className="flex flex-col gap-5 lg:order-last">
           <h2 className="text-balance font-bold text-2xl leading-snug md:text-3xl">
-            {l.note.title}
+            {phrases(l.note.title)}
           </h2>
           <p className="text-foreground-sub text-lg leading-relaxed">
-            {l.note.text}
+            {phrases(l.note.text)}
           </p>
         </div>
         <Screenshot
@@ -160,10 +161,10 @@ export function Landing({ lang, dict }: LandingProps) {
       <section className="mx-auto grid w-full max-w-6xl items-center gap-10 px-6 py-10 lg:grid-cols-[1fr_1.15fr] lg:py-16">
         <div className="flex flex-col gap-5">
           <h2 className="text-balance font-bold text-2xl leading-snug md:text-3xl">
-            {l.recommend.title}
+            {phrases(l.recommend.title)}
           </h2>
           <p className="text-foreground-sub text-lg leading-relaxed">
-            {l.recommend.text}
+            {phrases(l.recommend.text)}
           </p>
         </div>
         <Screenshot
@@ -176,7 +177,7 @@ export function Landing({ lang, dict }: LandingProps) {
 
       <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-6 py-12 text-center lg:py-20">
         <p className="text-balance font-bold text-2xl leading-snug">
-          {l.closing}
+          {phrases(l.closing)}
         </p>
         <Link href={registerHref} className={buttonVariants({ size: "lg" })}>
           {l.start}

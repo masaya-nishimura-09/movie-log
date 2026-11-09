@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { loginAction } from "@/actions/auth/login";
 import { Logo } from "@/components/atoms/logo";
+import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { LoginForm } from "@/components/organisms/login-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -20,7 +21,9 @@ export default async function LoginPage() {
         <h1>
           <Logo name={dict.brand.name} className="h-18" />
         </h1>
-        <p className="text-[13px] text-foreground-sub">{dict.brand.tagline}</p>
+        <p className="text-[13px] text-foreground-sub">
+          {phrases(dict.brand.tagline)}
+        </p>
       </div>
       <LoginForm
         lang={lang}

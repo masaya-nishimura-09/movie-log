@@ -10,6 +10,7 @@ import { GenreTag } from "@/components/atoms/genre-tag";
 import { LocalDate } from "@/components/atoms/local-date";
 import { MaskingTape } from "@/components/atoms/masking-tape";
 import { MoodTag } from "@/components/atoms/mood-tag";
+import { phrases } from "@/components/atoms/phrases";
 import { ScoreBadge } from "@/components/atoms/score-badge";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
@@ -160,7 +161,7 @@ export function RecordDetail({
           />
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-            {d.noteEmpty}
+            {phrases(d.noteEmpty)}
             <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
               {d.noteAdd}
             </TextLink>
@@ -197,7 +198,7 @@ export function RecordDetail({
           </p>
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-            {d.overviewEmpty}
+            {phrases(d.overviewEmpty)}
             <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
               {d.overviewAdd}
             </TextLink>
@@ -228,7 +229,7 @@ export function RecordDetail({
           />
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-            {d.creditsEmpty}
+            {phrases(d.creditsEmpty)}
             <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
               {d.creditsAdd}
             </TextLink>

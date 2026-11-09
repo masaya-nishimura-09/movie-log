@@ -5,6 +5,7 @@ import { Download } from "lucide-react";
 import { useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
+import { phrases } from "@/components/atoms/phrases";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { noteFiles } from "@/lib/export/note-markdown";
@@ -85,7 +86,7 @@ export function ExportSection({
         {dict.exportTitle}
       </h2>
       <p className="text-[13px] text-foreground-sub">
-        {dict.exportDescription}
+        {phrases(dict.exportDescription)}
       </p>
       <div className="mt-2 flex flex-wrap gap-2">
         <Button
@@ -109,7 +110,7 @@ export function ExportSection({
       </div>
       {failed && (
         <p role="alert" className="text-destructive-foreground text-sm">
-          {dict.exportFailed}
+          {phrases(dict.exportFailed)}
         </p>
       )}
     </section>

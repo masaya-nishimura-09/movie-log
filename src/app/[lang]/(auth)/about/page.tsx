@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
+import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
@@ -22,7 +23,9 @@ export default async function AboutPage() {
         <h1>
           <Logo name={dict.brand.name} className="h-18" />
         </h1>
-        <p className="text-[13px] text-foreground-sub">{dict.brand.tagline}</p>
+        <p className="text-[13px] text-foreground-sub">
+          {phrases(dict.brand.tagline)}
+        </p>
       </div>
       <section className="flex flex-col gap-3">
         <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">

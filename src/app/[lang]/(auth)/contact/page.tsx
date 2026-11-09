@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { sendContactAction } from "@/actions/contact/send-contact";
+import { phrases } from "@/components/atoms/phrases";
 import { BackButton } from "@/components/molecules/back-button";
 import { ContactForm } from "@/components/organisms/contact-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -19,7 +20,7 @@ export default async function ContactPage() {
           {dict.contact.title}
         </h1>
         <p className="text-[13px] text-foreground-sub leading-relaxed">
-          {dict.contact.intro}
+          {phrases(dict.contact.intro)}
         </p>
       </header>
       <ContactForm

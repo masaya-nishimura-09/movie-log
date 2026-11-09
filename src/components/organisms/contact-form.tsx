@@ -4,6 +4,7 @@ import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
+import { phrases } from "@/components/atoms/phrases";
 import { CountedTextarea } from "@/components/molecules/counted-textarea";
 import { FormField } from "@/components/molecules/form-field";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
@@ -43,7 +44,7 @@ export function ContactForm({
           {dict.successTitle}
         </p>
         <p className="text-[13px] text-foreground-sub leading-relaxed">
-          {dict.successText}
+          {phrases(dict.successText)}
         </p>
       </output>
     );

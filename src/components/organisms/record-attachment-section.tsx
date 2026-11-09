@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type ChangeEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { MaskingTape } from "@/components/atoms/masking-tape";
+import { phrases } from "@/components/atoms/phrases";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { InfoTip } from "@/components/molecules/info-tip";
 import { AttachmentViewer } from "@/components/organisms/attachment-viewer";
@@ -109,7 +110,7 @@ export function RecordAttachmentSection({
         </ul>
       ) : (
         <p className="rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
-          {dict.attachmentsEmpty}
+          {phrases(dict.attachmentsEmpty)}
         </p>
       )}
       {error && (

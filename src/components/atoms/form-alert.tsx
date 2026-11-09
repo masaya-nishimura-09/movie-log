@@ -1,7 +1,12 @@
 import type { ComponentProps } from "react";
+import { phrases } from "@/components/atoms/phrases";
 import { cn } from "@/lib/style/cn";
 
-export function FormAlert({ className, ...props }: ComponentProps<"p">) {
+export function FormAlert({
+  className,
+  children,
+  ...props
+}: ComponentProps<"p">) {
   return (
     <p
       role="alert"
@@ -10,6 +15,8 @@ export function FormAlert({ className, ...props }: ComponentProps<"p">) {
         className,
       )}
       {...props}
-    />
+    >
+      {typeof children === "string" ? phrases(children) : children}
+    </p>
   );
 }

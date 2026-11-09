@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
+import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { cn } from "@/lib/style/cn";
 
@@ -37,16 +38,20 @@ export function LegalDocument({
           {updatedLabel}: {updated}
         </p>
       </header>
-      <p className="text-[13px] text-foreground-sub leading-relaxed">{intro}</p>
+      <p className="text-[13px] text-foreground-sub leading-relaxed">
+        {phrases(intro)}
+      </p>
       {sections.map((section, index) => (
         <section key={section.h} className="flex flex-col gap-2">
-          <h2 className="font-bold text-base text-foreground">{section.h}</h2>
+          <h2 className="font-bold text-base text-foreground">
+            {phrases(section.h)}
+          </h2>
           {section.p.map((paragraph) => (
             <p
               key={paragraph}
               className="text-[13px] text-foreground-sub leading-relaxed"
             >
-              {paragraph}
+              {phrases(paragraph)}
             </p>
           ))}
           {index === sections.length - 1 && (
