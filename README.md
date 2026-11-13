@@ -45,6 +45,8 @@ flowchart LR
     web --> resend["Resend<br/>contact emails"]
     web --> turnstile["Cloudflare Turnstile<br/>bot protection"]
     browser --> turnstile
+    web --> stripe["Stripe<br/>support payments"]
+    browser --> stripe
 ```
 
 The browser never calls the API directly. Server Components and
@@ -92,6 +94,12 @@ UI components are organized into atoms, molecules, and organisms.
 - Protection against automated submissions with Cloudflare Turnstile
   and a hidden field
 
+### Support
+
+- Support payments to the developer through Stripe Checkout
+  (¥300, ¥500, ¥1,000, or a custom amount from ¥100 to ¥10,000)
+- A thanks page shown only after Stripe confirms the payment
+
 ### Interface
 
 - Japanese and English, chosen from the browser language
@@ -134,6 +142,7 @@ and 700 for headings, primary buttons, and scores.
 | Testing        | Vitest, Cypress                                     |
 | Bot protection | Cloudflare Turnstile                                |
 | Contact        | Resend                                              |
+| Payments       | Stripe                                              |
 | Tooling        | Biome, pnpm                                         |
 
 ## Setup
@@ -192,6 +201,7 @@ Set the following environment variables in `.env.local`.
 | `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinelier <onboarding@resend.dev>`) |
 | `TURNSTILE_SITE_KEY`   | Required | Cloudflare Turnstile site key (not required in mock mode)           |
 | `TURNSTILE_SECRET_KEY` | Required | Cloudflare Turnstile secret key (not required in mock mode)         |
+| `STRIPE_SECRET_KEY`    | Optional | Stripe secret key (required for support payments)                   |
 
 ### Scripts
 
@@ -235,20 +245,23 @@ src/
 
 ## Pages
 
-| Path                                        | Description      | Login        |
-|---------------------------------------------|------------------|--------------|
-| /:lang                                      | Landing page     | Not required |
-| /:lang/login                                | Login            | Not required |
-| /:lang/register                             | Registration     | Not required |
-| /:lang/about                                | About the app    | Not required |
-| /:lang/contact                              | Contact form     | Not required |
-| /:lang/terms                                | Terms of use     | Not required |
-| /:lang/privacy                              | Privacy policy   | Not required |
-| /:lang/records                              | Record list      | Required     |
-| /:lang/records/new                          | New record       | Required     |
-| /:lang/records/:id                          | Record details   | Required     |
-| /:lang/records/:id/edit                     | Record editing   | Required     |
-| /:lang/account                              | Account settings | Required     |
+| Path                                        | Description               | Login        |
+|---------------------------------------------|---------------------------|--------------|
+| /:lang                                      | Landing page              | Not required |
+| /:lang/login                                | Login                     | Not required |
+| /:lang/register                             | Registration              | Not required |
+| /:lang/about                                | About the app             | Not required |
+| /:lang/contact                              | Contact form              | Not required |
+| /:lang/terms                                | Terms of use              | Not required |
+| /:lang/privacy                              | Privacy policy            | Not required |
+| /:lang/commerce                             | Commercial disclosure     | Not required |
+| /:lang/records                              | Record list               | Required     |
+| /:lang/records/new                          | New record                | Required     |
+| /:lang/records/:id                          | Record details            | Required     |
+| /:lang/records/:id/edit                     | Record editing            | Required     |
+| /:lang/account                              | Account settings          | Required     |
+| /:lang/support                              | Choosing a support amount | Required     |
+| /:lang/support/thanks                       | Thanks for your support   | Required     |
 
 ## Credits
 

@@ -5,5 +5,6 @@ export const publicPaths = [
   "/about",
   "/terms",
   "/privacy",
+  "/commerce",
   "/contact",
 ];

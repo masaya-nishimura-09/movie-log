@@ -100,6 +100,7 @@ for (const [lang, t] of locales) {
         t.about.tmdbNotice,
         t.register.termsLink,
         t.register.privacyLink,
+        t.legal.commerceLink,
         t.about.back,
       );
     });
@@ -107,6 +108,7 @@ for (const [lang, t] of locales) {
     for (const [path, document] of [
       ["terms", t.legal.terms],
       ["privacy", t.legal.privacy],
+      ["commerce", t.legal.commerce],
     ] as const) {
       it(`${document.title}の全文`, () => {
         cy.visit(`/${lang}/${path}`);

@@ -7,13 +7,16 @@ describe("このアプリについて", () => {
     cy.contains(ja.about.tmdbNotice).should("be.visible");
   });
 
-  it("利用規約とプライバシーポリシーに移れる", () => {
+  it("利用規約、プライバシーポリシー、特定商取引法に基づく表記に移れる", () => {
     cy.visit("/ja/about");
     cy.contains("a", ja.register.termsLink).click();
     cy.location("pathname").should("eq", "/ja/terms");
     cy.visit("/ja/about");
     cy.contains("a", ja.register.privacyLink).click();
     cy.location("pathname").should("eq", "/ja/privacy");
+    cy.visit("/ja/about");
+    cy.contains("a", ja.legal.commerceLink).click();
+    cy.location("pathname").should("eq", "/ja/commerce");
   });
 
   it("ログインした状態で戻るを押すと、記録の一覧に移る", () => {

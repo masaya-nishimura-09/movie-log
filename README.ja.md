@@ -43,6 +43,8 @@ flowchart LR
     web --> resend["Resend<br/>お問い合わせのメール"]
     web --> turnstile["Cloudflare Turnstile<br/>自動送信の防止"]
     browser --> turnstile
+    web --> stripe["Stripe<br/>応援の支払い"]
+    browser --> stripe
 ```
 
 ブラウザから API へは直接アクセスしません。
@@ -86,6 +88,12 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 - Resend を利用した、メールで届くお問い合わせフォーム
 - Cloudflare Turnstile と非表示の入力欄による、自動送信の防止
 
+### 応援
+
+- Stripe Checkout を利用した、開発者への応援の支払い（300円、500円、1,000円、
+  または 100円から10,000円までの指定した金額）
+- 支払いが済んだことを Stripe に確かめてから表示するお礼のページ
+
 ### 画面
 
 - 日本語と英語（ブラウザの言語設定から自動で選択）
@@ -124,6 +132,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 | テスト         | Vitest、Cypress                                      |
 | ボット対策     | Cloudflare Turnstile                                 |
 | お問い合わせ   | Resend                                               |
+| 支払い         | Stripe                                               |
 | 開発ツール     | Biome、pnpm                                          |
 
 ## セットアップ
@@ -180,6 +189,7 @@ pnpm dev
 | `CONTACT_FROM_EMAIL`   | 任意      | お問い合わせのメールの送信元（既定値 `Cinelier <onboarding@resend.dev>`） |
 | `TURNSTILE_SITE_KEY`   | 必須      | Cloudflare Turnstile のサイトキー（モックモードでは不要）            |
 | `TURNSTILE_SECRET_KEY` | 必須      | Cloudflare Turnstile の秘密鍵（モックモードでは不要）                |
+| `STRIPE_SECRET_KEY`    | 任意      | Stripe のシークレットキー（応援の支払いを使う場合は必須）            |
 
 ### スクリプト
 
@@ -223,20 +233,23 @@ src/
 
 ## ページ
 
-| パス                                        | 内容                 | ログイン |
-|---------------------------------------------|----------------------|----------|
-| /:lang                                      | ランディングページ   | 不要     |
-| /:lang/login                                | ログイン             | 不要     |
-| /:lang/register                             | ユーザー登録         | 不要     |
-| /:lang/about                                | このアプリについて   | 不要     |
-| /:lang/contact                              | お問い合わせ         | 不要     |
-| /:lang/terms                                | 利用規約             | 不要     |
-| /:lang/privacy                              | プライバシーポリシー | 不要     |
-| /:lang/records                              | 鑑賞記録の一覧       | 必要     |
-| /:lang/records/new                          | 鑑賞記録の作成       | 必要     |
-| /:lang/records/:id                          | 鑑賞記録の詳細       | 必要     |
-| /:lang/records/:id/edit                     | 鑑賞記録の編集       | 必要     |
-| /:lang/account                              | アカウント設定       | 必要     |
+| パス                                          | 内容                     | ログイン |
+|---------------------------------------------|--------------------------|----------|
+| /:lang                                      | ランディングページ       | 不要     |
+| /:lang/login                                | ログイン                 | 不要     |
+| /:lang/register                             | ユーザー登録             | 不要     |
+| /:lang/about                                | このアプリについて       | 不要     |
+| /:lang/contact                              | お問い合わせ             | 不要     |
+| /:lang/terms                                | 利用規約                 | 不要     |
+| /:lang/privacy                              | プライバシーポリシー     | 不要     |
+| /:lang/commerce                             | 特定商取引法に基づく表記 | 不要     |
+| /:lang/records                              | 鑑賞記録の一覧           | 必要     |
+| /:lang/records/new                          | 鑑賞記録の作成           | 必要     |
+| /:lang/records/:id                          | 鑑賞記録の詳細           | 必要     |
+| /:lang/records/:id/edit                     | 鑑賞記録の編集           | 必要     |
+| /:lang/account                              | アカウント設定           | 必要     |
+| /:lang/support                              | 応援の金額の選択         | 必要     |
+| /:lang/support/thanks                       | 応援のお礼               | 必要     |
 
 ## クレジット
 

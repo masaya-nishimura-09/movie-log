@@ -3,9 +3,10 @@ import ja from "../../../src/i18n/dictionaries/ja.json";
 const documents = [
   { path: "/ja/terms", document: ja.legal.terms },
   { path: "/ja/privacy", document: ja.legal.privacy },
+  { path: "/ja/commerce", document: ja.legal.commerce },
 ];
 
-describe("利用規約とプライバシーポリシー", () => {
+describe("利用規約、プライバシーポリシー、特定商取引法に基づく表記", () => {
   for (const { path, document } of documents) {
     describe(document.title, () => {
       it("タイトル、最終更新日、すべての条項を表示する", () => {

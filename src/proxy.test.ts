@@ -68,6 +68,7 @@ describe("proxy: ログイン", () => {
       "/ja/about",
       "/ja/terms",
       "/ja/privacy",
+      "/ja/commerce",
       "/ja/contact",
     ]) {
       const response = await proxy(request(path));
