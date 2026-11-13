@@ -45,7 +45,7 @@ describe("toRecordsCsv", () => {
 
   it("writes the header in the screen's language", () => {
     expect(rows(toRecordsCsv([], "ja", ja))).toEqual([
-      "タイトル,原題,鑑賞日,プラットフォーム,スコア,雰囲気タグ,公開年,上映時間,ジャンル,製作国,言語,クレジット,あらすじ,ポスター画像のURL",
+      "タイトル,原題,鑑賞日,鑑賞方法,スコア,雰囲気タグ,公開年,上映時間,ジャンル,製作国,言語,クレジット,あらすじ,ポスター画像のURL",
     ]);
   });
 
@@ -58,7 +58,7 @@ describe("toRecordsCsv", () => {
         "2026-10-01",
         "Netflix",
         "5",
-        "感動系 / 緊張感系",
+        "感動 / 緊張感",
         "2016",
         "116",
         "ドラマ / SF",

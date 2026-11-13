@@ -8,7 +8,7 @@ describe("ヘッダー", () => {
     cy.viewport(1280, 800);
   });
 
-  it("サイドバーを出さず、ロゴ、検索欄、記録する、テーマ、アカウントを並べる", () => {
+  it("サイドバーを出さず、ロゴ、検索欄、記録を追加、テーマ、アカウントを並べる", () => {
     cy.visit("/ja/records");
     cy.get("aside, nav[aria-label]").should("not.exist");
     header().within(() => {
@@ -24,7 +24,7 @@ describe("ヘッダー", () => {
     });
   });
 
-  it("記録するで記録の作成に移り、ロゴで一覧に戻る", () => {
+  it("記録を追加で記録の作成に移り、ロゴで一覧に戻る", () => {
     cy.visit("/ja/records/1");
     header().contains("a", ja.header.newRecord).click();
     cy.location("pathname").should("eq", "/ja/records/new");

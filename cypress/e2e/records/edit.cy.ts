@@ -88,7 +88,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /\/edit$/);
   });
 
-  it("取り消すを押すと、変更せずに詳細画面にもどる", () => {
+  it("キャンセルを押すと、変更せずに詳細画面に戻る", () => {
     const title = `E2E 編集取り消し ${Date.now()}`;
     cy.createRecord(title);
     cy.contains("a", ja.recordDetail.edit).click();
@@ -200,7 +200,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.location("pathname").should("match", /\/edit$/);
     cy.contains("a", form.cancel).click();
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
     cy.location("pathname").should("eq", "/ja/records");
     cy.go(-2);
     cy.location("pathname").should("match", /\/edit$/);

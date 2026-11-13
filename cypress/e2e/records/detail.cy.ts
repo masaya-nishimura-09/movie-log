@@ -179,7 +179,7 @@ describe("記録の詳細", () => {
       section().contains(detail.attachmentsAdd).should("be.visible");
     });
 
-    it("削除の確認でやめると、添付は残る", () => {
+    it("削除の確認でキャンセルすると、添付は残る", () => {
       cy.createRecord(`E2E 添付やめる ${Date.now()}`);
       section()
         .find("input[type=file]")
@@ -188,7 +188,10 @@ describe("記録の詳細", () => {
       cy.get(
         `[role=dialog] button[aria-label="${detail.attachmentDelete}"]`,
       ).click();
-      cy.contains("button", ja.deleteAttachment.cancel).click();
+      cy.contains(
+        "[role=alertdialog] button",
+        ja.deleteAttachment.cancel,
+      ).click();
       cy.get("[role=alertdialog]").should("not.exist");
       cy.contains("[role=dialog]", "1 / 1").should("be.visible");
     });
@@ -240,7 +243,7 @@ describe("記録の詳細", () => {
   });
 
   describe("戻る先", () => {
-    it("検索を入れた一覧から開いて戻ると、同じ検索の一覧にもどる", () => {
+    it("検索を入れた一覧から開いて戻ると、同じ検索の一覧に戻る", () => {
       cy.visit("/ja/records?q=%E5%8B%9D%E6%89%8B");
       cy.get("main ul > li > a").should("have.length.at.least", 1);
       cy.contains("main ul > li > a", "勝手にしやがれ").click();
@@ -253,7 +256,7 @@ describe("記録の詳細", () => {
       );
     });
 
-    it("2ページ目から開いて戻ると、2ページ目にもどる", () => {
+    it("2ページ目から開いて戻ると、2ページ目に戻る", () => {
       cy.visit("/ja/records?page=2");
       cy.get("main ul > li > a").first().click();
       cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
@@ -262,7 +265,7 @@ describe("記録の詳細", () => {
       cy.location("search").should("eq", "?page=2");
     });
 
-    it("絞り込みのない一覧から開くと、住所に余計な印を付けず、戻ると一覧にもどる", () => {
+    it("絞り込みのない一覧から開くと、住所に余計な印を付けず、戻ると一覧に戻る", () => {
       cy.visit("/ja/records");
       cy.get("main ul > li > a")
         .first()
@@ -274,7 +277,7 @@ describe("記録の詳細", () => {
       cy.location("search").should("eq", "");
     });
 
-    it("戻る先に、このアプリの記録の一覧でない住所を入れても、無視して一覧にもどる", () => {
+    it("戻る先に、このアプリの記録の一覧でない住所を入れても、無視して一覧に戻る", () => {
       for (const from of [
         "https://evil.example/ja/records",
         "//evil.example",

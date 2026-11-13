@@ -4,7 +4,7 @@ import ja from "../../../src/i18n/dictionaries/ja.json";
 const account = ja.account;
 
 describe("データの書き出し", () => {
-  it("鑑賞記録をCSVで書き出すと、見出しと記録の行が入ったCSVをダウンロードする", () => {
+  it("記録をCSVで書き出すと、見出しと記録の行が入ったCSVをダウンロードする", () => {
     cy.register();
     const title = `E2E 書き出し ${Date.now()}`;
     cy.createRecord(title);

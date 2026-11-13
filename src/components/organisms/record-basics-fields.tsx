@@ -134,7 +134,6 @@ export function RecordBasicsFields({
             error={fieldError(errors, dict, "score")}
             required
             requiredLabel={dict.required}
-            hint={dict.scoreHint}
           >
             <div
               className="flex gap-1.75"

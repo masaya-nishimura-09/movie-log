@@ -9,7 +9,7 @@ describe("スマホの画面", () => {
 
   const newRecord = `a[aria-label="${ja.header.newRecord}"]`;
 
-  it("ヘッダーに、ロゴ、検索、記録する、テーマ、アカウントを並べる", () => {
+  it("ヘッダーに、ロゴ、検索、記録を追加、テーマ、アカウントを並べる", () => {
     cy.visit("/ja/records");
     cy.get("nav.fixed").should("not.exist");
     cy.get("header")
@@ -67,7 +67,7 @@ describe("スマホの画面", () => {
     cy.location("pathname").should("eq", "/ja/account");
   });
 
-  it("768px 以上では、＋のアイコンではなく、文字付きの記録するボタンを出す", () => {
+  it("768px 以上では、＋のアイコンではなく、文字付きの記録を追加ボタンを出す", () => {
     cy.viewport(800, 800);
     cy.visit("/ja/records");
     cy.get(newRecord).should("not.be.visible");

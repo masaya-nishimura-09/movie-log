@@ -65,7 +65,7 @@ describe("アカウント設定", () => {
     });
   });
 
-  it("今のパスワードが違うと、メールアドレスを変えられない", () => {
+  it("現在のパスワードが違うと、メールアドレスを変えられない", () => {
     cy.register().then(() => {
       cy.visit("/ja/account");
       cy.get("#email").clear().type("other@example.com");
@@ -117,7 +117,7 @@ describe("アカウント設定", () => {
     });
   });
 
-  it("今のパスワードが違うと、パスワードを変えられない", () => {
+  it("現在のパスワードが違うと、パスワードを変えられない", () => {
     cy.register().then(() => {
       cy.visit("/ja/account");
       cy.get("#oldPassword").type("wrong-password");
@@ -141,7 +141,7 @@ describe("アカウント設定", () => {
       .and("contain.text", account.passwordError);
   });
 
-  it("取り消すを押すと、入力を元に戻す", () => {
+  it("キャンセルを押すと、入力を元に戻す", () => {
     cy.login();
     cy.visit("/ja/account");
     cy.get("#username").clear().type("変更中の名前");
@@ -149,7 +149,7 @@ describe("アカウント設定", () => {
     cy.get("#username").should("have.value", "Demo User");
   });
 
-  it("もどるを押すと、記録の一覧に移る", () => {
+  it("戻るを押すと、記録の一覧に移る", () => {
     cy.login();
     cy.visit("/ja/account");
     cy.get(`a[aria-label="${account.back}"]`).click();
@@ -179,11 +179,11 @@ describe("退会", () => {
     });
   });
 
-  it("やめるを押すと退会しない", () => {
+  it("キャンセルを押すと退会しない", () => {
     cy.register().then(() => {
       cy.visit("/ja/account");
       cy.contains("button", account.withdrawAction).click();
-      cy.contains("button", account.withdrawCancel).click();
+      cy.contains("[role=alertdialog] button", account.withdrawCancel).click();
       cy.get("[role=alertdialog]").should("not.exist");
       cy.reload();
       cy.location("pathname").should("eq", "/ja/account");

@@ -193,7 +193,7 @@ describe("記録の一覧", () => {
     cy.location("search").should("eq", "");
   });
 
-  it("プラットフォームで絞り込むと、そのプラットフォームの記録だけを表示する", () => {
+  it("鑑賞方法で絞り込むと、その鑑賞方法の記録だけを表示する", () => {
     cy.visit("/ja/records");
     openFilter(filter.platform)
       .contains("[role=radio]", ja.enums.platform.netflix)

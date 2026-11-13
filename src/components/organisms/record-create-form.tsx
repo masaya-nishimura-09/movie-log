@@ -227,14 +227,9 @@ export function RecordCreateForm({
             }}
             className="flex flex-col gap-4.5"
           >
-            <div className="flex items-baseline gap-2">
-              <h2 className="font-bold text-base text-foreground">
-                {dict.stepMovieInfo}
-              </h2>
-              <span className="text-muted-foreground text-xs">
-                {dict.movieInfoHint}
-              </span>
-            </div>
+            <h2 className="font-bold text-base text-foreground">
+              {dict.stepMovieInfo}
+            </h2>
             <RecordMovieFields
               split
               errors={errors}

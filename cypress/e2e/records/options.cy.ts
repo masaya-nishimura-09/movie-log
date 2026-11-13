@@ -7,7 +7,7 @@ describe("選択肢がすべて表示される", () => {
     cy.login();
   });
 
-  it("作成フォーム：プラットフォーム、ジャンル、役割、雰囲気タグ", () => {
+  it("作成フォーム：鑑賞方法、ジャンル、役割、雰囲気タグ", () => {
     cy.visit("/ja/records/new");
     for (const label of Object.values(ja.enums.platform)) {
       cy.contains("label", label).should("exist");
@@ -62,7 +62,7 @@ describe("選択肢がすべて表示される", () => {
     cy.contains("[role=option]", `${form.languageUnknown} und`).should("exist");
   });
 
-  it("絞り込み：スコア、プラットフォーム、雰囲気タグ、ジャンル、並べ替え", () => {
+  it("絞り込み：スコア、鑑賞方法、雰囲気タグ、ジャンル、並べ替え", () => {
     cy.visit("/ja/records");
     cy.contains("main button", ja.recordFilter.score).click();
     for (const score of ["1", "2", "3", "4", "5"]) {
@@ -96,7 +96,7 @@ describe("選択肢がすべて表示される", () => {
     }
   });
 
-  it("どのプラットフォームでも絞り込める", () => {
+  it("どの鑑賞方法でも絞り込める", () => {
     for (const platform of Object.keys(ja.enums.platform)) {
       cy.visit(`/ja/records?platform=${platform}`);
       cy.get(

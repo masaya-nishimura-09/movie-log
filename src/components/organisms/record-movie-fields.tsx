@@ -139,7 +139,6 @@ export function RecordMovieFields({
             error={fieldError(errors, dict, "language")}
             required
             requiredLabel={dict.required}
-            hint={dict.languageHint}
           >
             <Select
               name="language"
@@ -203,7 +202,6 @@ export function RecordMovieFields({
         <FormField
           label={dict.credits}
           error={fieldError(errors, dict, "credits")}
-          hint={dict.creditsHint}
         >
           <CreditRows
             defaultValue={values.credits}

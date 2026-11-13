@@ -54,7 +54,10 @@ describe("API の失敗", () => {
     cy.location("pathname").should("eq", "/ja/records");
     cy.visit("/ja/account");
     cy.contains("button", ja.account.withdrawAction).click();
-    cy.contains("button", ja.account.withdrawConfirm).click();
+    cy.contains(
+      "[role=alertdialog] button",
+      ja.account.withdrawConfirm,
+    ).click();
     cy.contains("[role=alert]", ja.account.withdrawFailed).should("be.visible");
     cy.location("pathname").should("eq", "/ja/account");
   });

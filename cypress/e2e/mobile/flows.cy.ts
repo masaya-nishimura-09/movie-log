@@ -42,7 +42,7 @@ describe("スマホの画面での操作", () => {
     cy.contains("スマホで編集").should("be.visible");
 
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 

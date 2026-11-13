@@ -33,11 +33,11 @@ describe("記録の削除", () => {
     cy.contains(ja.recordList.noMatch).should("be.visible");
   });
 
-  it("やめるを押すと削除しない", () => {
+  it("キャンセルを押すと削除しない", () => {
     const title = `E2E 削除取り消し ${Date.now()}`;
     cy.createRecord(title);
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.cancel).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.cancel).click();
     cy.get("[role=alertdialog]").should("not.exist");
     cy.get("h1:visible").should("have.text", title);
   });
@@ -47,12 +47,12 @@ describe("記録の削除", () => {
     cy.contains("a", ja.recordDetail.edit).click();
     cy.go("back");
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
     cy.location("pathname").should("eq", "/ja/records");
     cy.go("back");
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
     cy.location("pathname").should("eq", "/ja/records");
     cy.get("[role=alert]").should("not.exist");
   });
@@ -66,7 +66,7 @@ describe("記録の削除", () => {
     cy.contains("button", ja.recordForm.save).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
-    cy.contains("button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
     cy.get("[role=alertdialog]")
       .contains("[role=alert]", ja.deleteRecord.unexpectedError)
       .should("be.visible");

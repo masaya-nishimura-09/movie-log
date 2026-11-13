@@ -238,7 +238,6 @@ for (const [lang, t] of locales) {
           t.recordForm.today,
           t.recordForm.yesterday,
           t.recordForm.score,
-          t.recordForm.scoreHint,
           t.recordForm.platform,
           t.recordForm.next,
           fill(t.characterCount, { current: 0, max: 255 }),
@@ -247,7 +246,6 @@ for (const [lang, t] of locales) {
         cy.fillRecordBasics("Arrival", { score: 3, lang });
         cy.contains("button", t.recordForm.next).click();
         shows(
-          t.recordForm.movieInfoHint,
           t.recordForm.originalTitle,
           t.recordForm.overview,
           fill(t.characterCount, { current: 0, max: 2000 }),
@@ -259,12 +257,10 @@ for (const [lang, t] of locales) {
           t.recordForm.runtimeUnit,
           t.recordForm.runtimeHint,
           t.recordForm.language,
-          t.recordForm.languageHint,
           t.recordForm.countries,
           t.recordForm.genres,
           t.recordForm.genresHint,
           t.recordForm.credits,
-          t.recordForm.creditsHint,
           t.recordForm.addCredit,
           t.recordForm.posterUrl,
           t.recordForm.uploadPoster,

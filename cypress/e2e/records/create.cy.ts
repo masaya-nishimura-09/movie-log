@@ -211,7 +211,7 @@ describe("記録の作成", () => {
     cy.get("#watchedAt").should("have.text", longDate(new Date()));
   });
 
-  it("もどるで前のステップに戻ると、入力した内容が残っている", () => {
+  it("戻るで前のステップに戻ると、入力した内容が残っている", () => {
     cy.visit("/ja/records/new");
     cy.fillRecordBasics("戻るテスト", { score: 2 });
     cy.contains("button", form.next).click();
@@ -229,7 +229,7 @@ describe("記録の作成", () => {
     cy.focused().should("have.id", "title");
   });
 
-  it("スコアとプラットフォームを選ばないと次のステップに進めない", () => {
+  it("スコアと鑑賞方法を選ばないと次のステップに進めない", () => {
     cy.visit("/ja/records/new");
     cy.get("#title").type("未選択テスト");
     cy.contains("button", form.next).click();
