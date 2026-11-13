@@ -1,11 +1,9 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import { createRecord } from "@/api/record/create-record";
 import { updateRecord } from "@/api/record/update-record";
-import type { Locale } from "@/i18n/locales";
 import { readRecordForm } from "@/lib/record/read-record-form";
 import { recordInputSchema } from "@/schemas/record/record-input";
 
@@ -45,12 +43,9 @@ export async function createRecordAction(
 }
 
 export async function updateRecordAction(
-  lang: Locale,
   recordId: string,
-  _previous: ActionResult<never> | undefined,
+  _previous: ActionResult<string> | undefined,
   formData: FormData,
-): Promise<ActionResult<never>> {
-  const result = await save(recordId, formData);
-  if (!result.success) return result;
-  redirect(`/${lang}/records/${result.data}`);
+): Promise<ActionResult<string>> {
+  return save(recordId, formData);
 }

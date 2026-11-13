@@ -4,7 +4,6 @@ import { ApiError } from "@/api/client/api-error";
 const createRecord = vi.fn();
 const updateRecord = vi.fn();
 
-vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/record/create-record", () => ({ createRecord }));
 vi.mock("@/api/record/update-record", () => ({ updateRecord }));
 
@@ -103,11 +102,12 @@ describe("createRecordAction", () => {
 });
 
 describe("updateRecordAction", () => {
-  it("updates the record and moves to it", async () => {
+  it("updates the record and returns its ID", async () => {
     updateRecord.mockResolvedValue({ recordId: "7" });
-    await expect(
-      updateRecordAction("ja", "7", undefined, form()),
-    ).rejects.toThrow("REDIRECT /ja/records/7");
+    await expect(updateRecordAction("7", undefined, form())).resolves.toEqual({
+      success: true,
+      data: "7",
+    });
     expect(updateRecord).toHaveBeenCalledWith(
       "7",
       expect.objectContaining({ title: "Arrival" }),
@@ -117,8 +117,9 @@ describe("updateRecordAction", () => {
 
   it("returns notFound when the record was deleted", async () => {
     updateRecord.mockRejectedValue(new ApiError(404, "RECORD_NOT_FOUND"));
-    await expect(
-      updateRecordAction("ja", "7", undefined, form()),
-    ).resolves.toEqual({ success: false, messageKey: "notFound" });
+    await expect(updateRecordAction("7", undefined, form())).resolves.toEqual({
+      success: false,
+      messageKey: "notFound",
+    });
   });
 });

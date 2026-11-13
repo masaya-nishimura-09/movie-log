@@ -308,6 +308,10 @@ for (const [lang, t] of locales) {
           t.recordForm.watchSection,
           t.recordForm.movieSection,
           t.recordForm.stepImpression,
+          t.recordForm.note,
+          t.recordForm.attachments,
+          t.recordForm.attachmentsHint,
+          t.recordForm.attachmentsAdd,
           t.recordForm.cancel,
           t.recordForm.saveChanges,
         );

@@ -5,8 +5,13 @@ import {
   getMovieAction,
   searchMoviesAction,
 } from "@/actions/movie/movie-assist";
+import {
+  addAttachmentAction,
+  deleteAttachmentAction,
+} from "@/actions/record/attachment";
 import { updateRecordAction } from "@/actions/record/save-record";
 import { getRecord } from "@/api/record/get-record";
+import { getRecordAttachments } from "@/api/record/get-record-attachments";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordEditForm } from "@/components/organisms/record-edit-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -21,10 +26,11 @@ export default async function EditRecordPage({
   params,
 }: PageProps<"/[lang]/records/[id]/edit">) {
   const { id } = await params;
-  const [lang, dict, record] = await Promise.all([
+  const [lang, dict, record, attachments] = await Promise.all([
     getLocale(),
     getDictionary(),
     getRecord(id),
+    getRecordAttachments(id),
   ]);
   if (!record) notFound();
   const values = toFormValues(record);
@@ -39,7 +45,10 @@ export default async function EditRecordPage({
       />
       <RecordEditForm
         lang={lang}
-        action={updateRecordAction.bind(null, lang, id)}
+        action={updateRecordAction.bind(null, id)}
+        attachments={attachments}
+        addAttachment={addAttachmentAction.bind(null, id)}
+        deleteAttachment={deleteAttachmentAction.bind(null, id)}
         searchMovies={searchMoviesAction.bind(null, lang)}
         getMovie={getMovieAction.bind(null, lang)}
         uploadPoster={uploadPosterAction}

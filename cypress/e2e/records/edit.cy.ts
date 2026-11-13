@@ -119,6 +119,95 @@ describe("記録の編集", () => {
     cy.contains(ja.recordDetail.creditsEmpty).should("be.visible");
     cy.get("main").contains(ja.enums.genre.drama).should("not.exist");
   });
+
+  it("添付済みの画像を外し、新しい画像を足して保存すると、詳細画面に反映される", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 編集添付 ${Date.now()}`);
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.get("form input[type=file][multiple]").selectFile(
+      "cypress/fixtures/poster.png",
+      { force: true },
+    );
+    cy.contains("button", form.save).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+
+    cy.contains("a", ja.recordDetail.edit).click();
+    cy.get("form li img").should("have.length", 1);
+    cy.get(
+      `button[aria-label="${form.attachmentRemove.replace("{number}", "1")}"]`,
+    ).click();
+    cy.get("form li img").should("have.length", 0);
+    cy.get("form input[type=file][multiple]").selectFile(
+      [
+        "cypress/fixtures/poster.png",
+        "cypress/fixtures/not-image.txt",
+        "cypress/fixtures/poster.png",
+      ],
+      { force: true },
+    );
+    cy.contains("[role=alert]", form.attachmentsInvalid).should("be.visible");
+    cy.get("form li img").should("have.length", 2);
+    cy.contains("button", form.saveChanges).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.contains("main h2", ja.recordDetail.attachments)
+      .closest("section")
+      .find("img[src^='data:image/png']")
+      .should("have.length", 2);
+  });
+
+  it("添付済みの画像も含めて10枚までしか選べない", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 編集添付上限 ${Date.now()}`);
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.get("form input[type=file][multiple]").selectFile(
+      Array.from({ length: 3 }, () => "cypress/fixtures/poster.png"),
+      { force: true },
+    );
+    cy.contains("button", form.save).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+
+    cy.contains("a", ja.recordDetail.edit).click();
+    cy.get("form li img").should("have.length", 3);
+    cy.get("form input[type=file][multiple]").selectFile(
+      Array.from({ length: 8 }, () => "cypress/fixtures/poster.png"),
+      { force: true },
+    );
+    cy.contains(
+      "[role=alert]",
+      form.attachmentsLimit.replace("{max}", "10"),
+    ).should("be.visible");
+    cy.get("form li img").should("have.length", 10);
+    cy.get("form input[type=file][multiple]").should("not.exist");
+  });
+
+  it("画像を外してもキャンセルすると、添付は変わらない", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 編集添付取り消し ${Date.now()}`);
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.get("form input[type=file][multiple]").selectFile(
+      "cypress/fixtures/poster.png",
+      { force: true },
+    );
+    cy.contains("button", form.save).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+
+    cy.contains("a", ja.recordDetail.edit).click();
+    cy.get(
+      `button[aria-label="${form.attachmentRemove.replace("{number}", "1")}"]`,
+    ).click();
+    cy.contains("a", form.cancel).click();
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+    cy.contains("main h2", ja.recordDetail.attachments)
+      .closest("section")
+      .find("img[src^='data:image/png']")
+      .should("have.length", 1);
+  });
 });
 
 describe("記録の編集（サーバー側の検証と失敗）", () => {
