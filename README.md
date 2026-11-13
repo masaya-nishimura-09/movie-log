@@ -191,6 +191,7 @@ Set the following environment variables in `.env.local`.
 | Variable               | Required | Description                                                         |
 |------------------------|----------|---------------------------------------------------------------------|
 | `API_BASE_URL`         | Required | Base URL of the Cinelier API (not required in mock mode)             |
+| `SITE_URL`             | Optional | Public URL of the site, used for the sitemap, OGP and Stripe return URLs (default: `http://localhost:3000`) |
 | `USE_MOCK`             | Optional | Set to `true` to use mock data instead of the API                   |
 | `MOCK_DATASET`         | Optional | Set to `demo` to use the fictional demo films in mock mode          |
 | `MOCK_LANGUAGE`        | Optional | Set to `en` for English mock records (Japanese otherwise)           |
