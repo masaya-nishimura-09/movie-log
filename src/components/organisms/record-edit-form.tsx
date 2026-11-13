@@ -72,35 +72,33 @@ export function RecordEditForm({
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
         </FormAlert>
       )}
-      <div className="grid items-start gap-4 lg:grid-cols-2">
-        <Panel title={dict.watchSection}>
-          <RecordBasicsFields
-            lang={lang}
-            errors={failure?.errors}
-            title={movie.title}
-            onTitleChange={movie.setTitle}
-            searchMovies={searchMovies}
-            onMovieSelect={movie.select}
-            values={values}
-            dict={dict}
-            enums={enums}
-            counterTemplate={counterTemplate}
-          />
-        </Panel>
-        <Panel title={dict.movieSection}>
-          <RecordMovieFields
-            errors={failure?.errors}
-            key={movie.version}
-            lang={lang}
-            values={movie.values}
-            maxReleaseYear={maxReleaseYear}
-            uploadPoster={uploadPoster}
-            counterTemplate={counterTemplate}
-            dict={dict}
-            enums={enums}
-          />
-        </Panel>
-      </div>
+      <Panel title={dict.watchSection}>
+        <RecordBasicsFields
+          lang={lang}
+          errors={failure?.errors}
+          title={movie.title}
+          onTitleChange={movie.setTitle}
+          searchMovies={searchMovies}
+          onMovieSelect={movie.select}
+          values={values}
+          dict={dict}
+          enums={enums}
+          counterTemplate={counterTemplate}
+        />
+      </Panel>
+      <Panel title={dict.movieSection}>
+        <RecordMovieFields
+          errors={failure?.errors}
+          key={movie.version}
+          lang={lang}
+          values={movie.values}
+          maxReleaseYear={maxReleaseYear}
+          uploadPoster={uploadPoster}
+          counterTemplate={counterTemplate}
+          dict={dict}
+          enums={enums}
+        />
+      </Panel>
       <Panel title={dict.stepImpression}>
         <RecordImpressionFields
           errors={failure?.errors}
