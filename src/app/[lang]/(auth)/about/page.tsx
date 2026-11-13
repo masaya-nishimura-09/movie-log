@@ -5,6 +5,7 @@ import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
 import { Logo } from "@/components/atoms/logo";
 import { phrases } from "@/components/atoms/phrases";
+import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
@@ -28,9 +29,7 @@ export default async function AboutPage() {
         </p>
       </div>
       <section className="flex flex-col gap-3">
-        <h2 className="font-bold text-muted-foreground text-xs tracking-[0.08em]">
-          {dict.about.creditsHeading}
-        </h2>
+        <SectionLabel>{dict.about.creditsHeading}</SectionLabel>
         <Image
           src="/tmdb-logo.svg"
           alt="TMDB"
@@ -43,13 +42,19 @@ export default async function AboutPage() {
           {dict.about.tmdbNotice}
         </p>
       </section>
-      <nav className="flex flex-col gap-2">
-        <TextLink href={`/${lang}/terms`} className="self-start text-sm">
-          {dict.register.termsLink}
-        </TextLink>
-        <TextLink href={`/${lang}/privacy`} className="self-start text-sm">
-          {dict.register.privacyLink}
-        </TextLink>
+      <nav className="flex flex-col gap-3">
+        <SectionLabel>{dict.about.legalHeading}</SectionLabel>
+        <div className="flex flex-col gap-2">
+          <TextLink href={`/${lang}/terms`} className="self-start text-sm">
+            {dict.register.termsLink}
+          </TextLink>
+          <TextLink href={`/${lang}/privacy`} className="self-start text-sm">
+            {dict.register.privacyLink}
+          </TextLink>
+          <TextLink href={`/${lang}/commerce`} className="self-start text-sm">
+            {dict.legal.commerceLink}
+          </TextLink>
+        </div>
       </nav>
       <Link
         href={`/${lang}/records`}

@@ -44,13 +44,93 @@
     "link": "About this app",
     "back": "Back",
     "creditsHeading": "Credits",
-    "tmdbNotice": "This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB."
+    "tmdbNotice": "This application uses TMDB and the TMDB APIs but is not endorsed, certified, or otherwise approved by TMDB.",
+    "legalHeading": "Terms and policies"
+  },
+  "support": {
+    "title": "Support Cinelier",
+    "intro": "Cinelier is a free app developed by one person.",
+    "introRequest": "If you enjoy it, your support would mean a lot.",
+    "amountLabel": "Amount",
+    "amount": "¥{amount}",
+    "custom": "Other amount",
+    "customAmountLabel": "Amount (JPY)",
+    "customAmountHint": "From ¥100 to ¥10,000",
+    "submit": "Continue to payment",
+    "stripeNote": "You pay on a Stripe page. Your card details are not sent to Cinelier.",
+    "choiceRequired": "Choose an amount",
+    "customAmountRequired": "Enter an amount",
+    "customAmountOutOfRange": "Enter an amount from ¥100 to ¥10,000",
+    "unexpectedError": "The payment page could not be opened. Please try again later",
+    "back": "Back",
+    "productName": "Support for Cinelier",
+    "thanksTitle": "Thank you!",
+    "thanksText": "We received your support of {amount}.",
+    "thanksUse": "It will go toward developing and running Cinelier.",
+    "thanksBack": "Back to list"
   },
   "legal": {
     "updatedLabel": "Last updated",
-    "updated": "November 9, 2026",
+    "updated": "November 13, 2026",
     "contactLabel": "Contact form",
     "back": "Back",
+    "commerceLink": "Commercial disclosure",
+    "commerce": {
+      "title": "Commercial disclosure",
+      "intro": "This page shows the information required by Japan's Specified Commercial Transactions Act for support payments to Cinelier (the \"Service\").",
+      "sections": [
+        {
+          "h": "Seller",
+          "p": ["Disclosed without delay on request."]
+        },
+        {
+          "h": "Address",
+          "p": ["Disclosed without delay on request."]
+        },
+        {
+          "h": "Phone number",
+          "p": ["Disclosed without delay on request."]
+        },
+        {
+          "h": "Email address",
+          "p": ["(Coming soon)"]
+        },
+        {
+          "h": "Price",
+          "p": [
+            "The amount you choose on the support page (from ¥100 to ¥10,000)"
+          ]
+        },
+        {
+          "h": "Additional fees",
+          "p": ["None."]
+        },
+        {
+          "h": "Payment method",
+          "p": ["Credit card"]
+        },
+        {
+          "h": "Payment timing",
+          "p": ["The payment is made when you complete it on the payment page."]
+        },
+        {
+          "h": "Delivery",
+          "p": [
+            "Support is not payment for goods or services, so nothing is delivered."
+          ]
+        },
+        {
+          "h": "Refunds",
+          "p": ["Payments cannot be canceled or refunded."]
+        },
+        {
+          "h": "Contact",
+          "p": [
+            "For questions about this disclosure, please use the contact form below."
+          ]
+        }
+      ]
+    },
     "terms": {
       "title": "Terms of Use",
       "intro": "These Terms of Use (the \"Terms\") set out the conditions for using Cinelier (the \"Service\") between the Cinelier operator (the \"Operator\") and its users. You must agree to these Terms to use the Service.",
@@ -161,6 +241,7 @@
             "- Poster images: the image URL you enter, or the image you upload",
             "- Attached images: the images you upload to attach to a record, such as photos of pamphlets or flyers",
             "- Contact information: the email address and message you enter in the contact form",
+            "- Support payment information: the name and email address you enter on the Stripe payment page, the amount you pay, and your card's brand, last 4 digits, expiry date and issuing country (we do not receive your full card number)",
             "- Information used to keep you logged in",
             "- Activity logs: access time, IP address, browser type, and your user ID when an error occurs"
           ]
@@ -172,6 +253,7 @@
             "- providing the Service (saving, showing, searching, editing and exporting records);",
             "- logging in and verifying who you are;",
             "- answering inquiries;",
+            "- confirming support payments;",
             "- investigating and fixing problems;",
             "- preventing abuse, such as limiting login attempts and blocking automated submissions of the login, sign-up, and contact forms; and",
             "- dealing with violations of the Terms of Use."
@@ -192,6 +274,7 @@
             "- Vercel (United States): the web server of the Service. Access logs are kept.",
             "- Cloudflare Turnstile (United States): to block automated submissions of the login, sign-up, and contact forms, your IP address and browser information are sent to Cloudflare.",
             "- Resend (United States): to deliver your inquiry to the Operator by email, the email address and message you enter are sent to Resend.",
+            "- Stripe (United States): to process support payments, Stripe handles the card number, email address and other details entered on its payment page. The Operator does not receive your card number.",
             "We will add the provider and country of the server that stores account information, records, and uploaded images to this policy once it is decided.",
             "Information on the personal data protection system of the United States is available on the website of Japan's Personal Information Protection Commission.",
             "We do not use external services for advertising or analytics."
@@ -211,6 +294,7 @@
           "p": [
             "Account information and records are kept until you delete your account. When you do, your account information, records and uploaded images are deleted.",
             "Contact information is kept as long as needed to answer the inquiry and deleted once it is no longer needed.",
+            "Records of support payments are kept by Stripe and are not deleted when you delete your account.",
             "Activity logs are deleted after a set period."
           ]
         },
@@ -271,6 +355,7 @@
     "logout": "Log out",
     "openSearch": "Search",
     "contact": "Contact",
+    "support": "Support Cinelier",
     "close": "Close",
     "newRecord": "Log"
   },

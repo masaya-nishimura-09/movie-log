@@ -62,6 +62,8 @@ describe("ログイン", () => {
       "/ja/records/1",
       "/ja/records/1/edit",
       "/ja/account",
+      "/ja/support",
+      "/ja/support/thanks",
     ]) {
       cy.visit(path);
       cy.location("pathname").should("eq", "/ja/login");

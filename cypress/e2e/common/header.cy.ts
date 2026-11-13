@@ -40,6 +40,7 @@ describe("ヘッダー", () => {
         ja.header.account,
         ja.header.about,
         ja.header.contact,
+        ja.header.support,
         ja.header.logout,
       ]);
     });

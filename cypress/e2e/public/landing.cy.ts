@@ -27,6 +27,7 @@ describe("トップページ", () => {
       [ja.about.link, "/ja/about"],
       [ja.register.termsLink, "/ja/terms"],
       [ja.register.privacyLink, "/ja/privacy"],
+      [ja.legal.commerceLink, "/ja/commerce"],
       [ja.contact.link, "/ja/contact"],
     ];
     for (const [label, path] of links) {
