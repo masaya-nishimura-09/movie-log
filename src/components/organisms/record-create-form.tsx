@@ -3,7 +3,8 @@
 import { Toast } from "@base-ui/react/toast";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { type MouseEvent, useEffect, useRef, useState } from "react";
+import { z } from "zod";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
@@ -16,12 +17,15 @@ import { useFormSubmit } from "@/hooks/use-form-submit";
 import { useMovieAssist } from "@/hooks/use-movie-assist";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import type { RecordFieldErrors } from "@/lib/record/field-error";
+import { readRecordForm } from "@/lib/record/read-record-form";
 import { convertWatchedAt } from "@/lib/record/watched-at";
 import { cn } from "@/lib/style/cn";
 import { dictMessage } from "@/lib/text/dict-message";
 import { interpolate } from "@/lib/text/interpolate";
 import type { MovieSuggestion, MovieValues } from "@/schemas/movie/movie";
 import type { RecordFormValues } from "@/schemas/record/record-form";
+import { recordInputSchema } from "@/schemas/record/record-input";
 
 type RecordCreateFormProps = {
   lang: Locale;
@@ -110,6 +114,8 @@ export function RecordCreateForm({
   }, [savedId, lang, dict.attachmentsUploadFailed]);
   const movie = useMovieAssist(values, getMovie);
   const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const [stepErrors, setStepErrors] = useState<RecordFieldErrors>();
+  const errors = stepErrors ?? failure?.errors;
 
   useEffect(() => {
     const fields = Object.keys(failure?.errors ?? {});
@@ -117,19 +123,40 @@ export function RecordCreateForm({
     if (steps.length > 0) setStep(Math.min(...steps));
   }, [failure]);
 
-  const goNext = () => {
-    const invalid = stepRefs.current[step]?.querySelector<HTMLInputElement>(
-      "input:invalid, textarea:invalid",
+  const goNext = (event: MouseEvent<HTMLButtonElement>) => {
+    const form = event.currentTarget.form;
+    if (!form) return;
+    const formData = new FormData(form);
+    convertWatchedAt(formData);
+    const result = recordInputSchema.safeParse(readRecordForm(formData));
+    const invalid: RecordFieldErrors = Object.fromEntries(
+      Object.entries(
+        result.success ? {} : z.flattenError(result.error).fieldErrors,
+      ).filter(([field]) => fieldSteps[field] === step),
     );
-    if (invalid) {
-      invalid.reportValidity();
+    const invalidFields = Object.keys(invalid);
+    if (invalidFields.length > 0) {
+      setStepErrors(invalid);
+      stepRefs.current[step]
+        ?.querySelector<HTMLElement>(
+          invalidFields.map((field) => `[name="${field}"]`).join(", "),
+        )
+        ?.focus();
       return;
     }
+    setStepErrors(undefined);
     setStep(step + 1);
   };
 
   return (
-    <form onSubmit={submit} noValidate className="flex w-full flex-1 flex-col">
+    <form
+      onSubmit={(event) => {
+        setStepErrors(undefined);
+        submit(event);
+      }}
+      noValidate
+      className="flex w-full flex-1 flex-col"
+    >
       <header className="flex flex-col gap-3.5 bg-background px-4 pt-4 pb-3.5 md:px-7 md:pt-5 md:pb-0">
         <ol className="flex gap-2">
           {steps.map((label, index) => (
@@ -182,7 +209,7 @@ export function RecordCreateForm({
             <RecordBasicsFields
               lang={lang}
               split
-              errors={failure?.errors}
+              errors={errors}
               title={movie.title}
               onTitleChange={movie.setTitle}
               searchMovies={searchMovies}
@@ -210,7 +237,7 @@ export function RecordCreateForm({
             </div>
             <RecordMovieFields
               split
-              errors={failure?.errors}
+              errors={errors}
               key={movie.version}
               lang={lang}
               values={movie.values}
@@ -237,7 +264,7 @@ export function RecordCreateForm({
               </span>
             </div>
             <RecordImpressionFields
-              errors={failure?.errors}
+              errors={errors}
               values={values}
               dict={dict}
               enums={enums}

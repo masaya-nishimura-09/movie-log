@@ -225,7 +225,8 @@ describe("記録の作成", () => {
     cy.visit("/ja/records/new");
     cy.contains("button", form.next).click();
     cy.get("li[aria-current=step]").should("contain.text", form.stepBasics);
-    cy.get("#title:invalid").should("exist");
+    cy.contains(form.errors.title).should("be.visible");
+    cy.focused().should("have.id", "title");
   });
 
   it("スコアとプラットフォームを選ばないと次のステップに進めない", () => {
@@ -233,6 +234,9 @@ describe("記録の作成", () => {
     cy.get("#title").type("未選択テスト");
     cy.contains("button", form.next).click();
     cy.get("li[aria-current=step]").should("contain.text", form.stepBasics);
+    cy.contains(form.errors.score).should("be.visible");
+    cy.contains(form.errors.platform).should("be.visible");
+    cy.contains(form.errors.title).should("not.exist");
   });
 
   it("公開年が範囲外だと次のステップに進めない", () => {
@@ -242,7 +246,8 @@ describe("記録の作成", () => {
     cy.get("#releaseYear").type("1800");
     cy.contains("button", form.next).click();
     cy.get("li[aria-current=step]").should("contain.text", form.stepMovieInfo);
-    cy.get("#releaseYear:invalid").should("exist");
+    cy.contains(form.errors.releaseYear).should("be.visible");
+    cy.focused().should("have.id", "releaseYear");
   });
 
   it("画像以外のファイルはアップロードできない", () => {
