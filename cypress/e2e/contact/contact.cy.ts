@@ -3,13 +3,15 @@ import ja from "../../../src/i18n/dictionaries/ja.json";
 const contact = ja.contact;
 
 describe("お問い合わせ", () => {
-  it("送信すると、受け付けたことを表示する", () => {
+  it("送信すると、受け付けたことだけを表示し、入力を促す説明を消す", () => {
     cy.visit("/ja/contact");
     cy.get("#email").type("user@example.com");
     cy.get("#message").type("E2E テストからの送信です");
     cy.contains("button", contact.submit).click();
-    cy.contains(contact.successTitle).should("be.visible");
+    cy.contains("h1", contact.successTitle).should("be.visible");
     cy.contains(contact.successText).should("be.visible");
+    cy.contains("h1", contact.title).should("not.exist");
+    cy.contains(contact.intro).should("not.exist");
   });
 
   it("内容が空だとエラーを表示する", () => {

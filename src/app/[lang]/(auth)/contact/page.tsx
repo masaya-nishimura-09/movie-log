@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { sendContactAction } from "@/actions/contact/send-contact";
-import { phrases } from "@/components/atoms/phrases";
 import { BackButton } from "@/components/molecules/back-button";
 import { ContactForm } from "@/components/organisms/contact-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -15,14 +14,6 @@ export default async function ContactPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-bold text-2xl text-foreground">
-          {dict.contact.title}
-        </h1>
-        <p className="text-[13px] text-foreground-sub leading-relaxed">
-          {phrases(dict.contact.intro)}
-        </p>
-      </header>
       <ContactForm
         lang={lang}
         siteKey={turnstileSiteKey()}
