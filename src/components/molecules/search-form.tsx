@@ -39,7 +39,7 @@ export function SearchForm({
         aria-label={label}
         placeholder={placeholder}
         maxLength={maxLength}
-        className="min-w-0 flex-1 bg-transparent text-foreground text-sm outline-none placeholder:text-placeholder"
+        className="min-w-0 flex-1 bg-transparent text-base text-foreground outline-none placeholder:text-placeholder md:text-sm"
       />
       {Object.entries(hidden).map(([key, value]) =>
         value === undefined || value === "" ? null : (
