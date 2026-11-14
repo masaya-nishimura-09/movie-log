@@ -71,7 +71,7 @@
   },
   "legal": {
     "updatedLabel": "Last updated",
-    "updated": "November 13, 2026",
+    "updated": "November 14, 2026",
     "contactLabel": "Contact form",
     "back": "Back",
     "commerceLink": "Commercial disclosure",
@@ -275,8 +275,8 @@
             "- Cloudflare Turnstile (United States): to block automated submissions of the login, sign-up, and contact forms, your IP address and browser information are sent to Cloudflare.",
             "- Resend (United States): to deliver your inquiry to the Operator by email, the email address and message you enter are sent to Resend.",
             "- Stripe (United States): to process support payments, Stripe handles the card number, email address and other details entered on its payment page. The Operator does not receive your card number.",
-            "We will add the provider and country of the server that stores account information, records, and uploaded images to this policy once it is decided.",
-            "Information on the personal data protection system of the United States is available on the website of Japan's Personal Information Protection Commission.",
+            "- Amazon Web Services (United States): the server that stores account information, records, uploaded images, and activity logs. The server is located in Australia.",
+            "Information on the personal data protection systems of the United States and Australia is available on the website of Japan's Personal Information Protection Commission.",
             "We do not use external services for advertising or analytics."
           ]
         },
@@ -293,6 +293,7 @@
           "h": "6. Retention and deletion",
           "p": [
             "Account information and records are kept until you delete your account. When you do, your account information, records and uploaded images are deleted.",
+            "However, information remaining in database backups is deleted 30 days after the backup is created.",
             "Contact information is kept as long as needed to answer the inquiry and deleted once it is no longer needed.",
             "Records of support payments are kept by Stripe and are not deleted when you delete your account.",
             "Activity logs are deleted after a set period."
@@ -303,7 +304,9 @@
           "p": [
             "The Operator works to prevent leaks, loss and damage of the information.",
             "Passwords are stored in a form that cannot be turned back into the original text.",
-            "Communication with the Service is encrypted (HTTPS)."
+            "Communication with the Service is encrypted (HTTPS).",
+            "The Amazon Web Services server listed in \"4. External services\" is provided by a United States company and is located in Australia. The Operator takes security measures based on an understanding of the personal data protection systems of the United States and Australia.",
+            "Anyone who knows the URL of an uploaded image can view it without logging in. The URLs are hard to guess, but please do not share them with others."
           ]
         },
         {
