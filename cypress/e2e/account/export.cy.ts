@@ -10,7 +10,17 @@ describe("データの書き出し", () => {
     cy.createRecord(title);
     cy.visit("/ja/account");
     cy.contains("h2", account.exportTitle).should("be.visible");
+    cy.intercept({ method: "POST", url: "/ja/account" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
     cy.contains("button", account.exportAction).click();
+    cy.contains("button", account.exporting)
+      .should("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.contains("button", account.exportNotesAction).should("be.disabled");
     const today = new Date().toLocaleDateString("sv-SE");
     cy.readFile(
       `${Cypress.config("downloadsFolder")}/cinelier-records-${today}.csv`,

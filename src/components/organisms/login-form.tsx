@@ -77,7 +77,8 @@ export function LoginForm({
         type="submit"
         size="lg"
         className="mt-1 w-full"
-        disabled={pending}
+        pending={pending}
+        pendingLabel={dict.submitting}
       >
         {dict.submit}
       </Button>

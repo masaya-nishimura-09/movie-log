@@ -211,6 +211,40 @@ describe("記録の詳細", () => {
       section().contains(detail.attachmentsAdd).should("be.visible");
     });
 
+    it("削除中は、ボタンを削除中にし、大きく表示した画面も閉じない", () => {
+      cy.createRecord(`E2E 添付削除中 ${Date.now()}`);
+      section()
+        .find("input[type=file]")
+        .selectFile("cypress/fixtures/poster.png", { force: true });
+      thumbnails().should("have.length", 1).first().click();
+      cy.get(`[role=dialog] button[aria-label="${detail.attachmentDelete}"]`)
+        .should("be.visible")
+        .click();
+      cy.location("pathname").then((path) => {
+        cy.intercept({ method: "POST", url: path }, (req) => {
+          req.on("response", (res) => {
+            res.setDelay(1500);
+          });
+        });
+      });
+      cy.contains(
+        "[role=alertdialog] button",
+        ja.deleteAttachment.confirm,
+      ).click();
+      cy.contains("[role=alertdialog] button", ja.deleteAttachment.deleting)
+        .should("be.disabled")
+        .and("have.attr", "aria-busy", "true")
+        .find("[data-spinner]")
+        .should("be.visible");
+      cy.get("[role=dialog]")
+        .contains("button", detail.attachmentClose)
+        .should("be.disabled");
+      cy.get("body").type("{esc}");
+      cy.get("[role=alertdialog]").should("be.visible");
+      cy.get("[role=dialog]").should("not.exist");
+      thumbnails().should("have.length", 0);
+    });
+
     it("削除の確認でキャンセルすると、添付は残る", () => {
       cy.createRecord(`E2E 添付やめる ${Date.now()}`);
       section()

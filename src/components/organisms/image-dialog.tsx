@@ -12,6 +12,7 @@ type ImageDialogProps = {
   onClose: () => void;
   title: ReactNode;
   closeLabel: string;
+  closeDisabled?: boolean;
   actions?: ReactNode;
   onKeyDown?: (event: KeyboardEvent) => void;
   finalFocus?: RefObject<HTMLElement | null>;
@@ -23,6 +24,7 @@ export function ImageDialog({
   onClose,
   title,
   closeLabel,
+  closeDisabled = false,
   actions,
   onKeyDown,
   finalFocus,
@@ -48,7 +50,10 @@ export function ImageDialog({
             </Dialog.Title>
             <div className="flex items-center gap-2">
               {actions}
-              <Dialog.Close className={imageDialogButton}>
+              <Dialog.Close
+                className={imageDialogButton}
+                disabled={closeDisabled}
+              >
                 <XIcon className="size-5" aria-hidden />
                 <span className="sr-only">{closeLabel}</span>
               </Dialog.Close>

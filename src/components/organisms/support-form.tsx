@@ -85,7 +85,12 @@ export function SupportForm({ action, dict }: SupportFormProps) {
       <p className="text-[13px] text-foreground-sub leading-relaxed">
         {phrases(dict.stripeNote)}
       </p>
-      <Button type="submit" size="lg" disabled={pending}>
+      <Button
+        type="submit"
+        size="lg"
+        pending={pending}
+        pendingLabel={dict.submitting}
+      >
         {dict.submit}
       </Button>
     </form>

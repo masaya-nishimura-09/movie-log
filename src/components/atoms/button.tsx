@@ -1,5 +1,7 @@
 import { Button as ButtonPrimitive } from "@base-ui/react/button";
 import { cva, type VariantProps } from "class-variance-authority";
+import type { ReactNode } from "react";
+import { PendingContent } from "@/components/atoms/pending-content";
 import { cn } from "@/lib/style/cn";
 
 const buttonStyles = cva(
@@ -50,13 +52,31 @@ function Button({
   className,
   variant = "default",
   size = "default",
+  pending = false,
+  pendingLabel,
+  disabled,
   ...props
-}: ButtonPrimitive.Props & VariantProps<typeof buttonVariants>) {
+}: ButtonPrimitive.Props &
+  VariantProps<typeof buttonVariants> & {
+    pending?: boolean;
+    pendingLabel?: ReactNode;
+  }) {
   return (
     <ButtonPrimitive
       data-slot="button"
       className={buttonVariants({ variant, size, className })}
       {...props}
+      disabled={disabled || pending}
+      aria-busy={pending || undefined}
+      {...(pending && {
+        children: (
+          <PendingContent
+            pending
+            label={props.children}
+            pendingLabel={pendingLabel}
+          />
+        ),
+      })}
     />
   );
 }

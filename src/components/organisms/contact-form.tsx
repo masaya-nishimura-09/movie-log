@@ -107,7 +107,7 @@ export function ContactForm({
           />
         </div>
         <TurnstileWidget lang={lang} siteKey={siteKey} failure={failure} />
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" pending={pending} pendingLabel={dict.submitting}>
           {dict.submit}
         </Button>
       </form>

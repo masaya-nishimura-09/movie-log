@@ -39,7 +39,7 @@ export function ExportSection({
   releaseYearTemplate,
 }: ExportSectionProps) {
   const [failed, setFailed] = useState(false);
-  const [pending, startTransition] = useTransition();
+  const [, startTransition] = useTransition();
   const [running, setRunning] = useState<"records" | "notes">();
   const today = () => new Date().toLocaleDateString("sv-SE");
 
@@ -92,20 +92,24 @@ export function ExportSection({
         <Button
           variant="outline"
           size="sm"
-          disabled={pending}
+          pending={running === "records"}
+          pendingLabel={dict.exporting}
+          disabled={running !== undefined}
           onClick={() => run("records")}
         >
           <Download className="size-4" aria-hidden />
-          {running === "records" ? dict.exporting : dict.exportAction}
+          {dict.exportAction}
         </Button>
         <Button
           variant="outline"
           size="sm"
-          disabled={pending}
+          pending={running === "notes"}
+          pendingLabel={dict.exporting}
+          disabled={running !== undefined}
           onClick={() => run("notes")}
         >
           <Download className="size-4" aria-hidden />
-          {running === "notes" ? dict.exporting : dict.exportNotesAction}
+          {dict.exportNotesAction}
         </Button>
       </div>
       {failed && (

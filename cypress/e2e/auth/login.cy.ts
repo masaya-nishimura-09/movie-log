@@ -69,4 +69,22 @@ describe("ログイン", () => {
       cy.location("pathname").should("eq", "/ja/login");
     }
   });
+
+  it("ログイン中は、ボタンをログイン中にして回転するアイコンを出し、押せなくする", () => {
+    cy.visit("/ja/login");
+    cy.get("#email").type(demoAccount.email);
+    cy.get("#password").type(demoAccount.password);
+    cy.intercept({ method: "POST", url: "/ja/login" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
+    cy.contains("button", ja.login.submit).click();
+    cy.contains("button", ja.login.submitting)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.location("pathname").should("eq", "/ja/records");
+  });
 });

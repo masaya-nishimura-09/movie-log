@@ -32,7 +32,11 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
       <p className="text-[13px] text-foreground-sub">
         {phrases(dict.withdrawDescription)}
       </p>
-      <AlertDialog>
+      <AlertDialog
+        onOpenChange={(open, details) => {
+          if (!open && pending) details.cancel();
+        }}
+      >
         <AlertDialogTrigger
           render={<Button variant="destructive" size="sm" className="mt-2" />}
         >
@@ -53,12 +57,15 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
             </p>
           )}
           <AlertDialogFooter>
-            <AlertDialogCancel>{dict.withdrawCancel}</AlertDialogCancel>
+            <AlertDialogCancel disabled={pending}>
+              {dict.withdrawCancel}
+            </AlertDialogCancel>
             <form action={formAction}>
               <Button
                 type="submit"
                 variant="danger"
-                disabled={pending}
+                pending={pending}
+                pendingLabel={dict.withdrawing}
                 className="w-full"
               >
                 {dict.withdrawConfirm}

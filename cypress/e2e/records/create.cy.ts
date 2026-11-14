@@ -349,6 +349,9 @@ describe("記録の作成（候補とアップロード）", () => {
       },
     );
     cy.contains(form.uploadingPoster).should("be.visible");
+    cy.contains("label", form.uploadingPoster)
+      .find("[data-spinner]")
+      .should("be.visible");
     cy.get("input[type=file]:not([multiple])").should("be.disabled");
     cy.contains(form.uploadPoster).should("be.visible");
   });
@@ -391,5 +394,25 @@ describe("記録の作成（候補とアップロード）", () => {
     cy.contains("button", form.save).click();
     cy.contains("[role=alert]", form.unexpectedError).should("be.visible");
     cy.location("pathname").should("eq", "/ja/records/new");
+  });
+
+  it("保存中は、ボタンを保存中にして回転するアイコンを出し、押せなくする", () => {
+    cy.visit("/ja/records/new");
+    cy.fillRecordBasics(`E2E 作成中 ${Date.now()}`, { score: 3 });
+    cy.contains("button", form.next).click();
+    cy.get("#releaseYear").type("2020");
+    cy.contains("button", form.next).click();
+    cy.intercept({ method: "POST", url: "/ja/records/new" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
+    cy.contains("button", form.save).click();
+    cy.contains("button", form.saving)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
   });
 });

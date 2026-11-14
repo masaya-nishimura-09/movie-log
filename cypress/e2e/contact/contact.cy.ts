@@ -83,4 +83,22 @@ describe("お問い合わせ", () => {
     cy.get("#email").should("have.value", "not-an-email");
     cy.get("#message").should("have.value", "消えてほしくない本文");
   });
+
+  it("送信中は、ボタンを送信中にして回転するアイコンを出し、押せなくする", () => {
+    cy.visit("/ja/contact");
+    cy.get("#email").type("user@example.com");
+    cy.get("#message").type("E2E テストからの送信です");
+    cy.intercept({ method: "POST", url: "/ja/contact" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
+    cy.contains("button", contact.submit).click();
+    cy.contains("button", contact.submitting)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.contains("h1", contact.successTitle).should("be.visible");
+  });
 });

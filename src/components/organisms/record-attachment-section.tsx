@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type ChangeEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { MaskingTape } from "@/components/atoms/masking-tape";
+import { PendingContent } from "@/components/atoms/pending-content";
 import { phrases } from "@/components/atoms/phrases";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { InfoTip } from "@/components/molecules/info-tip";
@@ -59,8 +60,13 @@ export function RecordAttachmentSection({
 
   const addButton = add && attachments.length < maxAttachments && (
     <label className="flex aspect-[210/297] cursor-pointer flex-col items-center justify-center gap-1.5 rounded-[2px] border border-dashed px-2 text-center text-muted-foreground text-xs outline-none transition-colors hover:text-foreground has-disabled:cursor-default has-disabled:opacity-50 has-focus-visible:ring-2 has-focus-visible:ring-ring">
-      <Plus className="size-4.5" aria-hidden />
-      {pending ? dict.attachmentsUploading : dict.attachmentsAdd}
+      <PendingContent
+        pending={pending}
+        icon={<Plus className="size-4.5" aria-hidden />}
+        iconClassName="size-4.5"
+        label={dict.attachmentsAdd}
+        pendingLabel={dict.attachmentsUploading}
+      />
       <input
         type="file"
         accept={posterContentTypes.join(",")}

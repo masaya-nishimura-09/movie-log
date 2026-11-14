@@ -87,7 +87,6 @@ export function RecordCreateForm({
     convertWatchedAt,
   );
   const [files, setFiles] = useState<File[]>([]);
-  const [uploading, setUploading] = useState(false);
   const router = useRouter();
   const toastManager = Toast.useToastManager();
   const savedId = state?.success ? state.data : undefined;
@@ -99,7 +98,6 @@ export function RecordCreateForm({
   useEffect(() => {
     if (savedId === undefined) return;
     const { router, toastManager, addAttachment } = afterSave.current;
-    setUploading(true);
     (async () => {
       let ok = true;
       for (const file of pendingFiles.current) {
@@ -301,10 +299,11 @@ export function RecordCreateForm({
           <Button
             key="save"
             type="submit"
-            disabled={pending || savedId !== undefined}
+            pending={pending || savedId !== undefined}
+            pendingLabel={dict.saving}
             className="ml-auto h-12 flex-1 md:h-11 md:flex-none md:px-4.5"
           >
-            {uploading ? dict.uploadingAttachments : dict.save}
+            {dict.save}
           </Button>
         )}
       </footer>

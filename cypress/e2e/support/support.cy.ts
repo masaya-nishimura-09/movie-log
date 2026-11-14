@@ -81,4 +81,21 @@ describe("応援", () => {
       cy.location("pathname").should("eq", "/ja/support");
     }
   });
+
+  it("支払いへ進む途中は、ボタンの文言を変えて回転するアイコンを出し、押せなくする", () => {
+    cy.visit("/ja/support");
+    choose("500円");
+    cy.intercept({ method: "POST", url: "/ja/support" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
+    cy.contains("button", support.submit).click();
+    cy.contains("button", support.submitting)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.location("pathname").should("eq", "/ja/support/thanks");
+  });
 });

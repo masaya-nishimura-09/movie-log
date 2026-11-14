@@ -189,4 +189,48 @@ describe("退会", () => {
       cy.location("pathname").should("eq", "/ja/account");
     });
   });
+
+  it("保存中は、ボタンを保存中にして回転するアイコンを出し、押せなくする", () => {
+    cy.register().then(({ username }) => {
+      cy.visit("/ja/account");
+      cy.get("#username").clear().type(`${username}-pending`);
+      cy.intercept({ method: "POST", url: "/ja/account" }, (req) => {
+        req.on("response", (res) => {
+          res.setDelay(1500);
+        });
+      });
+      section(account.usernameTitle).contains("button", account.save).click();
+      section(account.usernameTitle)
+        .contains("button", account.saving)
+        .should("be.disabled")
+        .and("have.attr", "aria-busy", "true")
+        .find("[data-spinner]")
+        .should("be.visible");
+      cy.contains(account.saved).should("be.visible");
+    });
+  });
+
+  it("退会中は、ボタンを退会処理中にして回転するアイコンを出し、ダイアログを閉じない", () => {
+    cy.register().then(() => {
+      cy.visit("/ja/account");
+      cy.intercept({ method: "POST", url: "/ja/account" }, (req) => {
+        req.on("response", (res) => {
+          res.setDelay(1500);
+        });
+      });
+      cy.contains("button", account.withdrawAction).click();
+      cy.contains("[role=alertdialog] button", account.withdrawConfirm).click();
+      cy.contains("[role=alertdialog] button", account.withdrawing)
+        .should("be.disabled")
+        .and("have.attr", "aria-busy", "true")
+        .find("[data-spinner]")
+        .should("be.visible");
+      cy.contains("[role=alertdialog] button", account.withdrawCancel).should(
+        "be.disabled",
+      );
+      cy.get("body").type("{esc}");
+      cy.get("[role=alertdialog]").should("be.visible");
+      cy.location("pathname").should("eq", "/ja/register");
+    });
+  });
 });

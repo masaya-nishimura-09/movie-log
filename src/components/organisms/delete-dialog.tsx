@@ -1,7 +1,7 @@
 "use client";
 
 import { Trash2 } from "lucide-react";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { phrases } from "@/components/atoms/phrases";
@@ -22,10 +22,12 @@ type DeleteDialogProps = {
   triggerLabel: string;
   triggerClassName?: string;
   iconOnly?: boolean;
+  onPendingChange?: (pending: boolean) => void;
   dict: {
     title: string;
     cancel: string;
     confirm: string;
+    deleting: string;
     unexpectedError: string;
   };
 };
@@ -36,12 +38,21 @@ export function DeleteDialog({
   triggerLabel,
   triggerClassName,
   iconOnly = false,
+  onPendingChange,
   dict,
 }: DeleteDialogProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
 
+  useEffect(() => {
+    onPendingChange?.(pending);
+  }, [pending, onPendingChange]);
+
   return (
-    <AlertDialog>
+    <AlertDialog
+      onOpenChange={(open, details) => {
+        if (!open && pending) details.cancel();
+      }}
+    >
       <AlertDialogTrigger
         render={
           <Button
@@ -70,12 +81,15 @@ export function DeleteDialog({
           </p>
         )}
         <AlertDialogFooter>
-          <AlertDialogCancel>{dict.cancel}</AlertDialogCancel>
+          <AlertDialogCancel disabled={pending}>
+            {dict.cancel}
+          </AlertDialogCancel>
           <form action={formAction}>
             <Button
               type="submit"
               variant="danger"
-              disabled={pending}
+              pending={pending}
+              pendingLabel={dict.deleting}
               className="w-full"
             >
               {dict.confirm}

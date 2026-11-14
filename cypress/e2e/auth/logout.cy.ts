@@ -9,7 +9,16 @@ describe("ログアウト", () => {
     cy.contains("button", ja.login.submit).click();
     cy.location("pathname").should("eq", "/ja/records");
     cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
+    cy.intercept({ method: "POST", url: "/ja/records" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
     cy.contains("[role=menuitem]", ja.header.logout).click();
+    cy.contains("[role=menuitem]", ja.header.loggingOut)
+      .should("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
     cy.location("pathname").should("eq", "/ja/login");
     cy.getCookie("access_token").should("be.null");
     cy.getCookie("refresh_token").should("be.null");

@@ -1,4 +1,4 @@
-import { Coffee, Info, LogOut, Mail, UserRound } from "lucide-react";
+import { Coffee, Info, Mail, UserRound } from "lucide-react";
 import Link from "next/link";
 import { logoutAction } from "@/actions/auth/logout";
 import {
@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/molecules/dropdown-menu";
+import { LogoutMenuItem } from "@/components/molecules/logout-menu-item";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 
@@ -48,14 +49,7 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
           {dict.support}
         </DropdownMenuItem>
         <form action={logoutAction.bind(null, lang)}>
-          <DropdownMenuItem
-            nativeButton
-            closeOnClick={false}
-            render={<button type="submit" className="w-full" />}
-          >
-            <LogOut aria-hidden />
-            {dict.logout}
-          </DropdownMenuItem>
+          <LogoutMenuItem label={dict.logout} pendingLabel={dict.loggingOut} />
         </form>
       </DropdownMenuContent>
     </DropdownMenu>

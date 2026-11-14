@@ -5,6 +5,7 @@ import { type ChangeEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { buttonVariants } from "@/components/atoms/button";
 import { Input } from "@/components/atoms/input";
+import { PendingContent } from "@/components/atoms/pending-content";
 import { cn } from "@/lib/style/cn";
 import { posterContentTypes } from "@/schemas/media/media";
 
@@ -64,8 +65,13 @@ export function PosterUrlField({
             "@md:w-auto w-full cursor-pointer has-disabled:cursor-default has-disabled:opacity-50",
           )}
         >
-          <Upload className="size-4" aria-hidden />
-          {pending ? uploadingLabel : uploadLabel}
+          <PendingContent
+            pending={pending}
+            icon={<Upload className="size-4" aria-hidden />}
+            iconClassName="size-4"
+            label={uploadLabel}
+            pendingLabel={uploadingLabel}
+          />
           <input
             type="file"
             accept={posterContentTypes.join(",")}

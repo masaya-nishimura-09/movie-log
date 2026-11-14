@@ -297,4 +297,23 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.contains("button", form.saveChanges).click();
     cy.contains("[role=alert]", form.notFound).should("be.visible");
   });
+
+  it("保存中は、ボタンを保存中にして回転するアイコンを出し、押せなくする", () => {
+    cy.createRecord(`E2E 保存中 ${Date.now()}`);
+    cy.contains("a", ja.recordDetail.edit).click();
+    cy.location("pathname").then((path) => {
+      cy.intercept({ method: "POST", url: path }, (req) => {
+        req.on("response", (res) => {
+          res.setDelay(1500);
+        });
+      });
+    });
+    cy.contains("button", ja.recordForm.saveChanges).click();
+    cy.contains("button", ja.recordForm.saving)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+  });
 });

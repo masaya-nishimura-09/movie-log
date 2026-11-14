@@ -71,4 +71,28 @@ describe("記録の削除", () => {
       .contains("[role=alert]", ja.deleteRecord.unexpectedError)
       .should("be.visible");
   });
+
+  it("削除中は、ボタンを削除中にして回転するアイコンを出し、キャンセルと Escape キーでは閉じない", () => {
+    cy.createRecord(`E2E 削除中 ${Date.now()}`);
+    cy.location("pathname").then((path) => {
+      cy.intercept({ method: "POST", url: path }, (req) => {
+        req.on("response", (res) => {
+          res.setDelay(1500);
+        });
+      });
+    });
+    cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.confirm).click();
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.deleting)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.contains("[role=alertdialog] button", ja.deleteRecord.cancel).should(
+      "be.disabled",
+    );
+    cy.get("body").type("{esc}");
+    cy.get("[role=alertdialog]").should("be.visible");
+    cy.location("pathname").should("eq", "/ja/records");
+  });
 });

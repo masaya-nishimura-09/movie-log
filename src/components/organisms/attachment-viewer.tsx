@@ -2,7 +2,7 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { type KeyboardEvent, type PointerEvent, useRef } from "react";
+import { type KeyboardEvent, type PointerEvent, useRef, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { DeleteDialog } from "@/components/organisms/delete-dialog";
 import {
@@ -39,8 +39,10 @@ export function AttachmentViewer({
   const hasPrev = index > 0;
   const hasNext = index < attachments.length - 1;
   const swipeStart = useRef<number>(undefined);
+  const [deleting, setDeleting] = useState(false);
 
   const move = (step: number) => {
+    if (deleting) return;
     const next = index + step;
     if (next >= 0 && next < attachments.length) onIndexChange(next);
   };
@@ -65,13 +67,16 @@ export function AttachmentViewer({
   return (
     <ImageDialog
       open={opened !== undefined}
-      onClose={onClose}
+      onClose={() => {
+        if (!deleting) onClose();
+      }}
       onKeyDown={onKeyDown}
       title={interpolate(dict.attachmentPosition, {
         number: index + 1,
         total: attachments.length,
       })}
       closeLabel={dict.attachmentClose}
+      closeDisabled={deleting}
       actions={
         remove &&
         opened && (
@@ -81,6 +86,7 @@ export function AttachmentViewer({
             triggerLabel={dict.attachmentDelete}
             triggerClassName={cn(imageDialogButton, "h-10 p-0 shadow-none")}
             iconOnly
+            onPendingChange={setDeleting}
             dict={deleteDict}
           />
         )
@@ -110,7 +116,7 @@ export function AttachmentViewer({
               <button
                 type="button"
                 onClick={() => move(-1)}
-                disabled={!hasPrev}
+                disabled={!hasPrev || deleting}
                 aria-label={dict.attachmentPrev}
                 className={cn(
                   imageDialogButton,
@@ -122,7 +128,7 @@ export function AttachmentViewer({
               <button
                 type="button"
                 onClick={() => move(1)}
-                disabled={!hasNext}
+                disabled={!hasNext || deleting}
                 aria-label={dict.attachmentNext}
                 className={cn(
                   imageDialogButton,

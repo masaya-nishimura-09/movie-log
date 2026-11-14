@@ -76,7 +76,6 @@ export function RecordEditForm({
   const movie = useMovieAssist(values, getMovie);
   const [kept, setKept] = useState(attachments);
   const [files, setFiles] = useState<File[]>([]);
-  const [uploading, setUploading] = useState(false);
   const router = useRouter();
   const toastManager = Toast.useToastManager();
   const saved = state?.success === true;
@@ -95,7 +94,6 @@ export function RecordEditForm({
     const { router, toastManager, addAttachment, deleteAttachment } =
       afterSave.current;
     const { attachments, kept, files } = changes.current;
-    setUploading(true);
     (async () => {
       let ok = true;
       for (const attachment of attachments) {
@@ -180,8 +178,12 @@ export function RecordEditForm({
         >
           {dict.cancel}
         </Link>
-        <Button type="submit" disabled={pending || saved}>
-          {uploading ? dict.uploadingAttachments : dict.saveChanges}
+        <Button
+          type="submit"
+          pending={pending || saved}
+          pendingLabel={dict.saving}
+        >
+          {dict.saveChanges}
         </Button>
       </div>
     </form>

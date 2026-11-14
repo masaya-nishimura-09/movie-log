@@ -70,7 +70,8 @@ export function AccountFormCard({
         </Button>
         <Button
           type="submit"
-          disabled={pending}
+          pending={pending}
+          pendingLabel={dict.saving}
           className="h-12 flex-1 md:h-11 md:flex-none"
         >
           {dict.save}

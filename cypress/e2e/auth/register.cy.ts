@@ -69,4 +69,25 @@ describe("新規登録", () => {
     cy.contains("a", ja.register.toLogin).click();
     cy.location("pathname").should("eq", "/ja/login");
   });
+
+  it("登録中は、ボタンを登録中にして回転するアイコンを出し、押せなくする", () => {
+    const id = `${Date.now()}`;
+    cy.visit("/ja/register");
+    cy.get("#username").type(`pending${id}`);
+    cy.get("#email").type(`pending${id}@example.com`);
+    cy.get("#password").type("password123");
+    cy.get("input[name=agreedToTerms]").check();
+    cy.intercept({ method: "POST", url: "/ja/register" }, (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1500);
+      });
+    });
+    cy.contains("button", ja.register.submit).click();
+    cy.contains("button", ja.register.submitting)
+      .should("be.disabled")
+      .and("have.attr", "aria-busy", "true")
+      .find("[data-spinner]")
+      .should("be.visible");
+    cy.location("pathname").should("eq", "/ja/records");
+  });
 });
