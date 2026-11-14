@@ -17,6 +17,7 @@ import { TextLink } from "@/components/atoms/text-link";
 import { NoteSheet } from "@/components/molecules/note-sheet";
 import { RecordDetailTabs } from "@/components/molecules/record-detail-tabs";
 import { RecordPoster } from "@/components/molecules/record-poster";
+import { PosterViewer } from "@/components/organisms/poster-viewer";
 import { RecordAttachmentSection } from "@/components/organisms/record-attachment-section";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
@@ -239,16 +240,31 @@ export function RecordDetail({
     </>
   );
 
+  const poster = (
+    <RecordPoster
+      posterUrl={record.posterUrl}
+      noPosterLabel={dict.recordCard.noPoster}
+      sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
+      className="rounded-[3px] shadow-[0_10px_24px_-12px_rgb(10_41_71/0.55)]"
+    />
+  );
+
   return (
     <article className="mx-auto grid w-full 3xl:grid-cols-[minmax(180px,min(520px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] gap-6 px-4 pt-5 pb-10 md:grid-cols-[232px_minmax(0,1fr)] md:gap-9 md:px-10 md:pt-8 xl:grid-cols-[minmax(180px,min(320px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)] 2xl:grid-cols-[minmax(180px,min(440px,calc((100svh_-_330px)*2/3)))_minmax(0,1fr)]">
       <div className="flex gap-4 md:flex-col md:gap-5">
         <div className="relative w-29 shrink-0 self-start pt-1.5 md:w-full md:self-auto md:pt-2.5">
-          <RecordPoster
-            posterUrl={record.posterUrl}
-            noPosterLabel={dict.recordCard.noPoster}
-            sizes="(min-width: 1920px) 520px, (min-width: 1536px) 440px, (min-width: 1280px) 320px, (min-width: 768px) 232px, 116px"
-            className="rounded-[3px] shadow-[0_10px_24px_-12px_rgb(10_41_71/0.55)]"
-          />
+          {record.posterUrl === "" ? (
+            poster
+          ) : (
+            <PosterViewer
+              posterUrl={record.posterUrl}
+              title={record.title}
+              openLabel={d.posterOpen}
+              closeLabel={d.attachmentClose}
+            >
+              {poster}
+            </PosterViewer>
+          )}
           <MaskingTape className="top-0 h-3.5 w-11 md:top-0 md:h-5.5 md:w-24 2xl:w-32" />
         </div>
         <div className="flex min-w-0 flex-col gap-3 md:hidden">

@@ -1,11 +1,14 @@
 "use client";
 
-import { Dialog } from "@base-ui/react/dialog";
-import { ChevronLeft, ChevronRight, XIcon } from "lucide-react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { type KeyboardEvent, type PointerEvent, useRef } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { DeleteDialog } from "@/components/organisms/delete-dialog";
+import {
+  ImageDialog,
+  imageDialogButton,
+} from "@/components/organisms/image-dialog";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
@@ -22,9 +25,6 @@ type AttachmentViewerProps = {
 };
 
 const swipeDistance = 50;
-
-const roundButton =
-  "grid size-10 shrink-0 place-items-center rounded-full bg-white/10 text-background outline-none transition-colors hover:bg-white/20 focus-visible:ring-2 focus-visible:ring-background/70 disabled:pointer-events-none disabled:opacity-30";
 
 export function AttachmentViewer({
   attachments,
@@ -63,94 +63,78 @@ export function AttachmentViewer({
   };
 
   return (
-    <Dialog.Root
+    <ImageDialog
       open={opened !== undefined}
-      onOpenChange={(open) => {
-        if (!open) onClose();
-      }}
+      onClose={onClose}
+      onKeyDown={onKeyDown}
+      title={interpolate(dict.attachmentPosition, {
+        number: index + 1,
+        total: attachments.length,
+      })}
+      closeLabel={dict.attachmentClose}
+      actions={
+        remove &&
+        opened && (
+          <DeleteDialog
+            action={() => remove(opened.attachmentId)}
+            description={deleteDict.description}
+            triggerLabel={dict.attachmentDelete}
+            triggerClassName={cn(imageDialogButton, "h-10 p-0 shadow-none")}
+            iconOnly
+            dict={deleteDict}
+          />
+        )
+      }
     >
-      <Dialog.Portal>
-        <Dialog.Backdrop className="fixed inset-0 z-50 bg-[color-mix(in_oklab,var(--navy)_94%,transparent)] transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0 supports-backdrop-filter:backdrop-blur-sm" />
-        <Dialog.Popup
-          onKeyDown={onKeyDown}
-          className="fixed inset-0 z-50 flex flex-col outline-none transition-opacity duration-150 data-ending-style:opacity-0 data-starting-style:opacity-0"
-        >
-          {opened && (
-            <>
-              <div className="flex items-center justify-between gap-3 px-4 py-3 md:px-6 md:py-4">
-                <Dialog.Title className="font-medium text-background/80 text-sm tabular-nums">
-                  {interpolate(dict.attachmentPosition, {
-                    number: index + 1,
-                    total: attachments.length,
-                  })}
-                </Dialog.Title>
-                <div className="flex items-center gap-2">
-                  {remove && (
-                    <DeleteDialog
-                      action={() => remove(opened.attachmentId)}
-                      description={deleteDict.description}
-                      triggerLabel={dict.attachmentDelete}
-                      triggerClassName={cn(roundButton, "h-10 p-0 shadow-none")}
-                      iconOnly
-                      dict={deleteDict}
-                    />
-                  )}
-                  <Dialog.Close className={roundButton}>
-                    <XIcon className="size-5" aria-hidden />
-                    <span className="sr-only">{dict.attachmentClose}</span>
-                  </Dialog.Close>
-                </div>
-              </div>
-
-              <div
-                className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4 md:px-24 md:pb-12"
-                onPointerDown={onPointerDown}
-                onPointerUp={onPointerUp}
+      {opened && (
+        <>
+          <div
+            className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4 md:px-24 md:pb-12"
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+          >
+            <Image
+              key={opened.attachmentId}
+              src={opened.imageUrl}
+              alt=""
+              width={1600}
+              height={2263}
+              unoptimized
+              sizes="100vw"
+              draggable={false}
+              className="h-auto max-h-full w-auto max-w-full select-none rounded-lg object-contain shadow-[0_24px_60px_-20px_rgb(0_0_0/0.6)]"
+            />
+          </div>
+          {attachments.length > 1 && (
+            <div className="flex justify-center gap-6 pb-6 md:contents">
+              <button
+                type="button"
+                onClick={() => move(-1)}
+                disabled={!hasPrev}
+                aria-label={dict.attachmentPrev}
+                className={cn(
+                  imageDialogButton,
+                  "md:fixed md:top-1/2 md:left-6 md:size-12 md:-translate-y-1/2",
+                )}
               >
-                <Image
-                  key={opened.attachmentId}
-                  src={opened.imageUrl}
-                  alt=""
-                  width={1600}
-                  height={2263}
-                  unoptimized
-                  sizes="100vw"
-                  draggable={false}
-                  className="h-auto max-h-full w-auto max-w-full select-none rounded-lg object-contain shadow-[0_24px_60px_-20px_rgb(0_0_0/0.6)]"
-                />
-              </div>
-              {attachments.length > 1 && (
-                <div className="flex justify-center gap-6 pb-6 md:contents">
-                  <button
-                    type="button"
-                    onClick={() => move(-1)}
-                    disabled={!hasPrev}
-                    aria-label={dict.attachmentPrev}
-                    className={cn(
-                      roundButton,
-                      "md:fixed md:top-1/2 md:left-6 md:size-12 md:-translate-y-1/2",
-                    )}
-                  >
-                    <ChevronLeft className="size-6" aria-hidden />
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => move(1)}
-                    disabled={!hasNext}
-                    aria-label={dict.attachmentNext}
-                    className={cn(
-                      roundButton,
-                      "md:fixed md:top-1/2 md:right-6 md:size-12 md:-translate-y-1/2",
-                    )}
-                  >
-                    <ChevronRight className="size-6" aria-hidden />
-                  </button>
-                </div>
-              )}
-            </>
+                <ChevronLeft className="size-6" aria-hidden />
+              </button>
+              <button
+                type="button"
+                onClick={() => move(1)}
+                disabled={!hasNext}
+                aria-label={dict.attachmentNext}
+                className={cn(
+                  imageDialogButton,
+                  "md:fixed md:top-1/2 md:right-6 md:size-12 md:-translate-y-1/2",
+                )}
+              >
+                <ChevronRight className="size-6" aria-hidden />
+              </button>
+            </div>
           )}
-        </Dialog.Popup>
-      </Dialog.Portal>
-    </Dialog.Root>
+        </>
+      )}
+    </ImageDialog>
   );
 }

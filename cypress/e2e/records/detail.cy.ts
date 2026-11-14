@@ -90,6 +90,38 @@ describe("記録の詳細", () => {
     });
   }
 
+  describe("ポスター", () => {
+    const posterButton = () =>
+      cy.get(`main button[aria-label="${detail.posterOpen}"]`);
+
+    it("ポスターを押すと大きく表示し、閉じるで戻る", () => {
+      cy.visit("/ja/records/1");
+      posterButton().click();
+      cy.get("[role=dialog]").within(() => {
+        cy.contains("h2", "勝手にしやがれ").should("be.visible");
+        cy.get("img[src*='image.tmdb.org']").should("be.visible");
+        cy.get("button").contains(detail.attachmentClose).click({
+          force: true,
+        });
+      });
+      cy.get("[role=dialog]").should("not.exist");
+    });
+
+    it("Escape キーで閉じる", () => {
+      cy.visit("/ja/records/1");
+      posterButton().click();
+      cy.get("[role=dialog]").should("be.visible");
+      cy.focused().type("{esc}");
+      cy.get("[role=dialog]").should("not.exist");
+    });
+
+    it("ポスターがない記録では、ポスターを押せない", () => {
+      cy.createRecord(`E2E ポスターなし ${Date.now()}`);
+      cy.get("main h1:visible").should("contain", "E2E ポスターなし");
+      posterButton().should("not.exist");
+    });
+  });
+
   describe("添付", () => {
     const section = () =>
       cy.contains("main h2", detail.attachments).closest("section");

@@ -470,6 +470,7 @@
     "attachmentsUploading": "アップロード中",
     "attachmentsUploadError": "添付できませんでした。JPEG・PNG・WebP の5MBまでです",
     "attachmentClose": "閉じる",
+    "posterOpen": "ポスターを拡大する",
     "attachmentDelete": "削除",
     "attachmentPosition": "{number} / {total}",
     "attachmentPrev": "前の画像",

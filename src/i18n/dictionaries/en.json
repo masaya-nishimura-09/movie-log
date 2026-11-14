@@ -472,6 +472,7 @@
     "attachmentsUploading": "Uploading",
     "attachmentsUploadError": "Couldn't attach. Use a JPEG, PNG, or WebP up to 5 MB",
     "attachmentClose": "Close",
+    "posterOpen": "Enlarge poster",
     "attachmentDelete": "Delete",
     "attachmentPosition": "{number} / {total}",
     "attachmentPrev": "Previous image",
