@@ -3,6 +3,10 @@ import { longDate } from "../../support/text";
 
 const form = ja.recordForm;
 
+function openTab(label: string) {
+  cy.contains("[role=tab]", label).click();
+}
+
 describe("記録の編集", () => {
   beforeEach(() => {
     cy.login();
@@ -43,6 +47,7 @@ describe("記録の編集", () => {
       .contains("label", "2")
       .click();
     cy.contains("label", ja.enums.platform.hulu).click();
+    openTab(form.stepMovieInfo);
     cy.get("#originalTitle").clear().type("The Matrix");
     cy.get("#overview").clear().type("仮想現実から目覚める話。");
     cy.get("#releaseYear").clear().type("1999");
@@ -53,6 +58,7 @@ describe("記録の編集", () => {
     cy.contains("label", ja.enums.genre.action).click();
     cy.get("input[name='credits.0.personName']").type("Lana Wachowski");
     cy.get("#posterUrl").clear().type("https://example.com/poster.jpg");
+    openTab(form.stepImpression);
     cy.contains("label", ja.enums.moodTag.tense).click();
     cy.get("[role=textbox]").click().type("2回目に観たときの感想");
     cy.contains("button", form.saveChanges).click();
@@ -79,6 +85,7 @@ describe("記録の編集", () => {
   it("サーバーで不正と判定された項目は、エラーを表示する", () => {
     cy.createRecord(`E2E 編集エラー ${Date.now()}`);
     cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepMovieInfo);
     cy.get("#releaseYear").clear().type("1800");
     cy.get("#posterUrl").clear().type("ftp://example.com/poster.jpg");
     cy.contains("button", form.saveChanges).click();
@@ -111,6 +118,7 @@ describe("記録の編集", () => {
     cy.contains("dd", "外す監督").should("exist");
 
     cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepMovieInfo);
     cy.contains("label", ja.enums.genre.drama).click();
     cy.get(`button[aria-label="${form.removeCredit}"]`).first().click();
     cy.contains("button", form.saveChanges).click();
@@ -134,6 +142,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
 
     cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepImpression);
     cy.get("form li img").should("have.length", 1);
     cy.get(
       `button[aria-label="${form.attachmentRemove.replace("{number}", "1")}"]`,
@@ -171,6 +180,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
 
     cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepImpression);
     cy.get("form li img").should("have.length", 3);
     cy.get("form input[type=file][multiple]").selectFile(
       Array.from({ length: 8 }, () => "cypress/fixtures/poster.png"),
@@ -198,6 +208,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
 
     cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepImpression);
     cy.get(
       `button[aria-label="${form.attachmentRemove.replace("{number}", "1")}"]`,
     ).click();
@@ -207,6 +218,53 @@ describe("記録の編集", () => {
       .closest("section")
       .find("img[src^='data:image/png']")
       .should("have.length", 1);
+  });
+
+  it("タブで、鑑賞情報、映画の情報、感想を切り替える", () => {
+    cy.visit("/ja/records/1/edit");
+    cy.contains("[role=tab]", form.stepBasics).should(
+      "have.attr",
+      "aria-selected",
+      "true",
+    );
+    cy.get("#title").should("be.visible");
+    cy.get("#releaseYear").should("not.be.visible");
+    openTab(form.stepMovieInfo);
+    cy.get("#releaseYear").should("be.visible");
+    cy.get("#title").should("not.be.visible");
+    openTab(form.stepImpression);
+    cy.get("[role=textbox]").should("be.visible");
+    cy.get("#releaseYear").should("not.be.visible");
+  });
+
+  it("住所の tab に知らない値を付けて開くと、鑑賞情報のタブを開く", () => {
+    for (const tab of ["constructor", "__proto__", "unknown"]) {
+      cy.visit(`/ja/records/1/edit?tab=${tab}`);
+      cy.contains("[role=tab]", form.stepBasics).should(
+        "have.attr",
+        "aria-selected",
+        "true",
+      );
+      cy.get("#title").should("be.visible");
+    }
+  });
+
+  it("ほかのタブの項目にエラーがあると、そのタブに印を付けて切り替える", () => {
+    cy.createRecord(`E2E タブのエラー ${Date.now()}`);
+    cy.contains("a", ja.recordDetail.edit).click();
+    openTab(form.stepMovieInfo);
+    cy.get("#releaseYear").clear().type("1800");
+    openTab(form.stepImpression);
+    cy.contains("button", form.saveChanges).click();
+    cy.contains("[role=tab]", form.stepMovieInfo)
+      .should("have.attr", "aria-selected", "true")
+      .and("contain.text", form.tabHasError);
+    cy.contains("[role=tab]", form.stepBasics).should(
+      "not.contain.text",
+      form.tabHasError,
+    );
+    cy.contains(form.errors.releaseYear).should("be.visible");
+    cy.get("#releaseYear").should("have.focus");
   });
 });
 
@@ -219,6 +277,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.createRecord(`E2E 全エラー ${Date.now()}`);
     cy.contains("a", ja.recordDetail.edit).click();
     cy.get("#title").clear();
+    openTab(form.stepMovieInfo);
     cy.get("#releaseYear").clear().type("1800");
     cy.get("#runtime").clear().type("1441");
     cy.get("#posterUrl").clear().type("ftp://example.com/poster.jpg");
@@ -293,6 +352,7 @@ describe("記録の編集（サーバー側の検証と失敗）", () => {
     cy.location("pathname").should("eq", "/ja/records");
     cy.go(-2);
     cy.location("pathname").should("match", /\/edit$/);
+    openTab(form.stepImpression);
     cy.get("[role=textbox]").click().type("削除後の保存");
     cy.contains("button", form.saveChanges).click();
     cy.contains("[role=alert]", form.notFound).should("be.visible");

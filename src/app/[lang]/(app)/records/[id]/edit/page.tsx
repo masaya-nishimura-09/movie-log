@@ -15,6 +15,7 @@ import { getRecordAttachments } from "@/api/record/get-record-attachments";
 import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { RecordEditForm } from "@/components/organisms/record-edit-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { isRecordStep } from "@/lib/record/field-step";
 import { maxReleaseYear, toFormValues } from "@/lib/record/to-form-values";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,8 +25,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function EditRecordPage({
   params,
+  searchParams,
 }: PageProps<"/[lang]/records/[id]/edit">) {
   const { id } = await params;
+  const { tab } = await searchParams;
+  const initialTab = isRecordStep(tab) ? tab : "basics";
   const [lang, dict, record, attachments] = await Promise.all([
     getLocale(),
     getDictionary(),
@@ -44,6 +48,7 @@ export default async function EditRecordPage({
         title={dict.recordForm.editTitle}
       />
       <RecordEditForm
+        initialTab={initialTab}
         lang={lang}
         action={updateRecordAction.bind(null, id)}
         attachments={attachments}

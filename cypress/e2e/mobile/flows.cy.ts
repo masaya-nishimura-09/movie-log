@@ -37,6 +37,7 @@ describe("スマホの画面での操作", () => {
     cy.get("h1:visible").should("have.text", title);
 
     cy.get(`a[href$="/edit"]:visible`).first().click();
+    cy.contains("[role=tab]", form.stepImpression).click();
     cy.get("[role=textbox]").click().type("スマホで編集");
     cy.contains("button", form.saveChanges).click();
     cy.contains("スマホで編集").should("be.visible");

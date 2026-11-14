@@ -289,8 +289,6 @@ for (const [lang, t] of locales) {
         cy.get("#releaseYear").type("2016");
         cy.contains("button", t.recordForm.next).click();
         shows(
-          t.recordForm.impressionHeading,
-          t.recordForm.optional,
           t.recordForm.moodTags,
           t.recordForm.moodTagsHint,
           t.recordForm.note,
@@ -305,8 +303,8 @@ for (const [lang, t] of locales) {
         cy.visit(`/${lang}/records/1/edit`);
         shows(
           t.recordForm.editTitle,
-          t.recordForm.watchSection,
-          t.recordForm.movieSection,
+          t.recordForm.stepBasics,
+          t.recordForm.stepMovieInfo,
           t.recordForm.stepImpression,
           t.recordForm.note,
           t.recordForm.attachments,

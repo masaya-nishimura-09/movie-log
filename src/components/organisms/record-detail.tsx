@@ -15,8 +15,8 @@ import { ScoreBadge } from "@/components/atoms/score-badge";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
 import { NoteSheet } from "@/components/molecules/note-sheet";
-import { RecordDetailTabs } from "@/components/molecules/record-detail-tabs";
 import { RecordPoster } from "@/components/molecules/record-poster";
+import { RecordTabs } from "@/components/molecules/record-tabs";
 import { PosterViewer } from "@/components/organisms/poster-viewer";
 import { RecordAttachmentSection } from "@/components/organisms/record-attachment-section";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -163,7 +163,9 @@ export function RecordDetail({
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
             {phrases(d.noteEmpty)}
-            <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
+            <TextLink
+              href={`/${lang}/records/${record.recordId}/edit?tab=impression`}
+            >
               {d.noteAdd}
             </TextLink>
           </p>
@@ -200,7 +202,9 @@ export function RecordDetail({
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
             {phrases(d.overviewEmpty)}
-            <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
+            <TextLink
+              href={`/${lang}/records/${record.recordId}/edit?tab=movie`}
+            >
               {d.overviewAdd}
             </TextLink>
           </p>
@@ -231,7 +235,9 @@ export function RecordDetail({
         ) : (
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-2xl border border-dashed px-5.5 py-5 text-[15px] text-muted-foreground 2xl:px-7 2xl:py-6 2xl:text-lg">
             {phrases(d.creditsEmpty)}
-            <TextLink href={`/${lang}/records/${record.recordId}/edit`}>
+            <TextLink
+              href={`/${lang}/records/${record.recordId}/edit?tab=movie`}
+            >
               {d.creditsAdd}
             </TextLink>
           </p>
@@ -343,7 +349,7 @@ export function RecordDetail({
           </div>
         </div>
 
-        <RecordDetailTabs
+        <RecordTabs
           tabs={[
             { value: "record", label: d.tabRecord, content: recordTab },
             { value: "movie", label: d.tabMovie, content: movieTab },

@@ -18,6 +18,7 @@ import { useMovieAssist } from "@/hooks/use-movie-assist";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import type { RecordFieldErrors } from "@/lib/record/field-error";
+import { errorSteps, recordFieldSteps } from "@/lib/record/field-step";
 import { readRecordForm } from "@/lib/record/read-record-form";
 import { convertWatchedAt } from "@/lib/record/watched-at";
 import { cn } from "@/lib/style/cn";
@@ -46,24 +47,6 @@ type RecordCreateFormProps = {
   enums: Dictionary["enums"];
   counterTemplate: string;
   editorDict: Dictionary["noteEditor"];
-};
-
-const fieldSteps: Record<string, number> = {
-  title: 0,
-  watchedAt: 0,
-  score: 0,
-  platform: 0,
-  originalTitle: 1,
-  overview: 1,
-  releaseYear: 1,
-  runtime: 1,
-  language: 1,
-  countries: 1,
-  genres: 1,
-  credits: 1,
-  posterUrl: 1,
-  moodTags: 2,
-  note: 2,
 };
 
 export function RecordCreateForm({
@@ -116,9 +99,8 @@ export function RecordCreateForm({
   const errors = stepErrors ?? failure?.errors;
 
   useEffect(() => {
-    const fields = Object.keys(failure?.errors ?? {});
-    const steps = fields.map((field) => fieldSteps[field] ?? 0);
-    if (steps.length > 0) setStep(Math.min(...steps));
+    const [first] = errorSteps(failure?.errors);
+    if (first !== undefined) setStep(first);
   }, [failure]);
 
   const goNext = (event: MouseEvent<HTMLButtonElement>) => {
@@ -130,7 +112,7 @@ export function RecordCreateForm({
     const invalid: RecordFieldErrors = Object.fromEntries(
       Object.entries(
         result.success ? {} : z.flattenError(result.error).fieldErrors,
-      ).filter(([field]) => fieldSteps[field] === step),
+      ).filter(([field]) => recordFieldSteps[field] === step),
     );
     const invalidFields = Object.keys(invalid);
     if (invalidFields.length > 0) {
@@ -225,9 +207,6 @@ export function RecordCreateForm({
             }}
             className="flex flex-col gap-4.5"
           >
-            <h2 className="font-bold text-base text-foreground">
-              {dict.stepMovieInfo}
-            </h2>
             <RecordMovieFields
               split
               errors={errors}
@@ -248,14 +227,6 @@ export function RecordCreateForm({
             }}
             className="flex flex-col gap-4.5"
           >
-            <div className="flex items-baseline gap-2">
-              <h2 className="font-bold text-base text-foreground">
-                {dict.impressionHeading}
-              </h2>
-              <span className="text-muted-foreground text-xs">
-                {dict.optional}
-              </span>
-            </div>
             <RecordImpressionFields
               errors={errors}
               values={values}

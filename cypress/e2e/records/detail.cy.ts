@@ -384,11 +384,18 @@ describe("記録の詳細", () => {
     height((value) => expect(value).to.eq(256));
   });
 
-  it("ノート、あらすじ、クレジットがない記録では、追加のリンクから編集画面に移る", () => {
+  it("ノート、あらすじ、クレジットがない記録では、追加のリンクから編集画面のその欄のタブに移る", () => {
     cy.createRecord(`E2E 空の詳細 ${Date.now()}`);
     cy.contains(detail.noteEmpty).should("be.visible");
+    const selectedTab = (label: string) =>
+      cy
+        .contains("[role=tab]", label)
+        .should("have.attr", "aria-selected", "true");
     cy.contains("a", detail.noteAdd).click();
     cy.location("pathname").should("match", /\/edit$/);
+    cy.location("search").should("eq", "?tab=impression");
+    selectedTab(ja.recordForm.stepImpression);
+    cy.get("[role=textbox]").should("be.visible");
     cy.go("back");
     openMovieTab();
     cy.contains("main h2", detail.originalTitle).should("not.exist");
@@ -396,10 +403,16 @@ describe("記録の詳細", () => {
     cy.contains(detail.creditsEmpty).should("be.visible");
     cy.contains("a", detail.overviewAdd).click();
     cy.location("pathname").should("match", /\/edit$/);
+    cy.location("search").should("eq", "?tab=movie");
+    selectedTab(ja.recordForm.stepMovieInfo);
+    cy.get("#overview").should("be.visible");
     cy.go("back");
     openMovieTab();
     cy.contains("a", detail.creditsAdd).click();
     cy.location("pathname").should("match", /\/edit$/);
+    cy.location("search").should("eq", "?tab=movie");
+    selectedTab(ja.recordForm.stepMovieInfo);
+    cy.get("input[name='credits.0.personName']").should("be.visible");
   });
 
   it("存在しない記録では、ページが見つからないことを表示する", () => {
