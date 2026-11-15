@@ -1,4 +1,5 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
+import { mockVerificationToken } from "@/api/mock/mock-user";
 import { fakeJwt } from "@/test/fake-jwt";
 
 let mockFetch: typeof import("@/api/mock/mock-fetch").mockFetch;
@@ -36,8 +37,12 @@ async function auth(email?: string, password?: string) {
 
 async function register(name = "tester", email = "tester@example.com") {
   await mockFetch(
-    "/users/register",
+    "/users/register?language=ja",
     post({ name, email, password: "password" }),
+  );
+  await mockFetch(
+    "/users/verify-email",
+    post({ token: mockVerificationToken(email) }),
   );
   return auth(email);
 }
@@ -118,28 +123,143 @@ describe("mockFetch: 認証", () => {
 });
 
 describe("mockFetch: ユーザー", () => {
-  it("registers a user and rejects a duplicate email", async () => {
+  it("registers an unverified user who cannot log in until verified", async () => {
     const created = await mockFetch(
-      "/users/register",
+      "/users/register?language=ja",
       post({
         name: "tester",
         email: "tester@example.com",
         password: "password",
       }),
     );
-    expect(created.status).toBe(201);
-    expect(await created.json()).toEqual({
-      user_id: "2",
-      username: "tester",
-      email: "tester@example.com",
-    });
-    const duplicate = await mockFetch(
-      "/users/register",
-      post({ name: "x", email: "demo@example.com", password: "password" }),
+    expect(created.status).toBe(204);
+    const unverified = await mockFetch(
+      "/auth/login",
+      post({ email: "tester@example.com", password: "password" }),
     );
-    expect(await duplicate.json()).toMatchObject({
-      code: "USER_ALREADY_EXISTS",
+    expect(unverified.status).toBe(403);
+    expect(await unverified.json()).toMatchObject({
+      code: "EMAIL_NOT_VERIFIED",
     });
+    const wrongPassword = await mockFetch(
+      "/auth/login",
+      post({ email: "tester@example.com", password: "wrong" }),
+    );
+    expect(wrongPassword.status).toBe(401);
+
+    const verified = await mockFetch(
+      "/users/verify-email",
+      post({ token: mockVerificationToken("tester@example.com") }),
+    );
+    expect(verified.status).toBe(204);
+    expect((await tokens("tester@example.com")).access_token).toBeDefined();
+  });
+
+  it("rejects registration without a supported language", async () => {
+    for (const path of ["/users/register", "/users/register?language=fr"]) {
+      const response = await mockFetch(
+        path,
+        post({ name: "x", email: "x@example.com", password: "password" }),
+      );
+      expect(response.status).toBe(400);
+    }
+  });
+
+  it("returns 204 for a verified email without changing the account", async () => {
+    const response = await mockFetch(
+      "/users/register?language=en",
+      post({ name: "x", email: "demo@example.com", password: "other-pass" }),
+    );
+    expect(response.status).toBe(204);
+    expect((await tokens()).access_token).toBeDefined();
+    expect((await tokens("demo@example.com", "other-pass")).code).toBe(
+      "INVALID_CREDENTIALS",
+    );
+  });
+
+  it("replaces an unverified account registered again with the same email", async () => {
+    await mockFetch(
+      "/users/register?language=ja",
+      post({ name: "first", email: "again@example.com", password: "first-pw" }),
+    );
+    await mockFetch(
+      "/users/register?language=ja",
+      post({
+        name: "second",
+        email: "again@example.com",
+        password: "second-pw",
+      }),
+    );
+    await mockFetch(
+      "/users/verify-email",
+      post({ token: mockVerificationToken("again@example.com") }),
+    );
+    const headers = await auth("again@example.com", "second-pw");
+    const current = await mockFetch("/users/", { headers });
+    expect(await current.json()).toEqual({
+      user_id: "2",
+      username: "second",
+      email: "again@example.com",
+    });
+  });
+
+  it("rejects an unknown, malformed or already used verification token", async () => {
+    await mockFetch(
+      "/users/register?language=ja",
+      post({ name: "x", email: "x@example.com", password: "password" }),
+    );
+    const token = mockVerificationToken("x@example.com");
+    expect(
+      (await mockFetch("/users/verify-email", post({ token }))).status,
+    ).toBe(204);
+    for (const body of [
+      { token },
+      { token: mockVerificationToken("nobody@example.com") },
+      { token: "broken" },
+      {},
+    ]) {
+      const response = await mockFetch("/users/verify-email", post(body));
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        code: "INVALID_VERIFICATION_TOKEN",
+      });
+    }
+  });
+
+  it("accepts a resend request for any valid email", async () => {
+    for (const email of ["demo@example.com", "nobody@example.com"]) {
+      const response = await mockFetch(
+        "/users/verify-email/resend?language=ja",
+        post({ email }),
+      );
+      expect(response.status).toBe(204);
+    }
+  });
+
+  it("rejects a resend request with an invalid email or language", async () => {
+    const invalidEmail = await mockFetch(
+      "/users/verify-email/resend?language=ja",
+      post({ email: "not-an-email" }),
+    );
+    expect(invalidEmail.status).toBe(400);
+    const noLanguage = await mockFetch(
+      "/users/verify-email/resend",
+      post({ email: "demo@example.com" }),
+    );
+    expect(noLanguage.status).toBe(400);
+  });
+
+  it("returns errors for the resend keywords", async () => {
+    const tooMany = await mockFetch(
+      "/users/verify-email/resend?language=ja",
+      post({ email: "__too_many__@example.com" }),
+    );
+    expect(tooMany.status).toBe(429);
+    const failed = await mockFetch(
+      "/users/verify-email/resend?language=ja",
+      post({ email: "__error__@example.com" }),
+    );
+    expect(failed.status).toBe(500);
   });
 
   it("gets and deletes the current user", async () => {

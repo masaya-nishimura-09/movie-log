@@ -1,7 +1,12 @@
 import { mockAttachments } from "@/api/mock/mock-attachments";
 import { mockNotes } from "@/api/mock/mock-notes";
 import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
-import { mockAccounts, toUserResponse } from "@/api/mock/mock-user";
+import {
+  emailFromVerificationToken,
+  mockAccounts,
+  toUserResponse,
+} from "@/api/mock/mock-user";
+import { hasLocale } from "@/i18n/locales";
 import { isTokenExpired } from "@/lib/auth/token-cookies";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
 import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
@@ -261,6 +266,7 @@ function login(init: RequestInit): Response {
   if (!account || account.password !== password) {
     return error(401, "INVALID_CREDENTIALS");
   }
+  if (!account.verified) return error(403, "EMAIL_NOT_VERIFIED");
   return issueTokens(account);
 }
 
@@ -303,19 +309,53 @@ function emailTaken(email: unknown, except?: Account): boolean {
   return mockAccounts.some((a) => a.email === email && a !== except);
 }
 
-function register(init: RequestInit): Response {
+function hasLanguage(params: URLSearchParams): boolean {
+  return hasLocale(params.get("language") ?? "");
+}
+
+function register(init: RequestInit, params: URLSearchParams): Response {
+  if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
   const { name, email, password } = readJson(init) as UserBody;
-  if (emailTaken(email)) return error(409, "USER_ALREADY_EXISTS");
-  const account: Account = {
+  const existing = mockAccounts.find((a) => a.email === email);
+  if (existing?.verified) return new Response(null, { status: 204 });
+  if (existing) {
+    existing.username = String(name);
+    existing.password = String(password);
+    return new Response(null, { status: 204 });
+  }
+  mockAccounts.push({
     user_id: String(
       Math.max(0, ...mockAccounts.map((a) => Number(a.user_id))) + 1,
     ),
     username: String(name),
     email: String(email),
     password: String(password),
-  };
-  mockAccounts.push(account);
-  return Response.json(toUserResponse(account), { status: 201 });
+    verified: false,
+  });
+  return new Response(null, { status: 204 });
+}
+
+function verifyEmail(init: RequestInit): Response {
+  const email = emailFromVerificationToken(readJson(init).token);
+  const account = mockAccounts.find((a) => a.email === email && !a.verified);
+  if (!account) return error(400, "INVALID_VERIFICATION_TOKEN");
+  account.verified = true;
+  return new Response(null, { status: 204 });
+}
+
+function resendVerificationEmail(
+  init: RequestInit,
+  params: URLSearchParams,
+): Response {
+  if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
+  const { email } = readJson(init);
+  if (typeof email !== "string" || !email.includes("@")) {
+    return error(400, "INVALID_INPUT");
+  }
+  const localPart = email.split("@")[0];
+  if (localPart === errorKeyword) return error(500, "INTERNAL_SERVER_ERROR");
+  if (localPart === tooManyKeyword) return error(429, "TOO_MANY_REQUESTS");
+  return new Response(null, { status: 204 });
 }
 
 function updateUsername(account: Account, init: RequestInit): Response {
@@ -494,8 +534,12 @@ export async function mockFetch(
     if (id === "refresh") return refresh(init);
     if (id === "logout") return new Response(null, { status: 204 });
   }
-  if (method === "POST" && resource === "users" && id === "register") {
-    return register(init);
+  if (method === "POST" && resource === "users") {
+    if (id === "register") return register(init, url.searchParams);
+    if (id === "verify-email" && sub === undefined) return verifyEmail(init);
+    if (id === "verify-email" && sub === "resend") {
+      return resendVerificationEmail(init, url.searchParams);
+    }
   }
 
   const account = authenticate(init);

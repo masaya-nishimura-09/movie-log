@@ -56,6 +56,7 @@ describe("loginAction", () => {
 
   const cases = [
     [new ApiError(401, "INVALID_CREDENTIALS"), "invalidCredentials"],
+    [new ApiError(403, "EMAIL_NOT_VERIFIED"), "emailNotVerified"],
     [new ApiError(429, "TOO_MANY_REQUESTS"), "tooManyRequests"],
     [new ApiError(500, "INTERNAL_SERVER_ERROR"), "unexpectedError"],
     [new Error("network"), "unexpectedError"],

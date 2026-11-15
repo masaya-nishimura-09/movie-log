@@ -1,6 +1,10 @@
 import en from "../../../src/i18n/dictionaries/en.json";
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { demoAccount } from "../../support/commands";
+import {
+  demoAccount,
+  newAccount,
+  verificationToken,
+} from "../../support/commands";
 import { fill, pattern, shows } from "../../support/text";
 
 const locales = [
@@ -75,6 +79,58 @@ for (const [lang, t] of locales) {
         t.register.toLoginPrompt,
         t.register.toLogin,
         fill(t.characterCount, { current: 0, max: 100 }),
+      );
+    });
+
+    it("確認メールを送った画面と、確認前のログイン", () => {
+      const account = newAccount(`text${lang}`);
+      cy.visit(`/${lang}/register`);
+      cy.get("#username").type(account.username);
+      cy.get("#email").type(account.email);
+      cy.get("#password").type(account.password);
+      cy.get("input[name=agreedToTerms]").check();
+      cy.contains("button", t.register.submit).click();
+      shows(
+        t.register.sentTitle,
+        fill(t.register.sentText, { email: account.email }),
+        t.register.sentNote,
+        fill(t.resendVerification.cooldown, { seconds: 60 }),
+        t.register.sentToLogin,
+      );
+      cy.visit(`/${lang}/login`);
+      cy.get("#email").type(account.email);
+      cy.get("#password").type(account.password);
+      cy.contains("button", t.login.submit).click();
+      shows(t.login.emailNotVerified, t.resendVerification.resend);
+    });
+
+    it("メールアドレスの確認", () => {
+      cy.visit(`/${lang}/verify-email?token=wrong-token`);
+      cy.title().should("eq", `${t.verifyEmail.title} | ${t.metadata.title}`);
+      shows(
+        t.verifyEmail.title,
+        t.verifyEmail.description,
+        t.verifyEmail.submit,
+      );
+      cy.contains("button", t.verifyEmail.submit).click();
+      shows(
+        t.verifyEmail.invalidTitle,
+        t.verifyEmail.invalidText,
+        t.verifyEmail.toLogin,
+      );
+    });
+
+    it("メールアドレスの確認が済んだ画面", () => {
+      const account = newAccount(`done${lang}`);
+      cy.registerUnverified(account);
+      cy.visit(
+        `/${lang}/verify-email?token=${verificationToken(account.email)}`,
+      );
+      cy.contains("button", t.verifyEmail.submit).click();
+      shows(
+        t.verifyEmail.doneTitle,
+        t.verifyEmail.doneText,
+        t.verifyEmail.toLogin,
       );
     });
 

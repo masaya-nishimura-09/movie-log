@@ -31,6 +31,7 @@ export default async function LoginPage() {
         action={loginAction.bind(null, lang)}
         dict={dict.login}
         passwordDict={dict.passwordInput}
+        resendDict={dict.resendVerification}
       />
       <TextLink
         href={`/${lang}/about`}

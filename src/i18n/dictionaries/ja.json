@@ -376,7 +376,8 @@
     "invalidCredentials": "メールアドレスかパスワードが違います",
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "verificationFailed": "確認に失敗しました。もう一度ログインしてください",
-    "unexpectedError": "ログインできませんでした。時間をおいてやり直してください"
+    "unexpectedError": "ログインできませんでした。時間をおいてやり直してください",
+    "emailNotVerified": "メールアドレスの確認が済んでいません。届いた確認メールのボタンを押してください"
   },
   "register": {
     "title": "新規登録",
@@ -397,10 +398,34 @@
     "usernameError": "1〜100文字で入力してください",
     "emailError": "メールアドレスの形式が正しくありません",
     "passwordError": "半角英数字・記号で8〜72文字です",
-    "userAlreadyExists": "このメールアドレスはすでに使われています",
     "unexpectedError": "登録できませんでした。時間をおいてやり直してください",
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
-    "verificationFailed": "確認に失敗しました。もう一度登録してください"
+    "verificationFailed": "確認に失敗しました。もう一度登録してください",
+    "sentTitle": "確認メールを送りました",
+    "sentText": "{email} に確認メールを送りました。メールのボタンを押して、登録を済ませてください。",
+    "sentNote": "リンクの有効期限は24時間です。メールが届かないときは、迷惑メールのフォルダも確認してください。",
+    "sentToLogin": "ログイン画面へ"
+  },
+  "resendVerification": {
+    "resend": "確認メールを再送",
+    "resending": "再送中",
+    "cooldown": "{seconds}秒後に再送できます",
+    "resent": "確認メールを再送しました",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "resendFailed": "再送できませんでした。時間をおいてやり直してください"
+  },
+  "verifyEmail": {
+    "title": "メールアドレスの確認",
+    "description": "ボタンを押すと、メールアドレスの確認が済みます。",
+    "submit": "確認する",
+    "submitting": "確認中",
+    "doneTitle": "確認が済みました",
+    "doneText": "ログイン画面からログインしてください。",
+    "invalidTitle": "リンクが無効です",
+    "invalidText": "リンクの期限が切れているか、すでに確認が済んでいます。確認が済んでいないときは、ログイン画面から確認メールを再送してください。",
+    "toLogin": "ログイン画面へ",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "unexpectedError": "確認できませんでした。時間をおいてやり直してください"
   },
   "passwordInput": {
     "show": "パスワードを表示",

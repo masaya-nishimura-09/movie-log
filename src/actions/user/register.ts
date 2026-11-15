@@ -1,19 +1,17 @@
 "use server";
 
-import { redirect } from "next/navigation";
 import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import { registerUser } from "@/api/user/register-user";
 import type { Locale } from "@/i18n/locales";
-import { startSession } from "@/lib/auth/session";
 import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { userInputSchema } from "@/schemas/user/user-input";
 
 export async function registerAction(
   lang: Locale,
-  _previous: ActionResult<never> | undefined,
+  _previous: ActionResult<{ email: string }> | undefined,
   formData: FormData,
-): Promise<ActionResult<never>> {
+): Promise<ActionResult<{ email: string }>> {
   const input = userInputSchema.safeParse({
     username: formData.get("username"),
     email: formData.get("email"),
@@ -30,11 +28,8 @@ export async function registerAction(
   if (turnstileFailure) return { success: false, messageKey: turnstileFailure };
 
   try {
-    await registerUser(input.data);
+    await registerUser(input.data, lang);
   } catch (error) {
-    if (error instanceof ApiError && error.code === "USER_ALREADY_EXISTS") {
-      return { success: false, messageKey: "userAlreadyExists" };
-    }
     if (error instanceof ApiError && error.code === "TOO_MANY_REQUESTS") {
       return { success: false, messageKey: "tooManyRequests" };
     }
@@ -43,11 +38,5 @@ export async function registerAction(
     }
     throw error;
   }
-
-  try {
-    await startSession(input.data);
-  } catch {
-    redirect(`/${lang}/login`);
-  }
-  redirect(`/${lang}/records`);
+  return { success: true, data: { email: input.data.email } };
 }

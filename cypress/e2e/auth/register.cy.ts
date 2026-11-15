@@ -1,27 +1,57 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { demoAccount } from "../../support/commands";
+import {
+  demoAccount,
+  newAccount,
+  verificationToken,
+} from "../../support/commands";
 
 describe("新規登録", () => {
-  it("登録するとホームに移り、ログインした状態になる", () => {
+  it("登録すると、確認メールを送ったことと入力したアドレスを表示し、ログインした状態にはならない", () => {
+    cy.registerUnverified().then((account) => {
+      cy.location("pathname").should("eq", "/ja/register");
+      cy.contains(account.email).should("be.visible");
+      cy.contains(ja.register.sentNote).should("be.visible");
+      cy.getCookie("access_token").should("be.null");
+      cy.contains("a", ja.register.sentToLogin).click();
+      cy.location("pathname").should("eq", "/ja/login");
+    });
+  });
+
+  it("確認が済むとログインでき、登録した内容がアカウント設定に出る", () => {
     cy.register().then((account) => {
-      cy.location("pathname").should("eq", "/ja/records");
-      cy.contains("h1", ja.recordList.heading).should("be.visible");
       cy.visit("/ja/account");
       cy.get("#username").should("have.value", account.username);
       cy.get("#email").should("have.value", account.email);
     });
   });
 
-  it("登録済みのメールアドレスではエラーを表示する", () => {
+  it("登録済みのアドレスでも、新しいアドレスと同じく確認メールを送ったと表示する", () => {
     cy.visit("/ja/register");
     cy.get("#username").type("tester");
     cy.get("#email").type(demoAccount.email);
     cy.get("#password").type("password123");
     cy.get("input[name=agreedToTerms]").check();
     cy.contains("button", ja.register.submit).click();
-    cy.get("[role=alert]").should("have.text", ja.register.userAlreadyExists);
-    cy.get("#username").should("have.value", "tester");
-    cy.get("#email").should("have.value", demoAccount.email);
+    cy.contains("h1", ja.register.sentTitle).should("be.visible");
+    cy.contains(demoAccount.email).should("be.visible");
+    cy.get("[role=alert]").should("not.exist");
+  });
+
+  it("確認前に同じアドレスで登録し直すと、後の表示名とパスワードになる", () => {
+    const first = newAccount("again");
+    const second = {
+      ...first,
+      username: `${first.username}-2`,
+      password: "second-pass",
+    };
+    cy.registerUnverified(first);
+    cy.registerUnverified(second);
+    cy.visit(`/ja/verify-email?token=${verificationToken(first.email)}`);
+    cy.contains("button", ja.verifyEmail.submit).click();
+    cy.contains("h1", ja.verifyEmail.doneTitle).should("be.visible");
+    cy.login(second);
+    cy.visit("/ja/account");
+    cy.get("#username").should("have.value", second.username);
   });
 
   it("利用規約に同意しないとエラーを表示する", () => {
@@ -88,6 +118,6 @@ describe("新規登録", () => {
       .and("have.attr", "aria-busy", "true")
       .find("[data-spinner]")
       .should("be.visible");
-    cy.location("pathname").should("eq", "/ja/records");
+    cy.contains("h1", ja.register.sentTitle).should("be.visible");
   });
 });

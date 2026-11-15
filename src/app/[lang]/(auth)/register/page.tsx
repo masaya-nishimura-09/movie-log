@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { registerAction } from "@/actions/user/register";
 import { Logo } from "@/components/atoms/logo";
-import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -20,20 +19,13 @@ export default async function RegisterPage() {
       <div className="flex justify-center">
         <Logo name={dict.brand.name} className="h-18" />
       </div>
-      <div className="flex flex-col gap-1.5">
-        <h1 className="font-bold text-foreground text-xl">
-          {dict.register.title}
-        </h1>
-        <p className="text-muted-foreground text-xs">
-          {phrases(dict.register.description)}
-        </p>
-      </div>
       <RegisterForm
         lang={lang}
         siteKey={turnstileSiteKey()}
         action={registerAction.bind(null, lang)}
         dict={dict.register}
         passwordDict={dict.passwordInput}
+        resendDict={dict.resendVerification}
         counterTemplate={dict.characterCount}
       />
       <TextLink

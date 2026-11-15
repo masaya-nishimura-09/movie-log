@@ -1,0 +1,39 @@
+import type { Metadata } from "next";
+import { verifyEmailAction } from "@/actions/user/verify-email";
+import { Logo } from "@/components/atoms/logo";
+import { VerifyEmailForm } from "@/components/organisms/verify-email-form";
+import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const dict = await getDictionary();
+  return {
+    title: dict.verifyEmail.title,
+    robots: { index: false },
+    referrer: "no-referrer",
+  };
+}
+
+export default async function VerifyEmailPage({
+  searchParams,
+}: PageProps<"/[lang]/verify-email">) {
+  const [lang, dict, params] = await Promise.all([
+    getLocale(),
+    getDictionary(),
+    searchParams,
+  ]);
+  const token = typeof params.token === "string" ? params.token : "";
+
+  return (
+    <div className="flex flex-col gap-6">
+      <div className="flex justify-center">
+        <Logo name={dict.brand.name} className="h-18" />
+      </div>
+      <VerifyEmailForm
+        lang={lang}
+        action={verifyEmailAction.bind(null, token)}
+        hasToken={token !== ""}
+        dict={dict.verifyEmail}
+      />
+    </div>
+  );
+}

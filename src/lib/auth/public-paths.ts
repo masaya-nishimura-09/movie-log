@@ -8,3 +8,5 @@ export const publicPaths = [
   "/commerce",
   "/contact",
 ];
+
+export const unlistedPublicPaths = ["/verify-email"];

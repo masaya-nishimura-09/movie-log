@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
@@ -7,6 +8,7 @@ import { Input } from "@/components/atoms/input";
 import { TextLink } from "@/components/atoms/text-link";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
+import { ResendVerificationButton } from "@/components/molecules/resend-verification-button";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -22,6 +24,7 @@ type LoginFormProps = {
   ) => Promise<ActionResult<never>>;
   dict: Dictionary["login"];
   passwordDict: Dictionary["passwordInput"];
+  resendDict: Dictionary["resendVerification"];
 };
 
 export function LoginForm({
@@ -30,8 +33,21 @@ export function LoginForm({
   action,
   dict,
   passwordDict,
+  resendDict,
 }: LoginFormProps) {
-  const { failure, pending, submit } = useFormSubmit(action);
+  const submittedEmail = useRef("");
+  const [unverifiedEmail, setUnverifiedEmail] = useState<string>();
+  const { failure, pending, submit } = useFormSubmit(action, (formData) => {
+    submittedEmail.current = String(formData.get("email") ?? "");
+  });
+
+  useEffect(() => {
+    setUnverifiedEmail(
+      failure?.messageKey === "emailNotVerified"
+        ? submittedEmail.current
+        : undefined,
+    );
+  }, [failure]);
 
   return (
     <form onSubmit={submit} noValidate className="flex flex-col gap-5">
@@ -39,6 +55,14 @@ export function LoginForm({
         <FormAlert>
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
         </FormAlert>
+      )}
+      {unverifiedEmail && (
+        <ResendVerificationButton
+          key={unverifiedEmail}
+          lang={lang}
+          email={unverifiedEmail}
+          dict={resendDict}
+        />
       )}
       <FormField
         label={dict.email}

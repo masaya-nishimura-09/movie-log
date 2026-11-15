@@ -2,12 +2,9 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 import { ApiError } from "@/api/client/api-error";
 
 const registerUser = vi.fn();
-const startSession = vi.fn();
 const verifyTurnstile = vi.fn();
 
-vi.mock("next/navigation", () => import("@/test/next-navigation"));
 vi.mock("@/api/user/register-user", () => ({ registerUser }));
-vi.mock("@/lib/auth/session", () => ({ startSession }));
 vi.mock("@/lib/turnstile/verify-turnstile", () => ({ verifyTurnstile }));
 
 const { registerAction } = await import("@/actions/user/register");
@@ -31,30 +28,21 @@ beforeEach(() => {
   vi.clearAllMocks();
   verifyTurnstile.mockResolvedValue(undefined);
   registerUser.mockResolvedValue(undefined);
-  startSession.mockResolvedValue(undefined);
 });
 
 describe("registerAction", () => {
-  it("registers, logs in and moves to the records", async () => {
-    await expect(registerAction("en", undefined, form())).rejects.toThrow(
-      "REDIRECT /en/records",
-    );
-    expect(registerUser).toHaveBeenCalledWith({
-      username: "tester",
-      email: "user@example.com",
-      password: "password",
+  it("registers with the language and returns the email without logging in", async () => {
+    await expect(registerAction("en", undefined, form())).resolves.toEqual({
+      success: true,
+      data: { email: "user@example.com" },
     });
-    expect(startSession).toHaveBeenCalledWith({
-      username: "tester",
-      email: "user@example.com",
-      password: "password",
-    });
-  });
-
-  it("moves to login when the automatic login fails", async () => {
-    startSession.mockRejectedValue(new Error("failed"));
-    await expect(registerAction("ja", undefined, form())).rejects.toThrow(
-      "REDIRECT /ja/login",
+    expect(registerUser).toHaveBeenCalledWith(
+      {
+        username: "tester",
+        email: "user@example.com",
+        password: "password",
+      },
+      "en",
     );
   });
 
@@ -91,7 +79,6 @@ describe("registerAction", () => {
   });
 
   const cases = [
-    [new ApiError(409, "USER_ALREADY_EXISTS"), "userAlreadyExists"],
     [new ApiError(429, "TOO_MANY_REQUESTS"), "tooManyRequests"],
     [new ApiError(500, "INTERNAL_SERVER_ERROR"), "unexpectedError"],
   ] as const;

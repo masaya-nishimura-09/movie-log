@@ -14,15 +14,18 @@ beforeEach(() => {
 const { registerUser } = await import("@/api/user/register-user");
 
 describe("registerUser", () => {
-  it("posts the user to /users/register without the access token", async () => {
+  it("posts the user to /users/register with the language, without the access token", async () => {
     requestJson.mockResolvedValue(undefined);
-    await registerUser({
-      username: "tester",
-      email: "user@example.com",
-      password: "password",
-    });
+    await registerUser(
+      {
+        username: "tester",
+        email: "user@example.com",
+        password: "password",
+      },
+      "ja",
+    );
     const [path, , init] = requestJson.mock.calls[0] ?? [];
-    expect(path).toBe("/users/register");
+    expect(path).toBe("/users/register?language=ja");
     expect(init.method).toBe("POST");
     expect(JSON.parse(init.body)).toEqual({
       name: "tester",

@@ -378,7 +378,8 @@
     "invalidCredentials": "Incorrect email or password",
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
     "verificationFailed": "We could not verify the request. Log in again",
-    "unexpectedError": "Couldn't log in. Please try again later"
+    "unexpectedError": "Couldn't log in. Please try again later",
+    "emailNotVerified": "Your email address is not confirmed yet. Press the button in the confirmation email we sent you"
   },
   "register": {
     "title": "Create an account",
@@ -399,10 +400,34 @@
     "usernameError": "Enter 1 to 100 characters",
     "emailError": "Enter a valid email address",
     "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
-    "userAlreadyExists": "This email address is already in use",
     "unexpectedError": "Couldn't sign up. Please try again later",
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
-    "verificationFailed": "We could not verify the request. Sign up again"
+    "verificationFailed": "We could not verify the request. Sign up again",
+    "sentTitle": "Check your email",
+    "sentText": "We sent a confirmation email to {email}. Press the button in the email to finish signing up.",
+    "sentNote": "The link expires in 24 hours. If the email does not arrive, check your spam folder.",
+    "sentToLogin": "Go to the login page"
+  },
+  "resendVerification": {
+    "resend": "Resend confirmation email",
+    "resending": "Resending",
+    "cooldown": "You can resend in {seconds}s",
+    "resent": "Confirmation email sent again",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "resendFailed": "Couldn't resend. Please try again later"
+  },
+  "verifyEmail": {
+    "title": "Confirm your email",
+    "description": "Press the button to confirm your email address.",
+    "submit": "Confirm",
+    "submitting": "Confirming",
+    "doneTitle": "Email confirmed",
+    "doneText": "You can now log in.",
+    "invalidTitle": "This link is invalid",
+    "invalidText": "The link has expired or your email is already confirmed. If it is not confirmed yet, resend the confirmation email from the login page.",
+    "toLogin": "Go to the login page",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "unexpectedError": "Couldn't confirm. Please try again later"
   },
   "passwordInput": {
     "show": "Show password",

@@ -18,6 +18,11 @@ describe("sitemap", () => {
     expect(urls.some((url) => url.includes("/account"))).toBe(false);
   });
 
+  it("does not list the email verification page", () => {
+    const urls = sitemap().map((entry) => entry.url);
+    expect(urls.some((url) => url.includes("/verify-email"))).toBe(false);
+  });
+
   it("links each page to its other language", () => {
     const about = sitemap().find(
       (entry) => entry.url === "http://localhost:3000/ja/about",

@@ -7,7 +7,7 @@ import {
   locales,
   negotiateLocale,
 } from "@/i18n/locales";
-import { publicPaths } from "@/lib/auth/public-paths";
+import { publicPaths, unlistedPublicPaths } from "@/lib/auth/public-paths";
 import {
   accessTokenCookie,
   isTokenExpired,
@@ -40,7 +40,9 @@ export async function proxy(request: NextRequest) {
   }
 
   const path = pathname.slice(`/${locale}`.length);
-  if (publicPaths.includes(path)) return next(request, locale);
+  if (publicPaths.includes(path) || unlistedPublicPaths.includes(path)) {
+    return next(request, locale);
+  }
 
   const accessToken = request.cookies.get(accessTokenCookie)?.value;
   if (accessToken && !isTokenExpired(accessToken)) {

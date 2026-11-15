@@ -5,6 +5,24 @@ export const demoAccount = { email: "demo@example.com", password: "password" };
 
 export type Account = { username: string; email: string; password: string };
 
+export function verificationToken(email: string): string {
+  const encoded = Cypress.Buffer.from(email)
+    .toString("base64")
+    .replace(/\+/g, "-")
+    .replace(/\//g, "_")
+    .replace(/=+$/, "");
+  return `mock-verify-${encoded}`;
+}
+
+export function newAccount(prefix = "tester"): Account {
+  const id = `${Date.now()}${Cypress._.random(1000, 9999)}`;
+  return {
+    username: `${prefix}${id}`,
+    email: `${prefix}${id}@example.com`,
+    password: "password123",
+  };
+}
+
 type RecordBasicsOptions = {
   score?: number;
   platform?: keyof typeof ja.enums.platform;
@@ -16,6 +34,7 @@ declare global {
     interface Chainable {
       login(account?: { email: string; password: string }): Chainable<void>;
       register(): Chainable<Account>;
+      registerUnverified(account?: Account): Chainable<Account>;
       createRecord(title: string): Chainable<void>;
       fillRecordBasics(
         title: string,
@@ -35,21 +54,29 @@ Cypress.Commands.add("login", (account = demoAccount) => {
   });
 });
 
-Cypress.Commands.add("register", () => {
-  const id = `${Date.now()}${Cypress._.random(1000, 9999)}`;
-  const account = {
-    username: `tester${id}`,
-    email: `tester${id}@example.com`,
-    password: "password123",
-  };
+Cypress.Commands.add("registerUnverified", (account = newAccount()) => {
   cy.visit("/ja/register");
   cy.get("#username").type(account.username);
   cy.get("#email").type(account.email);
   cy.get("#password").type(account.password, { log: false });
   cy.get("input[name=agreedToTerms]").check();
   cy.contains("button", ja.register.submit).click();
-  cy.location("pathname").should("eq", "/ja/records");
+  cy.contains("h1", ja.register.sentTitle).should("be.visible");
   return cy.wrap(account);
+});
+
+Cypress.Commands.add("register", () => {
+  cy.registerUnverified().then((account) => {
+    cy.visit(`/ja/verify-email?token=${verificationToken(account.email)}`);
+    cy.contains("button", ja.verifyEmail.submit).click();
+    cy.contains("h1", ja.verifyEmail.doneTitle).should("be.visible");
+    cy.visit("/ja/login");
+    cy.get("#email").type(account.email);
+    cy.get("#password").type(account.password, { log: false });
+    cy.contains("button", ja.login.submit).click();
+    cy.location("pathname").should("eq", "/ja/records");
+    cy.wrap(account);
+  });
 });
 
 Cypress.Commands.add(

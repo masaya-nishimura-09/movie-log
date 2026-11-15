@@ -30,6 +30,9 @@ export async function loginAction(
     if (error instanceof ApiError && error.code === "INVALID_CREDENTIALS") {
       return { success: false, messageKey: "invalidCredentials" };
     }
+    if (error instanceof ApiError && error.code === "EMAIL_NOT_VERIFIED") {
+      return { success: false, messageKey: "emailNotVerified" };
+    }
     if (error instanceof ApiError && error.code === "TOO_MANY_REQUESTS") {
       return { success: false, messageKey: "tooManyRequests" };
     }
