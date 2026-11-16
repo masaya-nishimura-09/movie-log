@@ -427,6 +427,22 @@
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "unexpectedError": "確認できませんでした。時間をおいてやり直してください"
   },
+  "verifyEmailChange": {
+    "title": "メールアドレスの変更の確認",
+    "description": "ボタンを押すと、メールアドレスが新しいものに切り替わります。",
+    "submit": "確認する",
+    "submitting": "確認中",
+    "doneTitle": "メールアドレスを変更しました",
+    "doneText": "これからは新しいアドレスでログインしてください。",
+    "invalidTitle": "リンクが無効です",
+    "invalidText": "リンクの期限が切れているか、すでに使われています。メールアドレスは変更前のままです。変更するときは、アカウント設定からやり直してください。",
+    "emailTakenTitle": "このアドレスはすでに使われています",
+    "emailTakenText": "確認までの間に、このアドレスが別のアカウントで使われ始めました。メールアドレスは変更前のままです。",
+    "toLogin": "ログイン画面へ",
+    "toAccount": "アカウント設定へ",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "unexpectedError": "確認できませんでした。時間をおいてやり直してください"
+  },
   "passwordInput": {
     "show": "パスワードを表示",
     "hide": "パスワードを隠す"
@@ -634,7 +650,6 @@
     "usernameError": "1〜100文字で入力してください",
     "emailError": "メールアドレスの形式が正しくありません",
     "passwordError": "半角英数字・記号で8〜72文字です",
-    "userAlreadyExists": "このメールアドレスはすでに使われています",
     "invalidCurrentPassword": "現在のパスワードが違います",
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "unexpectedError": "保存できませんでした。時間をおいてやり直してください",
@@ -646,7 +661,8 @@
     "exporting": "書き出し中",
     "exportFailed": "書き出せませんでした。時間をおいてやり直してください",
     "exportUpdatedAt": "更新日",
-    "exportNotesAction": "ノートをMarkdownで書き出す（ZIP）"
+    "exportNotesAction": "ノートをMarkdownで書き出す（ZIP）",
+    "emailChangeSent": "{email} に確認メールを送りました。確認が済むまで、今のアドレスのままです。"
   },
   "noteEditor": {
     "toolbar": "書式",

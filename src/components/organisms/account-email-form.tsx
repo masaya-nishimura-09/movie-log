@@ -2,6 +2,7 @@
 
 import type { ActionResult } from "@/actions/action-result";
 import { Input } from "@/components/atoms/input";
+import { phrases } from "@/components/atoms/phrases";
 import { AccountFormCard } from "@/components/molecules/account-form-card";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
@@ -10,9 +11,9 @@ import type { User } from "@/schemas/user/user";
 
 type AccountEmailFormProps = {
   action: (
-    previous: ActionResult<null> | undefined,
+    previous: ActionResult<{ email: string }> | undefined,
     formData: FormData,
-  ) => Promise<ActionResult<null>>;
+  ) => Promise<ActionResult<{ email: string }>>;
   user: User;
   dict: Dictionary["account"];
   passwordDict: Dictionary["passwordInput"];
@@ -24,12 +25,21 @@ export function AccountEmailForm({
   dict,
   passwordDict,
 }: AccountEmailFormProps) {
+  const [sentBefore = "", sentAfter = ""] =
+    dict.emailChangeSent.split("{email}");
   return (
     <AccountFormCard
       title={dict.emailTitle}
       action={action}
       dict={dict}
-      clearOnSuccess={["password"]}
+      resetOnSuccess={["email", "password"]}
+      successNotice={({ email }) => (
+        <>
+          {phrases(sentBefore)}
+          <span className="break-all font-medium">{email}</span>
+          {phrases(sentAfter)}
+        </>
+      )}
     >
       {(failure) => (
         <>

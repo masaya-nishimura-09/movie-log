@@ -9,42 +9,47 @@ import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { dictMessage } from "@/lib/text/dict-message";
 
-type Failure = Extract<ActionResult<null>, { success: false }>;
+type Failure = Extract<ActionResult<never>, { success: false }>;
 
-type AccountFormCardProps = {
+type AccountFormCardProps<T> = {
   title: string;
   action: (
-    previous: ActionResult<null> | undefined,
+    previous: ActionResult<T> | undefined,
     formData: FormData,
-  ) => Promise<ActionResult<null>>;
+  ) => Promise<ActionResult<T>>;
   dict: Dictionary["account"];
-  clearOnSuccess?: string[];
+  resetOnSuccess?: string[];
+  successNotice?: (data: T) => ReactNode;
   children: (failure: Failure | undefined) => ReactNode;
 };
 
-export function AccountFormCard({
+export function AccountFormCard<T>({
   title,
   action,
   dict,
-  clearOnSuccess = [],
+  resetOnSuccess = [],
+  successNotice,
   children,
-}: AccountFormCardProps) {
+}: AccountFormCardProps<T>) {
   const { state, failure, pending, submit } = useFormSubmit(action);
   const toastManager = Toast.useToastManager();
   const toastManagerRef = useRef(toastManager);
   toastManagerRef.current = toastManager;
   const formRef = useRef<HTMLFormElement>(null);
-  const clearOnSuccessRef = useRef(clearOnSuccess);
-  clearOnSuccessRef.current = clearOnSuccess;
+  const resetOnSuccessRef = useRef(resetOnSuccess);
+  resetOnSuccessRef.current = resetOnSuccess;
+  const hasNotice = successNotice !== undefined;
 
   useEffect(() => {
     if (!state?.success) return;
-    toastManagerRef.current.add({ title: dict.saved, type: "success" });
-    for (const name of clearOnSuccessRef.current) {
-      const field = formRef.current?.elements.namedItem(name);
-      if (field instanceof HTMLInputElement) field.value = "";
+    if (!hasNotice) {
+      toastManagerRef.current.add({ title: dict.saved, type: "success" });
     }
-  }, [state, dict.saved]);
+    for (const name of resetOnSuccessRef.current) {
+      const field = formRef.current?.elements.namedItem(name);
+      if (field instanceof HTMLInputElement) field.value = field.defaultValue;
+    }
+  }, [state, dict.saved, hasNotice]);
 
   return (
     <form
@@ -58,6 +63,11 @@ export function AccountFormCard({
         <FormAlert>
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
         </FormAlert>
+      )}
+      {state?.success && successNotice && !pending && (
+        <output className="rounded-lg bg-mood px-3.5 py-2.5 text-foreground text-sm">
+          {successNotice(state.data)}
+        </output>
       )}
       {children(failure)}
       <div className="flex justify-end gap-2 border-secondary border-t pt-3.5">

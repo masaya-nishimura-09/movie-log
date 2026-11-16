@@ -9,32 +9,38 @@ import { FormAlert } from "@/components/atoms/form-alert";
 import { phrases } from "@/components/atoms/phrases";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
-import type { Locale } from "@/i18n/locales";
 import { dictMessage } from "@/lib/text/dict-message";
 
-type VerifyEmailFormProps = {
-  lang: Locale;
+type Screen = { title: string; text: string };
+
+type VerifyTokenFormProps = {
   action: (
     previous: ActionResult<null> | undefined,
     formData: FormData,
   ) => Promise<ActionResult<null>>;
   hasToken: boolean;
-  dict: Dictionary["verifyEmail"];
+  dict: Pick<
+    Dictionary["verifyEmail"],
+    | "title"
+    | "description"
+    | "submit"
+    | "submitting"
+    | "doneTitle"
+    | "doneText"
+    | "invalidTitle"
+    | "invalidText"
+    | "tooManyRequests"
+    | "unexpectedError"
+  >;
+  failureScreens?: Record<string, Screen>;
+  next: { href: string; label: string };
 };
 
-function Message({
-  icon,
-  title,
-  text,
-}: {
-  icon: ReactNode;
-  title: string;
-  text: string;
-}) {
+function Message({ icon, title, text }: Screen & { icon: ReactNode }) {
   return (
     <div className="flex flex-col items-center gap-2 text-center">
       {icon}
-      <h1 className="font-bold text-foreground text-xl">{title}</h1>
+      <h1 className="font-bold text-foreground text-xl">{phrases(title)}</h1>
       <output className="text-[13px] text-foreground-sub leading-relaxed">
         {phrases(text)}
       </output>
@@ -42,19 +48,20 @@ function Message({
   );
 }
 
-export function VerifyEmailForm({
-  lang,
+export function VerifyTokenForm({
   action,
   hasToken,
   dict,
-}: VerifyEmailFormProps) {
+  failureScreens = {},
+  next,
+}: VerifyTokenFormProps) {
   const { state, failure, pending, submit } = useFormSubmit(action);
-  const toLogin = (variant: "default" | "outline") => (
+  const nextLink = (variant: "default" | "outline") => (
     <Link
-      href={`/${lang}/login`}
+      href={next.href}
       className={buttonVariants({ variant, size: "lg", className: "w-full" })}
     >
-      {dict.toLogin}
+      {next.label}
     </Link>
   );
 
@@ -68,12 +75,19 @@ export function VerifyEmailForm({
           title={dict.doneTitle}
           text={dict.doneText}
         />
-        {toLogin("default")}
+        {nextLink("default")}
       </div>
     );
   }
 
-  if (!hasToken || failure?.messageKey === "invalidToken") {
+  const screens: Record<string, Screen> = {
+    invalidToken: { title: dict.invalidTitle, text: dict.invalidText },
+    ...failureScreens,
+  };
+  const failureScreen = hasToken
+    ? failure && screens[failure.messageKey]
+    : screens.invalidToken;
+  if (failureScreen) {
     return (
       <div className="flex flex-col gap-6">
         <Message
@@ -83,10 +97,9 @@ export function VerifyEmailForm({
               aria-hidden
             />
           }
-          title={dict.invalidTitle}
-          text={dict.invalidText}
+          {...failureScreen}
         />
-        {toLogin("outline")}
+        {nextLink("outline")}
       </div>
     );
   }

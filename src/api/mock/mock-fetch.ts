@@ -2,6 +2,7 @@ import { mockAttachments } from "@/api/mock/mock-attachments";
 import { mockNotes } from "@/api/mock/mock-notes";
 import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
 import {
+  emailFromEmailChangeToken,
   emailFromVerificationToken,
   mockAccounts,
   toUserResponse,
@@ -364,14 +365,32 @@ function updateUsername(account: Account, init: RequestInit): Response {
   return Response.json(toUserResponse(account));
 }
 
-function updateEmail(account: Account, init: RequestInit): Response {
+function updateEmail(
+  account: Account,
+  init: RequestInit,
+  params: URLSearchParams,
+): Response {
+  if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
   const { email, password } = readJson(init) as UserBody;
   if (account.password !== password) {
     return error(400, "INVALID_CURRENT_PASSWORD");
   }
+  account.pendingEmail = emailTaken(email, account) ? undefined : String(email);
+  return new Response(null, { status: 204 });
+}
+
+function verifyEmailChange(init: RequestInit): Response {
+  const email = emailFromEmailChangeToken(readJson(init).token);
+  const account = mockAccounts.find(
+    (a) => email !== undefined && a.pendingEmail === email,
+  );
+  if (!account || email === undefined) {
+    return error(400, "INVALID_VERIFICATION_TOKEN");
+  }
+  account.pendingEmail = undefined;
   if (emailTaken(email, account)) return error(409, "USER_ALREADY_EXISTS");
-  account.email = String(email);
-  return Response.json(toUserResponse(account));
+  account.email = email;
+  return new Response(null, { status: 204 });
 }
 
 function updatePassword(account: Account, init: RequestInit): Response {
@@ -540,6 +559,7 @@ export async function mockFetch(
     if (id === "verify-email" && sub === "resend") {
       return resendVerificationEmail(init, url.searchParams);
     }
+    if (id === "email" && sub === "verify") return verifyEmailChange(init);
   }
 
   const account = authenticate(init);
@@ -551,7 +571,7 @@ export async function mockFetch(
   }
   if (method === "PUT" && resource === "users") {
     if (id === "username") return updateUsername(account, init);
-    if (id === "email") return updateEmail(account, init);
+    if (id === "email") return updateEmail(account, init, url.searchParams);
     if (id === "password") return updatePassword(account, init);
   }
   if (resource === "records" && id === undefined) {

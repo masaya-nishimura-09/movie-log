@@ -18,7 +18,7 @@ describe("sitemap", () => {
     expect(urls.some((url) => url.includes("/account"))).toBe(false);
   });
 
-  it("does not list the email verification page", () => {
+  it("does not list the email verification pages", () => {
     const urls = sitemap().map((entry) => entry.url);
     expect(urls.some((url) => url.includes("/verify-email"))).toBe(false);
   });

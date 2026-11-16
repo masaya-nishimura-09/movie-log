@@ -1,15 +1,16 @@
 "use server";
 
-import { revalidatePath } from "next/cache";
 import { type ActionResult, invalidInput } from "@/actions/action-result";
 import { ApiError } from "@/api/client/api-error";
 import { updateEmail } from "@/api/user/update-email";
+import type { Locale } from "@/i18n/locales";
 import { emailChangeInputSchema } from "@/schemas/user/user-input";
 
 export async function updateEmailAction(
-  _previous: ActionResult<null> | undefined,
+  lang: Locale,
+  _previous: ActionResult<{ email: string }> | undefined,
   formData: FormData,
-): Promise<ActionResult<null>> {
+): Promise<ActionResult<{ email: string }>> {
   const input = emailChangeInputSchema.safeParse({
     email: formData.get("email"),
     password: formData.get("password"),
@@ -19,11 +20,8 @@ export async function updateEmailAction(
   }
 
   try {
-    await updateEmail(input.data);
+    await updateEmail(input.data, lang);
   } catch (error) {
-    if (error instanceof ApiError && error.code === "USER_ALREADY_EXISTS") {
-      return { success: false, messageKey: "userAlreadyExists" };
-    }
     if (
       error instanceof ApiError &&
       error.code === "INVALID_CURRENT_PASSWORD"
@@ -38,6 +36,5 @@ export async function updateEmailAction(
     }
     throw error;
   }
-  revalidatePath("/", "layout");
-  return { success: true, data: null };
+  return { success: true, data: { email: input.data.email } };
 }

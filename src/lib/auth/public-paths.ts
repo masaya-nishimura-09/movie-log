@@ -9,4 +9,4 @@ export const publicPaths = [
   "/contact",
 ];
 
-export const unlistedPublicPaths = ["/verify-email"];
+export const unlistedPublicPaths = ["/verify-email", "/verify-email-change"];

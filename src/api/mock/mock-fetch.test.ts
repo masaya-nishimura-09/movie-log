@@ -1,5 +1,8 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
-import { mockVerificationToken } from "@/api/mock/mock-user";
+import {
+  mockEmailChangeToken,
+  mockVerificationToken,
+} from "@/api/mock/mock-user";
 import { fakeJwt } from "@/test/fake-jwt";
 
 let mockFetch: typeof import("@/api/mock/mock-fetch").mockFetch;
@@ -292,9 +295,48 @@ describe("mockFetch: ユーザー", () => {
     });
   });
 
-  it("updates the email with the current password", async () => {
+  async function changeEmail(
+    headers: HeadersInit,
+    email: string,
+    password = "password",
+  ) {
+    return mockFetch(
+      "/users/email?language=ja",
+      post({ email, password }, "PUT", headers),
+    );
+  }
+
+  async function verifyChange(email: string) {
+    return mockFetch(
+      "/users/email/verify",
+      post({ token: mockEmailChangeToken(email) }),
+    );
+  }
+
+  async function currentEmail(headers: HeadersInit) {
+    const response = await mockFetch("/users/", { headers });
+    return (await response.json()).email;
+  }
+
+  it("keeps the current email until the new email is verified", async () => {
     const headers = await register();
-    const updated = await mockFetch(
+    const changed = await changeEmail(headers, "renamed@example.com");
+    expect(changed.status).toBe(204);
+    expect(await currentEmail(headers)).toBe("tester@example.com");
+    expect((await tokens()).access_token).toBeDefined();
+
+    const verified = await verifyChange("renamed@example.com");
+    expect(verified.status).toBe(204);
+    expect(await currentEmail(headers)).toBe("renamed@example.com");
+    expect((await tokens("renamed@example.com")).access_token).toBeDefined();
+    expect((await tokens("tester@example.com")).code).toBe(
+      "INVALID_CREDENTIALS",
+    );
+  });
+
+  it("rejects an email change without a supported language", async () => {
+    const headers = await register();
+    const response = await mockFetch(
       "/users/email",
       post(
         { email: "renamed@example.com", password: "password" },
@@ -302,35 +344,67 @@ describe("mockFetch: ユーザー", () => {
         headers,
       ),
     );
-    expect(await updated.json()).toEqual({
-      user_id: "2",
-      username: "tester",
-      email: "renamed@example.com",
-    });
-    expect((await tokens("renamed@example.com")).access_token).toBeDefined();
+    expect(response.status).toBe(400);
   });
 
   it("rejects an email change with a wrong current password", async () => {
     const headers = await register();
-    const response = await mockFetch(
-      "/users/email",
-      post({ email: "renamed@example.com", password: "wrong" }, "PUT", headers),
-    );
+    const response = await changeEmail(headers, "renamed@example.com", "wrong");
     expect(response.status).toBe(400);
     expect(await response.json()).toMatchObject({
       code: "INVALID_CURRENT_PASSWORD",
     });
+    expect((await verifyChange("renamed@example.com")).status).toBe(400);
   });
 
-  it("rejects an email used by another user", async () => {
+  it("returns 204 for an email used by another user without issuing a token", async () => {
     const headers = await register();
-    const response = await mockFetch(
-      "/users/email",
-      post({ email: "demo@example.com", password: "password" }, "PUT", headers),
-    );
-    expect(await response.json()).toMatchObject({
+    const response = await changeEmail(headers, "demo@example.com");
+    expect(response.status).toBe(204);
+    const verified = await verifyChange("demo@example.com");
+    expect(await verified.json()).toMatchObject({
+      code: "INVALID_VERIFICATION_TOKEN",
+    });
+    expect(await currentEmail(headers)).toBe("tester@example.com");
+  });
+
+  it("cancels an earlier pending change when a new change is requested", async () => {
+    const headers = await register();
+    await changeEmail(headers, "first@example.com");
+    await changeEmail(headers, "demo@example.com");
+    expect((await verifyChange("first@example.com")).status).toBe(400);
+    expect(await currentEmail(headers)).toBe("tester@example.com");
+  });
+
+  it("returns 409 when the new email was taken before the verification", async () => {
+    const headers = await register();
+    await changeEmail(headers, "taken@example.com");
+    await register("other", "taken@example.com");
+    const verified = await verifyChange("taken@example.com");
+    expect(verified.status).toBe(409);
+    expect(await verified.json()).toMatchObject({
       code: "USER_ALREADY_EXISTS",
     });
+    expect(await currentEmail(headers)).toBe("tester@example.com");
+    expect((await verifyChange("taken@example.com")).status).toBe(400);
+  });
+
+  it("rejects an unknown, malformed or already used email change token", async () => {
+    const headers = await register();
+    await changeEmail(headers, "renamed@example.com");
+    expect((await verifyChange("renamed@example.com")).status).toBe(204);
+    for (const body of [
+      { token: mockEmailChangeToken("renamed@example.com") },
+      { token: mockVerificationToken("renamed@example.com") },
+      { token: "broken" },
+      {},
+    ]) {
+      const response = await mockFetch("/users/email/verify", post(body));
+      expect(response.status).toBe(400);
+      expect(await response.json()).toMatchObject({
+        code: "INVALID_VERIFICATION_TOKEN",
+      });
+    }
   });
 
   it("updates the password with the current password", async () => {

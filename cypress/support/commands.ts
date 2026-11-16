@@ -5,13 +5,21 @@ export const demoAccount = { email: "demo@example.com", password: "password" };
 
 export type Account = { username: string; email: string; password: string };
 
-export function verificationToken(email: string): string {
+function mockToken(prefix: string, email: string): string {
   const encoded = Cypress.Buffer.from(email)
     .toString("base64")
     .replace(/\+/g, "-")
     .replace(/\//g, "_")
     .replace(/=+$/, "");
-  return `mock-verify-${encoded}`;
+  return `${prefix}${encoded}`;
+}
+
+export function verificationToken(email: string): string {
+  return mockToken("mock-verify-", email);
+}
+
+export function emailChangeToken(email: string): string {
+  return mockToken("mock-email-change-", email);
 }
 
 export function newAccount(prefix = "tester"): Account {

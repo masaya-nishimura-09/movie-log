@@ -18,11 +18,14 @@ beforeEach(() => {
 const { updateEmail } = await import("@/api/user/update-email");
 
 describe("updateEmail", () => {
-  it("puts the email and password to /users/email", async () => {
+  it("puts the email and password to /users/email with the language", async () => {
     apiFetch.mockResolvedValue(undefined);
-    await updateEmail({ email: "user@example.com", password: "password" });
+    await updateEmail(
+      { email: "user@example.com", password: "password" },
+      "en",
+    );
     const [path, , init] = apiFetch.mock.calls[0] ?? [];
-    expect(path).toBe("/users/email");
+    expect(path).toBe("/users/email?language=en");
     expect(init.method).toBe("PUT");
     expect(JSON.parse(init.body)).toEqual({
       email: "user@example.com",

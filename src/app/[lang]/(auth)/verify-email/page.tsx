@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { verifyEmailAction } from "@/actions/user/verify-email";
 import { Logo } from "@/components/atoms/logo";
-import { VerifyEmailForm } from "@/components/organisms/verify-email-form";
+import { VerifyTokenForm } from "@/components/organisms/verify-token-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -28,11 +28,11 @@ export default async function VerifyEmailPage({
       <div className="flex justify-center">
         <Logo name={dict.brand.name} className="h-18" />
       </div>
-      <VerifyEmailForm
-        lang={lang}
+      <VerifyTokenForm
         action={verifyEmailAction.bind(null, token)}
         hasToken={token !== ""}
         dict={dict.verifyEmail}
+        next={{ href: `/${lang}/login`, label: dict.verifyEmail.toLogin }}
       />
     </div>
   );

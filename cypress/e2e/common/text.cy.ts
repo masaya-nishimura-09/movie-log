@@ -2,6 +2,7 @@ import en from "../../../src/i18n/dictionaries/en.json";
 import ja from "../../../src/i18n/dictionaries/ja.json";
 import {
   demoAccount,
+  emailChangeToken,
   newAccount,
   verificationToken,
 } from "../../support/commands";
@@ -132,6 +133,72 @@ for (const [lang, t] of locales) {
         t.verifyEmail.doneText,
         t.verifyEmail.toLogin,
       );
+    });
+
+    it("メールアドレスの変更の確認", () => {
+      cy.visit(`/${lang}/verify-email-change?token=wrong-token`);
+      cy.title().should(
+        "eq",
+        `${t.verifyEmailChange.title} | ${t.metadata.title}`,
+      );
+      shows(
+        t.verifyEmailChange.title,
+        t.verifyEmailChange.description,
+        t.verifyEmailChange.submit,
+      );
+      cy.contains("button", t.verifyEmailChange.submit).click();
+      shows(
+        t.verifyEmailChange.invalidTitle,
+        t.verifyEmailChange.invalidText,
+        t.verifyEmailChange.toLogin,
+      );
+    });
+
+    it("メールアドレスの変更の案内と、変更が済んだ画面", () => {
+      cy.register().then(({ email, password }) => {
+        const newEmail = `text-${lang}-${email}`;
+        cy.visit(`/${lang}/account`);
+        cy.get("#email").clear().type(newEmail);
+        cy.get("#emailPassword").type(password);
+        cy.contains("form", t.account.emailTitle)
+          .contains("button", t.account.save)
+          .click();
+        shows(fill(t.account.emailChangeSent, { email: newEmail }));
+        cy.visit(
+          `/${lang}/verify-email-change?token=${emailChangeToken(newEmail)}`,
+        );
+        cy.contains("button", t.verifyEmailChange.submit).click();
+        shows(
+          t.verifyEmailChange.doneTitle,
+          t.verifyEmailChange.doneText,
+          t.verifyEmailChange.toAccount,
+        );
+      });
+    });
+
+    it("変更先のアドレスがほかの人に使われていたとき", () => {
+      cy.register().then(({ password }) => {
+        const other = newAccount(`taken${lang}`);
+        cy.visit(`/${lang}/account`);
+        cy.get("#email").clear().type(other.email);
+        cy.get("#emailPassword").type(password);
+        cy.contains("form", t.account.emailTitle)
+          .contains("button", t.account.save)
+          .click();
+        shows(fill(t.account.emailChangeSent, { email: other.email }));
+        cy.registerUnverified(other);
+        cy.visit(`/ja/verify-email?token=${verificationToken(other.email)}`);
+        cy.contains("button", ja.verifyEmail.submit).click();
+        cy.contains("h1", ja.verifyEmail.doneTitle);
+        cy.visit(
+          `/${lang}/verify-email-change?token=${emailChangeToken(other.email)}`,
+        );
+        cy.contains("button", t.verifyEmailChange.submit).click();
+        shows(
+          t.verifyEmailChange.emailTakenTitle,
+          t.verifyEmailChange.emailTakenText,
+        );
+      });
     });
 
     it("お問い合わせ", () => {

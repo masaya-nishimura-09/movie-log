@@ -71,6 +71,7 @@ describe("proxy: ログイン", () => {
       "/ja/commerce",
       "/ja/contact",
       "/ja/verify-email",
+      "/ja/verify-email-change",
     ]) {
       const response = await proxy(request(path));
       expect(location(response)).toBeNull();

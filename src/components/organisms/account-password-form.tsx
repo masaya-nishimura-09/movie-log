@@ -25,7 +25,7 @@ export function AccountPasswordForm({
       title={dict.passwordTitle}
       action={action}
       dict={dict}
-      clearOnSuccess={["oldPassword", "newPassword"]}
+      resetOnSuccess={["oldPassword", "newPassword"]}
     >
       {(failure) => (
         <>

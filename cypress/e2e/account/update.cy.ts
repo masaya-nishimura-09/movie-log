@@ -1,5 +1,6 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { demoAccount } from "../../support/commands";
+import { demoAccount, emailChangeToken } from "../../support/commands";
+import { fill } from "../../support/text";
 
 const account = ja.account;
 
@@ -47,15 +48,44 @@ describe("アカウント設定", () => {
     cy.contains(account.usernameError).should("be.visible");
   });
 
-  it("メールアドレスを変えると、新しいメールアドレスでログインできる", () => {
+  it("メールアドレスを変えて保存すると、確認メールを送ったと表示し、アドレスは今のままにする", () => {
+    cy.register().then(({ email, password }) => {
+      cy.visit("/ja/account");
+      cy.get("#email").clear().type(`new-${email}`);
+      cy.get("#emailPassword").type(password);
+      section(account.emailTitle).contains("button", account.save).click();
+      section(account.emailTitle)
+        .find("output")
+        .should(
+          "have.text",
+          fill(account.emailChangeSent, { email: `new-${email}` }),
+        );
+      cy.contains(account.saved).should("not.exist");
+      cy.get("#email").should("have.value", email);
+      cy.get("#emailPassword").should("have.value", "");
+      cy.reload();
+      cy.get("#email").should("have.value", email);
+
+      cy.clearCookies();
+      loginWith(email, password);
+      cy.location("pathname").should("eq", "/ja/records");
+    });
+  });
+
+  it("新しいアドレスの確認が済むと切り替わり、新しいアドレスでログインできる", () => {
     cy.register().then(({ email, password }) => {
       const newEmail = `new-${email}`;
       cy.visit("/ja/account");
       cy.get("#email").clear().type(newEmail);
       cy.get("#emailPassword").type(password);
       section(account.emailTitle).contains("button", account.save).click();
-      cy.contains(account.saved).should("be.visible");
-      cy.get("#emailPassword").should("have.value", "");
+      section(account.emailTitle).find("output").should("be.visible");
+      cy.visit(`/ja/verify-email-change?token=${emailChangeToken(newEmail)}`);
+      cy.contains("button", ja.verifyEmailChange.submit).click();
+      cy.contains("h1", ja.verifyEmailChange.doneTitle).should("be.visible");
+      cy.contains("a", ja.verifyEmailChange.toAccount).click();
+      cy.location("pathname").should("eq", "/ja/account");
+      cy.get("#email").should("have.value", newEmail);
 
       cy.clearCookies();
       loginWith(email, password);
@@ -78,13 +108,20 @@ describe("アカウント設定", () => {
     });
   });
 
-  it("ほかの人が使っているメールアドレスには変えられない", () => {
-    cy.register().then(({ password }) => {
+  it("ほかの人が使っているアドレスでも、確認メールを送ったと表示する", () => {
+    cy.register().then(({ email, password }) => {
       cy.visit("/ja/account");
       cy.get("#email").clear().type(demoAccount.email);
       cy.get("#emailPassword").type(password);
       section(account.emailTitle).contains("button", account.save).click();
-      cy.get("[role=alert]").should("have.text", account.userAlreadyExists);
+      section(account.emailTitle)
+        .find("output")
+        .should(
+          "have.text",
+          fill(account.emailChangeSent, { email: demoAccount.email }),
+        );
+      cy.get("[role=alert]").should("not.exist");
+      cy.get("#email").should("have.value", email);
     });
   });
 

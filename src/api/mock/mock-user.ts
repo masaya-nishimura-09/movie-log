@@ -4,6 +4,7 @@ type MockAccount = UserResponse & {
   user_id: string;
   password: string;
   verified: boolean;
+  pendingEmail?: string;
 };
 
 const initialAccounts: MockAccount[] = [
@@ -23,23 +24,38 @@ export const mockAccounts = store.mockAccounts;
 export function toUserResponse({
   password: _,
   verified: __,
+  pendingEmail: ___,
   ...user
 }: MockAccount) {
   return user;
 }
 
+function encodeToken(prefix: string, email: string): string {
+  return `${prefix}${Buffer.from(email).toString("base64url")}`;
+}
+
+function decodeToken(prefix: string, token: unknown): string | undefined {
+  if (typeof token !== "string" || !token.startsWith(prefix)) {
+    return undefined;
+  }
+  return Buffer.from(token.slice(prefix.length), "base64url").toString();
+}
+
 const verificationTokenPrefix = "mock-verify-";
+const emailChangeTokenPrefix = "mock-email-change-";
 
 export function mockVerificationToken(email: string): string {
-  return `${verificationTokenPrefix}${Buffer.from(email).toString("base64url")}`;
+  return encodeToken(verificationTokenPrefix, email);
 }
 
 export function emailFromVerificationToken(token: unknown): string | undefined {
-  if (typeof token !== "string" || !token.startsWith(verificationTokenPrefix)) {
-    return undefined;
-  }
-  return Buffer.from(
-    token.slice(verificationTokenPrefix.length),
-    "base64url",
-  ).toString();
+  return decodeToken(verificationTokenPrefix, token);
+}
+
+export function mockEmailChangeToken(email: string): string {
+  return encodeToken(emailChangeTokenPrefix, email);
+}
+
+export function emailFromEmailChangeToken(token: unknown): string | undefined {
+  return decodeToken(emailChangeTokenPrefix, token);
 }

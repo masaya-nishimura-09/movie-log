@@ -47,7 +47,7 @@ export default async function AccountPage() {
           counterTemplate={dict.characterCount}
         />
         <AccountEmailForm
-          action={updateEmailAction}
+          action={updateEmailAction.bind(null, lang)}
           user={user}
           dict={dict.account}
           passwordDict={dict.passwordInput}
