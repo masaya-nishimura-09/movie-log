@@ -440,7 +440,8 @@ function updatePassword(account: Account, init: RequestInit): Response {
   return Response.json(toUserResponse(account));
 }
 
-function deleteUser(account: Account): Response {
+function deleteUser(account: Account, params: URLSearchParams): Response {
+  if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
   if (account.username === withdrawErrorName) {
     return error(500, "INTERNAL_SERVER_ERROR");
   }
@@ -607,7 +608,7 @@ export async function mockFetch(
 
   if (resource === "users" && id === undefined) {
     if (method === "GET") return Response.json(toUserResponse(account));
-    if (method === "DELETE") return deleteUser(account);
+    if (method === "DELETE") return deleteUser(account, url.searchParams);
   }
   if (method === "PUT" && resource === "users") {
     if (id === "username") return updateUsername(account, init);

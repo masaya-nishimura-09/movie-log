@@ -706,6 +706,11 @@
     "exportNotesAction": "Export notes as Markdown (ZIP)",
     "emailChangeSent": "We sent a confirmation email to {email}. Your email stays the same until it is confirmed."
   },
+  "withdrawn": {
+    "title": "Your account has been deleted",
+    "text": "All your records, notes and attachments have been deleted. Thank you for using Cinelier.",
+    "toTop": "Go to the top page"
+  },
   "noteEditor": {
     "toolbar": "Formatting",
     "bold": "Bold",

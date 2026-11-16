@@ -15,9 +15,12 @@ beforeEach(() => {
 });
 
 describe("withdrawAction", () => {
-  it("deletes the user, ends the session and moves to register", async () => {
+  it("deletes the user, ends the session and moves to the completion page", async () => {
     deleteUser.mockResolvedValue(undefined);
-    await expect(withdrawAction("en")).rejects.toThrow("REDIRECT /en/register");
+    await expect(withdrawAction("en")).rejects.toThrow(
+      "REDIRECT /en/withdrawn",
+    );
+    expect(deleteUser).toHaveBeenCalledWith("en");
     expect(endSession).toHaveBeenCalled();
   });
 

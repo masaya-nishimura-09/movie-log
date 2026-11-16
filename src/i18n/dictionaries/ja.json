@@ -704,6 +704,11 @@
     "exportNotesAction": "ノートをMarkdownで書き出す（ZIP）",
     "emailChangeSent": "{email} に確認メールを送りました。確認が済むまで、今のアドレスのままです。"
   },
+  "withdrawn": {
+    "title": "退会が完了しました",
+    "text": "記録、ノート、添付画像はすべて削除しました。ご利用ありがとうございました。",
+    "toTop": "トップページへ"
+  },
   "noteEditor": {
     "toolbar": "書式",
     "bold": "太字",

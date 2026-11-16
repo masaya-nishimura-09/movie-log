@@ -18,10 +18,10 @@ beforeEach(() => {
 const { deleteUser } = await import("@/api/user/delete-user");
 
 describe("deleteUser", () => {
-  it("deletes /users/", async () => {
+  it("deletes /users/ with the language", async () => {
     apiFetch.mockResolvedValue(undefined);
-    await deleteUser();
-    expect(apiFetch.mock.calls[0]?.[0]).toBe("/users/");
+    await deleteUser("ja");
+    expect(apiFetch.mock.calls[0]?.[0]).toBe("/users/?language=ja");
     expect(apiFetch.mock.calls[0]?.[2]).toEqual({ method: "DELETE" });
   });
 });

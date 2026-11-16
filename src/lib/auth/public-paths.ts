@@ -14,4 +14,5 @@ export const unlistedPublicPaths = [
   "/verify-email-change",
   "/forgot-password",
   "/reset-password",
+  "/withdrawn",
 ];

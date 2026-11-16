@@ -23,7 +23,7 @@ export function ResultMessage({ icon, title, text }: ResultMessageProps) {
     <div className="flex flex-col items-center gap-2 text-center">
       {icons[icon]}
       <h1 className="font-bold text-foreground text-xl">{phrases(title)}</h1>
-      <output className="text-[13px] text-foreground-sub leading-relaxed">
+      <output className="text-balance text-[13px] text-foreground-sub leading-relaxed">
         {phrases(text)}
       </output>
     </div>

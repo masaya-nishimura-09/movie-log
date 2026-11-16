@@ -1,5 +1,9 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { demoAccount } from "../../support/commands";
+import {
+  demoAccount,
+  newAccount,
+  verificationToken,
+} from "../../support/commands";
 
 function login(password: string) {
   cy.visit("/ja/login");
@@ -50,7 +54,15 @@ describe("API の失敗", () => {
   });
 
   it("退会：サーバーエラーでは、退会できなかったことを表示する", () => {
-    register("__withdraw_error__");
+    const account = { ...newAccount(), username: "__withdraw_error__" };
+    cy.registerUnverified(account);
+    cy.visit(`/ja/verify-email?token=${verificationToken(account.email)}`);
+    cy.contains("button", ja.verifyEmail.submit).click();
+    cy.contains("h1", ja.verifyEmail.doneTitle).should("be.visible");
+    cy.visit("/ja/login");
+    cy.get("#email").type(account.email);
+    cy.get("#password").type(account.password);
+    cy.contains("button", ja.login.submit).click();
     cy.location("pathname").should("eq", "/ja/records");
     cy.visit("/ja/account");
     cy.contains("button", ja.account.withdrawAction).click();

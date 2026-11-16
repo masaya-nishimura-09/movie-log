@@ -11,7 +11,7 @@ export async function withdrawAction(
   lang: Locale,
 ): Promise<ActionResult<never>> {
   try {
-    await deleteUser();
+    await deleteUser(lang);
   } catch (error) {
     if (error instanceof ApiError) {
       return { success: false, messageKey: "withdrawFailed" };
@@ -19,5 +19,5 @@ export async function withdrawAction(
     throw error;
   }
   await endSession();
-  redirect(`/${lang}/register`);
+  redirect(`/${lang}/withdrawn`);
 }

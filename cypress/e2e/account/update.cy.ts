@@ -210,7 +210,11 @@ describe("退会", () => {
       cy.contains("[role=alertdialog]", account.withdrawConfirmTitle)
         .contains("button", account.withdrawConfirm)
         .click();
-      cy.location("pathname").should("eq", "/ja/register");
+      cy.location("pathname").should("eq", "/ja/withdrawn");
+      cy.contains("h1", ja.withdrawn.title).should("be.visible");
+      cy.getCookie("access_token").should("be.null");
+      cy.contains("a", ja.withdrawn.toTop).click();
+      cy.location("pathname").should("eq", "/ja");
       loginWith(email, password);
       cy.get("[role=alert]").should("have.text", ja.login.invalidCredentials);
     });
@@ -267,7 +271,7 @@ describe("退会", () => {
       );
       cy.get("body").type("{esc}");
       cy.get("[role=alertdialog]").should("be.visible");
-      cy.location("pathname").should("eq", "/ja/register");
+      cy.location("pathname").should("eq", "/ja/withdrawn");
     });
   });
 });

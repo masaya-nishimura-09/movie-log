@@ -74,6 +74,7 @@ describe("proxy: ログイン", () => {
       "/ja/verify-email-change",
       "/ja/forgot-password",
       "/ja/reset-password",
+      "/ja/withdrawn",
     ]) {
       const response = await proxy(request(path));
       expect(location(response)).toBeNull();

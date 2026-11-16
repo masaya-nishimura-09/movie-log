@@ -263,6 +263,12 @@ for (const [lang, t] of locales) {
       });
     });
 
+    it("退会の完了", () => {
+      cy.visit(`/${lang}/withdrawn`);
+      cy.title().should("eq", `${t.withdrawn.title} | ${t.metadata.title}`);
+      shows(t.withdrawn.title, t.withdrawn.text, t.withdrawn.toTop);
+    });
+
     it("お問い合わせ", () => {
       cy.visit(`/${lang}/contact`);
       shows(

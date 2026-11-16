@@ -274,7 +274,10 @@ describe("mockFetch: ユーザー", () => {
       username: "tester",
       email: "tester@example.com",
     });
-    const deleted = await mockFetch("/users/", { method: "DELETE", headers });
+    const deleted = await mockFetch("/users/?language=ja", {
+      method: "DELETE",
+      headers,
+    });
     expect(deleted.status).toBe(204);
     const login = await mockFetch(
       "/auth/login",
@@ -450,7 +453,10 @@ describe("mockFetch: ユーザー", () => {
   it("gives a new user an ID that no one uses, even after a withdrawal", async () => {
     const first = await register("first", "first@example.com");
     await register("second", "second@example.com");
-    await mockFetch("/users/", { method: "DELETE", headers: first });
+    await mockFetch("/users/?language=ja", {
+      method: "DELETE",
+      headers: first,
+    });
     const third = await register("third", "third@example.com");
     const created = await mockFetch(
       "/records/",
@@ -466,7 +472,7 @@ describe("mockFetch: ユーザー", () => {
     const { record_id } = await (
       await mockFetch("/records/", post(newRecord, "POST", headers))
     ).json();
-    await mockFetch("/users/", { method: "DELETE", headers });
+    await mockFetch("/users/?language=ja", { method: "DELETE", headers });
     const demo = await auth();
     const response = await mockFetch(`/records/${record_id}`, {
       headers: demo,
@@ -474,9 +480,19 @@ describe("mockFetch: ユーザー", () => {
     expect(response.status).toBe(404);
   });
 
+  it("rejects a withdrawal without a supported language", async () => {
+    const headers = await register();
+    const response = await mockFetch("/users/", { method: "DELETE", headers });
+    expect(response.status).toBe(400);
+    expect((await mockFetch("/users/", { headers })).status).toBe(200);
+  });
+
   it("fails to withdraw a user named __withdraw_error__", async () => {
     const headers = await register("__withdraw_error__");
-    const response = await mockFetch("/users/", { method: "DELETE", headers });
+    const response = await mockFetch("/users/?language=ja", {
+      method: "DELETE",
+      headers,
+    });
     expect(response.status).toBe(500);
   });
 });
