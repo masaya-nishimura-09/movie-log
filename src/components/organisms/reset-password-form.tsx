@@ -61,11 +61,7 @@ export function ResetPasswordForm({
         />
         <Link
           href={`/${lang}/forgot-password`}
-          className={buttonVariants({
-            variant: "outline",
-            size: "lg",
-            className: "w-full",
-          })}
+          className={buttonVariants({ size: "lg", className: "w-full" })}
         >
           {dict.toRequest}
         </Link>

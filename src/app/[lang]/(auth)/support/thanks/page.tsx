@@ -60,10 +60,7 @@ export default async function SupportThanksPage({
           <p>{phrases(dict.support.thanksUse)}</p>
         </div>
       </div>
-      <Link
-        href={`/${lang}/records`}
-        className={cn(buttonVariants({ variant: "outline" }))}
-      >
+      <Link href={`/${lang}/records`} className={cn(buttonVariants())}>
         <ArrowLeft aria-hidden />
         {dict.support.thanksBack}
       </Link>

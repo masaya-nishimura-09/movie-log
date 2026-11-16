@@ -42,10 +42,10 @@ export function VerifyTokenForm({
   next,
 }: VerifyTokenFormProps) {
   const { state, failure, pending, submit } = useFormSubmit(action);
-  const nextLink = (variant: "default" | "outline") => (
+  const nextLink = (
     <Link
       href={next.href}
-      className={buttonVariants({ variant, size: "lg", className: "w-full" })}
+      className={buttonVariants({ size: "lg", className: "w-full" })}
     >
       {next.label}
     </Link>
@@ -59,7 +59,7 @@ export function VerifyTokenForm({
           title={dict.doneTitle}
           text={dict.doneText}
         />
-        {nextLink("default")}
+        {nextLink}
       </div>
     );
   }
@@ -75,7 +75,7 @@ export function VerifyTokenForm({
     return (
       <div className="flex flex-col gap-6">
         <ResultMessage icon="failed" {...failureScreen} />
-        {nextLink("outline")}
+        {nextLink}
       </div>
     );
   }
