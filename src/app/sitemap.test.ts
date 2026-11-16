@@ -18,9 +18,15 @@ describe("sitemap", () => {
     expect(urls.some((url) => url.includes("/account"))).toBe(false);
   });
 
-  it("does not list the email verification pages", () => {
+  it("does not list the pages opened from emails", () => {
     const urls = sitemap().map((entry) => entry.url);
-    expect(urls.some((url) => url.includes("/verify-email"))).toBe(false);
+    for (const path of [
+      "/verify-email",
+      "/forgot-password",
+      "/reset-password",
+    ]) {
+      expect(urls.some((url) => url.includes(path))).toBe(false);
+    }
   });
 
   it("links each page to its other language", () => {

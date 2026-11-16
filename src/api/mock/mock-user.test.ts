@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import {
   emailFromEmailChangeToken,
+  emailFromPasswordResetToken,
   emailFromVerificationToken,
   mockAccounts,
   mockEmailChangeToken,
+  mockPasswordResetToken,
   mockVerificationToken,
   toUserResponse,
 } from "@/api/mock/mock-user";
@@ -29,6 +31,7 @@ describe("toUserResponse", () => {
         password: "secret",
         verified: false,
         pendingEmail: "new@example.com",
+        resetRequested: true,
       }),
     ).toEqual({ user_id: "1", username: "tester", email: "user@example.com" });
   });
@@ -60,6 +63,18 @@ describe("mockEmailChangeToken", () => {
     ).toBeUndefined();
     expect(
       emailFromVerificationToken(mockEmailChangeToken("new@example.com")),
+    ).toBeUndefined();
+  });
+});
+
+describe("mockPasswordResetToken", () => {
+  it("encodes the email so that it can be read back, only for a reset", () => {
+    const token = mockPasswordResetToken("user@example.com");
+    expect(token).toBe("mock-password-reset-dXNlckBleGFtcGxlLmNvbQ");
+    expect(emailFromPasswordResetToken(token)).toBe("user@example.com");
+    expect(emailFromVerificationToken(token)).toBeUndefined();
+    expect(
+      emailFromPasswordResetToken(mockVerificationToken("user@example.com")),
     ).toBeUndefined();
   });
 });

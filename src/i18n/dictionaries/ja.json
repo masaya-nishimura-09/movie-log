@@ -377,7 +377,8 @@
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "verificationFailed": "確認に失敗しました。もう一度ログインしてください",
     "unexpectedError": "ログインできませんでした。時間をおいてやり直してください",
-    "emailNotVerified": "メールアドレスの確認が済んでいません。届いた確認メールのボタンを押してください"
+    "emailNotVerified": "メールアドレスの確認が済んでいません。届いた確認メールのボタンを押してください",
+    "forgotPassword": "パスワードを忘れた場合"
   },
   "register": {
     "title": "新規登録",
@@ -442,6 +443,45 @@
     "toAccount": "アカウント設定へ",
     "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "unexpectedError": "確認できませんでした。時間をおいてやり直してください"
+  },
+  "forgotPassword": {
+    "title": "パスワードの再設定",
+    "description": "登録したメールアドレスに、パスワードを再設定するためのメールを送ります。",
+    "email": "メールアドレス",
+    "emailError": "メールアドレスの形式が正しくありません",
+    "submit": "メールを送る",
+    "submitting": "送信中",
+    "sentTitle": "メールを送りました",
+    "sentText": "{email} に、パスワードを再設定するためのメールを送りました。メールのボタンを押して、新しいパスワードを設定してください。",
+    "sentNote": "リンクの有効期限は1時間です。登録されていないアドレスや、確認が済んでいないアドレスには届きません。メールが届かないときは、迷惑メールのフォルダも確認してください。",
+    "toLogin": "ログイン画面へ",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
+  },
+  "resendPasswordReset": {
+    "resend": "メールを再送",
+    "resending": "再送中",
+    "cooldown": "{seconds}秒後に再送できます",
+    "resent": "メールを再送しました",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "resendFailed": "再送できませんでした。時間をおいてやり直してください"
+  },
+  "resetPassword": {
+    "title": "新しいパスワードの設定",
+    "description": "新しいパスワードを入力してください。変更すると、すべての端末でログアウトします。",
+    "password": "新しいパスワード",
+    "passwordHint": "8〜72文字",
+    "passwordError": "半角英数字・記号で8〜72文字です",
+    "submit": "変更する",
+    "submitting": "変更中",
+    "doneTitle": "パスワードを変更しました",
+    "doneText": "新しいパスワードでログインしてください。",
+    "toLogin": "ログイン画面へ",
+    "invalidTitle": "リンクが無効です",
+    "invalidText": "リンクの期限が切れているか、すでに使われています。もう一度、再設定を申し込んでください。",
+    "toRequest": "再設定を申し込む",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
+    "unexpectedError": "変更できませんでした。時間をおいてやり直してください"
   },
   "passwordInput": {
     "show": "パスワードを表示",

@@ -2,6 +2,7 @@
 
 import { Check, MailCheck } from "lucide-react";
 import type { ActionResult } from "@/actions/action-result";
+import { resendVerificationEmailAction } from "@/actions/user/resend-verification-email";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
@@ -10,7 +11,7 @@ import { TextLink } from "@/components/atoms/text-link";
 import { CountedInput } from "@/components/molecules/counted-input";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
-import { ResendVerificationButton } from "@/components/molecules/resend-verification-button";
+import { ResendButton } from "@/components/molecules/resend-button";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -62,9 +63,10 @@ export function RegisterForm({
             {phrases(dict.sentNote)}
           </p>
         </div>
-        <ResendVerificationButton
-          lang={lang}
+        <ResendButton
+          scope="verification"
           email={state.data.email}
+          send={(email) => resendVerificationEmailAction(lang, email)}
           dict={resendDict}
           coolingDown
         />

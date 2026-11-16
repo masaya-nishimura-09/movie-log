@@ -5,6 +5,7 @@ type MockAccount = UserResponse & {
   password: string;
   verified: boolean;
   pendingEmail?: string;
+  resetRequested?: boolean;
 };
 
 const initialAccounts: MockAccount[] = [
@@ -25,6 +26,7 @@ export function toUserResponse({
   password: _,
   verified: __,
   pendingEmail: ___,
+  resetRequested: ____,
   ...user
 }: MockAccount) {
   return user;
@@ -43,6 +45,7 @@ function decodeToken(prefix: string, token: unknown): string | undefined {
 
 const verificationTokenPrefix = "mock-verify-";
 const emailChangeTokenPrefix = "mock-email-change-";
+const passwordResetTokenPrefix = "mock-password-reset-";
 
 export function mockVerificationToken(email: string): string {
   return encodeToken(verificationTokenPrefix, email);
@@ -58,4 +61,14 @@ export function mockEmailChangeToken(email: string): string {
 
 export function emailFromEmailChangeToken(token: unknown): string | undefined {
   return decodeToken(emailChangeTokenPrefix, token);
+}
+
+export function mockPasswordResetToken(email: string): string {
+  return encodeToken(passwordResetTokenPrefix, email);
+}
+
+export function emailFromPasswordResetToken(
+  token: unknown,
+): string | undefined {
+  return decodeToken(passwordResetTokenPrefix, token);
 }

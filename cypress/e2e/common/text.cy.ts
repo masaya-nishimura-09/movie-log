@@ -4,6 +4,7 @@ import {
   demoAccount,
   emailChangeToken,
   newAccount,
+  passwordResetToken,
   verificationToken,
 } from "../../support/commands";
 import { fill, pattern, shows } from "../../support/text";
@@ -61,6 +62,7 @@ for (const [lang, t] of locales) {
         t.login.submit,
         t.login.toRegisterPrompt,
         t.login.toRegister,
+        t.login.forgotPassword,
         t.about.link,
       );
     });
@@ -197,6 +199,66 @@ for (const [lang, t] of locales) {
         shows(
           t.verifyEmailChange.emailTakenTitle,
           t.verifyEmailChange.emailTakenText,
+        );
+      });
+    });
+
+    it("パスワードの再設定の申し込みと、メールを送った画面", () => {
+      cy.visit(`/${lang}/forgot-password`);
+      cy.title().should(
+        "eq",
+        `${t.forgotPassword.title} | ${t.metadata.title}`,
+      );
+      shows(
+        t.forgotPassword.title,
+        t.forgotPassword.description,
+        t.forgotPassword.email,
+        t.forgotPassword.submit,
+        t.forgotPassword.toLogin,
+      );
+      cy.get("#email").type("nobody@example.com");
+      cy.contains("button", t.forgotPassword.submit).click();
+      shows(
+        t.forgotPassword.sentTitle,
+        fill(t.forgotPassword.sentText, { email: "nobody@example.com" }),
+        t.forgotPassword.sentNote,
+        fill(t.resendPasswordReset.cooldown, { seconds: 60 }),
+        t.forgotPassword.toLogin,
+      );
+    });
+
+    it("新しいパスワードの設定", () => {
+      cy.visit(`/${lang}/reset-password?token=any-token`);
+      cy.title().should("eq", `${t.resetPassword.title} | ${t.metadata.title}`);
+      shows(
+        t.resetPassword.title,
+        t.resetPassword.description,
+        t.resetPassword.password,
+        t.resetPassword.passwordHint,
+        t.resetPassword.submit,
+      );
+      cy.get("#password").type("new-password-789");
+      cy.contains("button", t.resetPassword.submit).click();
+      shows(
+        t.resetPassword.invalidTitle,
+        t.resetPassword.invalidText,
+        t.resetPassword.toRequest,
+      );
+    });
+
+    it("パスワードを変更した画面", () => {
+      cy.register().then(({ email }) => {
+        cy.visit(`/${lang}/forgot-password`);
+        cy.get("#email").type(email);
+        cy.contains("button", t.forgotPassword.submit).click();
+        cy.contains("h1", t.forgotPassword.sentTitle);
+        cy.visit(`/${lang}/reset-password?token=${passwordResetToken(email)}`);
+        cy.get("#password").type("new-password-789");
+        cy.contains("button", t.resetPassword.submit).click();
+        shows(
+          t.resetPassword.doneTitle,
+          t.resetPassword.doneText,
+          t.resetPassword.toLogin,
         );
       });
     });

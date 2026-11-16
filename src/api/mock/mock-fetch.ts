@@ -3,6 +3,7 @@ import { mockNotes } from "@/api/mock/mock-notes";
 import { mockRecordOwners, mockRecords } from "@/api/mock/mock-records";
 import {
   emailFromEmailChangeToken,
+  emailFromPasswordResetToken,
   emailFromVerificationToken,
   mockAccounts,
   toUserResponse,
@@ -14,6 +15,7 @@ import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
 import { maxAttachments } from "@/schemas/record/attachment";
 import { moodTagSchema } from "@/schemas/record/enums";
 import type { RecordResponse } from "@/schemas/record/record";
+import { passwordResetInputSchema } from "@/schemas/user/user-input";
 
 function error(status: number, code: ApiErrorResponse["code"]): Response {
   return Response.json({ code, message: code } satisfies ApiErrorResponse, {
@@ -344,10 +346,10 @@ function verifyEmail(init: RequestInit): Response {
   return new Response(null, { status: 204 });
 }
 
-function resendVerificationEmail(
+function readEmailRequest(
   init: RequestInit,
   params: URLSearchParams,
-): Response {
+): string | Response {
   if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
   const { email } = readJson(init);
   if (typeof email !== "string" || !email.includes("@")) {
@@ -356,6 +358,40 @@ function resendVerificationEmail(
   const localPart = email.split("@")[0];
   if (localPart === errorKeyword) return error(500, "INTERNAL_SERVER_ERROR");
   if (localPart === tooManyKeyword) return error(429, "TOO_MANY_REQUESTS");
+  return email;
+}
+
+function resendVerificationEmail(
+  init: RequestInit,
+  params: URLSearchParams,
+): Response {
+  const email = readEmailRequest(init, params);
+  if (email instanceof Response) return email;
+  return new Response(null, { status: 204 });
+}
+
+function requestPasswordReset(
+  init: RequestInit,
+  params: URLSearchParams,
+): Response {
+  const email = readEmailRequest(init, params);
+  if (email instanceof Response) return email;
+  const account = mockAccounts.find((a) => a.email === email && a.verified);
+  if (account) account.resetRequested = true;
+  return new Response(null, { status: 204 });
+}
+
+function resetPassword(init: RequestInit): Response {
+  const { token, password } = readJson(init);
+  const input = passwordResetInputSchema.safeParse({ password });
+  if (!input.success) return error(400, "INVALID_INPUT");
+  const email = emailFromPasswordResetToken(token);
+  const account = mockAccounts.find(
+    (a) => email !== undefined && a.email === email && a.resetRequested,
+  );
+  if (!account) return error(400, "INVALID_PASSWORD_RESET_TOKEN");
+  account.password = input.data.password;
+  account.resetRequested = false;
   return new Response(null, { status: 204 });
 }
 
@@ -560,6 +596,10 @@ export async function mockFetch(
       return resendVerificationEmail(init, url.searchParams);
     }
     if (id === "email" && sub === "verify") return verifyEmailChange(init);
+    if (id === "password" && sub === "reset-request") {
+      return requestPasswordReset(init, url.searchParams);
+    }
+    if (id === "password" && sub === "reset") return resetPassword(init);
   }
 
   const account = authenticate(init);

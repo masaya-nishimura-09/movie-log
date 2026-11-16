@@ -45,3 +45,7 @@ export type PasswordChangeInput = z.infer<typeof passwordChangeInputSchema>;
 export function toPasswordChangeRequest(input: PasswordChangeInput) {
   return { old_password: input.oldPassword, new_password: input.newPassword };
 }
+
+export const passwordResetRequestInputSchema = z.object({ email: emailSchema });
+
+export const passwordResetInputSchema = z.object({ password: passwordSchema });

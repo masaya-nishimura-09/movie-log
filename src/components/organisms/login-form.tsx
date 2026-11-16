@@ -2,13 +2,14 @@
 
 import { useEffect, useRef, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
+import { resendVerificationEmailAction } from "@/actions/user/resend-verification-email";
 import { Button } from "@/components/atoms/button";
 import { FormAlert } from "@/components/atoms/form-alert";
 import { Input } from "@/components/atoms/input";
 import { TextLink } from "@/components/atoms/text-link";
 import { FormField } from "@/components/molecules/form-field";
 import { PasswordInput } from "@/components/molecules/password-input";
-import { ResendVerificationButton } from "@/components/molecules/resend-verification-button";
+import { ResendButton } from "@/components/molecules/resend-button";
 import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
@@ -57,10 +58,11 @@ export function LoginForm({
         </FormAlert>
       )}
       {unverifiedEmail && (
-        <ResendVerificationButton
+        <ResendButton
           key={unverifiedEmail}
-          lang={lang}
+          scope="verification"
           email={unverifiedEmail}
+          send={(email) => resendVerificationEmailAction(lang, email)}
           dict={resendDict}
         />
       )}
@@ -96,6 +98,12 @@ export function LoginForm({
           hideLabel={passwordDict.hide}
         />
       </FormField>
+      <TextLink
+        href={`/${lang}/forgot-password`}
+        className="-mt-2 self-end text-xs"
+      >
+        {dict.forgotPassword}
+      </TextLink>
       <TurnstileWidget lang={lang} siteKey={siteKey} failure={failure} />
       <Button
         type="submit"

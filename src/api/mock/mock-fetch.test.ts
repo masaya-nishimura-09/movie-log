@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 import {
   mockEmailChangeToken,
+  mockPasswordResetToken,
   mockVerificationToken,
 } from "@/api/mock/mock-user";
 import { fakeJwt } from "@/test/fake-jwt";
@@ -867,6 +868,74 @@ describe("mockFetch: 記録", () => {
     await mockFetch("/records/1", { method: "DELETE", headers });
     const store = globalThis as { mockAttachments?: { record_id: string }[] };
     expect(store.mockAttachments?.some((a) => a.record_id === "1")).toBe(false);
+  });
+});
+
+describe("mockFetch: パスワードの再設定", () => {
+  async function requestReset(email: string, query = "?language=ja") {
+    return mockFetch(`/users/password/reset-request${query}`, post({ email }));
+  }
+
+  async function reset(email: string, password = "new-password") {
+    return mockFetch(
+      "/users/password/reset",
+      post({ token: mockPasswordResetToken(email), password }),
+    );
+  }
+
+  it("resets the password of a verified account once with the emailed token", async () => {
+    expect((await requestReset("demo@example.com")).status).toBe(204);
+    expect((await reset("demo@example.com")).status).toBe(204);
+    expect(
+      (await tokens("demo@example.com", "new-password")).access_token,
+    ).toBeDefined();
+    expect((await tokens()).code).toBe("INVALID_CREDENTIALS");
+    const again = await reset("demo@example.com", "another-pass");
+    expect(again.status).toBe(400);
+    expect(await again.json()).toMatchObject({
+      code: "INVALID_PASSWORD_RESET_TOKEN",
+    });
+  });
+
+  it("returns 204 for an unknown or unverified email without issuing a token", async () => {
+    await mockFetch(
+      "/users/register?language=ja",
+      post({ name: "x", email: "x@example.com", password: "password" }),
+    );
+    for (const email of ["nobody@example.com", "x@example.com"]) {
+      expect((await requestReset(email)).status).toBe(204);
+      expect((await reset(email)).status).toBe(400);
+    }
+  });
+
+  it("rejects a token that was not requested or is malformed", async () => {
+    expect((await reset("demo@example.com")).status).toBe(400);
+    const broken = await mockFetch(
+      "/users/password/reset",
+      post({ token: "broken", password: "new-password" }),
+    );
+    expect(await broken.json()).toMatchObject({
+      code: "INVALID_PASSWORD_RESET_TOKEN",
+    });
+  });
+
+  it("rejects an invalid new password with INVALID_INPUT", async () => {
+    await requestReset("demo@example.com");
+    for (const password of ["short", "pass word2", "a".repeat(73)]) {
+      const response = await reset("demo@example.com", password);
+      expect(await response.json()).toMatchObject({ code: "INVALID_INPUT" });
+    }
+    expect((await reset("demo@example.com")).status).toBe(204);
+  });
+
+  it("rejects a request with an invalid email or language", async () => {
+    expect((await requestReset("not-an-email")).status).toBe(400);
+    expect((await requestReset("demo@example.com", "")).status).toBe(400);
+  });
+
+  it("returns errors for the request keywords", async () => {
+    expect((await requestReset("__too_many__@example.com")).status).toBe(429);
+    expect((await requestReset("__error__@example.com")).status).toBe(500);
   });
 });
 

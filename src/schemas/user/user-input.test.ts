@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import {
   emailChangeInputSchema,
   passwordChangeInputSchema,
+  passwordResetInputSchema,
+  passwordResetRequestInputSchema,
   toPasswordChangeRequest,
   toUsernameRequest,
   toUserRequest,
@@ -95,5 +97,25 @@ describe("toPasswordChangeRequest", () => {
         newPassword: "new-pass2",
       }),
     ).toEqual({ old_password: "old-pass1", new_password: "new-pass2" });
+  });
+});
+
+describe("passwordResetRequestInputSchema", () => {
+  it("requires a valid email", () => {
+    const parse = (email: string) =>
+      passwordResetRequestInputSchema.safeParse({ email }).success;
+    expect(parse("user@example.com")).toBe(true);
+    expect(parse("user")).toBe(false);
+  });
+});
+
+describe("passwordResetInputSchema", () => {
+  it("requires the new password to be 8 to 72 half-width characters", () => {
+    const parse = (password: string) =>
+      passwordResetInputSchema.safeParse({ password }).success;
+    expect(parse("password1!")).toBe(true);
+    expect(parse("short")).toBe(false);
+    expect(parse("pass word2")).toBe(false);
+    expect(parse("a".repeat(73))).toBe(false);
   });
 });

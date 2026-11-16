@@ -22,6 +22,10 @@ export function emailChangeToken(email: string): string {
   return mockToken("mock-email-change-", email);
 }
 
+export function passwordResetToken(email: string): string {
+  return mockToken("mock-password-reset-", email);
+}
+
 export function newAccount(prefix = "tester"): Account {
   const id = `${Date.now()}${Cypress._.random(1000, 9999)}`;
   return {

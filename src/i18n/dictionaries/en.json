@@ -379,7 +379,8 @@
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
     "verificationFailed": "We could not verify the request. Log in again",
     "unexpectedError": "Couldn't log in. Please try again later",
-    "emailNotVerified": "Your email address is not confirmed yet. Press the button in the confirmation email we sent you"
+    "emailNotVerified": "Your email address is not confirmed yet. Press the button in the confirmation email we sent you",
+    "forgotPassword": "Forgot your password?"
   },
   "register": {
     "title": "Create an account",
@@ -444,6 +445,45 @@
     "toAccount": "Go to account settings",
     "tooManyRequests": "Too many attempts. Please wait a moment and try again",
     "unexpectedError": "Couldn't confirm. Please try again later"
+  },
+  "forgotPassword": {
+    "title": "Reset your password",
+    "description": "We will send an email to reset your password to the address you registered.",
+    "email": "Email",
+    "emailError": "Enter a valid email address",
+    "submit": "Send email",
+    "submitting": "Sending",
+    "sentTitle": "Check your email",
+    "sentText": "We sent an email to {email} to reset your password. Press the button in the email to set a new password.",
+    "sentNote": "The link expires in 1 hour. It is not sent to addresses that are not registered or not confirmed yet. If the email does not arrive, check your spam folder.",
+    "toLogin": "Go to the login page",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "unexpectedError": "Couldn't send. Please try again later"
+  },
+  "resendPasswordReset": {
+    "resend": "Resend email",
+    "resending": "Resending",
+    "cooldown": "You can resend in {seconds}s",
+    "resent": "Email sent again",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "resendFailed": "Couldn't resend. Please try again later"
+  },
+  "resetPassword": {
+    "title": "Set a new password",
+    "description": "Enter a new password. Changing it signs you out on all devices.",
+    "password": "New password",
+    "passwordHint": "8-72 characters",
+    "passwordError": "Use 8 to 72 half-width letters, digits, or symbols",
+    "submit": "Change password",
+    "submitting": "Changing",
+    "doneTitle": "Password changed",
+    "doneText": "Log in with your new password.",
+    "toLogin": "Go to the login page",
+    "invalidTitle": "This link is invalid",
+    "invalidText": "The link has expired or has already been used. Please request a password reset again.",
+    "toRequest": "Request a reset again",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
+    "unexpectedError": "Couldn't change the password. Please try again later"
   },
   "passwordInput": {
     "show": "Show password",
