@@ -10,6 +10,7 @@ import {
 } from "@/api/mock/mock-user";
 import { hasLocale } from "@/i18n/locales";
 import { isTokenExpired } from "@/lib/auth/token-cookies";
+import { contactInputSchema } from "@/schemas/contact/contact";
 import type { ApiErrorResponse } from "@/schemas/error/api-error";
 import { posterContentTypes, posterMaxBytes } from "@/schemas/media/media";
 import { maxAttachments } from "@/schemas/record/attachment";
@@ -395,6 +396,13 @@ function resetPassword(init: RequestInit): Response {
   return new Response(null, { status: 204 });
 }
 
+function sendContact(init: RequestInit, params: URLSearchParams): Response {
+  if (!hasLanguage(params)) return error(400, "INVALID_INPUT");
+  const input = contactInputSchema.safeParse(readJson(init));
+  if (!input.success) return error(400, "INVALID_INPUT");
+  return new Response(null, { status: 204 });
+}
+
 function updateUsername(account: Account, init: RequestInit): Response {
   const { name } = readJson(init) as UserBody;
   account.username = String(name);
@@ -589,6 +597,9 @@ export async function mockFetch(
     if (id === "login") return login(init);
     if (id === "refresh") return refresh(init);
     if (id === "logout") return new Response(null, { status: 204 });
+  }
+  if (method === "POST" && resource === "contacts" && id === undefined) {
+    return sendContact(init, url.searchParams);
   }
   if (method === "POST" && resource === "users") {
     if (id === "register") return register(init, url.searchParams);

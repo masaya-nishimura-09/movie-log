@@ -1,11 +1,9 @@
 "use server";
 
-import { cookies } from "next/headers";
 import { type ActionResult, invalidInput } from "@/actions/action-result";
+import { ApiError } from "@/api/client/api-error";
+import { sendContact } from "@/api/contact/send-contact";
 import type { Locale } from "@/i18n/locales";
-import { accessTokenCookie, readJwtUserId } from "@/lib/auth/token-cookies";
-import { sendContactMail } from "@/lib/contact/send-contact-mail";
-import { useMock } from "@/lib/env";
 import { logError } from "@/lib/log/logger";
 import { verifyTurnstile } from "@/lib/turnstile/verify-turnstile";
 import { contactInputSchema, honeypotField } from "@/schemas/contact/contact";
@@ -27,19 +25,15 @@ export async function sendContactAction(
     return invalidInput(input.error);
   }
 
-  if (useMock) return { success: true, data: null };
-
   const turnstileFailure = await verifyTurnstile(formData);
   if (turnstileFailure) return { success: false, messageKey: turnstileFailure };
 
   try {
-    const accessToken = (await cookies()).get(accessTokenCookie)?.value;
-    await sendContactMail(input.data, {
-      lang,
-      userId: accessToken ? readJwtUserId(accessToken) : undefined,
-      receivedAt: new Date(),
-    });
+    await sendContact(input.data, lang);
   } catch (error) {
+    if (error instanceof ApiError && error.code === "TOO_MANY_REQUESTS") {
+      return { success: false, messageKey: "tooManyRequests" };
+    }
     logError("error", "contact_send_failed", error);
     return { success: false, messageKey: "unexpectedError" };
   }

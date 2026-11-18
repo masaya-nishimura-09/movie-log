@@ -1,24 +1,15 @@
-import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { fakeJwt } from "@/test/fake-jwt";
+import { beforeEach, describe, expect, it, vi } from "vitest";
+import { ApiError } from "@/api/client/api-error";
 
-const cookieValues = new Map<string, string>();
-const sendContactMail = vi.fn();
+const sendContact = vi.fn();
 const verifyTurnstile = vi.fn();
+const logError = vi.fn();
 
-vi.mock("next/headers", () => ({
-  cookies: async () => ({
-    get: (name: string) =>
-      cookieValues.has(name) ? { value: cookieValues.get(name) } : undefined,
-  }),
-}));
-vi.mock("@/lib/contact/send-contact-mail", () => ({ sendContactMail }));
+vi.mock("@/api/contact/send-contact", () => ({ sendContact }));
 vi.mock("@/lib/turnstile/verify-turnstile", () => ({ verifyTurnstile }));
+vi.mock("@/lib/log/logger", () => ({ logError }));
 
-async function load(useMock = false) {
-  vi.resetModules();
-  vi.stubEnv("USE_MOCK", useMock ? "true" : "false");
-  return (await import("@/actions/contact/send-contact")).sendContactAction;
-}
+const { sendContactAction } = await import("@/actions/contact/send-contact");
 
 function form(fields: Record<string, string> = {}) {
   const data = new FormData();
@@ -29,87 +20,74 @@ function form(fields: Record<string, string> = {}) {
 
 beforeEach(() => {
   vi.clearAllMocks();
-  cookieValues.clear();
   verifyTurnstile.mockResolvedValue(undefined);
-  sendContactMail.mockResolvedValue(undefined);
-  vi.spyOn(console, "error").mockImplementation(() => {});
-});
-
-afterEach(() => {
-  vi.unstubAllEnvs();
-  vi.restoreAllMocks();
+  sendContact.mockResolvedValue(undefined);
 });
 
 describe("sendContactAction", () => {
-  it("sends the mail with the language, the user and the time", async () => {
-    const send = await load();
-    cookieValues.set("access_token", fakeJwt({ UserID: 7 }));
-    await expect(send("en", undefined, form())).resolves.toEqual({
-      success: true,
-      data: null,
-    });
-    expect(sendContactMail).toHaveBeenCalledWith(
+  it("sends the trimmed message to the API with the language", async () => {
+    await expect(
+      sendContactAction("en", undefined, form({ message: "  Hello  " })),
+    ).resolves.toEqual({ success: true, data: null });
+    expect(sendContact).toHaveBeenCalledWith(
       { email: "user@example.com", message: "Hello" },
-      { lang: "en", userId: "7", receivedAt: expect.any(Date) },
+      "en",
     );
   });
 
-  it("sends a guest's mail without a user ID", async () => {
-    const send = await load();
-    await send("ja", undefined, form());
-    expect(sendContactMail.mock.calls[0]?.[1].userId).toBeUndefined();
-  });
-
   it("pretends to succeed for a bot that fills the hidden field", async () => {
-    const send = await load();
     await expect(
-      send("ja", undefined, form({ website: "spam" })),
+      sendContactAction("ja", undefined, form({ website: "spam" })),
     ).resolves.toEqual({ success: true, data: null });
     expect(verifyTurnstile).not.toHaveBeenCalled();
-    expect(sendContactMail).not.toHaveBeenCalled();
+    expect(sendContact).not.toHaveBeenCalled();
   });
 
   it("returns field errors for invalid input", async () => {
-    const send = await load();
     await expect(
-      send("ja", undefined, form({ email: "user", message: " " })),
+      sendContactAction("ja", undefined, form({ email: "user", message: " " })),
     ).resolves.toEqual({
       success: false,
       messageKey: "invalidInput",
       errors: { email: ["invalidEmail"], message: ["messageRequired"] },
     });
-    expect(sendContactMail).not.toHaveBeenCalled();
+    expect(sendContact).not.toHaveBeenCalled();
   });
 
   it("returns the Turnstile failure without sending", async () => {
-    const send = await load();
     verifyTurnstile.mockResolvedValue("verificationFailed");
-    await expect(send("ja", undefined, form())).resolves.toEqual({
+    await expect(sendContactAction("ja", undefined, form())).resolves.toEqual({
       success: false,
       messageKey: "verificationFailed",
     });
-    expect(sendContactMail).not.toHaveBeenCalled();
+    expect(sendContact).not.toHaveBeenCalled();
   });
 
-  it("returns unexpectedError and logs when sending fails", async () => {
-    const send = await load();
-    sendContactMail.mockRejectedValue(new Error("Resend returned 500"));
-    await expect(send("ja", undefined, form())).resolves.toEqual({
+  it("returns tooManyRequests for TOO_MANY_REQUESTS without logging", async () => {
+    sendContact.mockRejectedValue(new ApiError(429, "TOO_MANY_REQUESTS"));
+    await expect(sendContactAction("ja", undefined, form())).resolves.toEqual({
       success: false,
-      messageKey: "unexpectedError",
+      messageKey: "tooManyRequests",
     });
-    expect(console.error).toHaveBeenCalledWith(
-      expect.stringContaining('"event":"contact_send_failed"'),
-    );
+    expect(logError).not.toHaveBeenCalled();
   });
 
-  it("succeeds without verifying or sending in mock mode", async () => {
-    const send = await load(true);
-    await expect(send("ja", undefined, form())).resolves.toEqual({
-      success: true,
-      data: null,
+  const failures = [
+    new ApiError(400, "INVALID_INPUT"),
+    new ApiError(500, "INTERNAL_SERVER_ERROR"),
+    new Error("network"),
+  ];
+  for (const error of failures) {
+    it(`returns unexpectedError and logs for ${error.message}`, async () => {
+      sendContact.mockRejectedValue(error);
+      await expect(sendContactAction("ja", undefined, form())).resolves.toEqual(
+        { success: false, messageKey: "unexpectedError" },
+      );
+      expect(logError).toHaveBeenCalledWith(
+        "error",
+        "contact_send_failed",
+        error,
+      );
     });
-    expect(verifyTurnstile).not.toHaveBeenCalled();
-    expect(sendContactMail).not.toHaveBeenCalled();
-  });
+  }
 });

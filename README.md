@@ -42,7 +42,6 @@ you have watched by those conditions. When someone asks
 flowchart LR
     browser["Browser"] --> web["Cinelier Web<br/>(Next.js)"]
     web --> api["Cinelier API<br/>(Go / Gin)"]
-    web --> resend["Resend<br/>contact emails"]
     web --> turnstile["Cloudflare Turnstile<br/>bot protection"]
     browser --> turnstile
     web --> stripe["Stripe<br/>support payments"]
@@ -90,7 +89,7 @@ UI components are organized into atoms, molecules, and organisms.
 
 ### Contact
 
-- A contact form that sends messages by email through Resend
+- A contact form that sends messages by email through the API
 - Protection against automated submissions with Cloudflare Turnstile
   and a hidden field
 
@@ -141,7 +140,6 @@ and 700 for headings, primary buttons, and scores.
 | Validation     | Zod                                                 |
 | Testing        | Vitest, Cypress                                     |
 | Bot protection | Cloudflare Turnstile                                |
-| Contact        | Resend                                              |
 | Payments       | Stripe                                              |
 | Tooling        | Biome, pnpm                                         |
 
@@ -197,9 +195,6 @@ Set the following environment variables in `.env.local`.
 | `MOCK_LANGUAGE`        | Optional | Set to `en` for English mock records (Japanese otherwise)           |
 | `INTERNAL_API_SECRET`  | Optional | Secret shared with the API for rate limiting by client IP (must match the API's value) |
 | `APP_VERSION`          | Optional | Version written to logs, such as the Git commit hash                |
-| `RESEND_API_KEY`       | Optional | Resend API key (required for the contact form)                      |
-| `CONTACT_TO_EMAIL`     | Optional | Address that receives contact messages (required for the contact form) |
-| `CONTACT_FROM_EMAIL`   | Optional | Sender of contact emails (default: `Cinelier <onboarding@resend.dev>`) |
 | `TURNSTILE_SITE_KEY`   | Required | Cloudflare Turnstile site key (not required in mock mode)           |
 | `TURNSTILE_SECRET_KEY` | Required | Cloudflare Turnstile secret key (not required in mock mode)         |
 | `STRIPE_SECRET_KEY`    | Optional | Stripe secret key (required for support payments)                   |

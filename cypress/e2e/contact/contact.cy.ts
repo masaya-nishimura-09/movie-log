@@ -14,6 +14,24 @@ describe("お問い合わせ", () => {
     cy.contains(contact.intro).should("not.exist");
   });
 
+  it("回数の制限にかかると、その旨を表示して入力を残す", () => {
+    cy.visit("/ja/contact");
+    cy.get("#email").type("user@example.com");
+    cy.get("#message").type("__too_many__");
+    cy.contains("button", contact.submit).click();
+    cy.get("[role=alert]").should("have.text", contact.tooManyRequests);
+    cy.get("#message").should("have.value", "__too_many__");
+  });
+
+  it("送信に失敗すると、送れなかったことを表示する", () => {
+    cy.visit("/ja/contact");
+    cy.get("#email").type("user@example.com");
+    cy.get("#message").type("__error__");
+    cy.contains("button", contact.submit).click();
+    cy.get("[role=alert]").should("have.text", contact.unexpectedError);
+    cy.contains("h1", contact.successTitle).should("not.exist");
+  });
+
   it("内容が空だとエラーを表示する", () => {
     cy.visit("/ja/contact");
     cy.get("#email").type("user@example.com");

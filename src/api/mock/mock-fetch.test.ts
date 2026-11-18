@@ -955,6 +955,44 @@ describe("mockFetch: パスワードの再設定", () => {
   });
 });
 
+describe("mockFetch: お問い合わせ", () => {
+  it("accepts a valid message without logging in", async () => {
+    const response = await mockFetch(
+      "/contacts?language=ja",
+      post({ email: "user@example.com", message: "Hello" }),
+    );
+    expect(response.status).toBe(204);
+  });
+
+  it("rejects an invalid email, an empty or too long message, or no language", async () => {
+    for (const [path, body] of [
+      ["/contacts?language=ja", { email: "user", message: "Hello" }],
+      ["/contacts?language=ja", { email: "user@example.com", message: " " }],
+      [
+        "/contacts?language=ja",
+        { email: "user@example.com", message: "a".repeat(2001) },
+      ],
+      ["/contacts", { email: "user@example.com", message: "Hello" }],
+    ] as const) {
+      const response = await mockFetch(path, post(body));
+      expect(response.status).toBe(400);
+    }
+  });
+
+  it("returns 500 or 429 for the message keywords", async () => {
+    for (const [message, status] of [
+      ["__error__", 500],
+      ["__too_many__", 429],
+    ] as const) {
+      const response = await mockFetch(
+        "/contacts?language=ja",
+        post({ email: "user@example.com", message }),
+      );
+      expect(response.status).toBe(status);
+    }
+  });
+});
+
 describe("mockFetch: 失敗を返す値", () => {
   it("returns 500 for a list searched with __error__", async () => {
     expect((await list(await auth(), "keyword=__error__")).status).toBe(500);

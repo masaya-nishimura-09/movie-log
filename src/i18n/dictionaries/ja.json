@@ -346,6 +346,7 @@
     "messageRequired": "お問い合わせ内容を入力してください",
     "messageTooLong": "お問い合わせ内容は2000文字以内で入力してください",
     "verificationFailed": "確認に失敗しました。もう一度送信してください",
+    "tooManyRequests": "試行回数が多すぎます。しばらく待ってからやり直してください",
     "unexpectedError": "送信できませんでした。時間をおいてやり直してください"
   },
   "header": {

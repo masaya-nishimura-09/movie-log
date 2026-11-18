@@ -348,6 +348,7 @@
     "messageRequired": "Enter a message",
     "messageTooLong": "Keep the message within 2000 characters",
     "verificationFailed": "We could not verify the request. Send it again",
+    "tooManyRequests": "Too many attempts. Please wait a moment and try again",
     "unexpectedError": "Your message could not be sent. Try again later"
   },
   "header": {

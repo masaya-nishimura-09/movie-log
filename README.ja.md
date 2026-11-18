@@ -40,7 +40,6 @@
 flowchart LR
     browser["ブラウザ"] --> web["Cinelier Web<br/>(Next.js)"]
     web --> api["Cinelier API<br/>(Go / Gin)"]
-    web --> resend["Resend<br/>お問い合わせのメール"]
     web --> turnstile["Cloudflare Turnstile<br/>自動送信の防止"]
     browser --> turnstile
     web --> stripe["Stripe<br/>応援の支払い"]
@@ -85,7 +84,7 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 
 ### お問い合わせ
 
-- Resend を利用した、メールで届くお問い合わせフォーム
+- API を通してメールで届く、お問い合わせフォーム
 - Cloudflare Turnstile と非表示の入力欄による、自動送信の防止
 
 ### 応援
@@ -131,7 +130,6 @@ UI コンポーネントは、atoms、molecules、organisms の 3 層に分け�
 | バリデーション | Zod                                                  |
 | テスト         | Vitest、Cypress                                      |
 | ボット対策     | Cloudflare Turnstile                                 |
-| お問い合わせ   | Resend                                               |
 | 支払い         | Stripe                                               |
 | 開発ツール     | Biome、pnpm                                          |
 
@@ -185,9 +183,6 @@ pnpm dev
 | `MOCK_LANGUAGE`        | 任意      | `en` にすると、英語のモックデータを使用（それ以外は日本語）          |
 | `INTERNAL_API_SECRET`  | 任意      | API との共有シークレット。クライアント IP 単位のレート制限に使用（API と同じ値を設定） |
 | `APP_VERSION`          | 任意      | ログに記録するバージョン（Git のコミット ID など）                   |
-| `RESEND_API_KEY`       | 任意      | Resend の API キー（お問い合わせフォームを使う場合は必須）           |
-| `CONTACT_TO_EMAIL`     | 任意      | お問い合わせを受け取るメールアドレス（お問い合わせフォームを使う場合は必須） |
-| `CONTACT_FROM_EMAIL`   | 任意      | お問い合わせのメールの送信元（既定値 `Cinelier <onboarding@resend.dev>`） |
 | `TURNSTILE_SITE_KEY`   | 必須      | Cloudflare Turnstile のサイトキー（モックモードでは不要）            |
 | `TURNSTILE_SECRET_KEY` | 必須      | Cloudflare Turnstile の秘密鍵（モックモードでは不要）                |
 | `STRIPE_SECRET_KEY`    | 任意      | Stripe のシークレットキー（応援の支払いを使う場合は必須）            |
