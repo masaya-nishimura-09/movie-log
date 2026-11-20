@@ -1,13 +1,17 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
 
 describe("記録が0件のとき", () => {
-  it("まだ記録がないことと、記録を追加するボタンを表示する", () => {
+  it("白紙のノートであることと、1本目を書くボタンを表示し、並べ替えと絞り込みは押せない", () => {
     cy.register();
     cy.visit("/ja/records");
     cy.contains(ja.emptyState.title).should("be.visible");
     cy.contains(ja.emptyState.description).should("be.visible");
-    cy.contains(/件中 \d+件を表示/).should("not.exist");
-    cy.get(`button[aria-label="${ja.recordSort.label}"]`).should("not.exist");
+    cy.contains(ja.recordList.summary.replace("{total}", "0")).should(
+      "be.visible",
+    );
+    cy.get(`button[aria-label="${ja.recordSort.label}"]:visible`)
+      .closest("[inert]")
+      .should("exist");
     cy.get("main").contains("a", ja.emptyState.action).click();
     cy.location("pathname").should("eq", "/ja/records/new");
   });
@@ -17,13 +21,15 @@ describe("記録が0件のとき", () => {
     const title = `E2E 初めての記録 ${Date.now()}`;
     cy.createRecord(title);
     cy.visit("/ja/records");
-    cy.contains("1件中 1件を表示").should("be.visible");
-    cy.get("main ul > li > a").should("have.length", 1);
+    cy.contains(ja.recordList.summary.replace("{total}", "1")).should(
+      "be.visible",
+    );
+    cy.get("main ol a:visible").should("have.length", 1);
     const date = new Intl.DateTimeFormat("ja", {
       month: "numeric",
       day: "numeric",
     }).format(new Date());
-    cy.get(`[aria-label="${ja.recordCard.noPoster}"]`)
+    cy.get(`main ol a:visible [aria-label="${ja.recordCard.noPoster}"]`)
       .closest("a")
       .should("contain.text", title)
       .and("contain.text", date)

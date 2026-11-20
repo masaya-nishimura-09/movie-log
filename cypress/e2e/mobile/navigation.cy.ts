@@ -84,8 +84,8 @@ describe("スマホの画面", () => {
       "勝手にしやがれ{enter}",
     );
     cy.location("search").should("contain", "q=");
-    cy.get("main ul > li > a").should("have.length.at.least", 1);
-    cy.get("main ul > li > a").each(([card]) =>
+    cy.get("main ol a:visible").should("have.length.at.least", 1);
+    cy.get("main ol a:visible").each(([card]) =>
       expect(card.textContent).to.contain("勝手にしやがれ"),
     );
   });

@@ -6,7 +6,7 @@ import {
   recordListResponseSchema,
 } from "@/schemas/record/list";
 
-const perPage = 12;
+const perPage = 8;
 
 const sortParams: Record<RecordSort, { field: string; order: string }> = {
   watchedAtDesc: { field: "watched_at", order: "desc" },

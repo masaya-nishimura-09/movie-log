@@ -8,11 +8,13 @@ import {
   PopoverTrigger,
 } from "@/components/molecules/popover";
 import { cn } from "@/lib/style/cn";
+import { interpolate } from "@/lib/text/interpolate";
 
 type FilterButtonProps = {
   label: string;
   count?: number;
   selectedLabel?: string;
+  selectedTemplate: string;
   wide?: boolean;
   children: ReactNode;
 };
@@ -21,6 +23,7 @@ export function FilterButton({
   label,
   count = 0,
   selectedLabel,
+  selectedTemplate,
   wide,
   children,
 }: FilterButtonProps) {
@@ -31,13 +34,15 @@ export function FilterButton({
       <PopoverTrigger
         aria-label={selectedLabel && `${label}: ${selectedLabel}`}
         className={cn(
-          "flex h-9.5 items-center gap-1.5 rounded-full px-3.5 font-medium text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
+          "flex h-9 items-center gap-1 rounded-full pr-2.5 pl-3 text-[13px] outline-none focus-visible:ring-2 focus-visible:ring-ring",
           active
-            ? "bg-selected text-selected-foreground"
-            : "bg-control text-foreground-sub hover:text-foreground",
+            ? "bg-foreground text-background"
+            : "bg-secondary text-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)]",
         )}
       >
-        {selectedLabel ?? label}
+        {selectedLabel === undefined
+          ? label
+          : interpolate(selectedTemplate, { label, value: selectedLabel })}
         {count > 0 && <span className="tabular-nums">{count}</span>}
         <ChevronDown className="size-3.5" aria-hidden />
       </PopoverTrigger>

@@ -40,13 +40,15 @@ export function FilterSheet({
       <SheetTrigger
         aria-label={dict.open}
         className={cn(
-          buttonVariants({ variant: "outline", size: "sm" }),
-          "px-3",
-          activeCount > 0 && "bg-selected text-selected-foreground",
+          buttonVariants({ variant: "secondary", size: "sm" }),
+          "h-9 px-3 text-[13px] text-foreground",
+          activeCount > 0 &&
+            "bg-foreground text-background hover:bg-foreground",
         )}
       >
-        <SlidersHorizontal className="size-4" aria-hidden />
-        {activeCount > 0 && activeCount}
+        <SlidersHorizontal className="size-3.75" aria-hidden />
+        {dict.open}
+        {activeCount > 0 && <span className="tabular-nums">{activeCount}</span>}
       </SheetTrigger>
       <SheetContent
         side="bottom"

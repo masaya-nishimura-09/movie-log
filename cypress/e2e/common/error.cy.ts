@@ -30,6 +30,6 @@ describe("読み込みエラー", () => {
       .clear()
       .type("勝手にしやがれ{enter}");
     cy.contains(ja.errorPage.title).should("not.exist");
-    cy.get("main ul > li > a").should("have.length.at.least", 1);
+    cy.get("main ol a:visible").should("have.length.at.least", 1);
   });
 });

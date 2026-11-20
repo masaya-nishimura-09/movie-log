@@ -3,13 +3,19 @@ import { cn } from "@/lib/style/cn";
 type StarRatingProps = {
   score: number;
   label: string;
+  max?: number;
   className?: string;
 };
 
 const starPath =
   "m12 3.5 2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z";
 
-export function StarRating({ score, label, className }: StarRatingProps) {
+export function StarRating({
+  score,
+  label,
+  max = 5,
+  className,
+}: StarRatingProps) {
   return (
     <span
       role="img"
@@ -19,7 +25,7 @@ export function StarRating({ score, label, className }: StarRatingProps) {
         className,
       )}
     >
-      {[1, 2, 3, 4, 5].map((star) => (
+      {Array.from({ length: max }, (_, i) => i + 1).map((star) => (
         <svg
           key={star}
           viewBox="0 0 24 24"

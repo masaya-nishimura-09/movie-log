@@ -5,7 +5,6 @@ import {
   Fragment,
   type ReactNode,
   useCallback,
-  useEffect,
   useLayoutEffect,
   useRef,
   useState,
@@ -15,7 +14,9 @@ import { NotebookPage } from "@/components/molecules/notebook-page";
 import { PageTurner } from "@/components/molecules/page-turner";
 import { ScrapPhoto } from "@/components/molecules/scrap-photo";
 import { AttachmentViewer } from "@/components/organisms/attachment-viewer";
+import { NotebookScreen } from "@/components/organisms/notebook-screen";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
+import { usePageKeys } from "@/hooks/use-page-keys";
 import { useSwipe } from "@/hooks/use-swipe";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { notebookProseStyles } from "@/lib/note/prose-styles";
@@ -85,15 +86,6 @@ function contentHeight(scroller: HTMLElement): number {
     scroller.clientHeight -
     Number.parseFloat(style.paddingTop) -
     Number.parseFloat(style.paddingBottom)
-  );
-}
-
-function isTyping(target: EventTarget | null): boolean {
-  return (
-    target instanceof HTMLElement &&
-    target.closest(
-      "input, textarea, select, [contenteditable='true'], [role='dialog'], [role='alertdialog']",
-    ) !== null
   );
 }
 
@@ -167,20 +159,10 @@ export function RecordNotebook({
     },
     [start, step],
   );
-  const goPrev = hasPrev ? () => turn(-1) : undefined;
-  const goNext = hasNext ? () => turn(1) : undefined;
+  const goPrev = useCallback(() => hasPrev && turn(-1), [hasPrev, turn]);
+  const goNext = useCallback(() => hasNext && turn(1), [hasNext, turn]);
 
-  useEffect(() => {
-    const onKeyDown = (event: KeyboardEvent) => {
-      if (event.altKey || event.ctrlKey || event.metaKey) return;
-      if (isTyping(event.target)) return;
-      if (event.key === "ArrowLeft" && hasPrev) turn(-1);
-      if (event.key === "ArrowRight" && hasNext) turn(1);
-    };
-    window.addEventListener("keydown", onKeyDown);
-    return () => window.removeEventListener("keydown", onKeyDown);
-  }, [hasPrev, hasNext, turn]);
-
+  usePageKeys(goPrev, goNext);
   const swipe = useSwipe(goPrev, goNext);
 
   const pageLabel = (index: number) =>
@@ -306,38 +288,37 @@ export function RecordNotebook({
       label={position}
       prevLabel={dict.prevPage}
       nextLabel={dict.nextPage}
-      onPrev={goPrev}
-      onNext={goNext}
+      prev={hasPrev ? goPrev : undefined}
+      next={hasNext ? goNext : undefined}
       className={className}
     />
   );
 
   return (
-    <div className="mx-auto flex w-full max-w-296 flex-col max-lg:h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))] md:max-lg:max-w-2xl lg:px-8 lg:pb-6">
-      <div className="flex flex-wrap items-center gap-1.5 px-4 pt-1.5 pb-2.5 lg:gap-3 lg:px-0 lg:py-4">
-        {back}
-        <div className="flex-1" />
-        {turner("hidden lg:flex")}
-        <span aria-hidden className="hidden w-2 lg:block" />
-        {actions}
-      </div>
-      <div
-        className="min-h-0 flex-1 touch-pan-y lg:flex-none"
-        onPointerDown={swipe.onPointerDown}
-        onPointerUp={swipe.onPointerUp}
-      >
-        {layout === null ? (
-          <>
-            <div className="hidden lg:block">{spread}</div>
-            <div className="h-full lg:hidden">{single}</div>
-          </>
-        ) : layout === "spread" ? (
-          spread
-        ) : (
-          single
-        )}
-      </div>
-      {turner("justify-center pt-2 pb-4.5 lg:hidden")}
+    <NotebookScreen
+      toolbar={
+        <>
+          {back}
+          <div className="flex-1" />
+          {turner("hidden lg:flex")}
+          <span aria-hidden className="hidden w-2 lg:block" />
+          {actions}
+        </>
+      }
+      footer={turner("justify-center pt-2 pb-4.5 lg:hidden")}
+      onPointerDown={swipe.onPointerDown}
+      onPointerUp={swipe.onPointerUp}
+    >
+      {layout === null ? (
+        <>
+          <div className="hidden lg:block">{spread}</div>
+          <div className="h-full lg:hidden">{single}</div>
+        </>
+      ) : layout === "spread" ? (
+        spread
+      ) : (
+        single
+      )}
       <AttachmentViewer
         attachments={attachments}
         index={openAttachment}
@@ -346,6 +327,6 @@ export function RecordNotebook({
         dict={dict}
         deleteDict={deleteDict}
       />
-    </div>
+    </NotebookScreen>
   );
 }

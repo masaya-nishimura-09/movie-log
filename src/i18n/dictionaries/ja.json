@@ -491,15 +491,16 @@
   },
   "recordList": {
     "heading": "観た映画",
-    "summary": "{total}件中 {shown}件を表示",
-    "activeFilters": "絞り込み {count}件",
-    "noMatch": "条件に合う記録がありません",
-    "clearFilters": "絞り込みを解除"
-  },
-  "pagination": {
-    "status": "{current} / {total}",
-    "previous": "前のページ",
-    "next": "次のページ"
+    "summary": "全{total}本",
+    "noMatch": "条件に合う記録はありません",
+    "clearFilters": "すべて解除",
+    "contents": "CONTENTS",
+    "filteredSummary": "全{total}本中 {shown}本",
+    "filtering": "絞り込み中",
+    "resultCount": "{count}本",
+    "noMatchHint": "条件を減らすか、すべて解除してください。",
+    "continued": "（つづき）",
+    "unknownYear": "公開年なし"
   },
   "recordFilter": {
     "open": "絞り込み",
@@ -511,7 +512,8 @@
     "genre": "ジャンル",
     "showAllPlatforms": "すべて表示（{count}件）",
     "remove": "{label}を解除",
-    "showResults": "{count}件を表示"
+    "showResults": "{count}件を表示",
+    "selected": "{label}：{value}"
   },
   "recordSort": {
     "label": "並び替え",
@@ -522,12 +524,11 @@
     "titleAsc": "タイトル順"
   },
   "emptyState": {
-    "title": "まだ記録がありません",
-    "description": "最後に観た映画から記録してみましょう。タイトル、鑑賞日、スコア、鑑賞方法の4つを入れれば保存できます。",
-    "action": "記録を追加"
+    "title": "まだ白紙のノートです",
+    "description": "最後に観た映画から、1本目を書いてみましょう。",
+    "action": "1本目を書く"
   },
   "recordCard": {
-    "score": "スコア {score}",
     "noPoster": "ポスター未登録"
   },
   "recordDetail": {

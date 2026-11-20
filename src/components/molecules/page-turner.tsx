@@ -1,24 +1,57 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import Link from "next/link";
+import type { ReactNode } from "react";
 import { cn } from "@/lib/style/cn";
+
+type Turn = (() => void) | string | undefined;
 
 type PageTurnerProps = {
   label: string;
   prevLabel: string;
   nextLabel: string;
-  onPrev?: () => void;
-  onNext?: () => void;
+  prev: Turn;
+  next: Turn;
   className?: string;
 };
 
 const arrow =
   "grid size-11 place-items-center rounded-[10px] text-foreground outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-35 lg:size-10";
 
+function TurnButton({
+  turn,
+  label,
+  children,
+}: {
+  turn: Turn;
+  label: string;
+  children: ReactNode;
+}) {
+  if (typeof turn === "string") {
+    return (
+      <Link href={turn} aria-label={label} className={arrow}>
+        {children}
+      </Link>
+    );
+  }
+  return (
+    <button
+      type="button"
+      onClick={turn}
+      disabled={!turn}
+      aria-label={label}
+      className={arrow}
+    >
+      {children}
+    </button>
+  );
+}
+
 export function PageTurner({
   label,
   prevLabel,
   nextLabel,
-  onPrev,
-  onNext,
+  prev,
+  next,
   className,
 }: PageTurnerProps) {
   return (
@@ -28,27 +61,15 @@ export function PageTurner({
         className,
       )}
     >
-      <button
-        type="button"
-        onClick={onPrev}
-        disabled={!onPrev}
-        aria-label={prevLabel}
-        className={arrow}
-      >
+      <TurnButton turn={prev} label={prevLabel}>
         <ChevronLeft className="size-5 lg:size-4.5" aria-hidden />
-      </button>
+      </TurnButton>
       <span aria-live="polite" className="min-w-14 text-center tabular-nums">
         {label}
       </span>
-      <button
-        type="button"
-        onClick={onNext}
-        disabled={!onNext}
-        aria-label={nextLabel}
-        className={arrow}
-      >
+      <TurnButton turn={next} label={nextLabel}>
         <ChevronRight className="size-5 lg:size-4.5" aria-hidden />
-      </button>
+      </TurnButton>
     </div>
   );
 }

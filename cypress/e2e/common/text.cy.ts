@@ -327,10 +327,14 @@ for (const [lang, t] of locales) {
           "eq",
           `${t.recordList.heading} | ${t.metadata.title}`,
         );
-        shows(t.recordList.heading, t.header.newRecord);
-        cy.contains(
-          pattern(`${t.recordList.summary} ・ ${t.recordList.activeFilters}`),
-        ).should("exist");
+        shows(
+          t.recordList.contents,
+          t.recordList.heading,
+          t.recordList.filtering,
+          t.header.newRecord,
+        );
+        cy.contains(pattern(t.recordList.filteredSummary)).should("exist");
+        cy.contains(pattern(t.recordList.resultCount)).should("exist");
         cy.get(`input[placeholder="${t.header.searchPlaceholder}"]`).should(
           "exist",
         );
@@ -345,11 +349,14 @@ for (const [lang, t] of locales) {
           t.recordFilter.platform,
           t.recordFilter.moodTag,
           t.recordFilter.genre,
-          `${t.recordFilter.score} 5`,
+          fill(t.recordFilter.selected, {
+            label: t.recordFilter.score,
+            value: "★5",
+          }),
           t.recordFilter.clearAll,
         );
         cy.get(
-          `[aria-label="${fill(t.recordFilter.remove, { label: `${t.recordFilter.score} 5` })}"]`,
+          `[aria-label="${fill(t.recordFilter.remove, { label: "★5" })}"]`,
         ).should("exist");
         cy.get(`[aria-label="${t.header.accountMenu}"]`).click();
         shows(
@@ -362,14 +369,19 @@ for (const [lang, t] of locales) {
 
       it("ページ送り", () => {
         cy.visit(`/${lang}/records`);
-        cy.contains(pattern(t.pagination.status)).should("exist");
-        cy.get(`[aria-label="${t.pagination.previous}"]`).should("exist");
-        cy.get(`[aria-label="${t.pagination.next}"]`).should("exist");
+        cy.contains(pattern(t.recordList.summary)).should("exist");
+        cy.contains(pattern(t.recordDetail.pagePosition)).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.prevPage}"]`).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.nextPage}"]`).should("exist");
       });
 
       it("一致する記録がないとき", () => {
         cy.visit(`/${lang}/records?q=no-match-title`);
-        shows(t.recordList.noMatch, t.recordList.clearFilters);
+        shows(
+          t.recordList.noMatch,
+          t.recordList.noMatchHint,
+          t.recordList.clearFilters,
+        );
       });
 
       it("記録の詳細", () => {

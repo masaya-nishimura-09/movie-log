@@ -45,7 +45,7 @@ describe("getRecords", () => {
       ["sort_field", "watched_at"],
       ["sort_order", "desc"],
       ["page", "1"],
-      ["per_page", "12"],
+      ["per_page", "8"],
     ]);
   });
 
@@ -94,7 +94,7 @@ describe("getRecords", () => {
       totalCount: 30,
       filteredCount: 25,
       page: 2,
-      pageCount: 3,
+      pageCount: 4,
     });
   });
 

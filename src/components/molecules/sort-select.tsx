@@ -1,5 +1,6 @@
 "use client";
 
+import { ArrowUpDown } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Select,
@@ -41,6 +42,7 @@ export function SortSelect({
         size="sm"
         className={cn("w-full text-[13px]", className)}
       >
+        <ArrowUpDown className="size-3.75" aria-hidden />
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

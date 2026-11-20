@@ -493,15 +493,16 @@
   },
   "recordList": {
     "heading": "Watched films",
-    "summary": "Showing {shown} of {total}",
-    "activeFilters": "{count} filters",
-    "noMatch": "No records match these filters",
-    "clearFilters": "Clear filters"
-  },
-  "pagination": {
-    "status": "{current} / {total}",
-    "previous": "Previous page",
-    "next": "Next page"
+    "summary": "{total} films",
+    "noMatch": "No logs match these filters",
+    "clearFilters": "Clear all",
+    "contents": "CONTENTS",
+    "filteredSummary": "{shown} of {total} films",
+    "filtering": "Filtering",
+    "resultCount": "{count} films",
+    "noMatchHint": "Remove some filters, or clear them all.",
+    "continued": "(continued)",
+    "unknownYear": "Unknown year"
   },
   "recordFilter": {
     "open": "Filters",
@@ -513,7 +514,8 @@
     "genre": "Genre",
     "showAllPlatforms": "Show all ({count})",
     "remove": "Remove {label}",
-    "showResults": "Show {count} results"
+    "showResults": "Show {count} results",
+    "selected": "{label}: {value}"
   },
   "recordSort": {
     "label": "Sort",
@@ -524,12 +526,11 @@
     "titleAsc": "Title"
   },
   "emptyState": {
-    "title": "No records yet",
-    "description": "Start with the last film you watched. A title, the date, a score, and where you watched are all you need.",
-    "action": "Log your first film"
+    "title": "This notebook is still blank",
+    "description": "Start with the last film you watched.",
+    "action": "Write the first one"
   },
   "recordCard": {
-    "score": "Score {score}",
     "noPoster": "No poster"
   },
   "recordDetail": {
