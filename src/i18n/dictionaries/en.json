@@ -297,7 +297,7 @@
             "However, information remaining in database backups is deleted 30 days after the backup is created.",
             "Contact information is kept as long as needed to answer the inquiry and deleted once it is no longer needed.",
             "Records of support payments are kept by Stripe and are not deleted when you delete your account.",
-            "Activity logs are deleted after a set period."
+            "Activity logs are deleted 30 days after they are recorded."
           ]
         },
         {
