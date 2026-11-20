@@ -7,11 +7,9 @@
     "name": "Cinelier"
   },
   "landing": {
-    "headline": "One note for every film you watch.",
     "lead": "Write down what you thought, next to the date, a score, and the mood of the film. Your records stay private, and only you can read them.",
     "start": "Sign up to start",
     "login": "Log in",
-    "listAlt": "A grid of posters for the films you have logged",
     "features": [
       {
         "title": "A page for each film",
@@ -29,14 +27,35 @@
     "note": {
       "title": "Your note, right next to the poster.",
       "text": "The note you wrote sits on the same page as the date and mood. You can also attach up to 10 photos of pamphlets or flyers to each film.",
-      "alt": "One film's record, with a note of headings and text under the poster and the watched date"
+      "alt": "The rest of the note, and a scrap page with photos of a pamphlet and flyers"
     },
     "recommend": {
       "title": "“Anything moving on Netflix?”",
       "text": "Love films, and people keep asking you what to watch. The right pick for someone else rarely comes to mind on the spot. Filter the films you have seen by platform and mood, and the answer is right there.",
-      "alt": "Records filtered to the Netflix platform and the Moving mood"
+      "alt": "The contents filtered by where you watched and mood"
     },
-    "closing": "Start with the last film you saw. A title, the date, a score, and where you watched are all you need. You can add a note later."
+    "eyebrow": "FILM JOURNAL",
+    "headlineBefore": "",
+    "headlineLead": "One ",
+    "headlineMarked": "note",
+    "headlineAfter": " for every film you watch.",
+    "badge": "Free · Only you can read your logs",
+    "registerShort": "Sign up",
+    "heroAlt": "One film’s log: the poster and viewing details on the left page, the note on the right",
+    "heroMobileAlt": "The first page of a log on a phone",
+    "contents": {
+      "eyebrow": "CONTENTS",
+      "title": "Every film, in one notebook.",
+      "text": "Your logs are bound into one notebook, page after page. Open any film from the monthly contents.",
+      "alt": "The contents of watched films, in chapters by month",
+      "mobileAlt": "The contents on a phone"
+    },
+    "featuresEyebrow": "FEATURES",
+    "featuresTitle": "Write it down, find it later.",
+    "noteEyebrow": "NOTE & SCRAP",
+    "recommendEyebrow": "RECOMMEND",
+    "closingTitle": "Start with the last film you saw.",
+    "closingText": "A title, the date, a score, and where you watched are all you need. You can add a note later."
   },
   "about": {
     "title": "About",

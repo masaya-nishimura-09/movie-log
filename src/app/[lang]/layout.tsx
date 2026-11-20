@@ -50,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `/og/og-${lang}.jpg`,
           width: 1200,
           height: 630,
-          alt: dict.landing.listAlt,
+          alt: dict.landing.heroAlt,
         },
       ],
     },

@@ -25,7 +25,12 @@ for (const [lang, t] of locales) {
         t.metadata.description,
       );
       shows(
-        t.landing.headline,
+        `${t.landing.headlineBefore}${t.landing.headlineLead}${t.landing.headlineMarked}${t.landing.headlineAfter}`,
+        t.landing.eyebrow,
+        t.landing.contents.eyebrow,
+        t.landing.featuresEyebrow,
+        t.landing.noteEyebrow,
+        t.landing.recommendEyebrow,
         t.landing.lead,
         t.landing.start,
         t.landing.login,
@@ -33,7 +38,12 @@ for (const [lang, t] of locales) {
         t.landing.note.text,
         t.landing.recommend.title,
         t.landing.recommend.text,
-        t.landing.closing,
+        t.landing.closingTitle,
+        t.landing.closingText,
+        t.landing.badge,
+        t.landing.contents.title,
+        t.landing.contents.text,
+        t.landing.featuresTitle,
         t.about.link,
         t.register.termsLink,
         t.register.privacyLink,
@@ -42,7 +52,10 @@ for (const [lang, t] of locales) {
       for (const feature of t.landing.features)
         shows(feature.title, feature.text);
       for (const alt of [
-        t.landing.listAlt,
+        t.landing.heroAlt,
+        t.landing.heroMobileAlt,
+        t.landing.contents.alt,
+        t.landing.contents.mobileAlt,
         t.landing.note.alt,
         t.landing.recommend.alt,
       ]) {

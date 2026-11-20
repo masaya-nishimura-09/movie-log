@@ -69,12 +69,16 @@ UI components are organized into atoms, molecules, and organisms.
   with previous and next buttons
 - One note per record, written in an editor with bold, italic, headings,
   subheadings, bulleted lists, numbered lists, and quotes
-- A record page split into a log tab (mood, note, and attachments)
-  and a film info tab (original title, synopsis, genres, and credits)
+- A record page shaped like a ring notebook (a cover, the note, and scraps
+  on separate pages; a spread on desktop and one page on phones,
+  turned with buttons, arrow keys, or a swipe)
+- Create and edit screens with two spreads:
+  viewing and film details, then the note and scraps
 
 ### Finding Records
 
-- Search over titles and notes, sorting, and pagination
+- Search over titles and notes, sorting, and a contents page split into
+  chapters by month (or by stars when sorted by score)
 - Filtering by score, platform, mood, and genre
   (one score and one platform;
   moods and genres match only records that have all of them)
