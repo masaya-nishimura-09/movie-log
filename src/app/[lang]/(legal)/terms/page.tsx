@@ -1,10 +1,14 @@
 import type { Metadata } from "next";
 import { LegalDocument } from "@/components/organisms/legal-document";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { alternates } from "@/lib/seo/alternates";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const dict = await getDictionary();
-  return { title: dict.legal.terms.title };
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return {
+    title: dict.legal.terms.title,
+    alternates: alternates(lang, "/terms"),
+  };
 }
 
 export default async function TermsPage() {

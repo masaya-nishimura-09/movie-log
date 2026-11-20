@@ -8,11 +8,12 @@ import { phrases } from "@/components/atoms/phrases";
 import { SectionLabel } from "@/components/atoms/section-label";
 import { TextLink } from "@/components/atoms/text-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { alternates } from "@/lib/seo/alternates";
 import { cn } from "@/lib/style/cn";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const dict = await getDictionary();
-  return { title: dict.about.title };
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return { title: dict.about.title, alternates: alternates(lang, "/about") };
 }
 
 export default async function AboutPage() {

@@ -4,11 +4,15 @@ import { Logo } from "@/components/atoms/logo";
 import { TextLink } from "@/components/atoms/text-link";
 import { RegisterForm } from "@/components/organisms/register-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { alternates } from "@/lib/seo/alternates";
 import { turnstileSiteKey } from "@/lib/turnstile/verify-turnstile";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const dict = await getDictionary();
-  return { title: dict.register.title };
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return {
+    title: dict.register.title,
+    alternates: alternates(lang, "/register"),
+  };
 }
 
 export default async function RegisterPage() {

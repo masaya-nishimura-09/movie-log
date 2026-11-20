@@ -36,6 +36,7 @@ describe("sitemap", () => {
     expect(about?.alternates?.languages).toEqual({
       ja: "http://localhost:3000/ja/about",
       en: "http://localhost:3000/en/about",
+      "x-default": "http://localhost:3000/about",
     });
   });
 });

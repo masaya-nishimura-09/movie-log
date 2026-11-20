@@ -3,11 +3,15 @@ import { sendContactAction } from "@/actions/contact/send-contact";
 import { BackButton } from "@/components/molecules/back-button";
 import { ContactForm } from "@/components/organisms/contact-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+import { alternates } from "@/lib/seo/alternates";
 import { turnstileSiteKey } from "@/lib/turnstile/verify-turnstile";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const dict = await getDictionary();
-  return { title: dict.contact.title };
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
+  return {
+    title: dict.contact.title,
+    alternates: alternates(lang, "/contact"),
+  };
 }
 
 export default async function ContactPage() {

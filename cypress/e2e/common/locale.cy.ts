@@ -1,5 +1,6 @@
 import en from "../../../src/i18n/dictionaries/en.json";
 import ja from "../../../src/i18n/dictionaries/ja.json";
+import { publicPaths } from "../../../src/lib/auth/public-paths";
 import { demoAccount } from "../../support/commands";
 
 describe("言語", () => {
@@ -20,6 +21,38 @@ describe("言語", () => {
   it("言語のない URL には、言語を付けて移る", () => {
     cy.visit("/about", { headers: { "Accept-Language": "ja" } });
     cy.location("pathname").should("eq", "/ja/about");
+  });
+
+  for (const page of publicPaths) {
+    it(`/ja${page} に、正規の URL と各言語の URL を書く`, () => {
+      cy.visit(`/ja${page}`);
+      cy.get("link[rel=canonical]")
+        .should("have.length", 1)
+        .and("have.attr", "href")
+        .and("match", new RegExp(`/ja${page}$`));
+      cy.get("link[rel=alternate][hreflang=ja]")
+        .should("have.attr", "href")
+        .and("match", new RegExp(`/ja${page}$`));
+      cy.get("link[rel=alternate][hreflang=en]")
+        .should("have.attr", "href")
+        .and("match", new RegExp(`/en${page}$`));
+      cy.get("link[rel=alternate][hreflang=x-default]")
+        .should("have.attr", "href")
+        .and("match", new RegExp(`^https?://[^/]+${page}$`));
+    });
+  }
+
+  it("/en のページには、英語の URL を正規の URL として書く", () => {
+    cy.visit("/en/about");
+    cy.get("link[rel=canonical]")
+      .should("have.attr", "href")
+      .and("match", /\/en\/about$/);
+  });
+
+  it("メールから開く画面には、正規の URL と各言語の URL を書かない", () => {
+    cy.visit("/ja/verify-email?token=wrong-token");
+    cy.get("link[rel=alternate][hreflang]").should("not.exist");
+    cy.get("link[rel=canonical]").should("not.exist");
   });
 
   it("英語の画面でログインから記録の操作まで使える", () => {
