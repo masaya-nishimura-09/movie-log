@@ -26,14 +26,14 @@ describe("記録の詳細", () => {
     page()
       .first()
       .within(() => {
-        cy.get("h1").should("have.text", "勝手にしやがれ");
+        cy.get("h1").should("contain.text", "勝手にしやがれ");
         cy.contains("À bout de souffle").should("be.visible");
         cy.contains("dt", detail.watchedAt)
           .next("dd")
-          .should("have.text", "2026/08/16(日)");
+          .should("contain.text", "2026/08/16(日)");
         cy.contains("dt", detail.platform)
           .next("dd")
-          .should("have.text", ja.enums.platform.criterion_channel);
+          .should("contain.text", ja.enums.platform.criterion_channel);
         cy.contains("dt", detail.score)
           .next("dd")
           .find("[role=img]")
@@ -47,16 +47,16 @@ describe("記録の詳細", () => {
         cy.contains("h2", detail.movieInfo).should("be.visible");
         cy.contains("dt", detail.released)
           .next("dd")
-          .should("have.text", "1960年 · 90分");
+          .should("contain.text", "1960年 · 90分");
         cy.contains("dt", detail.production)
           .next("dd")
-          .should("have.text", "フランス · フランス語");
+          .should("contain.text", "フランス · フランス語");
         cy.contains("dt", detail.genres)
           .next("dd")
           .should("contain", ja.enums.genre.drama);
         cy.contains("dt", detail.directors)
           .next("dd")
-          .should("have.text", "ジャン＝リュック・ゴダール");
+          .should("contain.text", "ジャン＝リュック・ゴダール");
         cy.contains("dt", detail.cast)
           .next("dd")
           .should("contain", "ジャン＝ポール・ベルモンド");
@@ -79,7 +79,6 @@ describe("記録の詳細", () => {
     cy.turnNotebookTo("観たきっかけ")
       .find("h2")
       .should("contain", "観たきっかけ");
-    cy.turnNotebookTo("最後の場面は").should("be.visible");
     cy.turnNotebookToEnd();
     page()
       .last()

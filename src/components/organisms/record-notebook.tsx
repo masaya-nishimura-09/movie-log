@@ -134,8 +134,8 @@ export function RecordNotebook({
     pageIndex - (pageIndex % step),
     lastStart - (lastStart % step),
   );
-  const hasPrev = start > 0;
-  const hasNext = start + step < pages.length;
+  const hasPrev = layout !== null && start > 0;
+  const hasNext = layout !== null && start + step < pages.length;
 
   const turn = useCallback(
     (to: 1 | -1) => {
@@ -155,7 +155,7 @@ export function RecordNotebook({
   const pageLabel = (index: number) =>
     interpolate(dict.pageLabel, { page: index + 1 });
   const total = pages.length;
-  const right = layout === "spread" ? pages[start + 1] : undefined;
+  const right = layout === "single" ? undefined : pages[start + 1];
   const position = right
     ? interpolate(dict.pageSpread, {
         start: start + 1,

@@ -18,7 +18,7 @@ describe("スマホの画面での操作", () => {
 
   it("新規登録できる", () => {
     cy.register();
-    cy.contains(ja.emptyState.title).should("be.visible");
+    cy.contains(":visible", ja.emptyState.title).should("be.visible");
   });
 
   it("記録を作成、編集、削除できる", () => {

@@ -98,6 +98,7 @@ export function NotebookPage({
       )}
       <div
         ref={scrollRef}
+        data-slot="page-body"
         className={cn(
           "relative min-h-0 flex-1 overflow-y-auto overscroll-contain",
           ruledLines,

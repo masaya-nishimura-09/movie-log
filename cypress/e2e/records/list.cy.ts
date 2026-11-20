@@ -22,7 +22,9 @@ function cardWatchedAt(card: HTMLElement) {
 }
 
 function cardScore(card: HTMLElement) {
-  const label = card.querySelector("[role=img]")?.getAttribute("aria-label");
+  const label = card
+    .querySelector("[role=img][aria-label$='点']")
+    ?.getAttribute("aria-label");
   return Number(label?.match(/(\d+)点$/)?.[1]);
 }
 
@@ -134,14 +136,14 @@ describe("記録の一覧", () => {
     cy.get(`button[aria-label="${turner.prevPage}"]:visible`).should(
       "be.disabled",
     );
-    cy.contains(/^1 \/ \d+$/).should("be.visible");
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
     cards()
       .first()
       .then(([card]) => {
         const firstTitle = cardTitle(card);
         cy.get(`a[aria-label="${turner.nextPage}"]:visible`).click();
         cy.location("search").should("eq", "?page=2");
-        cy.contains(/^2 \/ \d+$/).should("be.visible");
+        cy.contains(":visible", /^2 \/ \d+$/).should("be.visible");
         cards()
           .first()
           .then(([next]) => expect(cardTitle(next)).not.to.eq(firstTitle));
@@ -164,7 +166,7 @@ describe("記録の一覧", () => {
   it("スマホでは1ページずつで、下のボタンとスワイプでめくる", () => {
     cy.viewport(390, 844);
     cy.visit("/ja/records");
-    cy.contains(/^1 \/ \d+$/).should("be.visible");
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
     cy.get(`a[aria-label="${turner.nextPage}"]:visible`).click();
     cy.location("search").should("eq", "?page=2");
     cy.get("main .touch-pan-y")
@@ -191,7 +193,7 @@ describe("記録の一覧", () => {
     cards().should("have.length", 1);
     cy.contains(/^全\d+本中 1本$/).should("be.visible");
     cy.contains("main", list.filtering).should("be.visible");
-    cy.get(`a[aria-label='${removeLabel(`"${title}"`)}']`).click();
+    cy.get(`a[aria-label='${removeLabel(`"${title}"`)}']:visible`).click();
     cy.location("search").should("eq", "");
   });
 
@@ -201,7 +203,9 @@ describe("記録の一覧", () => {
     cy.location("search").should("eq", "?score=4");
     cards().each(([card]) => expect(cardScore(card)).to.eq(4));
     cy.contains("main button", `${filter.score}：★4`).should("be.visible");
-    cy.get(`a[aria-label="${removeLabel("★4")}"]:visible`).click();
+    cy.get(
+      `a[aria-label="${removeLabel(`${filter.score} 4`)}"]:visible`,
+    ).click();
     cy.location("search").should("eq", "");
   });
 
@@ -277,6 +281,6 @@ describe("記録の一覧", () => {
   it("URL の不正な条件は無視する", () => {
     cy.visit("/ja/records?score=9&platform=unknown&sort=unknown&page=0");
     cards().should("have.length", 8);
-    cy.contains(/^1 \/ \d+$/).should("be.visible");
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
   });
 });

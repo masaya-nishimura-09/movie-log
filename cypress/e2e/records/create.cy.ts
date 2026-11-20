@@ -358,7 +358,7 @@ describe("記録の作成（候補とアップロード）", () => {
     save();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get("h1:visible").should("contain.text", "E2E 言語不明");
-    cy.get("main").should("not.contain", form.languageUnknown);
+    cy.contains("dt", ja.recordDetail.production).should("not.exist");
   });
 
   it("アップロード中は、アップロード中と表示する", () => {

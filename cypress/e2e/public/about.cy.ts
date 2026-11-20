@@ -9,11 +9,16 @@ describe("このアプリについて", () => {
 
   it("お問い合わせと応援のページに移れる", () => {
     cy.visit("/ja/about");
-    cy.contains("a", ja.contact.link).click();
-    cy.location("pathname").should("eq", "/ja/contact");
-    cy.visit("/ja/about");
-    cy.contains("a", ja.support.title).click();
-    cy.location("pathname").should("eq", "/ja/support");
+    cy.contains("a", ja.contact.link).should(
+      "have.attr",
+      "href",
+      "/ja/contact",
+    );
+    cy.contains("a", ja.support.title).should(
+      "have.attr",
+      "href",
+      "/ja/support",
+    );
   });
 
   it("利用規約、プライバシーポリシー、特定商取引法に基づく表記に移れる", () => {

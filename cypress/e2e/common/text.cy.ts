@@ -368,7 +368,7 @@ for (const [lang, t] of locales) {
           t.recordFilter.clearAll,
         );
         cy.get(
-          `[aria-label="${fill(t.recordFilter.remove, { label: "★5" })}"]`,
+          `[aria-label="${fill(t.recordFilter.remove, { label: `${t.recordFilter.score} 5` })}"]`,
         ).should("exist");
         cy.get(`[aria-label="${t.header.accountMenu}"]`).click();
         shows(

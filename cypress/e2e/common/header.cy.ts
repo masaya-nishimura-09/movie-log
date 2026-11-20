@@ -52,9 +52,10 @@ describe("ヘッダー", () => {
     for (const width of [800, 1280, 1600]) {
       cy.viewport(width, 800);
       cy.visit("/ja/records");
-      cy.get("main").should(($main) => {
-        const box = $main[0]?.getBoundingClientRect();
-        expect(box?.left).to.eq(width - (box?.right ?? 0));
+      cy.get("main > div").should(($frame) => {
+        const box = $frame[0]?.getBoundingClientRect();
+        const page = $frame[0]?.ownerDocument.documentElement.clientWidth ?? 0;
+        expect(box?.left).to.be.closeTo(page - (box?.right ?? 0), 1);
       });
     }
   });

@@ -39,8 +39,8 @@ describe("記録の編集", () => {
     cy.get('input[name=score][value="4"]').should("be.checked");
     cy.get("input[name=platform]").should("have.value", "netflix");
     cy.get("#releaseYear").should("have.value", "2020");
-    cy.contains(form.recordedLabel).should("be.visible");
-    cy.contains(form.updatedLabel).should("be.visible");
+    cy.contains("main p", `${form.recordedLabel} `).should("be.visible");
+    cy.contains("main p", form.updatedLabel).should("be.visible");
     position().should("contain.text", form.editing);
   });
 

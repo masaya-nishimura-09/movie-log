@@ -35,8 +35,11 @@ export function newAccount(prefix = "tester"): Account {
   };
 }
 
+const pageContent =
+  "section[aria-label] [data-slot=page-body] > :not([aria-hidden])";
+
 export const notebookContent =
-  "main section[aria-label] > div > :not([aria-hidden])";
+  "main section[aria-label]:visible [data-slot=page-body] > :not([aria-hidden])";
 
 type RecordBasicsOptions = {
   score?: number;
@@ -134,14 +137,23 @@ Cypress.Commands.add("turnNotebookTo", (text) => {
   const look = (): void => {
     cy.get("main").then(($main) => {
       const shown = $main
-        .find(notebookContent)
+        .find(pageContent)
         .toArray()
-        .some((page) => page.textContent?.includes(text));
+        .some(
+          (page) =>
+            page.getClientRects().length > 0 &&
+            page.textContent?.includes(text),
+        );
       if (shown) return;
-      cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`)
-        .should("be.enabled")
-        .click();
-      look();
+      cy.get("[aria-live]:visible")
+        .invoke("text")
+        .then((before) => {
+          cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`)
+            .should("be.enabled")
+            .click();
+          cy.get("[aria-live]:visible").should("not.have.text", before);
+          look();
+        });
     });
   };
   look();
@@ -149,15 +161,20 @@ Cypress.Commands.add("turnNotebookTo", (text) => {
 });
 
 Cypress.Commands.add("turnNotebookToEnd", () => {
-  cy.get("[aria-live]:visible").should("not.be.empty");
   const step = (): void => {
-    cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`).then(
-      ($button) => {
-        if ($button.is(":disabled")) return;
-        cy.wrap($button).click();
+    cy.get("[aria-live]:visible")
+      .invoke("text")
+      .should("match", /\/ \d+$/)
+      .then((label) => {
+        const [shown, total] = label.split(" / ");
+        const last = Number(shown?.split("–").at(-1));
+        if (last >= Number(total)) return;
+        cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`)
+          .should("be.enabled")
+          .click();
+        cy.get("[aria-live]:visible").should("not.have.text", label);
         step();
-      },
-    );
+      });
   };
   step();
 });
