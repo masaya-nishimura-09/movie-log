@@ -338,7 +338,7 @@ export function Landing({ lang, dict }: LandingProps) {
         <div
           className={cn(
             coverSurface,
-            "relative mx-auto max-w-190 overflow-hidden px-6 pt-11 pb-10 pl-8 text-center text-(--paper) md:px-12 md:py-16",
+            "relative mx-auto flex max-w-140 flex-col justify-center overflow-hidden px-6 pt-11 pb-10 pl-8 text-center text-(--paper) md:min-h-180 md:px-14 md:py-16",
           )}
         >
           <CoverSpine />
