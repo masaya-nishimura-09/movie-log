@@ -59,12 +59,12 @@ export function DeleteDialog({
             variant="destructive"
             size="sm"
             aria-label={triggerLabel}
-            className={triggerClassName ?? "px-2.5 md:px-3.5"}
+            className={triggerClassName}
           />
         }
       >
-        <Trash2 className="size-4.5" aria-hidden />
-        {!iconOnly && <span className="hidden md:inline">{triggerLabel}</span>}
+        <Trash2 aria-hidden />
+        {!iconOnly && triggerLabel}
       </AlertDialogTrigger>
       <AlertDialogContent className="rounded-[18px] p-6">
         <AlertDialogHeader className="text-left">

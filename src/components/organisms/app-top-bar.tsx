@@ -23,8 +23,8 @@ type AppTopBarProps = {
   dict: Dictionary["header"];
 };
 
-const roundIcon =
-  "grid size-9 place-items-center rounded-full text-foreground-sub outline-none hover:bg-sidebar-accent hover:text-foreground focus-visible:ring-2 focus-visible:ring-ring";
+const iconButton =
+  "grid size-10 place-items-center rounded-[10px] text-foreground outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring";
 
 export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
   const search = (
@@ -38,50 +38,54 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
   );
 
   return (
-    <header className="flex h-(--header-height) shrink-0 items-center gap-2 bg-sidebar px-3 md:sticky md:top-0 md:z-30 md:gap-4 md:px-7">
-      <Link
-        href={`/${lang}/records`}
-        className="flex shrink-0 items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
-      >
-        <Logo name={brandName} className="h-8 md:h-10" />
-      </Link>
-      <div className="hidden max-w-xl flex-1 md:block">{search}</div>
-      <div className="ml-auto flex items-center gap-1.5">
-        <Sheet>
-          <SheetTrigger
-            aria-label={dict.openSearch}
-            className={`${roundIcon} md:hidden`}
-          >
-            <Search className="size-5" aria-hidden />
-          </SheetTrigger>
-          <SheetContent
-            side="top"
-            closeLabel={dict.close}
-            className="shell rounded-b-[20px] bg-sidebar p-4 pt-12"
-          >
-            <SheetTitle className="sr-only">{dict.searchLabel}</SheetTitle>
-            {search}
-          </SheetContent>
-        </Sheet>
+    <header className="border-b">
+      <div className="mx-auto flex h-14 max-w-296 items-center gap-1 px-4 md:h-16 md:gap-5 md:px-8">
         <Link
-          href={`/${lang}/records/new`}
-          aria-label={dict.newRecord}
-          className={`${roundIcon} md:hidden`}
+          href={`/${lang}/records`}
+          className="flex shrink-0 items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
         >
-          <Plus className="size-5" aria-hidden />
+          <Logo name={brandName} className="h-8 md:h-10" />
         </Link>
-        <Link
-          href={`/${lang}/records/new`}
-          className={cn(
-            buttonVariants({ size: "sm" }),
-            "mr-1 hidden md:inline-flex",
-          )}
-        >
-          <Plus aria-hidden />
-          {dict.newRecord}
-        </Link>
-        <ThemeToggle label={dict.themeToggle} className={roundIcon} />
-        <AccountMenu lang={lang} username={username} dict={dict} />
+        <div className="hidden min-w-50 max-w-130 flex-[0_1_520px] md:block">
+          {search}
+        </div>
+        <div className="ml-auto flex items-center gap-1 md:gap-5">
+          <Sheet>
+            <SheetTrigger
+              aria-label={dict.openSearch}
+              className={cn(iconButton, "md:hidden")}
+            >
+              <Search className="size-5" aria-hidden />
+            </SheetTrigger>
+            <SheetContent
+              side="top"
+              closeLabel={dict.close}
+              className="rounded-b-[20px] bg-background p-4 pt-12"
+            >
+              <SheetTitle className="sr-only">{dict.searchLabel}</SheetTitle>
+              {search}
+            </SheetContent>
+          </Sheet>
+          <Link
+            href={`/${lang}/records/new`}
+            aria-label={dict.newRecord}
+            className={cn(iconButton, "md:hidden")}
+          >
+            <Plus className="size-5" aria-hidden />
+          </Link>
+          <Link
+            href={`/${lang}/records/new`}
+            className={cn(
+              buttonVariants({ size: "sm" }),
+              "hidden px-4 md:inline-flex",
+            )}
+          >
+            <Plus aria-hidden />
+            {dict.newRecord}
+          </Link>
+          <ThemeToggle label={dict.themeToggle} className={iconButton} />
+          <AccountMenu lang={lang} username={username} dict={dict} />
+        </div>
       </div>
     </header>
   );

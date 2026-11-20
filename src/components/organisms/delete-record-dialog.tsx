@@ -13,6 +13,7 @@ type DeleteRecordDialogProps = {
   watchedAt: string;
   lang: Locale;
   triggerLabel: string;
+  triggerClassName?: string;
   dict: Dictionary["deleteRecord"];
 };
 
@@ -22,6 +23,7 @@ export function DeleteRecordDialog({
   watchedAt,
   lang,
   triggerLabel,
+  triggerClassName,
   dict,
 }: DeleteRecordDialogProps) {
   return (
@@ -32,6 +34,7 @@ export function DeleteRecordDialog({
         date: formatDate(watchedAt, lang, "medium"),
       })}
       triggerLabel={triggerLabel}
+      triggerClassName={triggerClassName}
       dict={dict}
     />
   );

@@ -1,5 +1,6 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { longDate } from "../../support/text";
+import { notebookContent } from "../../support/commands";
+import { weekdayDate } from "../../support/text";
 
 const form = ja.recordForm;
 
@@ -66,7 +67,7 @@ describe("記録の編集", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get("h1:visible").should("have.text", `${title} 改`);
     cy.get("main").within(() => {
-      cy.contains(longDate(yesterday)).should("exist");
+      cy.contains(weekdayDate(yesterday)).should("exist");
       cy.contains(ja.enums.platform.hulu).should("exist");
       cy.contains("1999年").should("exist");
       cy.contains("136分").should("exist");
@@ -74,7 +75,6 @@ describe("記録の編集", () => {
       cy.contains(ja.enums.moodTag.tense).should("exist");
       cy.contains("2回目に観たときの感想").should("exist");
       cy.get("img[src='https://example.com/poster.jpg']").should("exist");
-      cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
       cy.contains("The Matrix").should("exist");
       cy.contains("仮想現実から目覚める話。").should("exist");
       cy.contains(ja.enums.genre.action).should("exist");
@@ -114,7 +114,6 @@ describe("記録の編集", () => {
     cy.get("input[name='credits.0.personName']").type("外す監督");
     cy.contains("button", form.next).click();
     cy.contains("button", form.save).click();
-    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
     cy.contains("dd", "外す監督").should("exist");
 
     cy.contains("a", ja.recordDetail.edit).click();
@@ -123,8 +122,7 @@ describe("記録の編集", () => {
     cy.get(`button[aria-label="${form.removeCredit}"]`).first().click();
     cy.contains("button", form.saveChanges).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
-    cy.contains(ja.recordDetail.creditsEmpty).should("be.visible");
+    cy.get("main").contains("外す監督").should("not.exist");
     cy.get("main").contains(ja.enums.genre.drama).should("not.exist");
   });
 
@@ -160,10 +158,11 @@ describe("記録の編集", () => {
     cy.get("form li img").should("have.length", 2);
     cy.contains("button", form.saveChanges).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("main h2", ja.recordDetail.attachments)
-      .closest("section")
-      .find("img[src^='data:image/png']")
-      .should("have.length", 2);
+    cy.turnNotebookToEnd();
+    cy.get(`${notebookContent} img[src^='data:image/png']`).should(
+      "have.length",
+      2,
+    );
   });
 
   it("添付済みの画像も含めて10枚までしか選べない", () => {
@@ -214,10 +213,11 @@ describe("記録の編集", () => {
     ).click();
     cy.contains("a", form.cancel).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("main h2", ja.recordDetail.attachments)
-      .closest("section")
-      .find("img[src^='data:image/png']")
-      .should("have.length", 1);
+    cy.turnNotebookToEnd();
+    cy.get(`${notebookContent} img[src^='data:image/png']`).should(
+      "have.length",
+      1,
+    );
   });
 
   it("タブで、鑑賞情報、映画の情報、感想を切り替える", () => {

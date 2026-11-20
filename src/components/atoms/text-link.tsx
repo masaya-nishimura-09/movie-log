@@ -8,7 +8,7 @@ const textLinkStyles = cva(
   {
     variants: {
       tone: {
-        primary: "text-primary",
+        primary: "text-link",
         muted: "text-foreground-sub",
       },
     },

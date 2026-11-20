@@ -35,6 +35,9 @@ export function newAccount(prefix = "tester"): Account {
   };
 }
 
+export const notebookContent =
+  "main section[aria-label] > div > :not([aria-hidden])";
+
 type RecordBasicsOptions = {
   score?: number;
   platform?: keyof typeof ja.enums.platform;
@@ -48,6 +51,8 @@ declare global {
       register(): Chainable<Account>;
       registerUnverified(account?: Account): Chainable<Account>;
       createRecord(title: string): Chainable<void>;
+      turnNotebookTo(text: string): Chainable<JQuery<HTMLElement>>;
+      turnNotebookToEnd(): Chainable<void>;
       fillRecordBasics(
         title: string,
         options?: RecordBasicsOptions,
@@ -111,4 +116,37 @@ Cypress.Commands.add("createRecord", (title) => {
   cy.contains("button", ja.recordForm.next).click();
   cy.contains("button", ja.recordForm.save).click();
   cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
+});
+
+Cypress.Commands.add("turnNotebookTo", (text) => {
+  cy.get("[aria-live]:visible").should("not.be.empty");
+  const look = (): void => {
+    cy.get("main").then(($main) => {
+      const shown = $main
+        .find(notebookContent)
+        .toArray()
+        .some((page) => page.textContent?.includes(text));
+      if (shown) return;
+      cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`)
+        .should("be.enabled")
+        .click();
+      look();
+    });
+  };
+  look();
+  return cy.contains(notebookContent, text);
+});
+
+Cypress.Commands.add("turnNotebookToEnd", () => {
+  cy.get("[aria-live]:visible").should("not.be.empty");
+  const step = (): void => {
+    cy.get(`button[aria-label="${ja.recordDetail.nextPage}"]:visible`).then(
+      ($button) => {
+        if ($button.is(":disabled")) return;
+        cy.wrap($button).click();
+        step();
+      },
+    );
+  };
+  step();
 });

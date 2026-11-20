@@ -23,7 +23,7 @@ export function AccountMenu({ lang, username, dict }: AccountMenuProps) {
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={dict.accountMenu}
-        className="grid size-9 place-items-center rounded-full bg-mood font-medium text-[13px] text-mood-foreground outline-none focus-visible:ring-2 focus-visible:ring-ring"
+        className="ml-1 grid size-8.5 place-items-center rounded-full bg-(--sage) font-semibold text-(--navy) outline-none focus-visible:ring-2 focus-visible:ring-ring md:ml-0 md:size-9"
       >
         {Array.from(username)[0]}
       </DropdownMenuTrigger>

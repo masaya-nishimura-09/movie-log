@@ -1,5 +1,6 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
-import { longDate } from "../../support/text";
+import { notebookContent } from "../../support/commands";
+import { longDate, weekdayDate } from "../../support/text";
 
 const form = ja.recordForm;
 
@@ -91,7 +92,7 @@ describe("記録の作成", () => {
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
     cy.get("h1:visible").should("have.text", title);
     cy.get("main").within(() => {
-      cy.contains(longDate(yesterday)).should("exist");
+      cy.contains(weekdayDate(yesterday)).should("exist");
       cy.contains(ja.enums.platform.hulu).should("exist");
       cy.contains("2016年").should("exist");
       cy.contains("116分").should("exist");
@@ -102,17 +103,16 @@ describe("記録の作成", () => {
       cy.contains(ja.enums.moodTag.moving).should("exist");
       cy.contains(ja.enums.moodTag.dark).should("exist");
       cy.contains("言語学者が主人公の SF").should("exist");
-      cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
       cy.contains("Story of Your Life").should("exist");
       cy.contains("言語学者が宇宙からの来訪者と対話する。").should("exist");
       cy.contains(ja.enums.genre.drama).should("exist");
       cy.contains(ja.enums.genre.science_fiction).should("exist");
       cy.contains("dd", "Denis Villeneuve")
         .prev("dt")
-        .should("have.text", ja.enums.creditRole.director);
+        .should("have.text", ja.recordDetail.directors);
       cy.contains("dd", "Amy Adams")
         .prev("dt")
-        .should("have.text", ja.enums.creditRole.cast);
+        .should("have.text", ja.recordDetail.cast);
       cy.contains("削除する行").should("not.exist");
       cy.get("img[src^='https://mock.invalid/posters/']").should("exist");
     });
@@ -140,10 +140,11 @@ describe("記録の作成", () => {
     cy.get("form li img").should("have.length", 1);
     cy.contains("button", form.save).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("main h2", ja.recordDetail.attachments)
-      .closest("section")
-      .find("img[src^='data:image/png']")
-      .should("have.length", 1);
+    cy.turnNotebookToEnd();
+    cy.get(`${notebookContent} img[src^='data:image/png']`).should(
+      "have.length",
+      1,
+    );
   });
 
   it("画像は10枚までしか選べない", () => {

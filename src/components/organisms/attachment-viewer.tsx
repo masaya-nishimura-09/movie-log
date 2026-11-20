@@ -2,13 +2,14 @@
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import { type KeyboardEvent, type PointerEvent, useRef, useState } from "react";
+import { type KeyboardEvent, useState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { DeleteDialog } from "@/components/organisms/delete-dialog";
 import {
   ImageDialog,
   imageDialogButton,
 } from "@/components/organisms/image-dialog";
+import { useSwipe } from "@/hooks/use-swipe";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
@@ -24,8 +25,6 @@ type AttachmentViewerProps = {
   deleteDict: Dictionary["deleteAttachment"];
 };
 
-const swipeDistance = 50;
-
 export function AttachmentViewer({
   attachments,
   index,
@@ -38,7 +37,6 @@ export function AttachmentViewer({
   const opened = attachments[index];
   const hasPrev = index > 0;
   const hasNext = index < attachments.length - 1;
-  const swipeStart = useRef<number>(undefined);
   const [deleting, setDeleting] = useState(false);
 
   const move = (step: number) => {
@@ -52,17 +50,10 @@ export function AttachmentViewer({
     if (event.key === "ArrowRight") move(1);
   };
 
-  const onPointerDown = (event: PointerEvent) => {
-    if (event.pointerType !== "mouse") swipeStart.current = event.clientX;
-  };
-
-  const onPointerUp = (event: PointerEvent) => {
-    if (swipeStart.current === undefined) return;
-    const distance = event.clientX - swipeStart.current;
-    swipeStart.current = undefined;
-    if (distance > swipeDistance) move(-1);
-    if (distance < -swipeDistance) move(1);
-  };
+  const swipe = useSwipe(
+    () => move(-1),
+    () => move(1),
+  );
 
   return (
     <ImageDialog
@@ -96,8 +87,8 @@ export function AttachmentViewer({
         <>
           <div
             className="relative flex min-h-0 flex-1 items-center justify-center px-4 pb-4 md:px-24 md:pb-12"
-            onPointerDown={onPointerDown}
-            onPointerUp={onPointerUp}
+            onPointerDown={swipe.onPointerDown}
+            onPointerUp={swipe.onPointerUp}
           >
             <Image
               key={opened.attachmentId}

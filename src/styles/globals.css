@@ -6,6 +6,14 @@
 
 @theme {
   --breakpoint-3xl: 120rem;
+  --animate-page-in: page-in 220ms ease-out;
+
+  @keyframes page-in {
+    from {
+      opacity: 0;
+      transform: translateX(calc(var(--page-shift, 0px) * var(--page-motion)));
+    }
+  }
 }
 
 @theme inline {
@@ -37,6 +45,14 @@
   --color-destructive-border: var(--destructive-border);
   --color-destructive-foreground: var(--destructive-foreground);
   --font-sans: var(--font-poppins), var(--font-noto-sans-jp), sans-serif;
+  --font-display: var(--display-font);
+  --color-outline: var(--outline);
+  --color-link: var(--link);
+  --color-paper: var(--paper);
+  --color-paper-ink: var(--paper-ink);
+  --color-paper-label: var(--paper-label);
+  --color-paper-muted: var(--paper-muted);
+  --color-cover: var(--cover);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
@@ -77,13 +93,25 @@
 
 :root {
   --font-body: var(--font-poppins), var(--font-noto-sans-jp), sans-serif;
-  --font-display:
-    var(--font-poppins), var(--font-zen-maru-gothic), var(--font-noto-sans-jp),
-    sans-serif;
+  --display-font:
+    var(--font-zen-maru-gothic), var(--font-noto-sans-jp), sans-serif;
   --navy: #0a2947;
   --beige: #f3e4c9;
   --sage: #d3d4c0;
   --brown: #8b5e3c;
+  --paper: #faf4e9;
+  --paper-line: #d9d2c2;
+  --paper-ink: var(--navy);
+  --paper-label: #7a5236;
+  --paper-muted: #586a75;
+  --cover: var(--brown);
+  --page-motion: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --page-motion: 0;
+  }
 }
 
 :root,
@@ -96,8 +124,10 @@
   --popover: var(--card);
   --popover-foreground: var(--navy);
   --primary: var(--brown);
-  --primary-foreground: var(--card);
+  --primary-foreground: var(--paper);
   --primary-edge: color-mix(in oklab, var(--brown) 65%, var(--navy));
+  --outline: rgb(10 41 71 / 0.22);
+  --link: var(--brown);
   --secondary: color-mix(in oklab, var(--navy) 6%, transparent);
   --secondary-foreground: var(--foreground-sub);
   --muted: var(--secondary);
@@ -162,9 +192,9 @@
   --accent-foreground: var(--beige);
   --destructive: #d9745e;
   --destructive-edge: #824134;
-  --destructive-border: #6b3a30;
-  --destructive-foreground: #e89a88;
-  --border: color-mix(in oklab, var(--beige) 15%, var(--navy));
+  --destructive-border: rgb(232 180 166 / 0.45);
+  --destructive-foreground: #eebcae;
+  --border: rgb(243 228 201 / 0.12);
   --input: var(--border);
   --edge: color-mix(in oklab, black 30%, transparent);
   --ring: var(--brown);
@@ -181,16 +211,18 @@
 
 .dark {
   --logo-ring: #b98a63;
-  --background: color-mix(in oklab, var(--navy) 75%, black);
+  --background: var(--navy);
   --foreground: var(--beige);
   --foreground-sub: color-mix(in oklab, var(--beige) 80%, var(--navy));
   --card: color-mix(in oklab, var(--beige) 7%, var(--navy));
   --card-foreground: var(--beige);
   --popover: color-mix(in oklab, var(--beige) 10%, var(--navy));
   --popover-foreground: var(--beige);
-  --primary: color-mix(in oklab, var(--brown) 70%, var(--beige));
-  --primary-foreground: var(--navy);
-  --primary-edge: var(--brown);
+  --primary: var(--brown);
+  --primary-foreground: var(--paper);
+  --primary-edge: color-mix(in oklab, var(--brown) 65%, black);
+  --outline: rgb(243 228 201 / 0.3);
+  --link: color-mix(in oklab, var(--brown) 70%, var(--beige));
   --secondary: color-mix(in oklab, var(--beige) 8%, transparent);
   --secondary-foreground: var(--foreground-sub);
   --muted: var(--secondary);
@@ -204,7 +236,7 @@
   --border: color-mix(in oklab, var(--beige) 15%, var(--navy));
   --input: var(--border);
   --edge: color-mix(in oklab, black 35%, transparent);
-  --ring: var(--primary);
+  --ring: color-mix(in oklab, var(--brown) 70%, var(--beige));
   --header: var(--navy);
   --field: color-mix(in oklab, var(--beige) 8%, transparent);
   --control: color-mix(in oklab, var(--sage) 22%, var(--navy));

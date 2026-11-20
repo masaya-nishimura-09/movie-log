@@ -113,7 +113,7 @@ export function CreditRows({
         variant="ghost"
         size="sm"
         onClick={addRow}
-        className="self-start text-primary"
+        className="self-start text-link"
       >
         <Plus aria-hidden />
         {addLabel}

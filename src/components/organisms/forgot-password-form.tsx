@@ -43,7 +43,7 @@ export function ForgotPasswordForm({
     return (
       <div className="flex flex-col gap-6">
         <div className="flex flex-col items-center gap-2 text-center">
-          <MailCheck className="mb-1 size-10 text-primary" aria-hidden />
+          <MailCheck className="mb-1 size-10 text-link" aria-hidden />
           <h1 className="font-bold text-foreground text-xl">
             {dict.sentTitle}
           </h1>

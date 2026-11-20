@@ -2,8 +2,8 @@ import { CircleAlert, CircleCheck, MailCheck } from "lucide-react";
 import { phrases } from "@/components/atoms/phrases";
 
 const icons = {
-  mail: <MailCheck className="mb-1 size-10 text-primary" aria-hidden />,
-  done: <CircleCheck className="mb-1 size-10 text-primary" aria-hidden />,
+  mail: <MailCheck className="mb-1 size-10 text-link" aria-hidden />,
+  done: <CircleCheck className="mb-1 size-10 text-link" aria-hidden />,
   failed: (
     <CircleAlert
       className="mb-1 size-10 text-destructive-foreground"

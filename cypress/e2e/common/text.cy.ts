@@ -375,39 +375,33 @@ for (const [lang, t] of locales) {
       it("記録の詳細", () => {
         cy.visit(`/${lang}/records/1`);
         shows(
-          t.recordDetail.scoreCaption,
-          t.recordDetail.tabRecord,
-          t.recordDetail.tabMovie,
-          t.recordDetail.moodTags,
-          t.recordDetail.note,
-          t.recordDetail.attachments,
-          t.recordDetail.attachmentsAdd,
           t.recordDetail.watchedAt,
           t.recordDetail.platform,
+          t.recordDetail.score,
+          t.recordDetail.moodTags,
+          t.recordDetail.movieInfo,
+          t.recordDetail.released,
+          t.recordDetail.production,
+          t.recordDetail.genres,
+          t.recordDetail.directors,
+          t.recordDetail.cast,
+          t.recordDetail.overview,
           t.recordDetail.createdAt,
-          t.recordDetail.updatedAt,
           t.recordDetail.back,
           t.recordDetail.edit,
-          t.recordForm.releaseYear,
-          t.recordForm.runtime,
-          t.recordForm.countries,
-          t.recordForm.language,
           fill(t.recordDetail.releaseYear, { year: 1960 }),
           fill(t.recordDetail.runtime, { minutes: 90 }),
         );
+        cy.contains(pattern(t.recordDetail.pageSpread)).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.prevPage}"]`).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.nextPage}"]`).should("exist");
         cy.get(
-          `[aria-label="${fill(t.recordDetail.attachmentOpen, { number: 1 })}"]`,
+          `[aria-label="${fill(t.recordDetail.pageLabel, { page: 1 })}"]`,
         ).should("exist");
-        cy.contains("[role=tab]", t.recordDetail.tabMovie).click();
-        shows(
-          t.recordDetail.originalTitle,
-          t.recordDetail.overview,
-          t.recordForm.genres,
-          t.recordDetail.credits,
-        );
         cy.get(
-          `[aria-label="${fill(t.recordCard.score, { score: 4 })}"]`,
+          `[aria-label="${fill(t.recordDetail.scoreValue, { score: 4 })}"]`,
         ).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.posterOpen}"]`).should("exist");
         cy.get(`button[aria-label="${t.recordDetail.delete}"]`).click();
         shows(
           t.deleteRecord.title,

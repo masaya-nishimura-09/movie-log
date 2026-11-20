@@ -23,3 +23,12 @@ export function longDate(date: Date, lang = "ja") {
     day: "numeric",
   }).format(date);
 }
+
+export function weekdayDate(date: Date, lang = "ja") {
+  return new Intl.DateTimeFormat(lang, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  }).format(date);
+}
