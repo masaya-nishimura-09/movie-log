@@ -8,7 +8,6 @@ import {
   useLayoutEffect,
   useRef,
   useState,
-  useSyncExternalStore,
 } from "react";
 import { NotebookPage } from "@/components/molecules/notebook-page";
 import { PageTurner } from "@/components/molecules/page-turner";
@@ -18,6 +17,7 @@ import { NotebookScreen } from "@/components/organisms/notebook-screen";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
 import { usePageKeys } from "@/hooks/use-page-keys";
 import { useSwipe } from "@/hooks/use-swipe";
+import { useWideScreen } from "@/hooks/use-wide-screen";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { notebookProseStyles } from "@/lib/note/prose-styles";
 import { type BlockSize, paginate } from "@/lib/notebook/paginate";
@@ -45,23 +45,8 @@ type Layout = "spread" | "single";
 
 type Sections = { cover: number[][]; note: number[][] };
 
-const spreadQuery = "(min-width: 1024px)";
 const coverStyles =
   "text-[13px] leading-7 lg:text-sm [&>*:not(:first-child)]:mt-7";
-
-function subscribeLayout(onChange: () => void) {
-  const query = window.matchMedia(spreadQuery);
-  query.addEventListener("change", onChange);
-  return () => query.removeEventListener("change", onChange);
-}
-
-function useLayout(): Layout | null {
-  return useSyncExternalStore(
-    subscribeLayout,
-    () => (window.matchMedia(spreadQuery).matches ? "spread" : "single"),
-    () => null,
-  );
-}
 
 function measureBlocks(container: HTMLElement): BlockSize[] {
   const children = Array.from(container.children) as HTMLElement[];
@@ -99,7 +84,9 @@ export function RecordNotebook({
   dict,
   deleteDict,
 }: RecordNotebookProps) {
-  const layout = useLayout();
+  const wide = useWideScreen();
+  const layout: Layout | null =
+    wide === null ? null : wide ? "spread" : "single";
   const [sections, setSections] = useState<Sections>(() => ({
     cover: [coverBlocks.map((_, index) => index)],
     note: noteBlocks.length > 0 ? [noteBlocks.map((_, index) => index)] : [],

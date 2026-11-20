@@ -7,37 +7,30 @@ describe("選択肢がすべて表示される", () => {
     cy.login();
   });
 
-  it("作成フォーム：鑑賞方法、ジャンル、役割、雰囲気タグ", () => {
+  it("作成フォーム：観た場所、スコア、雰囲気、ジャンル、役割", () => {
     cy.visit("/ja/records/new");
-    for (const label of Object.values(ja.enums.platform)) {
-      cy.contains("label", label).should("exist");
-    }
+    const choices = (field: string, labels: string[]) => {
+      cy.get(`[data-field="${field}"]:visible`).click();
+      for (const label of labels) {
+        cy.contains("button[aria-pressed]:visible", label).should("exist");
+      }
+      cy.get("body").type("{esc}");
+    };
+    choices("platform", Object.values(ja.enums.platform));
     for (const score of ["1", "2", "3", "4", "5"]) {
-      cy.get(`[role=radiogroup][aria-label="${form.score}"]`)
-        .contains("label", score)
-        .should("exist");
+      cy.get(`input[name=score][value="${score}"]`).should("exist");
     }
-    cy.fillRecordBasics("選択肢テスト", { score: 3 });
-    cy.contains("button", form.next).click();
-    for (const label of Object.values(ja.enums.genre)) {
-      cy.contains("label", label).should("exist");
-    }
+    choices("moodTags", Object.values(ja.enums.moodTag));
+    choices("genres", Object.values(ja.enums.genre));
+    cy.contains("button", form.addCredit).click();
     cy.get(`button[aria-label="${form.creditRole}"]`).first().click();
     for (const label of Object.values(ja.enums.creditRole)) {
       cy.contains("[role=option]", label).should("exist");
-    }
-    cy.get("body").type("{esc}");
-    cy.get("#releaseYear").type("2000");
-    cy.contains("button", form.next).click();
-    for (const label of Object.values(ja.enums.moodTag)) {
-      cy.contains("label", label).should("exist");
     }
   });
 
   it("作成フォーム：言語の選択肢", () => {
     cy.visit("/ja/records/new");
-    cy.fillRecordBasics("言語テスト", { score: 3 });
-    cy.contains("button", form.next).click();
     cy.get(`button[aria-label="${form.language}"]`).click();
     const names = new Intl.DisplayNames("ja", { type: "language" });
     for (const code of [

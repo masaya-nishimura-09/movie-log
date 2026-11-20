@@ -1,11 +1,16 @@
-import type { ActionResult } from "@/actions/action-result";
-import { ChoiceChip } from "@/components/atoms/choice-chip";
-import { Input } from "@/components/atoms/input";
-import { CountedTextarea } from "@/components/molecules/counted-textarea";
+"use client";
+
+import { useState } from "react";
+import { NotebookHeading } from "@/components/atoms/notebook-heading";
+import {
+  NotebookInput,
+  notebookLine,
+  notebookPlaceholder,
+} from "@/components/atoms/notebook-input";
+import { ChoicePicker } from "@/components/molecules/choice-picker";
 import { CountryInput } from "@/components/molecules/country-input";
 import { CreditRows } from "@/components/molecules/credit-rows";
-import { FormField } from "@/components/molecules/form-field";
-import { PosterUrlField } from "@/components/molecules/poster-url-field";
+import { NotebookField } from "@/components/molecules/notebook-field";
 import {
   Select,
   SelectContent,
@@ -18,7 +23,6 @@ import type { Locale } from "@/i18n/locales";
 import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { buildLanguageOptions } from "@/lib/record/language-options";
 import { cn } from "@/lib/style/cn";
-import { interpolate } from "@/lib/text/interpolate";
 import { genreSchema } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
@@ -27,11 +31,9 @@ type RecordMovieFieldsProps = {
   values: RecordFormValues;
   errors?: RecordFieldErrors;
   maxReleaseYear: number;
-  uploadPoster: (formData: FormData) => Promise<ActionResult<string>>;
-  counterTemplate: string;
   dict: Dictionary["recordForm"];
   enums: Dictionary["enums"];
-  split?: boolean;
+  closeLabel: string;
 };
 
 export function RecordMovieFields({
@@ -39,196 +41,187 @@ export function RecordMovieFields({
   values,
   errors,
   maxReleaseYear,
-  uploadPoster,
-  counterTemplate,
   dict,
   enums,
-  split = false,
+  closeLabel,
 }: RecordMovieFieldsProps) {
+  const [genres, setGenres] = useState<string[]>(values.genres);
   const languageOptions = buildLanguageOptions(
     lang,
     values.language,
     dict.languageUnknown,
   );
+  const error = (field: Parameters<typeof fieldError>[2]) =>
+    fieldError(errors, dict, field);
+  const required = { required: true, requiredLabel: dict.required };
 
   return (
-    <div
-      className={cn(
-        "flex flex-col gap-4.5",
-        split && "xl:grid xl:grid-cols-2 xl:items-start xl:gap-8",
-      )}
-    >
-      <div className={split ? "flex flex-col gap-4.5" : "contents"}>
-        <FormField
+    <div className="flex flex-col">
+      <div className="flex items-center justify-between gap-3">
+        <NotebookHeading>{dict.movieInfo}</NotebookHeading>
+        <p className="hidden text-[11px] text-paper-muted lg:block">
+          {dict.movieInfoHint}
+        </p>
+      </div>
+      <p className="text-[10px] text-paper-muted leading-7 lg:hidden">
+        {dict.movieInfoHint}
+      </p>
+      <div className="flex flex-col lg:mt-7">
+        <NotebookField
           label={dict.originalTitle}
-          error={fieldError(errors, dict, "originalTitle")}
           htmlFor="originalTitle"
+          error={error("originalTitle")}
         >
-          <Input
+          <NotebookInput
             id="originalTitle"
             name="originalTitle"
             maxLength={255}
+            placeholder={dict.originalTitlePlaceholder}
             defaultValue={values.originalTitle}
+            aria-invalid={Boolean(error("originalTitle")) || undefined}
           />
-        </FormField>
-
-        <FormField
-          label={dict.overview}
-          error={fieldError(errors, dict, "overview")}
-          htmlFor="overview"
+        </NotebookField>
+        <NotebookField
+          label={dict.releaseYear}
+          htmlFor="releaseYear"
+          error={error("releaseYear")}
+          {...required}
         >
-          <CountedTextarea
-            id="overview"
-            name="overview"
-            maxLength={2000}
-            defaultValue={values.overview}
-            counterTemplate={counterTemplate}
-          />
-        </FormField>
-
-        <div className="grid grid-cols-2 gap-4">
-          <FormField
-            label={dict.releaseYear}
-            error={fieldError(errors, dict, "releaseYear")}
-            htmlFor="releaseYear"
+          <NotebookInput
+            id="releaseYear"
+            name="releaseYear"
+            type="number"
+            inputMode="numeric"
             required
-            requiredLabel={dict.required}
-            hint={interpolate(dict.releaseYearHint, { max: maxReleaseYear })}
-          >
-            <Input
-              id="releaseYear"
-              name="releaseYear"
+            min={1888}
+            max={maxReleaseYear}
+            placeholder={dict.releaseYearPlaceholder}
+            defaultValue={values.releaseYear}
+            aria-invalid={Boolean(error("releaseYear")) || undefined}
+            className="tabular-nums"
+          />
+        </NotebookField>
+        <NotebookField
+          label={dict.runtime}
+          htmlFor="runtime"
+          error={error("runtime")}
+        >
+          <div className="relative">
+            <NotebookInput
+              id="runtime"
+              name="runtime"
               type="number"
               inputMode="numeric"
-              required
-              min={1888}
-              max={maxReleaseYear}
-              defaultValue={values.releaseYear}
-              className="tabular-nums"
+              min={0}
+              max={1440}
+              placeholder={dict.runtimePlaceholder}
+              defaultValue={values.runtime || ""}
+              aria-invalid={Boolean(error("runtime")) || undefined}
+              className="pr-8 tabular-nums"
             />
-          </FormField>
-          <FormField
-            label={dict.runtime}
-            error={fieldError(errors, dict, "runtime")}
-            htmlFor="runtime"
-            hint={dict.runtimeHint}
-          >
-            <div className="relative">
-              <Input
-                id="runtime"
-                name="runtime"
-                type="number"
-                inputMode="numeric"
-                min={0}
-                max={1440}
-                defaultValue={values.runtime}
-                className="pr-10 tabular-nums"
-              />
-              <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-muted-foreground text-sm">
-                {dict.runtimeUnit}
-              </span>
-            </div>
-          </FormField>
-        </div>
-
-        <div
-          className={cn("grid gap-4 sm:grid-cols-2", split && "xl:grid-cols-1")}
-        >
-          <FormField
-            label={dict.language}
-            error={fieldError(errors, dict, "language")}
-            required
-            requiredLabel={dict.required}
-          >
-            <Select
-              name="language"
-              items={languageOptions}
-              defaultValue={values.language}
-            >
-              <SelectTrigger aria-label={dict.language} className="w-full">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {languageOptions.map((option) => (
-                  <SelectItem key={option.value} value={option.value}>
-                    {option.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormField>
-          <FormField
-            label={dict.countries}
-            error={fieldError(errors, dict, "countries")}
-            htmlFor="countries"
-          >
-            <CountryInput
-              id="countries"
-              name="countries"
-              lang={lang}
-              defaultValue={values.countries}
-              placeholder={dict.countriesPlaceholder}
-              removeTemplate={dict.removeCountry}
-            />
-          </FormField>
-        </div>
-      </div>
-
-      <div className={split ? "flex flex-col gap-4.5" : "contents"}>
-        <FormField
-          label={dict.genres}
-          error={fieldError(errors, dict, "genres")}
-          hint={dict.genresHint}
-        >
-          <div className="flex flex-wrap gap-1.75">
-            {genreSchema.options.map((genre) => (
-              <ChoiceChip
-                key={genre}
-                type="checkbox"
-                name="genres"
-                value={genre}
-                shape="square"
-                size="sm"
-                tone="genre"
-                className="text-[13px]"
-                defaultChecked={values.genres.includes(genre)}
-              >
-                {enums.genre[genre]}
-              </ChoiceChip>
-            ))}
+            <span className="pointer-events-none absolute inset-y-0 right-1 flex items-center text-paper-muted text-xs">
+              {dict.runtimeUnit}
+            </span>
           </div>
-        </FormField>
-
-        <FormField
-          label={dict.credits}
-          error={fieldError(errors, dict, "credits")}
+        </NotebookField>
+        <NotebookField
+          label={dict.countries}
+          htmlFor="countries"
+          error={error("countries")}
         >
+          <CountryInput
+            id="countries"
+            name="countries"
+            lang={lang}
+            defaultValue={values.countries}
+            placeholder={dict.countriesPlaceholder}
+            addLabel={dict.addCountry}
+            notFoundLabel={dict.countryNotFound}
+            removeTemplate={dict.removeCountry}
+            invalid={Boolean(error("countries"))}
+          />
+        </NotebookField>
+        <NotebookField
+          label={dict.language}
+          error={error("language")}
+          {...required}
+        >
+          <Select
+            name="language"
+            items={languageOptions}
+            defaultValue={values.language || null}
+          >
+            <SelectTrigger
+              aria-label={dict.language}
+              size="sm"
+              data-field="language"
+              aria-invalid={Boolean(error("language")) || undefined}
+              className={cn(
+                "h-7 w-full rounded-none bg-transparent px-0.5 font-normal text-[13px] text-paper-ink data-[size=sm]:h-7 data-[size=sm]:rounded-none data-placeholder:text-[#a8a397] lg:text-sm",
+                notebookLine,
+              )}
+            >
+              <SelectValue placeholder={dict.choose} />
+            </SelectTrigger>
+            <SelectContent>
+              {languageOptions.map((option) => (
+                <SelectItem key={option.value} value={option.value}>
+                  {option.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </NotebookField>
+        <NotebookField label={dict.genres} error={error("genres")}>
+          <ChoicePicker
+            name="genres"
+            title={dict.genres}
+            placeholder={dict.chooseMany}
+            options={genreSchema.options.map((value) => ({
+              value,
+              label: enums.genre[value],
+            }))}
+            value={genres}
+            onChange={setGenres}
+            multiple
+            invalid={Boolean(error("genres"))}
+            closeLabel={closeLabel}
+          />
+        </NotebookField>
+        <NotebookField label={dict.credits} error={error("credits")}>
           <CreditRows
             defaultValue={values.credits}
             roleLabels={enums.creditRole}
-            roleLabel={dict.creditRole}
-            namePlaceholder={dict.personName}
-            addLabel={dict.addCredit}
-            removeLabel={dict.removeCredit}
+            invalid={Boolean(error("credits"))}
+            dict={{ ...dict, close: closeLabel }}
           />
-        </FormField>
-
-        <FormField
-          label={dict.posterUrl}
-          error={fieldError(errors, dict, "posterUrl")}
-          htmlFor="posterUrl"
-        >
-          <PosterUrlField
-            id="posterUrl"
-            name="posterUrl"
-            defaultValue={values.posterUrl}
-            placeholder={dict.posterUrlPlaceholder}
-            upload={uploadPoster}
-            uploadLabel={dict.uploadPoster}
-            uploadingLabel={dict.uploadingPoster}
-            errorLabel={dict.posterUploadError}
-          />
-        </FormField>
+        </NotebookField>
+      </div>
+      <div className="mt-7">
+        <NotebookHeading>
+          <label htmlFor="overview">{dict.overview}</label>
+        </NotebookHeading>
+        <textarea
+          id="overview"
+          name="overview"
+          maxLength={2000}
+          rows={3}
+          placeholder={dict.overviewPlaceholder}
+          defaultValue={values.overview}
+          aria-invalid={Boolean(error("overview")) || undefined}
+          className={cn(
+            "block w-full resize-none bg-transparent px-0.5 text-[13px] text-paper-ink leading-7 outline-none [field-sizing:content] aria-invalid:ring-1 aria-invalid:ring-destructive lg:text-sm",
+            notebookPlaceholder,
+          )}
+        />
+        {error("overview") && (
+          <p
+            role="alert"
+            className="text-[11px] text-destructive-foreground leading-7"
+          >
+            {error("overview")}
+          </p>
+        )}
       </div>
     </div>
   );

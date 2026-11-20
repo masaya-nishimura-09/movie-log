@@ -26,20 +26,24 @@ describe("スマホの画面での操作", () => {
     const title = `E2E スマホ ${Date.now()}`;
     cy.visit("/ja/records/new");
     cy.fillRecordBasics(title, { score: 4 });
-    cy.contains("button", form.next).click();
+    cy.contains("button:visible", form.next).click();
     cy.contains(
-      form.stepProgress.replace("{current}", "2").replace("{total}", "3"),
+      form.stepProgress.replace("{current}", "2").replace("{total}", "4"),
     ).should("be.visible");
     cy.get("#releaseYear").type("2020");
-    cy.contains("button", form.next).click();
-    cy.contains("button", form.save).click();
+    cy.contains("button:visible", form.next).click();
+    cy.contains("button:visible", form.next).click();
+    cy.contains("button:visible", form.save).click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.get("h1:visible").should("have.text", title);
+    cy.get("h1:visible").should("contain.text", title);
 
     cy.get(`a[href$="/edit"]:visible`).first().click();
-    cy.contains("[role=tab]", form.stepImpression).click();
+    cy.contains("button:visible", form.next).click();
+    cy.contains("button:visible", form.next).click();
     cy.get("[role=textbox]").click().type("スマホで編集");
-    cy.contains("button", form.saveChanges).click();
+    cy.contains("button:visible", form.next).click();
+    cy.contains("button:visible", form.saveChanges).click();
+    cy.turnNotebookTo("スマホで編集");
     cy.contains("スマホで編集").should("be.visible");
 
     cy.get(`button[aria-label="${ja.recordDetail.delete}"]`).click();

@@ -32,3 +32,13 @@ export function weekdayDate(date: Date, lang = "ja") {
     weekday: "short",
   }).format(date);
 }
+
+export function formDate(date: Date, lang = "ja") {
+  const sameYear = date.getFullYear() === new Date().getFullYear();
+  return new Intl.DateTimeFormat(lang, {
+    year: sameYear ? undefined : "numeric",
+    month: sameYear ? "numeric" : "2-digit",
+    day: sameYear ? "numeric" : "2-digit",
+    weekday: "short",
+  }).format(date);
+}

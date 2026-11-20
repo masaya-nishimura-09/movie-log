@@ -23,6 +23,8 @@ type AppTopBarProps = {
   dict: Dictionary["header"];
 };
 
+const hiddenWhileWriting = "[body:has([data-record-form])_&]:hidden";
+
 const iconButton =
   "grid size-10 place-items-center rounded-[10px] text-foreground outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring";
 
@@ -53,7 +55,7 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
           <Sheet>
             <SheetTrigger
               aria-label={dict.openSearch}
-              className={cn(iconButton, "md:hidden")}
+              className={cn(iconButton, "md:hidden", hiddenWhileWriting)}
             >
               <Search className="size-5" aria-hidden />
             </SheetTrigger>
@@ -69,7 +71,7 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
           <Link
             href={`/${lang}/records/new`}
             aria-label={dict.newRecord}
-            className={cn(iconButton, "md:hidden")}
+            className={cn(iconButton, "md:hidden", hiddenWhileWriting)}
           >
             <Plus className="size-5" aria-hidden />
           </Link>
@@ -78,12 +80,19 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
             className={cn(
               buttonVariants({ size: "sm" }),
               "hidden px-4 md:inline-flex",
+              hiddenWhileWriting,
             )}
           >
             <Plus aria-hidden />
             {dict.newRecord}
           </Link>
-          <ThemeToggle label={dict.themeToggle} className={iconButton} />
+          <ThemeToggle
+            label={dict.themeToggle}
+            className={cn(
+              iconButton,
+              "max-md:[body:has([data-record-form])_&]:hidden",
+            )}
+          />
           <AccountMenu lang={lang} username={username} dict={dict} />
         </div>
       </div>

@@ -51,6 +51,7 @@ declare global {
       register(): Chainable<Account>;
       registerUnverified(account?: Account): Chainable<Account>;
       createRecord(title: string): Chainable<void>;
+      pickChoice(field: string, label: string): Chainable<void>;
       turnNotebookTo(text: string): Chainable<JQuery<HTMLElement>>;
       turnNotebookToEnd(): Chainable<void>;
       fillRecordBasics(
@@ -96,25 +97,35 @@ Cypress.Commands.add("register", () => {
   });
 });
 
+Cypress.Commands.add("pickChoice", (field, label) => {
+  cy.get(`[data-field="${field}"]:visible`).click();
+  cy.contains("button[aria-pressed]:visible", label).click();
+  cy.get("body").then(($body) => {
+    if (
+      $body.find("[data-slot=popover-content]:visible, [role=dialog]:visible")
+        .length > 0
+    ) {
+      cy.get("body").type("{esc}");
+    }
+  });
+});
+
 Cypress.Commands.add(
   "fillRecordBasics",
   (title, { score = 3, platform = "netflix", lang = "ja" } = {}) => {
     const t = lang === "en" ? en : ja;
     cy.get("#title").type(title);
-    cy.get(`[role=radiogroup][aria-label="${t.recordForm.score}"]`)
-      .contains("label", String(score))
-      .click();
-    cy.contains("label", t.enums.platform[platform]).click();
+    cy.get(`input[name=score][value="${score}"]`).check({ force: true });
+    cy.pickChoice("platform", t.enums.platform[platform]);
   },
 );
 
 Cypress.Commands.add("createRecord", (title) => {
   cy.visit("/ja/records/new");
   cy.fillRecordBasics(title, { score: 4 });
-  cy.contains("button", ja.recordForm.next).click();
   cy.get("#releaseYear").type("2020");
-  cy.contains("button", ja.recordForm.next).click();
-  cy.contains("button", ja.recordForm.save).click();
+  cy.contains("button:visible", ja.recordForm.next).click();
+  cy.contains("button:visible", ja.recordForm.save).click();
   cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
 });
 

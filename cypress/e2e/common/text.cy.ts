@@ -422,60 +422,49 @@ for (const [lang, t] of locales) {
         );
       });
 
-      it("記録の作成の3つのステップ", () => {
+      it("記録の作成の2つの見開き", () => {
         cy.visit(`/${lang}/records/new`);
         shows(
           t.recordForm.createTitle,
-          t.recordForm.stepBasics,
-          t.recordForm.stepMovieInfo,
-          t.recordForm.stepImpression,
+          t.recordForm.spreadBasics,
           t.recordForm.title,
           t.recordForm.titleHint,
+          t.recordForm.posterAdd,
+          t.recordForm.posterDrop,
           t.recordForm.watchedAt,
           t.recordForm.today,
           t.recordForm.yesterday,
           t.recordForm.score,
           t.recordForm.platform,
-          t.recordForm.next,
-          fill(t.characterCount, { current: 0, max: 255 }),
-        );
-        cy.get(`[title="${t.recordForm.required}"]`).should("exist");
-        cy.fillRecordBasics("Arrival", { score: 3, lang });
-        cy.contains("button", t.recordForm.next).click();
-        shows(
+          t.recordForm.moodTags,
+          t.recordForm.movieInfo,
+          t.recordForm.movieInfoHint,
           t.recordForm.originalTitle,
-          t.recordForm.overview,
-          fill(t.characterCount, { current: 0, max: 2000 }),
           t.recordForm.releaseYear,
-          fill(t.recordForm.releaseYearHint, {
-            max: new Date().getFullYear() + 5,
-          }),
           t.recordForm.runtime,
           t.recordForm.runtimeUnit,
-          t.recordForm.runtimeHint,
-          t.recordForm.language,
           t.recordForm.countries,
+          t.recordForm.language,
           t.recordForm.genres,
-          t.recordForm.genresHint,
           t.recordForm.credits,
           t.recordForm.addCredit,
-          t.recordForm.posterUrl,
-          t.recordForm.uploadPoster,
-          t.recordForm.back,
+          t.recordForm.overview,
+          t.recordForm.cancel,
+          t.recordForm.next,
         );
         for (const placeholder of [
+          t.recordForm.titlePlaceholder,
+          t.recordForm.originalTitlePlaceholder,
+          t.recordForm.releaseYearPlaceholder,
+          t.recordForm.runtimePlaceholder,
           t.recordForm.countriesPlaceholder,
-          t.recordForm.personName,
-          t.recordForm.posterUrlPlaceholder,
+          t.recordForm.overviewPlaceholder,
         ]) {
-          cy.get(`input[placeholder="${placeholder}"]`).should("exist");
+          cy.get(`[placeholder="${placeholder}"]`).should("exist");
         }
-        for (const label of [
-          t.recordForm.creditRole,
-          t.recordForm.removeCredit,
-        ]) {
-          cy.get(`[aria-label="${label}"]`).should("exist");
-        }
+        cy.get(
+          `[aria-label="${fill(t.recordForm.scoreStar, { score: 1 })}"]`,
+        ).should("exist");
         cy.get("#countries").type("jp{enter}");
         cy.get(
           `[aria-label="${fill(t.recordForm.removeCountry, {
@@ -483,33 +472,59 @@ for (const [lang, t] of locales) {
               new Intl.DisplayNames(lang, { type: "region" }).of("JP") ?? "JP",
           })}"]`,
         ).should("exist");
+        cy.contains("button", t.recordForm.addCredit).click();
+        for (const label of [
+          t.recordForm.creditRole,
+          t.recordForm.removeCredit,
+          t.recordForm.personName,
+        ]) {
+          cy.get(`[aria-label="${label}"]`).should("exist");
+        }
+        cy.fillRecordBasics("Arrival", { score: 3, lang });
         cy.get("#releaseYear").type("2016");
-        cy.contains("button", t.recordForm.next).click();
+        cy.contains("button:visible", t.recordForm.next).click();
         shows(
-          t.recordForm.moodTags,
-          t.recordForm.moodTagsHint,
+          t.recordForm.spreadNote,
           t.recordForm.note,
-          t.recordForm.attachments,
-          t.recordForm.attachmentsHint,
+          fill(t.noteEditor.charCount, { count: 0 }),
+          t.recordForm.scrap,
+          fill(t.recordForm.scrapCount, { count: 0, max: 10 }),
           t.recordForm.attachmentsAdd,
+          t.recordForm.attachmentsDrop,
+          t.recordForm.back,
           t.recordForm.save,
         );
+        for (const label of [
+          t.noteEditor.heading,
+          t.noteEditor.subheading,
+          t.noteEditor.bold,
+          t.noteEditor.italic,
+          t.noteEditor.bulletList,
+          t.noteEditor.orderedList,
+          t.noteEditor.blockquote,
+        ]) {
+          cy.get(`[aria-label="${label}"]`).should("exist");
+        }
       });
 
       it("記録の編集", () => {
         cy.visit(`/${lang}/records/1/edit`);
         shows(
           t.recordForm.editTitle,
-          t.recordForm.stepBasics,
-          t.recordForm.stepMovieInfo,
-          t.recordForm.stepImpression,
-          t.recordForm.note,
-          t.recordForm.attachments,
-          t.recordForm.attachmentsHint,
-          t.recordForm.attachmentsAdd,
+          t.recordForm.spreadBasics,
+          t.recordForm.editing.trim(),
+          t.recordForm.backToRecord,
+          t.recordForm.recordedLabel,
+          t.recordForm.updatedLabel,
           t.recordForm.cancel,
+          t.recordForm.toNote,
           t.recordForm.saveChanges,
+          fill(t.recordForm.moreCredits, {
+            count: 3,
+            roles: t.enums.creditRole.cast,
+          }),
         );
+        cy.get(`[aria-label="${t.recordForm.posterRemove}"]`).should("exist");
       });
 
       it("アカウント設定と退会の確認", () => {
