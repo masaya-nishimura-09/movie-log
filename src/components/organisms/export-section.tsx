@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { phrases } from "@/components/atoms/phrases";
+import { AccountSection } from "@/components/molecules/account-section";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
 import { noteFiles } from "@/lib/export/note-markdown";
@@ -81,14 +82,11 @@ export function ExportSection({
   };
 
   return (
-    <section className="flex flex-col items-start gap-2 rounded-2xl bg-card px-4 py-4.5 md:px-5">
-      <h2 className="font-bold text-[15px] text-foreground">
-        {dict.exportTitle}
-      </h2>
-      <p className="text-[13px] text-foreground-sub">
-        {phrases(dict.exportDescription)}
-      </p>
-      <div className="mt-2 flex flex-wrap gap-2">
+    <AccountSection
+      title={dict.exportTitle}
+      description={dict.exportDescription}
+    >
+      <div className="flex flex-wrap gap-2.5">
         <Button
           variant="outline"
           size="sm"
@@ -113,10 +111,10 @@ export function ExportSection({
         </Button>
       </div>
       {failed && (
-        <p role="alert" className="text-destructive-foreground text-sm">
+        <p role="alert" className="mt-2 text-destructive-foreground text-sm">
           {phrases(dict.exportFailed)}
         </p>
       )}
-    </section>
+    </AccountSection>
   );
 }

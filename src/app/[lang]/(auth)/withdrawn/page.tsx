@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
-import { Logo } from "@/components/atoms/logo";
 import { ResultMessage } from "@/components/molecules/result-message";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -15,9 +14,6 @@ export default async function WithdrawnPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="h-18" />
-      </div>
       <ResultMessage
         icon="done"
         title={dict.withdrawn.title}

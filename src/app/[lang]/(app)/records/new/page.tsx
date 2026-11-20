@@ -38,7 +38,7 @@ export default async function NewRecordPage() {
         values={emptyFormValues()}
         maxReleaseYear={maxReleaseYear(new Date())}
         backHref={listHref}
-        backLabel={dict.recordDetail.back}
+        backLabel={dict.common.toContents}
         cancelHref={listHref}
         closeLabel={dict.header.close}
         dict={dict.recordForm}

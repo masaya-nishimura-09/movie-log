@@ -11,6 +11,7 @@ import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { formStack } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 import {
   contactMessageMaxLength,
@@ -39,11 +40,11 @@ export function ContactForm({
 
   if (state?.success) {
     return (
-      <output className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-bold text-2xl text-foreground">
+      <output className="flex flex-col">
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.successTitle}
         </h1>
-        <p className="text-[13px] text-foreground-sub leading-relaxed">
+        <p className="text-[13px] text-foreground-sub leading-7">
           {phrases(dict.successText)}
         </p>
       </output>
@@ -52,13 +53,15 @@ export function ContactForm({
 
   return (
     <>
-      <header className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-bold text-2xl text-foreground">{dict.title}</h1>
-        <p className="text-[13px] text-foreground-sub leading-relaxed">
+      <header className="mb-3.5 flex flex-col">
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
+          {dict.title}
+        </h1>
+        <p className="text-[13px] text-foreground-sub leading-7">
           {phrases(dict.intro)}
         </p>
       </header>
-      <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+      <form onSubmit={submit} noValidate className={formStack}>
         {failure && !failure.errors && (
           <FormAlert>
             {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}

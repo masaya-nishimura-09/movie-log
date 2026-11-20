@@ -1,9 +1,13 @@
-export default function LegalLayout({ children }: LayoutProps<"/[lang]">) {
+import { CoverScreen } from "@/components/organisms/cover-screen";
+import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export default async function LegalLayout({
+  children,
+}: LayoutProps<"/[lang]">) {
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
-    <main className="shell flex flex-1 items-start justify-center bg-sidebar px-4 py-10">
-      <div className="shell-inset w-full max-w-3xl rounded-[20px] bg-card px-6 py-8 md:px-10">
-        {children}
-      </div>
-    </main>
+    <CoverScreen homeHref={`/${lang}`} brandName={dict.brand.name} wide>
+      {children}
+    </CoverScreen>
   );
 }

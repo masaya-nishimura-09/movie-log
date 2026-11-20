@@ -261,7 +261,7 @@ describe("記録の詳細", () => {
   it("スマホでも、目次へ、編集、削除の文字を出す", () => {
     cy.viewport(390, 844);
     cy.visit("/ja/records/1");
-    cy.contains("a", detail.back).should("be.visible");
+    cy.contains("a", ja.common.toContents).should("be.visible");
     cy.contains("a", detail.edit).should("be.visible");
     cy.contains("button", detail.delete).should("be.visible");
   });
@@ -270,7 +270,7 @@ describe("記録の詳細", () => {
     cy.visit("/ja/records");
     cy.get("main ol a:visible").first().click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("a", detail.back).click();
+    cy.contains("a", ja.common.toContents).click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 
@@ -280,7 +280,7 @@ describe("記録の詳細", () => {
       cy.get("main ol a:visible").should("have.length.at.least", 1);
       cy.contains("main ol a:visible", "勝手にしやがれ").click();
       cy.location("pathname").should("eq", "/ja/records/1");
-      cy.contains("a", detail.back).click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "?q=%E5%8B%9D%E6%89%8B");
       cy.get("main ol a:visible").each(([card]) =>
@@ -292,7 +292,7 @@ describe("記録の詳細", () => {
       cy.visit("/ja/records?page=2");
       cy.get("main ol a:visible").first().click();
       cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-      cy.contains("a", detail.back).click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "?page=2");
     });
@@ -304,7 +304,7 @@ describe("記録の詳細", () => {
         .should("have.attr", "href")
         .and("match", /^\/ja\/records\/\d+$/);
       cy.get("main ol a:visible").first().click();
-      cy.contains("a", detail.back).click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "");
     });
@@ -318,7 +318,7 @@ describe("記録の詳細", () => {
         "javascript:alert(1)",
       ]) {
         cy.visit(`/ja/records/1?from=${encodeURIComponent(from)}`);
-        cy.contains("a", detail.back).should(
+        cy.contains("a", ja.common.toContents).should(
           "have.attr",
           "href",
           "/ja/records",

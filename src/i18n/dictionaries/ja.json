@@ -4,8 +4,7 @@
     "description": "観た映画を1本ずつノートに残し、気分や書いた言葉で探せる映画の記録帳。"
   },
   "brand": {
-    "name": "Cinelier",
-    "tagline": "観た映画を、あとで思い出せるように。"
+    "name": "Cinelier"
   },
   "landing": {
     "headline": "観た映画を、1本ずつノートに。",
@@ -532,7 +531,6 @@
     "noPoster": "ポスター未登録"
   },
   "recordDetail": {
-    "back": "目次へ",
     "edit": "編集",
     "delete": "削除",
     "releaseYear": "{year}年",
@@ -686,24 +684,22 @@
     "countryNotFound": "国名が見つかりません。別の書き方か、国コード（例：JP）で入れてください"
   },
   "account": {
-    "back": "戻る",
     "title": "アカウント設定",
-    "notice": "項目ごとに保存します。メールアドレスとパスワードの変更には、現在のパスワードが必要です。パスワードを変えると、他の端末のログインは解除されます。",
+    "notice": "項目ごとに保存します。",
     "username": "表示名",
     "email": "メールアドレス",
-    "usernameTitle": "表示名の変更",
-    "emailTitle": "メールアドレスの変更",
-    "passwordTitle": "パスワードの変更",
+    "usernameTitle": "表示名",
+    "emailTitle": "メールアドレス",
+    "passwordTitle": "パスワード",
     "currentPassword": "現在のパスワード",
     "currentPasswordHint": "変更の確認に使います",
     "newPassword": "新しいパスワード",
     "passwordHint": "8〜72文字",
-    "cancel": "キャンセル",
     "save": "保存",
     "saving": "保存中",
     "withdrawTitle": "退会",
     "withdrawDescription": "記録、ノート、添付画像をすべて削除します。削除すると元に戻せません。",
-    "withdrawAction": "退会",
+    "withdrawAction": "退会する",
     "withdrawConfirmTitle": "退会の確認",
     "withdrawConfirm": "退会",
     "withdrawing": "退会処理中",
@@ -723,7 +719,10 @@
     "exportFailed": "書き出せませんでした。時間をおいてやり直してください",
     "exportUpdatedAt": "更新日",
     "exportNotesAction": "ノートをMarkdownで書き出す（ZIP）",
-    "emailChangeSent": "{email} に確認メールを送りました。確認が済むまで、今のアドレスのままです。"
+    "emailChangeSent": "{email} に確認メールを送りました。確認が済むまで、今のアドレスのままです。",
+    "usernameDescription": "ノートの表紙に表示されます。",
+    "emailDescription": "変更すると、新しいアドレスに確認メールが届きます。",
+    "passwordDescription": "変えると、ほかの端末のログインは解除されます。"
   },
   "withdrawn": {
     "title": "退会が完了しました",
@@ -834,5 +833,8 @@
     "title": "読み込めませんでした",
     "description": "時間をおいて、もう一度お試しください。",
     "retry": "もう一度読み込む"
+  },
+  "common": {
+    "toContents": "目次へ"
   }
 }

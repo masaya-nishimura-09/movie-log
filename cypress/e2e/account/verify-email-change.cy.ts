@@ -11,7 +11,10 @@ const account = ja.account;
 const t = ja.verifyEmailChange;
 
 function section() {
-  return cy.contains("form", account.emailTitle);
+  return cy
+    .contains("section h2", account.emailTitle)
+    .closest("section")
+    .find("form");
 }
 
 function requestChange(newEmail: string, password: string) {

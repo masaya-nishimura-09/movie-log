@@ -12,7 +12,7 @@ function loginWith(email: string, password: string) {
 }
 
 function section(title: string) {
-  return cy.contains("form", title);
+  return cy.contains("section h2", title).closest("section").find("form");
 }
 
 describe("アカウント設定", () => {
@@ -178,18 +178,10 @@ describe("アカウント設定", () => {
       .and("contain.text", account.passwordError);
   });
 
-  it("キャンセルを押すと、入力を元に戻す", () => {
+  it("目次へを押すと、記録の一覧に移る", () => {
     cy.login();
     cy.visit("/ja/account");
-    cy.get("#username").clear().type("変更中の名前");
-    cy.contains("button", account.cancel).click();
-    cy.get("#username").should("have.value", "Demo User");
-  });
-
-  it("戻るを押すと、記録の一覧に移る", () => {
-    cy.login();
-    cy.visit("/ja/account");
-    cy.get(`a[aria-label="${account.back}"]`).click();
+    cy.contains("a", ja.common.toContents).click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 

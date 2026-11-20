@@ -4,8 +4,7 @@
     "description": "A film logbook with one note for each film, searchable by mood and by what you wrote."
   },
   "brand": {
-    "name": "Cinelier",
-    "tagline": "Remember every film you have watched."
+    "name": "Cinelier"
   },
   "landing": {
     "headline": "One note for every film you watch.",
@@ -534,7 +533,6 @@
     "noPoster": "No poster"
   },
   "recordDetail": {
-    "back": "Contents",
     "edit": "Edit",
     "delete": "Delete",
     "releaseYear": "{year}",
@@ -688,19 +686,17 @@
     "countryNotFound": "Country not found. Try another spelling or a code like JP"
   },
   "account": {
-    "back": "Back",
     "title": "Account settings",
-    "notice": "Each section is saved separately. Changing your email or password requires your current password. Changing your password signs out your other devices.",
+    "notice": "Each item is saved separately.",
     "username": "Display name",
     "email": "Email",
-    "usernameTitle": "Change display name",
-    "emailTitle": "Change email",
-    "passwordTitle": "Change password",
+    "usernameTitle": "Display name",
+    "emailTitle": "Email",
+    "passwordTitle": "Password",
     "currentPassword": "Current password",
     "currentPasswordHint": "Used to confirm the change",
     "newPassword": "New password",
     "passwordHint": "8 to 72 characters",
-    "cancel": "Discard",
     "save": "Save changes",
     "saving": "Saving",
     "withdrawTitle": "Delete account",
@@ -725,7 +721,10 @@
     "exportFailed": "Couldn't export. Please try again later",
     "exportUpdatedAt": "Updated",
     "exportNotesAction": "Export notes as Markdown (ZIP)",
-    "emailChangeSent": "We sent a confirmation email to {email}. Your email stays the same until it is confirmed."
+    "emailChangeSent": "We sent a confirmation email to {email}. Your email stays the same until it is confirmed.",
+    "usernameDescription": "Shown on the cover of your notebook.",
+    "emailDescription": "A confirmation email goes to the new address.",
+    "passwordDescription": "Changing it signs you out on your other devices."
   },
   "withdrawn": {
     "title": "Your account has been deleted",
@@ -836,5 +835,8 @@
     "title": "Couldn't load this page",
     "description": "Please try again in a moment.",
     "retry": "Try again"
+  },
+  "common": {
+    "toContents": "Contents"
   }
 }

@@ -1,31 +1,46 @@
-import { CircleAlert, CircleCheck, MailCheck } from "lucide-react";
+import { CircleAlert, CircleCheck, Mail } from "lucide-react";
+import type { ReactNode } from "react";
 import { phrases } from "@/components/atoms/phrases";
+import { cn } from "@/lib/style/cn";
 
 const icons = {
-  mail: <MailCheck className="mb-1 size-10 text-link" aria-hidden />,
-  done: <CircleCheck className="mb-1 size-10 text-link" aria-hidden />,
-  failed: (
-    <CircleAlert
-      className="mb-1 size-10 text-destructive-foreground"
-      aria-hidden
-    />
-  ),
+  mail: Mail,
+  done: CircleCheck,
+  failed: CircleAlert,
 };
 
 type ResultMessageProps = {
   icon: keyof typeof icons;
   title: string;
-  text: string;
+  text: ReactNode;
+  note?: string;
 };
 
-export function ResultMessage({ icon, title, text }: ResultMessageProps) {
+export function ResultMessage({ icon, title, text, note }: ResultMessageProps) {
+  const Icon = icons[icon];
   return (
-    <div className="flex flex-col items-center gap-2 text-center">
-      {icons[icon]}
-      <h1 className="font-bold text-foreground text-xl">{phrases(title)}</h1>
-      <output className="text-balance text-[13px] text-foreground-sub leading-relaxed">
-        {phrases(text)}
+    <div className="flex flex-col items-start">
+      <span
+        className={cn(
+          "mb-3.5 grid size-14 place-items-center rounded-full",
+          icon === "failed"
+            ? "bg-destructive/10 text-destructive-foreground"
+            : "bg-[rgb(139_94_60/0.12)] text-paper-label",
+        )}
+      >
+        <Icon className="size-6.5" strokeWidth={1.6} aria-hidden />
+      </span>
+      <h1 className="font-bold font-display text-foreground text-lg leading-7">
+        {phrases(title)}
+      </h1>
+      <output className="mt-3.5 text-[13px] text-foreground-sub leading-7">
+        {typeof text === "string" ? phrases(text) : text}
       </output>
+      {note && (
+        <p className="text-[13px] text-foreground-sub leading-7">
+          {phrases(note)}
+        </p>
+      )}
     </div>
   );
 }

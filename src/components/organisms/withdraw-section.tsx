@@ -4,6 +4,7 @@ import { useActionState } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { Button } from "@/components/atoms/button";
 import { phrases } from "@/components/atoms/phrases";
+import { AccountSection } from "@/components/molecules/account-section";
 import {
   AlertDialog,
   AlertDialogCancel,
@@ -25,21 +26,17 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
   const [state, formAction, pending] = useActionState(action, undefined);
 
   return (
-    <section className="flex flex-col items-start gap-2 rounded-2xl bg-card px-4 py-4.5 md:px-5">
-      <h2 className="font-bold text-[15px] text-destructive-foreground">
-        {dict.withdrawTitle}
-      </h2>
-      <p className="text-[13px] text-foreground-sub">
-        {phrases(dict.withdrawDescription)}
-      </p>
+    <AccountSection
+      title={dict.withdrawTitle}
+      description={dict.withdrawDescription}
+      danger
+    >
       <AlertDialog
         onOpenChange={(open, details) => {
           if (!open && pending) details.cancel();
         }}
       >
-        <AlertDialogTrigger
-          render={<Button variant="destructive" size="sm" className="mt-2" />}
-        >
+        <AlertDialogTrigger render={<Button variant="destructive" size="sm" />}>
           {dict.withdrawAction}
         </AlertDialogTrigger>
         <AlertDialogContent className="rounded-[18px] p-6">
@@ -74,6 +71,6 @@ export function WithdrawSection({ action, dict }: WithdrawSectionProps) {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-    </section>
+    </AccountSection>
   );
 }

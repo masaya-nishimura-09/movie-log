@@ -2,11 +2,7 @@
 
 import { useState } from "react";
 import { NotebookHeading } from "@/components/atoms/notebook-heading";
-import {
-  NotebookInput,
-  notebookLine,
-  notebookPlaceholder,
-} from "@/components/atoms/notebook-input";
+import { NotebookInput, notebookLine } from "@/components/atoms/notebook-input";
 import { ChoicePicker } from "@/components/molecules/choice-picker";
 import { CountryInput } from "@/components/molecules/country-input";
 import { CreditRows } from "@/components/molecules/credit-rows";
@@ -23,6 +19,7 @@ import type { Locale } from "@/i18n/locales";
 import { fieldError, type RecordFieldErrors } from "@/lib/record/field-error";
 import { buildLanguageOptions } from "@/lib/record/language-options";
 import { cn } from "@/lib/style/cn";
+import { paperPlaceholder } from "@/lib/style/paper";
 import { genreSchema } from "@/schemas/record/enums";
 import type { RecordFormValues } from "@/schemas/record/record-form";
 
@@ -211,7 +208,7 @@ export function RecordMovieFields({
           aria-invalid={Boolean(error("overview")) || undefined}
           className={cn(
             "block w-full resize-none bg-transparent px-0.5 text-[13px] text-paper-ink leading-7 outline-none [field-sizing:content] aria-invalid:ring-1 aria-invalid:ring-destructive lg:text-sm",
-            notebookPlaceholder,
+            paperPlaceholder,
           )}
         />
         {error("overview") && (

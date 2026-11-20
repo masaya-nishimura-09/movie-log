@@ -93,7 +93,7 @@ export default async function RecordPage({
           className="-ml-1 inline-flex min-h-11 items-center gap-1.5 rounded-sm px-1 text-foreground text-sm outline-none hover:text-link focus-visible:ring-2 focus-visible:ring-ring lg:gap-2"
         >
           <ArrowLeft className="size-4.5" aria-hidden />
-          {d.back}
+          {dict.common.toContents}
         </Link>
       }
       actions={

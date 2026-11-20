@@ -25,7 +25,7 @@ export function CountedTextarea({
       <Textarea
         maxLength={maxLength}
         defaultValue={defaultValue}
-        className="min-h-32 leading-loose"
+        className="min-h-28"
         onChange={(event) => setLength(event.target.value.length)}
         {...props}
       />

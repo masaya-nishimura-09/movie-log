@@ -1,12 +1,9 @@
-import { ArrowLeft } from "lucide-react";
+import { ChevronRight } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { buttonVariants } from "@/components/atoms/button";
-import { Logo } from "@/components/atoms/logo";
 import { phrases } from "@/components/atoms/phrases";
-import { SectionLabel } from "@/components/atoms/section-label";
-import { TextLink } from "@/components/atoms/text-link";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { alternates } from "@/lib/seo/alternates";
 import { cn } from "@/lib/style/cn";
@@ -19,49 +16,57 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function AboutPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
 
+  const links = [
+    { href: `/${lang}/terms`, label: dict.register.termsLink },
+    { href: `/${lang}/privacy`, label: dict.register.privacyLink },
+    { href: `/${lang}/commerce`, label: dict.legal.commerceLink },
+    { href: `/${lang}/contact`, label: dict.contact.link },
+    { href: `/${lang}/support`, label: dict.support.title },
+  ];
+  const label = "font-semibold text-paper-label text-xs leading-7";
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-col items-center gap-2 text-center">
-        <h1>
-          <Logo name={dict.brand.name} className="h-18" />
-        </h1>
-        <p className="text-[13px] text-foreground-sub">
-          {phrases(dict.brand.tagline)}
-        </p>
-      </div>
-      <section className="flex flex-col gap-3">
-        <SectionLabel>{dict.about.creditsHeading}</SectionLabel>
+    <div className="flex flex-col">
+      <h1 className="font-bold font-display text-lg leading-7">
+        {dict.about.title}
+      </h1>
+      <p className="text-[13px] text-foreground-sub leading-7">
+        {phrases(dict.metadata.description)}
+      </p>
+      <nav className="mt-7">
+        <h2 className={label}>{dict.about.legalHeading}</h2>
+        <ul>
+          {links.map((link) => (
+            <li key={link.href}>
+              <Link
+                href={link.href}
+                className="flex h-7 items-center justify-between rounded-sm text-sm outline-none hover:text-link focus-visible:ring-2 focus-visible:ring-ring"
+              >
+                {link.label}
+                <ChevronRight className="size-3.5" aria-hidden />
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </nav>
+      <section className="mt-7">
+        <h2 className={label}>{dict.about.creditsHeading}</h2>
         <Image
           src="/tmdb-logo.svg"
           alt="TMDB"
           width={273}
           height={36}
           unoptimized
-          className="h-3.5 w-auto self-start"
+          className="my-1.75 h-3.5 w-auto"
         />
-        <p className="text-[13px] text-foreground-sub leading-relaxed">
+        <p className="text-[11px] text-foreground-sub leading-7">
           {dict.about.tmdbNotice}
         </p>
       </section>
-      <nav className="flex flex-col gap-3">
-        <SectionLabel>{dict.about.legalHeading}</SectionLabel>
-        <div className="flex flex-col gap-2">
-          <TextLink href={`/${lang}/terms`} className="self-start text-sm">
-            {dict.register.termsLink}
-          </TextLink>
-          <TextLink href={`/${lang}/privacy`} className="self-start text-sm">
-            {dict.register.privacyLink}
-          </TextLink>
-          <TextLink href={`/${lang}/commerce`} className="self-start text-sm">
-            {dict.legal.commerceLink}
-          </TextLink>
-        </div>
-      </nav>
       <Link
         href={`/${lang}/records`}
-        className={cn(buttonVariants({ variant: "outline" }), "self-center")}
+        className={cn(buttonVariants({ variant: "outline" }), "mt-3.5 w-full")}
       >
-        <ArrowLeft aria-hidden />
         {dict.about.back}
       </Link>
     </div>

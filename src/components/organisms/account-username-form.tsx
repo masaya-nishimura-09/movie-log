@@ -24,7 +24,12 @@ export function AccountUsernameForm({
   counterTemplate,
 }: AccountUsernameFormProps) {
   return (
-    <AccountFormCard title={dict.usernameTitle} action={action} dict={dict}>
+    <AccountFormCard
+      title={dict.usernameTitle}
+      description={dict.usernameDescription}
+      action={action}
+      dict={dict}
+    >
       {(failure) => (
         <FormField
           label={dict.username}

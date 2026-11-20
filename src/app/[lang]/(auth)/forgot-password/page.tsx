@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { requestPasswordResetAction } from "@/actions/user/request-password-reset";
-import { Logo } from "@/components/atoms/logo";
 import { ForgotPasswordForm } from "@/components/organisms/forgot-password-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -14,9 +13,6 @@ export default async function ForgotPasswordPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="h-18" />
-      </div>
       <ForgotPasswordForm
         lang={lang}
         action={requestPasswordResetAction.bind(null, lang)}

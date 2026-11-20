@@ -115,7 +115,8 @@
 }
 
 :root,
-:root:not(.dark) .shell-inset {
+:root:not(.dark) .shell-inset,
+.paper-theme {
   --background: var(--beige);
   --foreground: var(--navy);
   --foreground-sub: color-mix(in oklab, var(--navy) 80%, var(--beige));

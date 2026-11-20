@@ -14,6 +14,7 @@ import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { formStack } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 
 type LoginFormProps = {
@@ -51,7 +52,7 @@ export function LoginForm({
   }, [failure]);
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+    <form onSubmit={submit} noValidate className={formStack}>
       {failure && !failure.errors && (
         <FormAlert>
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
@@ -100,7 +101,7 @@ export function LoginForm({
       </FormField>
       <TextLink
         href={`/${lang}/forgot-password`}
-        className="-mt-2 self-end text-xs"
+        className="self-end text-xs leading-7"
       >
         {dict.forgotPassword}
       </TextLink>
@@ -108,7 +109,7 @@ export function LoginForm({
       <Button
         type="submit"
         size="lg"
-        className="mt-1 w-full"
+        className="w-full"
         pending={pending}
         pendingLabel={dict.submitting}
       >

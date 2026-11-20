@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { resetPasswordAction } from "@/actions/user/reset-password";
-import { Logo } from "@/components/atoms/logo";
 import { ResetPasswordForm } from "@/components/organisms/reset-password-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -25,9 +24,6 @@ export default async function ResetPasswordPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="h-18" />
-      </div>
       <ResetPasswordForm
         lang={lang}
         action={resetPasswordAction.bind(null, token)}

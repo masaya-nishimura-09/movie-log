@@ -54,8 +54,6 @@ for (const [lang, t] of locales) {
       cy.visit(`/${lang}/login`);
       cy.title().should("eq", `${t.login.submit} | ${t.metadata.title}`);
       shows(
-        t.brand.name,
-        t.brand.tagline,
         t.login.email,
         t.login.password,
         t.login.passwordHint,
@@ -286,7 +284,8 @@ for (const [lang, t] of locales) {
     it("このアプリについて", () => {
       cy.visit(`/${lang}/about`);
       shows(
-        t.brand.tagline,
+        t.about.title,
+        t.about.legalHeading,
         t.about.creditsHeading,
         t.about.tmdbNotice,
         t.register.termsLink,
@@ -399,7 +398,7 @@ for (const [lang, t] of locales) {
           t.recordDetail.cast,
           t.recordDetail.overview,
           t.recordDetail.createdAt,
-          t.recordDetail.back,
+          t.common.toContents,
           t.recordDetail.edit,
           fill(t.recordDetail.releaseYear, { year: 1960 }),
           fill(t.recordDetail.runtime, { minutes: 90 }),
@@ -541,7 +540,6 @@ for (const [lang, t] of locales) {
           t.account.currentPasswordHint,
           t.account.newPassword,
           t.account.passwordHint,
-          t.account.cancel,
           t.account.save,
           t.account.withdrawTitle,
           t.account.withdrawDescription,

@@ -56,7 +56,8 @@ describe("スマホの画面での操作", () => {
       cy.get(`[aria-label="${ja.header.accountMenu}"]`).click();
       cy.contains("[role=menuitem]", ja.header.account).click();
       cy.get("#username").clear().type(`${username}-mobile`);
-      cy.contains("form", ja.account.usernameTitle)
+      cy.contains("section h2", ja.account.usernameTitle)
+        .closest("section")
         .contains("button", ja.account.save)
         .click();
       cy.contains(ja.account.saved).should("be.visible");
