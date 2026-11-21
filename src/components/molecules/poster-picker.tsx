@@ -102,10 +102,10 @@ export function PosterPicker({
               <Plus className="size-3.5 lg:size-4.5" aria-hidden />
             )}
           </span>
-          <span className="relative font-bold text-[11px] text-paper-label lg:text-xs">
+          <span className="relative font-bold text-paper-label text-xs">
             {pending ? dict.uploadingPoster : dict.posterAdd}
           </span>
-          <span className="relative hidden text-[10px] text-paper-muted lg:block">
+          <span className="relative hidden text-paper-muted text-xs lg:block">
             {dict.posterDrop}
           </span>
           <MaskingTape className="-top-2 h-4 w-14 lg:-top-2.5 lg:h-5.5 lg:w-20" />
@@ -125,7 +125,7 @@ export function PosterPicker({
       {failed && (
         <p
           role="alert"
-          className="mt-1 w-23 text-[10px] text-destructive-foreground leading-4 lg:w-38 lg:text-[11px]"
+          className="mt-1 w-23 text-destructive-foreground text-xs leading-4 lg:w-38"
         >
           {dict.posterUploadError}
         </p>

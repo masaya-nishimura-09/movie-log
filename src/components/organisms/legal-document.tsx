@@ -35,7 +35,7 @@ export function LegalDocument({
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {title}
         </h1>
-        <p className="text-[11px] text-muted-foreground leading-7">
+        <p className="text-muted-foreground text-xs leading-7">
           {updatedLabel}: {updated}
         </p>
       </header>

@@ -26,7 +26,7 @@ export function AccountSection({
         >
           {title}
         </h2>
-        <p className="mt-0.5 text-muted-foreground text-xs leading-5">
+        <p className="mt-0.5 text-[13px] text-muted-foreground leading-5">
           {phrases(description)}
         </p>
       </div>

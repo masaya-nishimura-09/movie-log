@@ -51,21 +51,21 @@ export default async function EditRecordPage({
         uploadPoster={uploadPosterAction}
         values={toFormValues(record)}
         titleNote={
-          <>
-            {f.recordedLabel}{" "}
+          <span className="grid grid-cols-[auto_1fr] gap-x-2 lg:inline">
+            <span>{f.recordedLabel}</span>{" "}
             <LocalDate
               date={record.createdAt}
               locale={lang}
               dateStyle="medium"
             />
-            {" ・ "}
-            {f.updatedLabel}{" "}
+            <span className="hidden lg:inline">{" ・ "}</span>
+            <span>{f.updatedLabel}</span>{" "}
             <LocalDate
               date={record.updatedAt}
               locale={lang}
-              dateStyle="short"
+              dateStyle="medium"
             />
-          </>
+          </span>
         }
         maxReleaseYear={maxReleaseYear(new Date())}
         backHref={recordHref}

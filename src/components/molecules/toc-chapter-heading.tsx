@@ -16,7 +16,7 @@ export function TocChapterHeading({ children, note }: TocChapterHeadingProps) {
         {children}
       </h2>
       {note && (
-        <span className="text-[11px] text-paper-muted leading-5 lg:text-xs lg:leading-5.5">
+        <span className="text-paper-muted text-xs leading-5 lg:leading-5.5">
           {note}
         </span>
       )}

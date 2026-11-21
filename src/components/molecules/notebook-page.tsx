@@ -122,7 +122,7 @@ export function NotebookPage({
       {footer && (
         <div
           className={cn(
-            "pointer-events-none absolute flex text-[11px] text-paper-muted tracking-[0.06em]",
+            "pointer-events-none absolute flex text-paper-muted text-xs tracking-[0.06em]",
             style.footer,
           )}
         >

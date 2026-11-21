@@ -20,7 +20,7 @@ export function NotebookFields({ rows, size, className }: NotebookFieldsProps) {
         >
           <dt
             className={cn(
-              "shrink-0 font-semibold text-[11px] text-paper-label leading-7",
+              "shrink-0 font-semibold text-paper-label text-xs leading-7",
               size === "md"
                 ? "w-14 lg:w-16 lg:text-xs"
                 : "w-16 lg:w-18 lg:text-[13px]",

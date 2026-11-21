@@ -33,7 +33,7 @@ type ChoicePickerProps = {
 };
 
 export const pickerChip =
-  "inline-flex h-5.5 shrink-0 items-center rounded-full bg-(--sage) px-2 text-(--navy) text-[11px] leading-5.5 lg:h-6 lg:px-2.5 lg:text-xs";
+  "inline-flex h-5.5 shrink-0 items-center rounded-full bg-(--sage) px-2 text-(--navy) text-xs leading-5.5 lg:h-6 lg:px-2.5";
 
 export function ChoicePicker({
   id,

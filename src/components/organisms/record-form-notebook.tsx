@@ -140,7 +140,7 @@ export function RecordFormNotebook({
             />
           ))}
         </span>
-        <span aria-live="polite" className="text-[11px] text-foreground-sub">
+        <span aria-live="polite" className="text-foreground-sub text-xs">
           {interpolate(dict.stepProgress, {
             current: page + 1,
             total: recordPageCount,

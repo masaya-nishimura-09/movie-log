@@ -91,7 +91,7 @@ export function RecordBasicsFields({
           {error("posterUrl") && (
             <p
               role="alert"
-              className="mt-1 w-23 text-[10px] text-destructive-foreground leading-4 lg:w-38 lg:text-[11px]"
+              className="mt-1 w-23 text-destructive-foreground text-xs leading-4 lg:w-38"
             >
               {error("posterUrl")}
             </p>
@@ -102,7 +102,7 @@ export function RecordBasicsFields({
             <label
               htmlFor="title"
               className={cn(
-                "block font-semibold text-[11px] leading-7 lg:text-xs",
+                "block font-semibold text-xs leading-7",
                 error("title")
                   ? "text-destructive-foreground"
                   : "text-paper-label",
@@ -132,7 +132,7 @@ export function RecordBasicsFields({
             />
             <p
               className={cn(
-                "truncate text-[10px] leading-7 lg:text-[11px]",
+                "truncate text-xs leading-7",
                 error("title")
                   ? "text-destructive-foreground"
                   : "text-paper-muted",
@@ -163,7 +163,7 @@ export function RecordBasicsFields({
                     type="button"
                     onClick={() => setWatchedAt(quick.value)}
                     aria-pressed={watchedAt === quick.value}
-                    className="h-6 whitespace-nowrap rounded-full px-2.5 text-[11px] text-paper-ink shadow-[inset_0_0_0_1px_rgb(10_41_71/0.2)] outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-(--navy) aria-pressed:text-(--beige) aria-pressed:shadow-none lg:text-xs"
+                    className="h-6 whitespace-nowrap rounded-full px-2.5 text-paper-ink text-xs shadow-[inset_0_0_0_1px_rgb(10_41_71/0.2)] outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-(--navy) aria-pressed:text-(--beige) aria-pressed:shadow-none"
                   >
                     {quick.label}
                   </button>

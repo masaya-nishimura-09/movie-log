@@ -116,7 +116,7 @@ export function MovieTitleField({
       />
       {open && (
         <div className="absolute top-full left-0 z-20 mt-2 w-[min(17.5rem,calc(100vw-5rem))] rounded-xl bg-[#fffdf8] p-1.5 text-paper-ink shadow-[0_14px_32px_rgb(10_41_71/0.2),0_0_0_1px_rgb(10_41_71/0.06)]">
-          <p className="px-2.5 pt-1.5 pb-1 text-[11px] text-paper-muted">
+          <p className="px-2.5 pt-1.5 pb-1 text-paper-muted text-xs">
             {listLabel} ・{" "}
             {interpolate(countTemplate, { count: suggestions.length })}
           </p>
@@ -147,7 +147,7 @@ export function MovieTitleField({
                   <span className="truncate font-bold font-display text-sm leading-5">
                     {suggestion.title}
                   </span>
-                  <span className="truncate text-[11px] text-paper-muted leading-4">
+                  <span className="truncate text-paper-muted text-xs leading-4">
                     {[
                       suggestion.releaseYear,
                       suggestion.originalTitle !== suggestion.title
@@ -159,14 +159,14 @@ export function MovieTitleField({
                   </span>
                 </span>
                 {index === active && (
-                  <span className="shrink-0 text-[10px] text-paper-muted">
+                  <span className="shrink-0 text-paper-muted text-xs">
                     Enter
                   </span>
                 )}
               </div>
             ))}
           </div>
-          <p className="mt-1 border-[rgb(10_41_71/0.08)] border-t px-2.5 pt-2 pb-1 text-[11px] text-paper-muted leading-5">
+          <p className="mt-1 border-[rgb(10_41_71/0.08)] border-t px-2.5 pt-2 pb-1 text-paper-muted text-xs leading-5">
             {manualHint}
           </p>
         </div>

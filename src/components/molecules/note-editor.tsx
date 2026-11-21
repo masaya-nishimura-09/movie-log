@@ -187,7 +187,7 @@ export function NoteEditor({
       >
         <EditorContent editor={editor} className="h-full" />
       </div>
-      <p className="flex h-7 shrink-0 items-center justify-between gap-3 text-[10px] text-paper-muted lg:text-[11px]">
+      <p className="flex h-7 shrink-0 items-center justify-between gap-3 text-paper-muted text-xs">
         <span role="alert" className="text-destructive-foreground">
           {error}
         </span>

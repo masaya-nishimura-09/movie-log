@@ -264,7 +264,7 @@ export function RecordForm({
           <div key="scrap" className="flex flex-col">
             <div className="flex flex-wrap items-center justify-between gap-x-3">
               <NotebookHeading>{dict.scrap}</NotebookHeading>
-              <p className="text-[10px] text-paper-muted leading-7 lg:text-[11px]">
+              <p className="text-paper-muted text-xs leading-7">
                 {interpolate(dict.scrapCount, {
                   count: scrapTotal,
                   max: maxAttachments,

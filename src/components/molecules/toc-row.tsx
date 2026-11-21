@@ -39,11 +39,11 @@ export function TocRow({
         <span className="truncate font-bold font-display text-sm underline-offset-3 group-hover:underline group-hover:decoration-[rgb(139_94_60/0.6)] lg:text-[15px]">
           {title}
         </span>
-        <span className="flex items-center gap-1.5 whitespace-nowrap text-[11px] text-paper-muted lg:leading-4.5">
+        <span className="flex items-center gap-1.5 whitespace-nowrap text-paper-muted text-xs lg:leading-4.5">
           <StarRating
             score={score}
             label={scoreLabel}
-            className="gap-px text-[11px] lg:hidden"
+            className="gap-px text-xs lg:hidden"
           />
           <span>
             {meta && <span className="hidden lg:inline">{meta} · </span>}
@@ -58,7 +58,7 @@ export function TocRow({
       <StarRating
         score={score}
         label={scoreLabel}
-        className="hidden gap-0.5 text-[11px] lg:inline-flex"
+        className="hidden gap-0.5 text-xs lg:inline-flex"
       />
     </Link>
   );

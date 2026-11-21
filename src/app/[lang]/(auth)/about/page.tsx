@@ -59,7 +59,7 @@ export default async function AboutPage() {
           unoptimized
           className="my-1.75 h-3.5 w-auto"
         />
-        <p className="text-[11px] text-foreground-sub leading-7">
+        <p className="text-foreground-sub text-xs leading-7">
           {dict.about.tmdbNotice}
         </p>
       </section>

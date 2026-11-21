@@ -35,7 +35,7 @@ function Eyebrow({
   return (
     <p
       className={cn(
-        "font-semibold text-[10px] text-paper-label tracking-[0.24em] md:text-[11px] dark:text-link",
+        "font-semibold text-paper-label text-xs tracking-[0.24em] dark:text-link",
         className,
       )}
     >
@@ -190,7 +190,7 @@ export function Landing({ lang, dict }: LandingProps) {
               {l.login}
             </Link>
           </div>
-          <p className="mt-3 text-center text-[11px] text-muted-foreground md:mt-4 md:text-left md:text-xs">
+          <p className="mt-3 text-center text-muted-foreground text-xs md:mt-4 md:text-left">
             {l.badge}
           </p>
         </div>
@@ -260,7 +260,7 @@ export function Landing({ lang, dict }: LandingProps) {
               >
                 <MaskingTape className="w-16 md:w-20" />
                 <div className="flex h-7 items-center justify-between">
-                  <span className="font-bold text-[11px] text-paper-label tracking-[0.1em] md:text-xs">
+                  <span className="font-bold text-paper-label text-xs tracking-[0.1em]">
                     {String(index + 1).padStart(2, "0")}
                   </span>
                   <Icon
@@ -394,7 +394,7 @@ export function Landing({ lang, dict }: LandingProps) {
             ))}
           </nav>
           <div className="hidden flex-1 md:block" />
-          <p className="text-[11px] text-muted-foreground md:text-xs">
+          <p className="text-muted-foreground text-xs">
             © {new Date().getFullYear()} {dict.brand.name}
           </p>
         </div>

@@ -160,10 +160,10 @@ export function PendingAttachmentsField({
               <span className="grid size-6.5 place-items-center rounded-full bg-[rgb(139_94_60/0.12)] text-primary lg:size-8">
                 <Plus className="size-3.5 lg:size-4" aria-hidden />
               </span>
-              <span className="font-bold text-[11px] text-paper-label lg:text-xs">
+              <span className="font-bold text-paper-label text-xs">
                 {dict.attachmentsAdd}
               </span>
-              <span className="hidden text-[10px] text-paper-muted lg:block">
+              <span className="hidden text-paper-muted text-xs lg:block">
                 {dict.attachmentsDrop}
               </span>
               <input
@@ -184,7 +184,7 @@ export function PendingAttachmentsField({
       {error && (
         <p
           role="alert"
-          className="text-[11px] text-destructive-foreground leading-7"
+          className="text-destructive-foreground text-xs leading-7"
         >
           {error}
         </p>

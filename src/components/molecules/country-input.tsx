@@ -92,7 +92,7 @@ export function CountryInput({
       {notFound && (
         <p
           role="alert"
-          className="text-[11px] text-destructive-foreground leading-7"
+          className="text-destructive-foreground text-xs leading-7"
         >
           {notFoundLabel}
         </p>

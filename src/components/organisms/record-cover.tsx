@@ -92,7 +92,7 @@ export function RecordCoverHeader({ lang, record, dict }: RecordCoverProps) {
         </h1>
         {record.originalTitle !== "" &&
           record.originalTitle !== record.title && (
-            <p className="text-[10px] text-paper-muted italic leading-7 lg:text-xs">
+            <p className="text-paper-muted text-xs italic leading-7">
               {record.originalTitle}
             </p>
           )}

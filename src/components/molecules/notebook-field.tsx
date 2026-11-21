@@ -29,7 +29,7 @@ export function NotebookField({
       <LabelTag
         htmlFor={htmlFor}
         className={cn(
-          "shrink-0 font-semibold text-[11px] leading-7 lg:text-xs",
+          "shrink-0 font-semibold text-xs leading-7",
           labelWidth === "sm" ? "w-16 lg:w-21" : "w-16 lg:w-21.5",
           error ? "text-destructive-foreground" : "text-paper-label",
         )}
@@ -50,7 +50,7 @@ export function NotebookField({
         {error && (
           <p
             role="alert"
-            className="flex items-center gap-1.5 text-[11px] text-destructive-foreground leading-7"
+            className="flex items-center gap-1.5 text-destructive-foreground text-xs leading-7"
           >
             <CircleAlert className="size-3.25 shrink-0" aria-hidden />
             {error}

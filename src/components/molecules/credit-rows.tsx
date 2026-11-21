@@ -88,7 +88,7 @@ export function CreditRows({
         <SelectTrigger
           aria-label={dict.creditRole}
           size="sm"
-          className="h-6 w-17 shrink-0 rounded-md bg-[rgb(10_41_71/0.06)] px-2 font-normal text-[11px] text-paper-ink data-[size=sm]:h-6 lg:w-20.5 lg:text-xs"
+          className="h-6 w-17 shrink-0 rounded-md bg-[rgb(10_41_71/0.06)] px-2 font-normal text-paper-ink text-xs data-[size=sm]:h-6 lg:w-20.5"
         >
           <SelectValue />
         </SelectTrigger>
@@ -126,7 +126,7 @@ export function CreditRows({
     <button
       type="button"
       onClick={addRow}
-      className="inline-flex h-7 items-center gap-1 rounded-sm font-semibold text-[11px] text-paper-label outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring lg:text-xs"
+      className="inline-flex h-7 items-center gap-1 rounded-sm font-semibold text-paper-label text-xs outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring"
     >
       <Plus className="size-3.5" aria-hidden />
       {dict.addCredit}

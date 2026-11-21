@@ -56,11 +56,11 @@ export function RecordMovieFields({
     <div className="flex flex-col">
       <div className="flex items-center justify-between gap-3">
         <NotebookHeading>{dict.movieInfo}</NotebookHeading>
-        <p className="hidden text-[11px] text-paper-muted lg:block">
+        <p className="hidden text-paper-muted text-xs lg:block">
           {dict.movieInfoHint}
         </p>
       </div>
-      <p className="text-[10px] text-paper-muted leading-7 lg:hidden">
+      <p className="text-paper-muted text-xs leading-7 lg:hidden">
         {dict.movieInfoHint}
       </p>
       <div className="flex flex-col lg:mt-7">
@@ -214,7 +214,7 @@ export function RecordMovieFields({
         {error("overview") && (
           <p
             role="alert"
-            className="text-[11px] text-destructive-foreground leading-7"
+            className="text-destructive-foreground text-xs leading-7"
           >
             {error("overview")}
           </p>
