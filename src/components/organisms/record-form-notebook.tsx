@@ -153,7 +153,7 @@ export function RecordFormNotebook({
   );
 
   const narrowFooter = (
-    <div className="flex flex-col gap-2 pt-2.5 pb-4.5 lg:hidden">
+    <div className="sticky bottom-0 -mx-4 flex flex-col gap-2 bg-background px-4 pt-2.5 pb-4.5 md:-mx-8 md:px-8 lg:hidden">
       {message && (
         <p
           role="alert"
@@ -200,6 +200,7 @@ export function RecordFormNotebook({
 
   return (
     <NotebookScreen
+      grow
       toolbar={
         <>
           <div className="hidden items-center gap-5 lg:flex">

@@ -23,7 +23,7 @@ export function NotebookScreen({
       className={cn(
         "app-container flex flex-col lg:pb-6",
         grow
-          ? "max-lg:grid max-lg:min-h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))] max-lg:grid-rows-[auto_1fr_auto]"
+          ? "max-lg:grid max-lg:min-h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))] max-lg:grid-cols-1 max-lg:grid-rows-[auto_1fr_auto]"
           : "max-lg:h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))]",
       )}
     >
