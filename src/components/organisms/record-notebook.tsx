@@ -11,7 +11,7 @@ import {
 } from "react";
 import { NotebookPage } from "@/components/molecules/notebook-page";
 import { PageTurner } from "@/components/molecules/page-turner";
-import { ScrapPhoto } from "@/components/molecules/scrap-photo";
+import { ScrapBoard } from "@/components/molecules/scrap-board";
 import { AttachmentViewer } from "@/components/organisms/attachment-viewer";
 import { NotebookScreen } from "@/components/organisms/notebook-screen";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
@@ -170,25 +170,18 @@ export function RecordNotebook({
     const animation = "animate-page-in";
     if (page.kind === "scrap") {
       return (
-        <ul
+        <ScrapBoard
           key={index}
           style={style}
-          className={cn(
-            animation,
-            "grid grid-cols-2 gap-x-3.5 gap-y-6.5 pt-1.5 lg:gap-x-5 lg:gap-y-9 lg:pt-0",
-            attachments.length > 6 ? "lg:grid-cols-4" : "lg:grid-cols-3",
-          )}
-        >
-          {attachments.map((attachment, i) => (
-            <li key={attachment.attachmentId}>
-              <ScrapPhoto
-                imageUrl={attachment.imageUrl}
-                label={interpolate(dict.attachmentOpen, { number: i + 1 })}
-                onOpen={() => setOpenAttachment(i)}
-              />
-            </li>
-          ))}
-        </ul>
+          className={animation}
+          wide={layout === "spread"}
+          photos={attachments.map((attachment, i) => ({
+            id: attachment.attachmentId,
+            imageUrl: attachment.imageUrl,
+            label: interpolate(dict.attachmentOpen, { number: i + 1 }),
+          }))}
+          onOpen={setOpenAttachment}
+        />
       );
     }
     const blocks = page.kind === "cover" ? coverBlocks : noteBlocks;
