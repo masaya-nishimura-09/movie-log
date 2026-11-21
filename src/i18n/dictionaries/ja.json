@@ -696,7 +696,7 @@
     "creditsTitle": "クレジット",
     "creditCount": "{count}人",
     "done": "完了",
-    "overviewPlaceholder": "あらすじ（自動で入ります）",
+    "overviewPlaceholder": "あらすじ",
     "scrap": "スクラップ",
     "scrapCount": "{count} / {max} 枚 ・ JPEG・PNG・WebP 5MBまで",
     "attachmentsDrop": "ドラッグでもOK",

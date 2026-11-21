@@ -698,7 +698,7 @@
     "creditsTitle": "Credits",
     "creditCount": "{count} people",
     "done": "Done",
-    "overviewPlaceholder": "Synopsis (filled in automatically)",
+    "overviewPlaceholder": "Synopsis",
     "scrap": "Scraps",
     "scrapCount": "{count} / {max} · JPEG, PNG, WebP up to 5 MB",
     "attachmentsDrop": "or drop it here",
