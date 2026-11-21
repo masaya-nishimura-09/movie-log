@@ -743,7 +743,9 @@
     "emailChangeSent": "We sent a confirmation email to {email}. Your email stays the same until it is confirmed.",
     "usernameDescription": "Shown on the cover of your notebook.",
     "emailDescription": "A confirmation email goes to the new address.",
-    "passwordDescription": "Changing it signs you out on your other devices."
+    "passwordDescription": "Changing it signs you out on your other devices.",
+    "languageTitle": "Language",
+    "languageDescription": "Switches the language of the screens and emails."
   },
   "withdrawn": {
     "title": "Your account has been deleted",

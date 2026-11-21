@@ -47,6 +47,26 @@ describe("proxy: 言語", () => {
     expect(location(await proxy(request("/about")))).toBe("/en/about");
   });
 
+  it("uses the language saved in the cookie before the browser language", async () => {
+    expect(
+      location(
+        await proxy(
+          request("/records", {
+            language: "ja",
+            cookies: { NEXT_LOCALE: "en" },
+          }),
+        ),
+      ),
+    ).toBe("/en/records");
+    expect(
+      location(
+        await proxy(
+          request("/", { language: "ja", cookies: { NEXT_LOCALE: "fr" } }),
+        ),
+      ),
+    ).toBe("/ja");
+  });
+
   it("does not treat a path that only starts with the locale as localized", async () => {
     expect(location(await proxy(request("/japan", { language: "ja" })))).toBe(
       "/ja/japan",

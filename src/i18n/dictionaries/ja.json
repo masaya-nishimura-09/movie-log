@@ -741,7 +741,9 @@
     "emailChangeSent": "{email} に確認メールを送りました。確認が済むまで、今のアドレスのままです。",
     "usernameDescription": "ノートの表紙に表示されます。",
     "emailDescription": "変更すると、新しいアドレスに確認メールが届きます。",
-    "passwordDescription": "変えると、ほかの端末のログインは解除されます。"
+    "passwordDescription": "変えると、ほかの端末のログインは解除されます。",
+    "languageTitle": "言語",
+    "languageDescription": "画面とメールの言語を切り替えます。"
   },
   "withdrawn": {
     "title": "退会が完了しました",

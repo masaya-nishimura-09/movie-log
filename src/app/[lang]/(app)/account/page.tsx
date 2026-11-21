@@ -1,6 +1,7 @@
 import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { changeLocaleAction } from "@/actions/locale/change-locale";
 import { exportNotesAction } from "@/actions/record/export-notes";
 import { exportRecordsAction } from "@/actions/record/export-records";
 import { updateEmailAction } from "@/actions/user/update-email";
@@ -13,6 +14,7 @@ import { AccountEmailForm } from "@/components/organisms/account-email-form";
 import { AccountPasswordForm } from "@/components/organisms/account-password-form";
 import { AccountUsernameForm } from "@/components/organisms/account-username-form";
 import { ExportSection } from "@/components/organisms/export-section";
+import { LanguageSection } from "@/components/organisms/language-section";
 import { WithdrawSection } from "@/components/organisms/withdraw-section";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -61,6 +63,11 @@ export default async function AccountPage() {
         action={updatePasswordAction.bind(null, lang)}
         dict={dict.account}
         passwordDict={dict.passwordInput}
+      />
+      <LanguageSection
+        lang={lang}
+        action={changeLocaleAction}
+        dict={dict.account}
       />
       <ExportSection
         lang={lang}

@@ -2,7 +2,9 @@ import { type NextRequest, NextResponse } from "next/server";
 import { refreshTokens } from "@/api/auth/refresh-tokens";
 import { ApiError } from "@/api/client/api-error";
 import {
+  hasLocale,
   type Locale,
+  localeCookie,
   localeHeader,
   locales,
   negotiateLocale,
@@ -33,7 +35,10 @@ export async function proxy(request: NextRequest) {
     (l) => pathname === `/${l}` || pathname.startsWith(`/${l}/`),
   );
   if (!locale) {
-    const negotiated = negotiateLocale(request.headers.get("accept-language"));
+    const saved = request.cookies.get(localeCookie)?.value ?? "";
+    const negotiated = hasLocale(saved)
+      ? saved
+      : negotiateLocale(request.headers.get("accept-language"));
     const url = request.nextUrl.clone();
     url.pathname = `/${negotiated}${pathname === "/" ? "" : pathname}`;
     return NextResponse.redirect(url);
