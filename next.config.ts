@@ -35,6 +35,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [new URL("https://image.tmdb.org/t/p/**")],
   },
   experimental: {
+    agentUpgrade: "security",
     serverActions: {
       bodySizeLimit: "6mb",
     },
