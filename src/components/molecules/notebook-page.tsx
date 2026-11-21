@@ -100,7 +100,7 @@ export function NotebookPage({
         ref={scrollRef}
         data-slot="page-body"
         className={cn(
-          "relative min-h-0 flex-1 overflow-y-auto overscroll-contain",
+          "relative min-h-0 flex-1 overflow-y-auto",
           ruledLines,
           style.scroll,
         )}

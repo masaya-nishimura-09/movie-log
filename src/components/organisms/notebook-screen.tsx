@@ -31,10 +31,7 @@ export function NotebookScreen({
         {toolbar}
       </div>
       <div
-        className={cn(
-          "flex-1 touch-pan-y lg:flex-none",
-          grow ? "[&_[data-slot=page-body]]:overscroll-auto" : "min-h-0",
-        )}
+        className={cn("flex-1 touch-pan-y lg:flex-none", !grow && "min-h-0")}
         onPointerDown={onPointerDown}
         onPointerUp={onPointerUp}
       >
