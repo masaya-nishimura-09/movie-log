@@ -79,7 +79,7 @@ export function RegisterForm({
 
   return (
     <>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col">
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.title}
         </h1>
@@ -137,7 +137,7 @@ export function RegisterForm({
             hideLabel={passwordDict.hide}
           />
         </FormField>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col">
           <label className="flex items-center gap-2 font-medium text-sm">
             <span className="relative grid size-4.25 shrink-0 place-items-center">
               <input

@@ -13,7 +13,7 @@ export default async function WithdrawnPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <ResultMessage
         icon="done"
         title={dict.withdrawn.title}

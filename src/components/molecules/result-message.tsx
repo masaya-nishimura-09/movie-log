@@ -22,7 +22,7 @@ export function ResultMessage({ icon, title, text, note }: ResultMessageProps) {
     <div className="flex flex-col items-start">
       <span
         className={cn(
-          "mb-3.5 grid size-14 place-items-center rounded-full",
+          "grid size-14 place-items-center rounded-full",
           icon === "failed"
             ? "bg-destructive/10 text-destructive-foreground"
             : "bg-[rgb(139_94_60/0.12)] text-paper-label",
@@ -33,7 +33,7 @@ export function ResultMessage({ icon, title, text, note }: ResultMessageProps) {
       <h1 className="font-bold font-display text-foreground text-lg leading-7">
         {phrases(title)}
       </h1>
-      <output className="mt-3.5 text-[13px] text-foreground-sub leading-7">
+      <output className="text-[13px] text-foreground-sub leading-7">
         {typeof text === "string" ? phrases(text) : text}
       </output>
       {note && (

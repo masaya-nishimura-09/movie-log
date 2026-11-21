@@ -10,21 +10,21 @@ export default async function NotFound() {
 
   return (
     <CoverScreen homeHref={`/${lang}`} brandName={dict.brand.name}>
-      <p
+      <div
         aria-hidden="true"
         className="font-bold font-display text-[44px] text-primary leading-14"
       >
         404
-      </p>
+      </div>
       <h1 className="font-bold font-display text-lg leading-7">
         {dict.notFound.title}
       </h1>
-      <p className="mt-3.5 text-[13px] text-foreground-sub leading-7">
+      <p className="text-[13px] text-foreground-sub leading-7">
         {phrases(dict.notFound.description)}
       </p>
       <Link
         href={`/${lang}/records`}
-        className={cn(buttonVariants(), "mt-3.5 w-full")}
+        className={cn(buttonVariants(), "my-1.5 w-full")}
       >
         {dict.notFound.action}
       </Link>

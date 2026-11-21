@@ -14,7 +14,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SupportPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <header className="flex flex-col">
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.support.title}

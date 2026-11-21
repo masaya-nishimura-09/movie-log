@@ -23,7 +23,7 @@ export default async function VerifyEmailPage({
   const token = typeof params.token === "string" ? params.token : "";
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <VerifyTokenForm
         action={verifyEmailAction.bind(null, token)}
         hasToken={token !== ""}

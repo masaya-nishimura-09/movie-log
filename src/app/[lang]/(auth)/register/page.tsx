@@ -18,7 +18,7 @@ export default async function RegisterPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <RegisterForm
         lang={lang}
         siteKey={turnstileSiteKey()}

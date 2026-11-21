@@ -1,60 +1,58 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { CoverSpine } from "@/components/atoms/cover-spine";
-import { CoverTexture } from "@/components/atoms/cover-texture";
 import { Logo } from "@/components/atoms/logo";
-import { MaskingTape } from "@/components/atoms/masking-tape";
+import { RingNotebook } from "@/components/organisms/ring-notebook";
 import { cn } from "@/lib/style/cn";
-import {
-  coverSurface,
-  onCover,
-  paperCard,
-  ruledLines,
-} from "@/lib/style/paper";
+import { ruledLines } from "@/lib/style/paper";
 
 type CoverScreenProps = {
   homeHref: string;
   brandName: string;
-  wide?: boolean;
   children: ReactNode;
 };
 
 export function CoverScreen({
   homeHref,
   brandName,
-  wide = false,
   children,
 }: CoverScreenProps) {
+  const logo = (
+    <Link
+      href={homeHref}
+      className="rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"
+    >
+      <Logo name={brandName} className="h-10 md:h-12" />
+    </Link>
+  );
+
   return (
-    <main className="flex flex-1 items-center justify-center bg-background px-4 py-6 md:px-8 md:py-10">
-      <div
-        className={cn(
-          coverSurface,
-          "relative flex min-h-[calc(100svh-3rem)] w-full flex-col items-center justify-center px-4 py-10 md:min-h-195 md:px-12",
-          wide ? "max-w-220 md:py-12" : "max-w-140",
-        )}
+    <main className="flex flex-1 flex-col items-center justify-center bg-background px-4 py-8 md:px-8 md:py-12">
+      <div className="mb-6 lg:hidden">{logo}</div>
+      <RingNotebook
+        variant="responsive"
+        className="h-auto w-full max-w-110 lg:max-w-220"
       >
-        <CoverSpine />
-        <CoverTexture />
-        <div className={cn("relative mb-7 text-center", onCover)}>
-          <Link
-            href={homeHref}
-            className="rounded-sm outline-none focus-visible:ring-(--beige) focus-visible:ring-2"
-          >
-            <Logo name={brandName} className="h-10 md:h-12" />
-          </Link>
+        <div className="paper-theme hidden min-w-0 flex-1 basis-0 items-center justify-center rounded-[2px] bg-paper px-12 lg:flex">
+          {logo}
         </div>
         <div
           className={cn(
-            paperCard,
-            ruledLines,
-            wide ? "max-w-180" : "max-w-100",
+            "paper-theme relative isolate flex min-h-84 flex-col justify-center overflow-hidden rounded-[3px] bg-paper px-6 py-14 text-paper-ink lg:min-h-140 lg:min-w-0 lg:flex-1 lg:basis-0 lg:rounded-[2px] lg:px-12",
+            "[&_:is(h1,h2,p,a,label,li,legend)]:leading-7 [&_[data-slot=form-field-label]]:pb-0",
           )}
         >
-          <MaskingTape className="w-24" />
-          {children}
+          <div className="relative">
+            <span
+              aria-hidden
+              className={cn(
+                "pointer-events-none absolute -inset-x-6 -top-252 -bottom-252 -z-10 lg:-inset-x-12",
+                ruledLines,
+              )}
+            />
+            {children}
+          </div>
         </div>
-      </div>
+      </RingNotebook>
     </main>
   );
 }

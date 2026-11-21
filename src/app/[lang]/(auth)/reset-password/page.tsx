@@ -23,7 +23,7 @@ export default async function ResetPasswordPage({
   const token = typeof params.token === "string" ? params.token : "";
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <ResetPasswordForm
         lang={lang}
         action={resetPasswordAction.bind(null, token)}

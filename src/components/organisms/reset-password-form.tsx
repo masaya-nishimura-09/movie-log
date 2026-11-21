@@ -72,7 +72,7 @@ export function ResetPasswordForm({
 
   return (
     <>
-      <div className="flex flex-col gap-1.5">
+      <div className="flex flex-col">
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.title}
         </h1>

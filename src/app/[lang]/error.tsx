@@ -27,10 +27,10 @@ export default function ErrorPage({
       <h1 className="font-bold font-display text-lg leading-7">
         {dict.errorPage.title}
       </h1>
-      <p className="mt-3.5 text-[13px] text-foreground-sub leading-7">
+      <p className="text-[13px] text-foreground-sub leading-7">
         {phrases(dict.errorPage.description)}
       </p>
-      <Button onClick={retry} className="mt-3.5 w-full">
+      <Button onClick={retry} className="my-1.5 w-full">
         {dict.errorPage.retry}
       </Button>
     </CoverScreen>

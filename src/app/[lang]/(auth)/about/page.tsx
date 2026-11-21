@@ -65,7 +65,7 @@ export default async function AboutPage() {
       </section>
       <Link
         href={`/${lang}/records`}
-        className={cn(buttonVariants({ variant: "outline" }), "mt-3.5 w-full")}
+        className={cn(buttonVariants({ variant: "outline" }), "my-1.5 w-full")}
       >
         {dict.about.back}
       </Link>

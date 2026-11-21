@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function ContactPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <ContactForm
         lang={lang}
         siteKey={turnstileSiteKey()}

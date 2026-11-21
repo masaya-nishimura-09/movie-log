@@ -32,7 +32,7 @@ export default async function VerifyEmailChangePage({
     store.has(accessTokenCookie) || store.has(refreshTokenCookie);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <VerifyTokenForm
         action={verifyEmailChangeAction.bind(null, token)}
         hasToken={token !== ""}

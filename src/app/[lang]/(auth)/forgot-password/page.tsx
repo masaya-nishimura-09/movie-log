@@ -12,7 +12,7 @@ export default async function ForgotPasswordPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <ForgotPasswordForm
         lang={lang}
         action={requestPasswordResetAction.bind(null, lang)}

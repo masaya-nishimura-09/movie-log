@@ -36,11 +36,11 @@ export function SupportForm({ action, dict }: SupportFormProps) {
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}
         </FormAlert>
       )}
-      <fieldset className="flex flex-col gap-2">
-        <legend className="mb-2 font-bold text-[13px] text-foreground">
+      <fieldset className="flex flex-col">
+        <legend className="font-bold text-[13px] text-foreground">
           {dict.amountLabel}
         </legend>
-        <div className="grid grid-cols-2 gap-2.5">
+        <div className="grid grid-cols-2 gap-x-2.5 gap-y-3 py-1.5">
           {[...supportPresetAmounts.map(String), customChoice].map((value) => (
             <ChoiceChip
               key={value}

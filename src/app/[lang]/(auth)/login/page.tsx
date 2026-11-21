@@ -15,7 +15,7 @@ export default async function LoginPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-7">
       <h1 className="font-bold font-display text-lg leading-7">
         {dict.login.submit}
       </h1>

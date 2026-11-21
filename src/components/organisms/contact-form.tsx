@@ -53,7 +53,7 @@ export function ContactForm({
 
   return (
     <>
-      <header className="mb-3.5 flex flex-col">
+      <header className="mb-7 flex flex-col">
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.title}
         </h1>

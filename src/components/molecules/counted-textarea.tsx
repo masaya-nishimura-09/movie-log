@@ -21,7 +21,7 @@ export function CountedTextarea({
   const [length, setLength] = useState(String(defaultValue ?? "").length);
 
   return (
-    <div className="flex flex-col gap-1">
+    <div className="flex flex-col">
       <Textarea
         maxLength={maxLength}
         defaultValue={defaultValue}
@@ -29,7 +29,7 @@ export function CountedTextarea({
         onChange={(event) => setLength(event.target.value.length)}
         {...props}
       />
-      <span className="self-end text-muted-foreground text-xs tabular-nums">
+      <span className="self-end text-muted-foreground text-xs tabular-nums leading-7">
         {interpolate(counterTemplate, { current: length, max: maxLength })}
       </span>
     </div>
