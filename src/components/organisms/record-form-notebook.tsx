@@ -194,6 +194,7 @@ export function RecordFormNotebook({
 
   const pageClass = (index: number) =>
     cn(
+      "lg:h-auto lg:min-h-175",
       index !== page && "max-lg:hidden",
       spreadOf(index) !== spread && "lg:hidden",
     );

@@ -181,7 +181,7 @@ export function NoteEditor({
       </div>
       <div
         className={cn(
-          "mt-7 flex-1 bg-[linear-gradient(to_bottom,transparent_21px,var(--paper-line)_21px,var(--paper-line)_22px,transparent_22px)] bg-size-[100%_28px] bg-local lg:min-h-0 lg:overflow-y-auto",
+          "mt-7 flex-1 bg-[linear-gradient(to_bottom,transparent_21px,var(--paper-line)_21px,var(--paper-line)_22px,transparent_22px)] bg-size-[100%_28px] bg-local",
           invalid && "rounded-sm ring-1 ring-destructive",
         )}
       >
