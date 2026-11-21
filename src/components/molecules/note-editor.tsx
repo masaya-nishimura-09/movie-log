@@ -154,7 +154,7 @@ export function NoteEditor({
 
   return (
     <div className="flex h-full min-h-56 flex-col">
-      <div className="flex h-7 items-center justify-between gap-2">
+      <div className="flex flex-col items-start gap-x-2 lg:h-7 lg:flex-row lg:items-center lg:justify-between">
         {heading}
         <div
           role="toolbar"
