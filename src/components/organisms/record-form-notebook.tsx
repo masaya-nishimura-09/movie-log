@@ -9,7 +9,7 @@ import {
   CircleAlert,
 } from "lucide-react";
 import Link from "next/link";
-import type { ReactNode } from "react";
+import { Fragment, type ReactNode } from "react";
 import { Button, buttonVariants } from "@/components/atoms/button";
 import { NotebookPage } from "@/components/molecules/notebook-page";
 import { NotebookScreen } from "@/components/organisms/notebook-screen";
@@ -176,9 +176,14 @@ export function RecordFormNotebook({
           </Button>
         )}
         {lastPage ? (
-          saveButton("flex-1 text-[15px]")
+          <Fragment key="save">{saveButton("flex-1 text-[15px]")}</Fragment>
         ) : (
-          <Button type="button" onClick={onNext} className="flex-1 text-[15px]">
+          <Button
+            key="next"
+            type="button"
+            onClick={onNext}
+            className="flex-1 text-[15px]"
+          >
             {dict.next}
             <ChevronRight aria-hidden />
           </Button>
