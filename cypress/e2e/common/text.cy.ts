@@ -25,7 +25,12 @@ for (const [lang, t] of locales) {
         t.metadata.description,
       );
       shows(
-        t.landing.headline,
+        `${t.landing.headlineBefore}${t.landing.headlineLead}${t.landing.headlineMarked}${t.landing.headlineAfter}`,
+        t.landing.eyebrow,
+        t.landing.contents.eyebrow,
+        t.landing.featuresEyebrow,
+        t.landing.noteEyebrow,
+        t.landing.recommendEyebrow,
         t.landing.lead,
         t.landing.start,
         t.landing.login,
@@ -33,7 +38,12 @@ for (const [lang, t] of locales) {
         t.landing.note.text,
         t.landing.recommend.title,
         t.landing.recommend.text,
-        t.landing.closing,
+        t.landing.closingTitle,
+        t.landing.closingText,
+        t.landing.badge,
+        t.landing.contents.title,
+        t.landing.contents.text,
+        t.landing.featuresTitle,
         t.about.link,
         t.register.termsLink,
         t.register.privacyLink,
@@ -42,7 +52,10 @@ for (const [lang, t] of locales) {
       for (const feature of t.landing.features)
         shows(feature.title, feature.text);
       for (const alt of [
-        t.landing.listAlt,
+        t.landing.heroAlt,
+        t.landing.heroMobileAlt,
+        t.landing.contents.alt,
+        t.landing.contents.mobileAlt,
         t.landing.note.alt,
         t.landing.recommend.alt,
       ]) {
@@ -54,8 +67,6 @@ for (const [lang, t] of locales) {
       cy.visit(`/${lang}/login`);
       cy.title().should("eq", `${t.login.submit} | ${t.metadata.title}`);
       shows(
-        t.brand.name,
-        t.brand.tagline,
         t.login.email,
         t.login.password,
         t.login.passwordHint,
@@ -286,7 +297,8 @@ for (const [lang, t] of locales) {
     it("このアプリについて", () => {
       cy.visit(`/${lang}/about`);
       shows(
-        t.brand.tagline,
+        t.about.title,
+        t.about.legalHeading,
         t.about.creditsHeading,
         t.about.tmdbNotice,
         t.register.termsLink,
@@ -327,10 +339,14 @@ for (const [lang, t] of locales) {
           "eq",
           `${t.recordList.heading} | ${t.metadata.title}`,
         );
-        shows(t.recordList.heading, t.header.newRecord);
-        cy.contains(
-          pattern(`${t.recordList.summary} ・ ${t.recordList.activeFilters}`),
-        ).should("exist");
+        shows(
+          t.recordList.contents,
+          t.recordList.heading,
+          t.recordList.filtering,
+          t.header.newRecord,
+        );
+        cy.contains(pattern(t.recordList.filteredSummary)).should("exist");
+        cy.contains(pattern(t.recordList.resultCount)).should("exist");
         cy.get(`input[placeholder="${t.header.searchPlaceholder}"]`).should(
           "exist",
         );
@@ -345,7 +361,10 @@ for (const [lang, t] of locales) {
           t.recordFilter.platform,
           t.recordFilter.moodTag,
           t.recordFilter.genre,
-          `${t.recordFilter.score} 5`,
+          fill(t.recordFilter.selected, {
+            label: t.recordFilter.score,
+            value: "★5",
+          }),
           t.recordFilter.clearAll,
         );
         cy.get(
@@ -362,52 +381,51 @@ for (const [lang, t] of locales) {
 
       it("ページ送り", () => {
         cy.visit(`/${lang}/records`);
-        cy.contains(pattern(t.pagination.status)).should("exist");
-        cy.get(`[aria-label="${t.pagination.previous}"]`).should("exist");
-        cy.get(`[aria-label="${t.pagination.next}"]`).should("exist");
+        cy.contains(pattern(t.recordList.summary)).should("exist");
+        cy.contains(pattern(t.recordDetail.pagePosition)).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.prevPage}"]`).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.nextPage}"]`).should("exist");
       });
 
       it("一致する記録がないとき", () => {
         cy.visit(`/${lang}/records?q=no-match-title`);
-        shows(t.recordList.noMatch, t.recordList.clearFilters);
+        shows(
+          t.recordList.noMatch,
+          t.recordList.noMatchHint,
+          t.recordList.clearFilters,
+        );
       });
 
       it("記録の詳細", () => {
         cy.visit(`/${lang}/records/1`);
         shows(
-          t.recordDetail.scoreCaption,
-          t.recordDetail.tabRecord,
-          t.recordDetail.tabMovie,
-          t.recordDetail.moodTags,
-          t.recordDetail.note,
-          t.recordDetail.attachments,
-          t.recordDetail.attachmentsAdd,
           t.recordDetail.watchedAt,
           t.recordDetail.platform,
+          t.recordDetail.score,
+          t.recordDetail.moodTags,
+          t.recordDetail.movieInfo,
+          t.recordDetail.released,
+          t.recordDetail.production,
+          t.recordDetail.genres,
+          t.recordDetail.directors,
+          t.recordDetail.cast,
+          t.recordDetail.overview,
           t.recordDetail.createdAt,
-          t.recordDetail.updatedAt,
-          t.recordDetail.back,
+          t.common.toContents,
           t.recordDetail.edit,
-          t.recordForm.releaseYear,
-          t.recordForm.runtime,
-          t.recordForm.countries,
-          t.recordForm.language,
           fill(t.recordDetail.releaseYear, { year: 1960 }),
           fill(t.recordDetail.runtime, { minutes: 90 }),
         );
+        cy.contains(pattern(t.recordDetail.pageSpread)).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.prevPage}"]`).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.nextPage}"]`).should("exist");
         cy.get(
-          `[aria-label="${fill(t.recordDetail.attachmentOpen, { number: 1 })}"]`,
+          `[aria-label="${fill(t.recordDetail.pageLabel, { page: 1 })}"]`,
         ).should("exist");
-        cy.contains("[role=tab]", t.recordDetail.tabMovie).click();
-        shows(
-          t.recordDetail.originalTitle,
-          t.recordDetail.overview,
-          t.recordForm.genres,
-          t.recordDetail.credits,
-        );
         cy.get(
-          `[aria-label="${fill(t.recordCard.score, { score: 4 })}"]`,
+          `[aria-label="${fill(t.recordDetail.scoreValue, { score: 4 })}"]`,
         ).should("exist");
+        cy.get(`[aria-label="${t.recordDetail.posterOpen}"]`).should("exist");
         cy.get(`button[aria-label="${t.recordDetail.delete}"]`).click();
         shows(
           t.deleteRecord.title,
@@ -416,60 +434,49 @@ for (const [lang, t] of locales) {
         );
       });
 
-      it("記録の作成の3つのステップ", () => {
+      it("記録の作成の2つの見開き", () => {
         cy.visit(`/${lang}/records/new`);
         shows(
           t.recordForm.createTitle,
-          t.recordForm.stepBasics,
-          t.recordForm.stepMovieInfo,
-          t.recordForm.stepImpression,
+          t.recordForm.spreadBasics,
           t.recordForm.title,
           t.recordForm.titleHint,
+          t.recordForm.posterAdd,
+          t.recordForm.posterDrop,
           t.recordForm.watchedAt,
           t.recordForm.today,
           t.recordForm.yesterday,
           t.recordForm.score,
           t.recordForm.platform,
-          t.recordForm.next,
-          fill(t.characterCount, { current: 0, max: 255 }),
-        );
-        cy.get(`[title="${t.recordForm.required}"]`).should("exist");
-        cy.fillRecordBasics("Arrival", { score: 3, lang });
-        cy.contains("button", t.recordForm.next).click();
-        shows(
+          t.recordForm.moodTags,
+          t.recordForm.movieInfo,
+          t.recordForm.movieInfoHint,
           t.recordForm.originalTitle,
-          t.recordForm.overview,
-          fill(t.characterCount, { current: 0, max: 2000 }),
           t.recordForm.releaseYear,
-          fill(t.recordForm.releaseYearHint, {
-            max: new Date().getFullYear() + 5,
-          }),
           t.recordForm.runtime,
           t.recordForm.runtimeUnit,
-          t.recordForm.runtimeHint,
-          t.recordForm.language,
           t.recordForm.countries,
+          t.recordForm.language,
           t.recordForm.genres,
-          t.recordForm.genresHint,
           t.recordForm.credits,
           t.recordForm.addCredit,
-          t.recordForm.posterUrl,
-          t.recordForm.uploadPoster,
-          t.recordForm.back,
+          t.recordForm.overview,
+          t.recordForm.cancel,
+          t.recordForm.next,
         );
         for (const placeholder of [
+          t.recordForm.titlePlaceholder,
+          t.recordForm.originalTitlePlaceholder,
+          t.recordForm.releaseYearPlaceholder,
+          t.recordForm.runtimePlaceholder,
           t.recordForm.countriesPlaceholder,
-          t.recordForm.personName,
-          t.recordForm.posterUrlPlaceholder,
+          t.recordForm.overviewPlaceholder,
         ]) {
-          cy.get(`input[placeholder="${placeholder}"]`).should("exist");
+          cy.get(`[placeholder="${placeholder}"]`).should("exist");
         }
-        for (const label of [
-          t.recordForm.creditRole,
-          t.recordForm.removeCredit,
-        ]) {
-          cy.get(`[aria-label="${label}"]`).should("exist");
-        }
+        cy.get(
+          `[aria-label="${fill(t.recordForm.scoreStar, { score: 1 })}"]`,
+        ).should("exist");
         cy.get("#countries").type("jp{enter}");
         cy.get(
           `[aria-label="${fill(t.recordForm.removeCountry, {
@@ -477,33 +484,59 @@ for (const [lang, t] of locales) {
               new Intl.DisplayNames(lang, { type: "region" }).of("JP") ?? "JP",
           })}"]`,
         ).should("exist");
+        cy.contains("button", t.recordForm.addCredit).click();
+        for (const label of [
+          t.recordForm.creditRole,
+          t.recordForm.removeCredit,
+          t.recordForm.personName,
+        ]) {
+          cy.get(`[aria-label="${label}"]`).should("exist");
+        }
+        cy.fillRecordBasics("Arrival", { score: 3, lang });
         cy.get("#releaseYear").type("2016");
-        cy.contains("button", t.recordForm.next).click();
+        cy.contains("button:visible", t.recordForm.next).click();
         shows(
-          t.recordForm.moodTags,
-          t.recordForm.moodTagsHint,
+          t.recordForm.spreadNote,
           t.recordForm.note,
-          t.recordForm.attachments,
-          t.recordForm.attachmentsHint,
+          fill(t.noteEditor.charCount, { count: 0 }),
+          t.recordForm.scrap,
+          fill(t.recordForm.scrapCount, { count: 0, max: 10 }),
           t.recordForm.attachmentsAdd,
+          t.recordForm.attachmentsDrop,
+          t.recordForm.back,
           t.recordForm.save,
         );
+        for (const label of [
+          t.noteEditor.heading,
+          t.noteEditor.subheading,
+          t.noteEditor.bold,
+          t.noteEditor.italic,
+          t.noteEditor.bulletList,
+          t.noteEditor.orderedList,
+          t.noteEditor.blockquote,
+        ]) {
+          cy.get(`[aria-label="${label}"]`).should("exist");
+        }
       });
 
       it("記録の編集", () => {
         cy.visit(`/${lang}/records/1/edit`);
         shows(
           t.recordForm.editTitle,
-          t.recordForm.stepBasics,
-          t.recordForm.stepMovieInfo,
-          t.recordForm.stepImpression,
-          t.recordForm.note,
-          t.recordForm.attachments,
-          t.recordForm.attachmentsHint,
-          t.recordForm.attachmentsAdd,
+          t.recordForm.spreadBasics,
+          t.recordForm.editing.trim(),
+          t.recordForm.backToRecord,
+          t.recordForm.recordedLabel,
+          t.recordForm.updatedLabel,
           t.recordForm.cancel,
+          t.recordForm.toNote,
           t.recordForm.saveChanges,
+          fill(t.recordForm.moreCredits, {
+            count: 3,
+            roles: t.enums.creditRole.cast,
+          }),
         );
+        cy.get(`[aria-label="${t.recordForm.posterRemove}"]`).should("exist");
       });
 
       it("アカウント設定と退会の確認", () => {
@@ -520,7 +553,6 @@ for (const [lang, t] of locales) {
           t.account.currentPasswordHint,
           t.account.newPassword,
           t.account.passwordHint,
-          t.account.cancel,
           t.account.save,
           t.account.withdrawTitle,
           t.account.withdrawDescription,

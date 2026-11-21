@@ -53,7 +53,7 @@ export function VerifyTokenForm({
 
   if (state?.success) {
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-7">
         <ResultMessage
           icon="done"
           title={dict.doneTitle}
@@ -73,7 +73,7 @@ export function VerifyTokenForm({
     : screens.invalidToken;
   if (failureScreen) {
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-7">
         <ResultMessage icon="failed" {...failureScreen} />
         {nextLink}
       </div>

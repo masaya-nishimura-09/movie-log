@@ -10,6 +10,7 @@ import { phrases } from "@/components/atoms/phrases";
 import { FormField } from "@/components/molecules/form-field";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import { formStack } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 import { interpolate } from "@/lib/text/interpolate";
 import { customChoice, supportPresetAmounts } from "@/schemas/support/support";
@@ -29,7 +30,7 @@ export function SupportForm({ action, dict }: SupportFormProps) {
     dictMessage(dict, failure?.errors?.[name]?.[0]);
 
   return (
-    <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+    <form onSubmit={submit} noValidate className={formStack}>
       {failure && !failure.errors && (
         <FormAlert>
           {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}

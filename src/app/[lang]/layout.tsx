@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_JP, Poppins } from "next/font/google";
+import { Noto_Sans_JP, Poppins, Zen_Maru_Gothic } from "next/font/google";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -12,13 +12,22 @@ const poppins = Poppins({
   weight: ["400", "500", "700"],
 });
 
+const zenMaruGothic = Zen_Maru_Gothic({
+  variable: "--font-zen-maru-gothic",
+  subsets: ["latin"],
+  weight: ["500", "700"],
+});
+
 const notoSansJP = Noto_Sans_JP({
   variable: "--font-noto-sans-jp",
   subsets: ["latin"],
 });
 
 export const viewport: Viewport = {
-  themeColor: "#0a2947",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f3e4c9" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a2947" },
+  ],
 };
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -41,7 +50,7 @@ export async function generateMetadata(): Promise<Metadata> {
           url: `/og/og-${lang}.jpg`,
           width: 1200,
           height: 630,
-          alt: dict.landing.listAlt,
+          alt: dict.landing.heroAlt,
         },
       ],
     },
@@ -61,6 +70,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         "antialiased",
         notoSansJP.variable,
         poppins.variable,
+        zenMaruGothic.variable,
       )}
     >
       <body className="flex min-h-full flex-col">

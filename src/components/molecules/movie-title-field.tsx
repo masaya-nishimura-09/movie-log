@@ -1,7 +1,6 @@
 "use client";
 
 import { type KeyboardEvent, useEffect, useRef, useState } from "react";
-import { Input } from "@/components/atoms/input";
 import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 import type { MovieSuggestion } from "@/schemas/movie/movie";
@@ -17,8 +16,11 @@ type MovieTitleFieldProps = {
   search: (title: string) => Promise<MovieSuggestion[]>;
   onSelect: (movieId: string) => void;
   maxLength: number;
-  counterTemplate: string;
   listLabel: string;
+  countTemplate: string;
+  manualHint: string;
+  placeholder: string;
+  invalid?: boolean;
   required?: boolean;
 };
 
@@ -30,8 +32,11 @@ export function MovieTitleField({
   search,
   onSelect,
   maxLength,
-  counterTemplate,
   listLabel,
+  countTemplate,
+  manualHint,
+  placeholder,
+  invalid = false,
   required,
 }: MovieTitleFieldProps) {
   const [suggestions, setSuggestions] = useState<MovieSuggestion[]>([]);
@@ -87,19 +92,21 @@ export function MovieTitleField({
 
   return (
     <div className="relative">
-      <Input
+      <input
         id={id}
         name={name}
         value={value}
         maxLength={maxLength}
         required={required}
+        placeholder={placeholder}
         autoComplete="off"
         role="combobox"
         aria-expanded={open}
         aria-controls={listId}
         aria-autocomplete="list"
+        aria-invalid={invalid || undefined}
         aria-activedescendant={active >= 0 ? `${listId}-${active}` : undefined}
-        className="pr-20"
+        className="h-12 w-full min-w-0 border-primary border-b-2 bg-transparent px-0.5 font-bold font-display text-lg text-paper-ink outline-none placeholder:text-[#a8a397] aria-invalid:border-destructive lg:h-14 lg:text-2xl"
         onChange={(event) => {
           setTyped(true);
           onValueChange(event.target.value);
@@ -107,51 +114,61 @@ export function MovieTitleField({
         onKeyDown={onKeyDown}
         onBlur={close}
       />
-      <span className="pointer-events-none absolute inset-y-0 right-3 flex h-11 items-center text-muted-foreground text-xs tabular-nums">
-        {interpolate(counterTemplate, {
-          current: value.length,
-          max: maxLength,
-        })}
-      </span>
       {open && (
-        <div
-          id={listId}
-          role="listbox"
-          aria-label={listLabel}
-          className="absolute inset-x-0 top-full z-20 mt-1 max-h-72 overflow-y-auto rounded-lg border bg-card p-1 shadow-lg"
-        >
-          {suggestions.map((suggestion, index) => (
-            <div
-              key={suggestion.movieId}
-              tabIndex={-1}
-              id={`${listId}-${index}`}
-              role="option"
-              aria-selected={index === active}
-              onMouseDown={(event) => {
-                event.preventDefault();
-                choose(suggestion);
-              }}
-              onMouseEnter={() => setActive(index)}
-              className={cn(
-                "flex cursor-pointer flex-col gap-0.5 rounded-md px-3 py-2 text-sm",
-                index === active && "bg-accent text-accent-foreground",
-              )}
-            >
-              <span className="text-foreground">
-                {suggestion.title}
-                {suggestion.releaseYear && (
-                  <span className="ml-2 text-muted-foreground text-xs tabular-nums">
-                    {suggestion.releaseYear}
+        <div className="absolute top-full left-0 z-20 mt-2 w-[min(17.5rem,calc(100vw-5rem))] rounded-xl bg-[#fffdf8] p-1.5 text-paper-ink shadow-[0_14px_32px_rgb(10_41_71/0.2),0_0_0_1px_rgb(10_41_71/0.06)]">
+          <p className="px-2.5 pt-1.5 pb-1 text-[11px] text-paper-muted">
+            {listLabel} ・{" "}
+            {interpolate(countTemplate, { count: suggestions.length })}
+          </p>
+          <div
+            id={listId}
+            role="listbox"
+            aria-label={listLabel}
+            className="max-h-64 overflow-y-auto"
+          >
+            {suggestions.map((suggestion, index) => (
+              <div
+                key={suggestion.movieId}
+                tabIndex={-1}
+                id={`${listId}-${index}`}
+                role="option"
+                aria-selected={index === active}
+                onMouseDown={(event) => {
+                  event.preventDefault();
+                  choose(suggestion);
+                }}
+                onMouseEnter={() => setActive(index)}
+                className={cn(
+                  "flex cursor-pointer items-center gap-2 rounded-lg px-2.5 py-1.5",
+                  index === active && "bg-[rgb(139_94_60/0.12)]",
+                )}
+              >
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="truncate font-bold font-display text-sm leading-5">
+                    {suggestion.title}
+                  </span>
+                  <span className="truncate text-[11px] text-paper-muted leading-4">
+                    {[
+                      suggestion.releaseYear,
+                      suggestion.originalTitle !== suggestion.title
+                        ? suggestion.originalTitle
+                        : undefined,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </span>
+                {index === active && (
+                  <span className="shrink-0 text-[10px] text-paper-muted">
+                    Enter
                   </span>
                 )}
-              </span>
-              {suggestion.originalTitle !== suggestion.title && (
-                <span className="text-muted-foreground text-xs">
-                  {suggestion.originalTitle}
-                </span>
-              )}
-            </div>
-          ))}
+              </div>
+            ))}
+          </div>
+          <p className="mt-1 border-[rgb(10_41_71/0.08)] border-t px-2.5 pt-2 pb-1 text-[11px] text-paper-muted leading-5">
+            {manualHint}
+          </p>
         </div>
       )}
     </div>

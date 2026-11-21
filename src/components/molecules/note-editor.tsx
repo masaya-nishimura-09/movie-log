@@ -17,18 +17,20 @@ import {
   type LucideIcon,
   Quote,
 } from "lucide-react";
-import { useState } from "react";
-import { Button } from "@/components/atoms/button";
+import { type ReactNode, useState } from "react";
 import type { Dictionary } from "@/i18n/get-dictionary";
-import { noteProseStyles } from "@/lib/note/prose-styles";
+import { notebookProseStyles } from "@/lib/note/prose-styles";
 import { cn } from "@/lib/style/cn";
+import { interpolate } from "@/lib/text/interpolate";
 
 type NoteEditorProps = {
   name: string;
   defaultValue?: JSONContent;
   dict: Dictionary["noteEditor"];
+  heading: ReactNode;
   id?: string;
   invalid?: boolean;
+  error?: string;
 };
 
 type ToolKey =
@@ -44,10 +46,13 @@ export function NoteEditor({
   name,
   defaultValue,
   dict,
+  heading,
   id,
   invalid = false,
+  error,
 }: NoteEditorProps) {
   const [json, setJson] = useState<JSONContent | undefined>(defaultValue);
+  const [count, setCount] = useState(0);
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -65,14 +70,24 @@ export function NoteEditor({
     editorProps: {
       attributes: {
         ...(id ? { id } : {}),
-        class: cn("min-h-64 px-3.5 py-3 outline-none", noteProseStyles),
+        "data-field": name,
+        class: cn(
+          "min-h-[calc(100%-1.75rem)] px-0.5 outline-none",
+          notebookProseStyles,
+        ),
         role: "textbox",
         "aria-label": dict.body,
         "aria-multiline": "true",
       },
     },
-    onCreate: ({ editor: current }) => setJson(current.getJSON()),
-    onUpdate: ({ editor: current }) => setJson(current.getJSON()),
+    onCreate: ({ editor: current }) => {
+      setJson(current.getJSON());
+      setCount(current.getText().replace(/\s/g, "").length);
+    },
+    onUpdate: ({ editor: current }) => {
+      setJson(current.getJSON());
+      setCount(current.getText().replace(/\s/g, "").length);
+    },
   });
   const active = useEditorState({
     editor,
@@ -94,18 +109,6 @@ export function NoteEditor({
     run: () => void;
   }[] = [
     {
-      key: "bold",
-      label: dict.bold,
-      Icon: Bold,
-      run: () => editor?.chain().focus().toggleBold().run(),
-    },
-    {
-      key: "italic",
-      label: dict.italic,
-      Icon: Italic,
-      run: () => editor?.chain().focus().toggleItalic().run(),
-    },
-    {
       key: "heading",
       label: dict.heading,
       Icon: Heading2,
@@ -116,6 +119,18 @@ export function NoteEditor({
       label: dict.subheading,
       Icon: Heading3,
       run: () => editor?.chain().focus().toggleHeading({ level: 3 }).run(),
+    },
+    {
+      key: "bold",
+      label: dict.bold,
+      Icon: Bold,
+      run: () => editor?.chain().focus().toggleBold().run(),
+    },
+    {
+      key: "italic",
+      label: dict.italic,
+      Icon: Italic,
+      run: () => editor?.chain().focus().toggleItalic().run(),
     },
     {
       key: "bulletList",
@@ -138,37 +153,46 @@ export function NoteEditor({
   ];
 
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-lg bg-field transition-colors focus-within:bg-card focus-within:ring-1 focus-within:ring-selected-border",
-        invalid && "ring-1 ring-destructive",
-      )}
-    >
-      <div
-        role="toolbar"
-        aria-label={dict.toolbar}
-        className="flex flex-wrap gap-0.5 border-input border-b border-dashed px-1.5 py-1.5 md:gap-1 md:px-2"
-      >
-        {tools.map(({ key, label, Icon, run }) => (
-          <Button
-            key={key}
-            type="button"
-            variant="ghost"
-            size="icon-sm"
-            aria-label={label}
-            title={label}
-            aria-pressed={active?.[key] ?? false}
-            className={cn(
-              "size-8 md:size-9",
-              active?.[key] && "bg-secondary text-foreground",
-            )}
-            onClick={run}
-          >
-            <Icon className="size-4.5" aria-hidden />
-          </Button>
-        ))}
+    <div className="flex h-full min-h-56 flex-col">
+      <div className="flex h-7 items-center justify-between gap-2">
+        {heading}
+        <div
+          role="toolbar"
+          aria-label={dict.toolbar}
+          className="flex h-7 items-center rounded-lg bg-[rgb(10_41_71/0.05)] px-0.5"
+        >
+          {tools.map(({ key, label, Icon, run }) => (
+            <button
+              key={key}
+              type="button"
+              aria-label={label}
+              title={label}
+              aria-pressed={active?.[key] ?? false}
+              className={cn(
+                "grid h-6 w-7 place-items-center rounded-md text-paper-ink outline-none hover:bg-[rgb(10_41_71/0.08)] focus-visible:ring-2 focus-visible:ring-ring lg:w-7.5",
+                active?.[key] && "bg-[rgb(139_94_60/0.18)]",
+              )}
+              onClick={run}
+            >
+              <Icon className="size-3.5" aria-hidden />
+            </button>
+          ))}
+        </div>
       </div>
-      <EditorContent editor={editor} />
+      <div
+        className={cn(
+          "mt-7 min-h-0 flex-1 overflow-y-auto bg-[linear-gradient(to_bottom,transparent_27px,var(--paper-line)_27px,var(--paper-line)_28px)] bg-size-[100%_28px] bg-local",
+          invalid && "rounded-sm ring-1 ring-destructive",
+        )}
+      >
+        <EditorContent editor={editor} className="h-full" />
+      </div>
+      <p className="flex h-7 shrink-0 items-center justify-between gap-3 text-[10px] text-paper-muted lg:text-[11px]">
+        <span role="alert" className="text-destructive-foreground">
+          {error}
+        </span>
+        {interpolate(dict.charCount, { count: count.toLocaleString() })}
+      </p>
       <input type="hidden" name={name} value={JSON.stringify(json ?? null)} />
     </div>
   );

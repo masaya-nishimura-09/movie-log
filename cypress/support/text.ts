@@ -23,3 +23,22 @@ export function longDate(date: Date, lang = "ja") {
     day: "numeric",
   }).format(date);
 }
+
+export function weekdayDate(date: Date, lang = "ja") {
+  return new Intl.DateTimeFormat(lang, {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  }).format(date);
+}
+
+export function formDate(date: Date, lang = "ja") {
+  const sameYear = date.getFullYear() === new Date().getFullYear();
+  return new Intl.DateTimeFormat(lang, {
+    year: sameYear ? undefined : "numeric",
+    month: sameYear ? "numeric" : "2-digit",
+    day: sameYear ? "numeric" : "2-digit",
+    weekday: "short",
+  }).format(date);
+}

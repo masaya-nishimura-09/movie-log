@@ -1,6 +1,5 @@
 "use client";
 
-import { MailCheck } from "lucide-react";
 import type { ActionResult } from "@/actions/action-result";
 import { resendPasswordResetAction } from "@/actions/user/request-password-reset";
 import { Button } from "@/components/atoms/button";
@@ -10,9 +9,11 @@ import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
 import { FormField } from "@/components/molecules/form-field";
 import { ResendButton } from "@/components/molecules/resend-button";
+import { ResultMessage } from "@/components/molecules/result-message";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { formStack } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 
 type ForgotPasswordFormProps = {
@@ -41,23 +42,21 @@ export function ForgotPasswordForm({
   if (state?.success) {
     const [sentBefore = "", sentAfter = ""] = dict.sentText.split("{email}");
     return (
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col items-center gap-2 text-center">
-          <MailCheck className="mb-1 size-10 text-primary" aria-hidden />
-          <h1 className="font-bold text-foreground text-xl">
-            {dict.sentTitle}
-          </h1>
-          <output className="text-[13px] text-foreground-sub leading-relaxed">
-            {phrases(sentBefore)}
-            <span className="break-all font-medium text-foreground">
-              {state.data.email}
-            </span>
-            {phrases(sentAfter)}
-          </output>
-          <p className="text-[13px] text-foreground-sub leading-relaxed">
-            {phrases(dict.sentNote)}
-          </p>
-        </div>
+      <div className="flex flex-col gap-7">
+        <ResultMessage
+          icon="mail"
+          title={dict.sentTitle}
+          text={
+            <>
+              {phrases(sentBefore)}
+              <span className="break-all font-medium text-foreground">
+                {state.data.email}
+              </span>
+              {phrases(sentAfter)}
+            </>
+          }
+          note={dict.sentNote}
+        />
         <ResendButton
           scope="passwordReset"
           email={state.data.email}
@@ -73,12 +72,14 @@ export function ForgotPasswordForm({
   return (
     <>
       <div className="flex flex-col gap-1.5">
-        <h1 className="font-bold text-foreground text-xl">{dict.title}</h1>
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
+          {dict.title}
+        </h1>
         <p className="text-muted-foreground text-xs">
           {phrases(dict.description)}
         </p>
       </div>
-      <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+      <form onSubmit={submit} noValidate className={formStack}>
         {failure && !failure.errors && (
           <FormAlert>
             {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}

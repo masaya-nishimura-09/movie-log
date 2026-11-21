@@ -25,32 +25,31 @@ export function FormField({
   children,
 }: FormFieldProps) {
   return (
-    <div className={cn("flex flex-col gap-1.25", className)}>
-      <Label
-        htmlFor={htmlFor}
-        className="gap-0 font-bold text-[13px] text-foreground leading-normal"
-      >
-        {label}
-        {required && (
-          <span className="ml-1 text-destructive" title={requiredLabel}>
-            *
-          </span>
+    <div className={cn("flex flex-col", className)}>
+      <div className="flex min-h-7 flex-wrap items-end justify-between gap-x-3 pb-1">
+        <Label
+          htmlFor={htmlFor}
+          className="gap-0 font-semibold text-paper-label text-xs leading-normal dark:text-link"
+        >
+          {label}
+          {required && (
+            <span className="ml-1 text-destructive" title={requiredLabel}>
+              *
+            </span>
+          )}
+        </Label>
+        {hint && !error && (
+          <span className="text-muted-foreground text-xs">{phrases(hint)}</span>
         )}
-      </Label>
+      </div>
       {children}
-      {error ? (
+      {error && (
         <p
-          className="mt-0.5 flex items-center gap-1.5 text-destructive-foreground text-xs"
+          className="flex items-center gap-1.5 text-destructive-foreground text-xs leading-7"
           role="alert"
         >
           {phrases(error)}
         </p>
-      ) : (
-        hint && (
-          <p className="mt-0.5 text-muted-foreground text-xs">
-            {phrases(hint)}
-          </p>
-        )
       )}
     </div>
   );

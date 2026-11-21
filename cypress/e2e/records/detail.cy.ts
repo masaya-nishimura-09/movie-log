@@ -1,98 +1,168 @@
 import ja from "../../../src/i18n/dictionaries/ja.json";
+import { notebookContent } from "../../support/commands";
 
 const detail = ja.recordDetail;
+
+const position = () => cy.get("[aria-live]:visible");
+const nextButton = () =>
+  cy.get(`button[aria-label="${detail.nextPage}"]:visible`);
+const prevButton = () =>
+  cy.get(`button[aria-label="${detail.prevPage}"]:visible`);
+const page = () => cy.get(notebookContent);
+
+function swipe(from: number, to: number) {
+  cy.get("main .touch-pan-y")
+    .trigger("pointerdown", { pointerType: "touch", clientX: from })
+    .trigger("pointerup", { pointerType: "touch", clientX: to });
+}
 
 describe("記録の詳細", () => {
   beforeEach(() => {
     cy.login();
   });
 
-  function openMovieTab() {
-    cy.contains("[role=tab]", detail.tabMovie).click();
-  }
-
-  it("記録の内容をすべて表示する", () => {
+  it("表紙のページに、ポスター、題名、観た日、観た場所、スコア、雰囲気、映画情報、記録した日時を書く", () => {
     cy.visit("/ja/records/1");
-    cy.get("h1:visible").should("have.text", "勝手にしやがれ");
-    cy.get("main").within(() => {
-      cy.contains("1960年").should("exist");
-      cy.contains("90分").should("exist");
-      cy.contains("フランス語").should("exist");
-      cy.contains(
-        new Intl.DisplayNames("ja", { type: "region" }).of("FR") ?? "FR",
-      ).should("exist");
-      cy.contains(ja.enums.platform.criterion_channel).should("exist");
-      cy.contains(ja.enums.moodTag.stylish).should("exist");
-      cy.contains("h2", "観たきっかけ").should("exist");
-      cy.contains(detail.createdAt).should("exist");
-      cy.contains(detail.updatedAt).should("exist");
-      openMovieTab();
-      cy.contains("À bout de souffle").should("exist");
-      cy.contains("自動車泥棒のミシェル").should("exist");
-      cy.contains(ja.enums.genre.drama).should("exist");
-      cy.contains("dd", "Raoul Coutard")
-        .prev("dt")
-        .should("have.text", ja.enums.creditRole.cinematographer);
-    });
-  });
-
-  it("最初は記録のタブを開き、タブで記録と映画情報を切り替える", () => {
-    cy.visit("/ja/records/1");
-    cy.contains("[role=tab]", detail.tabRecord).should(
-      "have.attr",
-      "aria-selected",
-      "true",
-    );
-    cy.contains("main h2", detail.note).should("be.visible");
-    cy.contains("main h2", detail.credits).should("not.exist");
-    openMovieTab();
-    cy.contains("[role=tab]", detail.tabMovie).should(
-      "have.attr",
-      "aria-selected",
-      "true",
-    );
-    cy.contains("main h2", detail.credits).should("be.visible");
-    cy.contains("main h2", detail.note).should("not.exist");
-    cy.contains("[role=tab]", detail.tabRecord).click();
-    cy.contains("main h2", detail.note).should("be.visible");
-  });
-
-  for (const [name, viewport] of [
-    ["広い画面", [1280, 800]],
-    ["スマホ", [390, 844]],
-  ] as const) {
-    it(`記録のタブは雰囲気、ノート、添付の順、映画情報のタブは原題、あらすじ、ジャンル、クレジットの順に並ぶ(${name})`, () => {
-      cy.viewport(viewport[0], viewport[1]);
-      cy.visit("/ja/records/1");
-      const tops = (labels: string[]) =>
-        cy.get("main h2").then(($headings) =>
-          labels.map((label) => {
-            const heading = [...$headings].find((h) => h.textContent === label);
-            expect(heading, label).to.exist;
-            return heading?.getBoundingClientRect().top ?? 0;
-          }),
-        );
-      const inOrder = (values: number[]) =>
-        expect(values).to.deep.equal([...values].sort((a, b) => a - b));
-      cy.get("main h1:visible").then(($title) => {
-        const title = $title[0]?.getBoundingClientRect().top ?? 0;
-        tops([detail.moodTags, detail.note, detail.attachments]).then(
-          (values) => inOrder([title, ...values]),
-        );
+    page()
+      .first()
+      .within(() => {
+        cy.get("h1").should("contain.text", "勝手にしやがれ");
+        cy.contains("À bout de souffle").should("be.visible");
+        cy.contains("dt", detail.watchedAt)
+          .next("dd")
+          .should("contain.text", "2026/08/16(日)");
+        cy.contains("dt", detail.platform)
+          .next("dd")
+          .should("contain.text", ja.enums.platform.criterion_channel);
+        cy.contains("dt", detail.score)
+          .next("dd")
+          .find("[role=img]")
+          .should("have.attr", "aria-label", "5点中4点");
+        cy.contains("dt", detail.moodTags)
+          .next("dd")
+          .should(
+            "have.text",
+            `${ja.enums.moodTag.stylish}・${ja.enums.moodTag.refreshing}`,
+          );
+        cy.contains("h2", detail.movieInfo).should("be.visible");
+        cy.contains("dt", detail.released)
+          .next("dd")
+          .should("contain.text", "1960年 · 90分");
+        cy.contains("dt", detail.production)
+          .next("dd")
+          .should("contain.text", "フランス · フランス語");
+        cy.contains("dt", detail.genres)
+          .next("dd")
+          .should("contain", ja.enums.genre.drama);
+        cy.contains("dt", detail.directors)
+          .next("dd")
+          .should("contain.text", "ジャン＝リュック・ゴダール");
+        cy.contains("dt", detail.cast)
+          .next("dd")
+          .should("contain", "ジャン＝ポール・ベルモンド");
       });
-      openMovieTab();
-      tops([
-        detail.originalTitle,
-        detail.overview,
-        ja.recordForm.genres,
-        detail.credits,
-      ]).then(inOrder);
-    });
-  }
+    cy.contains("section[aria-label]", `${detail.createdAt} 2026/08/`).should(
+      "be.visible",
+    );
+    cy.turnNotebookTo("自動車泥棒のミシェル").should("be.visible");
+  });
+
+  it("映画情報には監督と出演だけを書き、脚本や撮影は書かない", () => {
+    cy.visit("/ja/records/2");
+    cy.contains(notebookContent, "ブリジット・バルドー").should("be.visible");
+    page().first().should("not.contain", "Alberto Moravia");
+    page().first().should("not.contain", "Raoul Coutard");
+  });
+
+  it("表紙のあとにノート、最後にスクラップのページが続く", () => {
+    cy.visit("/ja/records/1");
+    cy.turnNotebookTo("観たきっかけ")
+      .find("h2")
+      .should("contain", "観たきっかけ");
+    cy.turnNotebookToEnd();
+    page()
+      .last()
+      .find(
+        `button[aria-label^="${detail.attachmentOpen.split("{number}")[0]}"]`,
+      )
+      .should("have.length", 4);
+    nextButton().should("be.disabled");
+  });
+
+  it("広い画面では見開きで、ボタンと矢印キーで2ページずつめくり、端ではめくれない", () => {
+    cy.visit("/ja/records/1");
+    position()
+      .invoke("text")
+      .should("match", /^1–2 \/ \d+$/);
+    page().should("have.length", 2);
+    prevButton().should("be.disabled");
+    nextButton().click();
+    position()
+      .invoke("text")
+      .should("match", /^3–4 \/ \d+$/);
+    prevButton().click();
+    position()
+      .invoke("text")
+      .should("match", /^1–2 \//);
+    cy.get("body").type("{rightArrow}");
+    position()
+      .invoke("text")
+      .should("match", /^3–4 \//);
+    cy.get("body").type("{leftArrow}");
+    position()
+      .invoke("text")
+      .should("match", /^1–2 \//);
+    position()
+      .invoke("text")
+      .then((text) => {
+        const total = Number(text.split("/")[1]);
+        for (let i = 0; i < Math.ceil(total / 2); i++) {
+          cy.get("body").type("{rightArrow}");
+        }
+        position()
+          .invoke("text")
+          .should("match", new RegExp(`${total}$`));
+        nextButton().should("be.disabled");
+      });
+  });
+
+  it("ページ数が奇数なら、最後の見開きの右のページは白紙にする", () => {
+    cy.visit("/ja/records/6");
+    position().should("have.text", "1 / 1");
+    page().should("have.length", 1);
+    cy.get("main section[aria-label]").should("have.length", 1);
+    nextButton().should("be.disabled");
+  });
+
+  it("スマホでは1ページずつ、下のボタンとスワイプでめくる", () => {
+    cy.viewport(390, 844);
+    cy.visit("/ja/records/1");
+    position()
+      .invoke("text")
+      .should("match", /^1 \/ \d+$/);
+    page().should("have.length", 1);
+    nextButton().click();
+    position().invoke("text").should("match", /^2 \//);
+    prevButton().click();
+    position().invoke("text").should("match", /^1 \//);
+    swipe(300, 100);
+    position().invoke("text").should("match", /^2 \//);
+    swipe(300, 280);
+    position().invoke("text").should("match", /^2 \//);
+    swipe(100, 300);
+    position().invoke("text").should("match", /^1 \//);
+  });
+
+  it("ノートも添付もない記録は、表紙だけのノートにする", () => {
+    cy.createRecord(`E2E 表紙だけ ${Date.now()}`);
+    position().should("have.text", "1 / 1");
+    prevButton().should("be.disabled");
+    nextButton().should("be.disabled");
+  });
 
   describe("ポスター", () => {
     const posterButton = () =>
-      cy.get(`main button[aria-label="${detail.posterOpen}"]`);
+      cy.get(`main button[aria-label="${detail.posterOpen}"]:visible`);
 
     it("ポスターを押すと大きく表示し、閉じるで戻る", () => {
       cy.visit("/ja/records/1");
@@ -107,10 +177,14 @@ describe("記録の詳細", () => {
       cy.get("[role=dialog]").should("not.exist");
     });
 
-    it("Escape キーで閉じる", () => {
+    it("Escape キーで閉じ、開いているあいだは矢印キーでページをめくらない", () => {
       cy.visit("/ja/records/1");
       posterButton().click();
       cy.get("[role=dialog]").should("be.visible");
+      cy.focused().type("{rightArrow}");
+      position()
+        .invoke("text")
+        .should("match", /^1–2 \//);
       cy.focused().type("{esc}");
       cy.get("[role=dialog]").should("not.exist");
     });
@@ -122,39 +196,33 @@ describe("記録の詳細", () => {
     });
   });
 
-  describe("添付", () => {
-    const section = () =>
-      cy.contains("main h2", detail.attachments).closest("section");
-    const thumbnails = () =>
-      section().find(
-        `button[aria-label^="${detail.attachmentOpen.split("{number}")[0]}"]`,
-      );
+  describe("スクラップ", () => {
+    const openScrap = (number: number) => {
+      cy.turnNotebookToEnd();
+      cy.get(
+        `button[aria-label="${detail.attachmentOpen.replace("{number}", String(number))}"]:visible`,
+      ).click();
+    };
 
-    it("添付を縮小画像で並べ、押すと大きく表示し、閉じるで戻る", () => {
+    it("押すと大きく表示し、閉じるで戻る。詳細画面では削除できない", () => {
       cy.visit("/ja/records/1");
-      thumbnails().should("have.length", 4);
-      section()
-        .find(
-          `button[aria-label="${detail.attachmentOpen.replace("{number}", "2")}"]`,
-        )
-        .click();
+      openScrap(2);
       cy.get("[role=dialog]").within(() => {
         cy.contains("2 / 4").should("be.visible");
         cy.get("img[src*='pamphlet-2']").should("be.visible");
-        cy.get(`button`).contains(detail.attachmentClose).click({
+        cy.get(`button[aria-label="${detail.attachmentDelete}"]`).should(
+          "not.exist",
+        );
+        cy.get("button").contains(detail.attachmentClose).click({
           force: true,
         });
       });
       cy.get("[role=dialog]").should("not.exist");
     });
 
-    it("左右のボタンと矢印キーで前後の添付に移り、端ではボタンを押せない", () => {
+    it("左右のボタンと矢印キーで前後のスクラップに移り、端ではボタンを押せない", () => {
       cy.visit("/ja/records/1");
-      section()
-        .find(
-          `button[aria-label="${detail.attachmentOpen.replace("{number}", "1")}"]`,
-        )
-        .click();
+      openScrap(1);
       const prev = () =>
         cy.get(`button[aria-label="${detail.attachmentPrev}"]`);
       const next = () =>
@@ -163,7 +231,6 @@ describe("記録の詳細", () => {
       prev().should("be.disabled");
       next().click();
       cy.contains("[role=dialog]", "2 / 4").should("be.visible");
-      cy.get("[role=dialog] img[src*='pamphlet-2']").should("be.visible");
       cy.get("body").type("{rightArrow}{rightArrow}");
       cy.contains("[role=dialog]", "4 / 4").should("be.visible");
       next().should("be.disabled");
@@ -173,172 +240,70 @@ describe("記録の詳細", () => {
       cy.contains("[role=dialog]", "2 / 4").should("be.visible");
     });
 
-    it("スマホでも、下のボタンで前後の添付に移る", () => {
+    it("スマホでも、下のボタンで前後のスクラップに移る", () => {
       cy.viewport(390, 844);
       cy.visit("/ja/records/1");
-      section()
-        .find(
-          `button[aria-label="${detail.attachmentOpen.replace("{number}", "1")}"]`,
-        )
-        .click();
+      openScrap(1);
       cy.get(`button[aria-label="${detail.attachmentNext}"]`)
         .should("be.visible")
         .click();
       cy.contains("[role=dialog]", "2 / 4").should("be.visible");
     });
-
-    it("画像を添付して表示し、削除すると消える", () => {
-      cy.createRecord(`E2E 添付 ${Date.now()}`);
-      section().contains(detail.attachmentsAdd).should("be.visible");
-      section()
-        .find("input[type=file]")
-        .selectFile("cypress/fixtures/poster.png", { force: true });
-      thumbnails().should("have.length", 1).first().click();
-      cy.get(`button[aria-label="${detail.attachmentNext}"]`).should(
-        "not.exist",
-      );
-      cy.get("[role=dialog]").within(() => {
-        cy.contains("1 / 1").should("be.visible");
-        cy.get("img[src^='data:image/png']").should("be.visible");
-        cy.get(`button[aria-label="${detail.attachmentDelete}"]`).click();
-      });
-      cy.get("[role=alertdialog]").within(() => {
-        cy.contains(ja.deleteAttachment.title).should("be.visible");
-        cy.contains("button", ja.deleteAttachment.confirm).click();
-      });
-      cy.get("[role=dialog]").should("not.exist");
-      thumbnails().should("have.length", 0);
-      section().contains(detail.attachmentsAdd).should("be.visible");
-    });
-
-    it("削除中は、ボタンを削除中にし、大きく表示した画面も閉じない", () => {
-      cy.createRecord(`E2E 添付削除中 ${Date.now()}`);
-      section()
-        .find("input[type=file]")
-        .selectFile("cypress/fixtures/poster.png", { force: true });
-      thumbnails().should("have.length", 1).first().click();
-      cy.get(`[role=dialog] button[aria-label="${detail.attachmentDelete}"]`)
-        .should("be.visible")
-        .click();
-      cy.location("pathname").then((path) => {
-        cy.intercept({ method: "POST", url: path }, (req) => {
-          req.on("response", (res) => {
-            res.setDelay(1500);
-          });
-        });
-      });
-      cy.contains(
-        "[role=alertdialog] button",
-        ja.deleteAttachment.confirm,
-      ).click();
-      cy.contains("[role=alertdialog] button", ja.deleteAttachment.deleting)
-        .should("be.disabled")
-        .and("have.attr", "aria-busy", "true")
-        .find("[data-spinner]")
-        .should("be.visible");
-      cy.get("[role=dialog]")
-        .contains("button", detail.attachmentClose)
-        .should("be.disabled");
-      cy.get("body").type("{esc}");
-      cy.get("[role=alertdialog]").should("be.visible");
-      cy.get("[role=dialog]").should("not.exist");
-      thumbnails().should("have.length", 0);
-    });
-
-    it("削除の確認でキャンセルすると、添付は残る", () => {
-      cy.createRecord(`E2E 添付やめる ${Date.now()}`);
-      section()
-        .find("input[type=file]")
-        .selectFile("cypress/fixtures/poster.png", { force: true });
-      thumbnails().should("have.length", 1).first().click();
-      cy.get(
-        `[role=dialog] button[aria-label="${detail.attachmentDelete}"]`,
-      ).click();
-      cy.contains(
-        "[role=alertdialog] button",
-        ja.deleteAttachment.cancel,
-      ).click();
-      cy.get("[role=alertdialog]").should("not.exist");
-      cy.contains("[role=dialog]", "1 / 1").should("be.visible");
-    });
-
-    it("添付は10枚までで、上限に達すると追加の枠を出さない", () => {
-      cy.createRecord(`E2E 添付上限 ${Date.now()}`);
-      section()
-        .find("input[type=file]")
-        .selectFile(
-          Array.from({ length: 11 }, () => "cypress/fixtures/poster.png"),
-          { force: true },
-        );
-      thumbnails().should("have.length", 10);
-      cy.contains(
-        "[role=alert]",
-        detail.attachmentsLimit.replace("{max}", "10"),
-      ).should("be.visible");
-      section().find("input[type=file]").should("not.exist");
-    });
-
-    it("画像でないファイルは添付せず、エラーを表示する", () => {
-      cy.createRecord(`E2E 添付エラー ${Date.now()}`);
-      section()
-        .find("input[type=file]")
-        .selectFile("cypress/fixtures/not-image.txt", { force: true });
-      cy.contains("[role=alert]", detail.attachmentsUploadError).should(
-        "be.visible",
-      );
-      thumbnails().should("have.length", 0);
-    });
   });
 
-  it("添付の (i) を押すと、説明を出す", () => {
+  it("編集のボタンで編集画面に移る", () => {
     cy.visit("/ja/records/1");
-    cy.get(
-      `button[aria-label="${detail.infoLabel.replace("{name}", detail.attachments)}"]`,
-    ).click();
-    cy.contains(detail.attachmentsInfo).should("be.visible");
-    cy.get("body").type("{esc}");
-    cy.contains(detail.attachmentsInfo).should("not.exist");
+    cy.contains("a", detail.edit).click();
+    cy.location("pathname").should("eq", "/ja/records/1/edit");
   });
 
-  it("一覧のカードから詳細に移り、一覧にもどれる", () => {
+  it("スマホでも、目次へ、編集、削除の文字を出す", () => {
+    cy.viewport(390, 844);
+    cy.visit("/ja/records/1");
+    cy.contains("a", ja.common.toContents).should("be.visible");
+    cy.contains("a", detail.edit).should("be.visible");
+    cy.contains("button", detail.delete).should("be.visible");
+  });
+
+  it("一覧のカードから詳細に移り、目次へで一覧にもどれる", () => {
     cy.visit("/ja/records");
-    cy.get("main ul > li > a").first().click();
+    cy.get("main ol a:visible").first().click();
     cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-    cy.contains("a", detail.back).click();
+    cy.contains("a", ja.common.toContents).click();
     cy.location("pathname").should("eq", "/ja/records");
   });
 
   describe("戻る先", () => {
     it("検索を入れた一覧から開いて戻ると、同じ検索の一覧に戻る", () => {
       cy.visit("/ja/records?q=%E5%8B%9D%E6%89%8B");
-      cy.get("main ul > li > a").should("have.length.at.least", 1);
-      cy.contains("main ul > li > a", "勝手にしやがれ").click();
+      cy.get("main ol a:visible").should("have.length.at.least", 1);
+      cy.contains("main ol a:visible", "勝手にしやがれ").click();
       cy.location("pathname").should("eq", "/ja/records/1");
-      cy.contains("a", detail.back).click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "?q=%E5%8B%9D%E6%89%8B");
-      cy.get("main ul > li > a").each(([card]) =>
+      cy.get("main ol a:visible").each(([card]) =>
         expect(card.textContent).to.contain("勝手にしやがれ"),
       );
     });
 
     it("2ページ目から開いて戻ると、2ページ目に戻る", () => {
       cy.visit("/ja/records?page=2");
-      cy.get("main ul > li > a").first().click();
+      cy.get("main ol a:visible").first().click();
       cy.location("pathname").should("match", /^\/ja\/records\/\d+$/);
-      cy.contains("a", detail.back).click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "?page=2");
     });
 
     it("絞り込みのない一覧から開くと、住所に余計な印を付けず、戻ると一覧に戻る", () => {
       cy.visit("/ja/records");
-      cy.get("main ul > li > a")
+      cy.get("main ol a:visible")
         .first()
         .should("have.attr", "href")
         .and("match", /^\/ja\/records\/\d+$/);
-      cy.get("main ul > li > a").first().click();
-      cy.contains("a", detail.back).click();
+      cy.get("main ol a:visible").first().click();
+      cy.contains("a", ja.common.toContents).click();
       cy.location("pathname").should("eq", "/ja/records");
       cy.location("search").should("eq", "");
     });
@@ -352,67 +317,13 @@ describe("記録の詳細", () => {
         "javascript:alert(1)",
       ]) {
         cy.visit(`/ja/records/1?from=${encodeURIComponent(from)}`);
-        cy.contains("a", detail.back).should(
+        cy.contains("a", ja.common.toContents).should(
           "have.attr",
           "href",
           "/ja/records",
         );
       }
     });
-  });
-
-  it("長いノートは冒頭だけを表示し、続きを読むで全文を広げ、閉じるで戻す", () => {
-    cy.visit("/ja/records/1");
-    const toggle = () => cy.contains("main button", /^(続きを読む|閉じる)$/);
-    const body = () =>
-      toggle()
-        .invoke("attr", "aria-controls")
-        .then((id) => cy.get(`[id="${id}"]`));
-    const height = (check: (value: number) => void) =>
-      body().should(($body) => check($body[0]?.clientHeight ?? 0));
-    toggle()
-      .should("have.text", detail.noteReadMore)
-      .and("have.attr", "aria-expanded", "false");
-    height((value) => expect(value).to.eq(256));
-    toggle().click();
-    toggle()
-      .should("have.text", detail.noteShowLess)
-      .and("have.attr", "aria-expanded", "true");
-    height((value) => expect(value).to.be.greaterThan(256));
-    body().contains("h2", "街の中の撮影").should("be.visible");
-    toggle().click();
-    height((value) => expect(value).to.eq(256));
-  });
-
-  it("ノート、あらすじ、クレジットがない記録では、追加のリンクから編集画面のその欄のタブに移る", () => {
-    cy.createRecord(`E2E 空の詳細 ${Date.now()}`);
-    cy.contains(detail.noteEmpty).should("be.visible");
-    const selectedTab = (label: string) =>
-      cy
-        .contains("[role=tab]", label)
-        .should("have.attr", "aria-selected", "true");
-    cy.contains("a", detail.noteAdd).click();
-    cy.location("pathname").should("match", /\/edit$/);
-    cy.location("search").should("eq", "?tab=impression");
-    selectedTab(ja.recordForm.stepImpression);
-    cy.get("[role=textbox]").should("be.visible");
-    cy.go("back");
-    openMovieTab();
-    cy.contains("main h2", detail.originalTitle).should("not.exist");
-    cy.contains(detail.overviewEmpty).should("be.visible");
-    cy.contains(detail.creditsEmpty).should("be.visible");
-    cy.contains("a", detail.overviewAdd).click();
-    cy.location("pathname").should("match", /\/edit$/);
-    cy.location("search").should("eq", "?tab=movie");
-    selectedTab(ja.recordForm.stepMovieInfo);
-    cy.get("#overview").should("be.visible");
-    cy.go("back");
-    openMovieTab();
-    cy.contains("a", detail.creditsAdd).click();
-    cy.location("pathname").should("match", /\/edit$/);
-    cy.location("search").should("eq", "?tab=movie");
-    selectedTab(ja.recordForm.stepMovieInfo);
-    cy.get("input[name='credits.0.personName']").should("be.visible");
   });
 
   it("存在しない記録では、ページが見つからないことを表示する", () => {

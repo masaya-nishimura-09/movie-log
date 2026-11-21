@@ -10,6 +10,8 @@ import {
 import type { RecordQuery } from "@/schemas/record/list";
 
 type ActiveFilterListProps = {
+  label: string;
+  count: string;
   basePath: string;
   query: RecordQuery;
   values: QueryValues;
@@ -19,6 +21,8 @@ type ActiveFilterListProps = {
 };
 
 export function ActiveFilterList({
+  label,
+  count,
   basePath,
   query,
   values,
@@ -43,7 +47,8 @@ export function ActiveFilterList({
       ? []
       : [
           {
-            label: `${dict.score} ${query.score}`,
+            label: `★${query.score}`,
+            name: `${dict.score} ${query.score}`,
             href: buildHref(
               basePath,
               selectValue(values, recordQueryKeys.score, String(query.score)),
@@ -79,7 +84,9 @@ export function ActiveFilterList({
 
   return (
     <ActiveFilterChips
+      label={label}
       items={items}
+      count={count}
       clearHref={clearHref}
       removeTemplate={dict.remove}
       clearAllLabel={dict.clearAll}

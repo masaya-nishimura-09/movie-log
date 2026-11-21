@@ -45,7 +45,7 @@ describe("toRecordsCsv", () => {
 
   it("writes the header in the screen's language", () => {
     expect(rows(toRecordsCsv([], "ja", ja))).toEqual([
-      "タイトル,原題,鑑賞日,鑑賞方法,スコア,雰囲気タグ,公開年,上映時間,ジャンル,製作国,言語,クレジット,あらすじ,ポスター画像のURL",
+      "タイトル,原題,観た日,観た場所,スコア,雰囲気,公開年,上映時間,ジャンル,制作国,言語,クレジット,あらすじ,ポスター画像のURL",
     ]);
   });
 

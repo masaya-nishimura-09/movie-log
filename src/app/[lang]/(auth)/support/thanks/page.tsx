@@ -43,11 +43,11 @@ export default async function SupportThanksPage({
   return (
     <div className="flex flex-col items-center gap-6 text-center">
       <div className="flex flex-col items-center gap-2">
-        <CircleCheck className="mb-1 size-10 text-primary" aria-hidden />
-        <h1 className="font-bold text-2xl text-foreground">
+        <CircleCheck className="mb-1 size-10 text-link" aria-hidden />
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.support.thanksTitle}
         </h1>
-        <div className="text-balance text-[13px] text-foreground-sub leading-relaxed">
+        <div className="text-[13px] text-foreground-sub leading-7">
           <p>
             {phrases(
               interpolate(dict.support.thanksText, {

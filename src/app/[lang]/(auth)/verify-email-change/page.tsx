@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { cookies } from "next/headers";
 import { verifyEmailChangeAction } from "@/actions/user/verify-email-change";
-import { Logo } from "@/components/atoms/logo";
 import { VerifyTokenForm } from "@/components/organisms/verify-token-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import {
@@ -34,9 +33,6 @@ export default async function VerifyEmailChangePage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="h-18" />
-      </div>
       <VerifyTokenForm
         action={verifyEmailChangeAction.bind(null, token)}
         hasToken={token !== ""}

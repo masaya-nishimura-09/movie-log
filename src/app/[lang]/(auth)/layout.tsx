@@ -1,9 +1,11 @@
-export default function AuthLayout({ children }: LayoutProps<"/[lang]">) {
+import { CoverScreen } from "@/components/organisms/cover-screen";
+import { getDictionary, getLocale } from "@/i18n/get-dictionary";
+
+export default async function AuthLayout({ children }: LayoutProps<"/[lang]">) {
+  const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
-    <main className="shell flex flex-1 items-center justify-center bg-sidebar px-4 py-10">
-      <div className="shell-inset w-full max-w-111 rounded-[20px] bg-card px-6 py-8 md:px-8">
-        {children}
-      </div>
-    </main>
+    <CoverScreen homeHref={`/${lang}`} brandName={dict.brand.name}>
+      {children}
+    </CoverScreen>
   );
 }

@@ -50,6 +50,10 @@ function renderNode(node: JSONContent): ReactNode {
   }
 }
 
+export function NoteNode({ node }: { node: JSONContent }) {
+  return renderNode(node);
+}
+
 export function NoteBody({ content, className }: NoteBodyProps) {
   return (
     <div className={cn("break-words", noteProseStyles, className)}>

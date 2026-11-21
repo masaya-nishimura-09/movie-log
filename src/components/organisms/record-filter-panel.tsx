@@ -126,7 +126,7 @@ export function PlatformOptions({
         }
         className="group flex flex-col"
       >
-        <summary className="mt-0.5 cursor-pointer list-none font-medium text-primary text-xs group-open:hidden">
+        <summary className="mt-0.5 cursor-pointer list-none font-medium text-link text-xs group-open:hidden">
           {showAllLabel}
         </summary>
         <div className="flex flex-col gap-2">

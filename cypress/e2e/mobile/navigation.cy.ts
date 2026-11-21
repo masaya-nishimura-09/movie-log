@@ -84,8 +84,8 @@ describe("スマホの画面", () => {
       "勝手にしやがれ{enter}",
     );
     cy.location("search").should("contain", "q=");
-    cy.get("main ul > li > a").should("have.length.at.least", 1);
-    cy.get("main ul > li > a").each(([card]) =>
+    cy.get("main ol a:visible").should("have.length.at.least", 1);
+    cy.get("main ol a:visible").each(([card]) =>
       expect(card.textContent).to.contain("勝手にしやがれ"),
     );
   });
@@ -134,12 +134,12 @@ describe("スマホの画面", () => {
     cy.location("search").should("eq", "");
   });
 
-  it("記録の作成では、ステップの番号を表示する", () => {
+  it("記録の作成では、ページの番号を表示する", () => {
     cy.visit("/ja/records/new");
     const progress = ja.recordForm.stepProgress
       .replace("{current}", "1")
-      .replace("{total}", "3");
-    cy.contains(`${progress} ・ ${ja.recordForm.stepBasics}`).should(
+      .replace("{total}", "4");
+    cy.contains(`${progress} ・ ${ja.recordForm.pageBasics}`).should(
       "be.visible",
     );
   });

@@ -1,9 +1,8 @@
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { buttonVariants } from "@/components/atoms/button";
+import { NotebookHeading } from "@/components/atoms/notebook-heading";
 import { phrases } from "@/components/atoms/phrases";
 import { TextLink } from "@/components/atoms/text-link";
-import { cn } from "@/lib/style/cn";
 
 type LegalSection = { h: string; p: string[] };
 
@@ -31,31 +30,33 @@ export function LegalDocument({
   backHref,
 }: LegalDocumentProps) {
   return (
-    <article className="flex flex-col gap-6">
-      <header className="flex flex-col gap-2">
-        <h1 className="font-bold text-2xl text-foreground">{title}</h1>
-        <p className="text-muted-foreground text-xs">
+    <article className="flex flex-col">
+      <header>
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
+          {title}
+        </h1>
+        <p className="text-[11px] text-muted-foreground leading-7">
           {updatedLabel}: {updated}
         </p>
       </header>
-      <p className="text-[13px] text-foreground-sub leading-relaxed">
+      <p className="mt-7 text-[13px] text-foreground-sub leading-7">
         {phrases(intro)}
       </p>
       {sections.map((section, index) => (
-        <section key={section.h} className="flex flex-col gap-2">
-          <h2 className="font-bold text-base text-foreground">
+        <section key={section.h} className="mt-7">
+          <NotebookHeading className="text-foreground">
             {phrases(section.h)}
-          </h2>
+          </NotebookHeading>
           {section.p.map((paragraph) => (
             <p
               key={paragraph}
-              className="text-[13px] text-foreground-sub leading-relaxed"
+              className="text-[13px] text-foreground-sub leading-7"
             >
               {phrases(paragraph)}
             </p>
           ))}
           {index === sections.length - 1 && (
-            <TextLink href={contactHref} className="self-start text-[13px]">
+            <TextLink href={contactHref} className="text-[13px] leading-7">
               {contactLabel}
             </TextLink>
           )}
@@ -63,9 +64,9 @@ export function LegalDocument({
       ))}
       <Link
         href={backHref}
-        className={cn(buttonVariants({ variant: "outline" }), "self-center")}
+        className="mt-7 inline-flex h-7 items-center gap-1.5 self-start rounded-sm text-[13px] text-foreground outline-none hover:text-link focus-visible:ring-2 focus-visible:ring-ring"
       >
-        <ArrowLeft aria-hidden />
+        <ArrowLeft className="size-3.5" aria-hidden />
         {backLabel}
       </Link>
     </article>

@@ -10,14 +10,14 @@ export default async function AppLayout({ children }: LayoutProps<"/[lang]">) {
   ]);
 
   return (
-    <div className="shell flex min-h-svh w-full flex-col bg-sidebar [--header-height:--spacing(15)] md:[--header-height:--spacing(18)]">
+    <div className="flex min-h-svh w-full flex-col bg-background [--app-header-height:57px] md:[--app-header-height:65px]">
       <AppTopBar
         lang={lang}
         brandName={dict.brand.name}
         username={user.username}
         dict={dict.header}
       />
-      <main className="shell-inset relative mx-2 mb-[calc(0.5rem+env(safe-area-inset-bottom))] flex min-h-0 min-w-0 flex-1 flex-col rounded-2xl bg-background md:mx-7 md:mb-7 md:h-[calc(100svh-var(--header-height)-1.75rem)] md:flex-none md:overflow-y-auto">
+      <main className="relative flex min-w-0 flex-1 flex-col pb-[env(safe-area-inset-bottom)]">
         {children}
       </main>
     </div>

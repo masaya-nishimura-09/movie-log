@@ -4,9 +4,12 @@ import {
   getMovieAction,
   searchMoviesAction,
 } from "@/actions/movie/movie-assist";
-import { addAttachmentAction } from "@/actions/record/attachment";
+import {
+  addAttachmentAction,
+  deleteAttachmentAction,
+} from "@/actions/record/attachment";
 import { createRecordAction } from "@/actions/record/save-record";
-import { RecordCreateForm } from "@/components/organisms/record-create-form";
+import { RecordForm } from "@/components/organisms/record-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { emptyFormValues, maxReleaseYear } from "@/lib/record/to-form-values";
 
@@ -17,26 +20,29 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function NewRecordPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
-  const today = new Date();
-  const values = emptyFormValues();
+  const listHref = `/${lang}/records`;
 
   return (
     <>
-      <h1 className="px-4 pt-5 font-bold text-2xl text-foreground md:px-7 md:pt-6">
-        {dict.recordForm.createTitle}
-      </h1>
-      <RecordCreateForm
+      <h1 className="sr-only">{dict.recordForm.createTitle}</h1>
+      <RecordForm
+        mode="create"
         lang={lang}
         action={createRecordAction}
+        attachments={[]}
         addAttachment={addAttachmentAction}
+        deleteAttachment={deleteAttachmentAction}
         searchMovies={searchMoviesAction.bind(null, lang)}
         getMovie={getMovieAction.bind(null, lang)}
         uploadPoster={uploadPosterAction}
-        values={values}
-        maxReleaseYear={maxReleaseYear(today)}
+        values={emptyFormValues()}
+        maxReleaseYear={maxReleaseYear(new Date())}
+        backHref={listHref}
+        backLabel={dict.common.toContents}
+        cancelHref={listHref}
+        closeLabel={dict.header.close}
         dict={dict.recordForm}
         enums={dict.enums}
-        counterTemplate={dict.characterCount}
         editorDict={dict.noteEditor}
       />
     </>

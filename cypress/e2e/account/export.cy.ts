@@ -27,7 +27,7 @@ describe("データの書き出し", () => {
     ).then((csv: string) => {
       const lines = csv.replace(/^﻿/, "").trimEnd().split("\r\n");
       expect(lines).to.have.length(2);
-      expect(lines[0]).to.match(/^タイトル,原題,鑑賞日,/);
+      expect(lines[0]).to.match(/^タイトル,原題,観た日,/);
       expect(lines[1]).to.contain(title);
       expect(lines[1]).to.contain(ja.enums.platform.netflix);
     });

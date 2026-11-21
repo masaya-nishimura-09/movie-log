@@ -2,7 +2,10 @@
 
 import { X } from "lucide-react";
 import { useState } from "react";
-import { Input } from "@/components/atoms/input";
+import { notebookLine } from "@/components/atoms/notebook-input";
+import { pickerChip } from "@/components/molecules/choice-picker";
+import { countryCode } from "@/lib/record/country-code";
+import { cn } from "@/lib/style/cn";
 import { interpolate } from "@/lib/text/interpolate";
 
 type CountryInputProps = {
@@ -11,7 +14,10 @@ type CountryInputProps = {
   lang: string;
   defaultValue: string[];
   placeholder: string;
+  addLabel: string;
+  notFoundLabel: string;
   removeTemplate: string;
+  invalid?: boolean;
 };
 
 export function CountryInput({
@@ -20,56 +26,77 @@ export function CountryInput({
   lang,
   defaultValue,
   placeholder,
+  addLabel,
+  notFoundLabel,
   removeTemplate,
+  invalid = false,
 }: CountryInputProps) {
   const [codes, setCodes] = useState(defaultValue);
+  const [notFound, setNotFound] = useState(false);
   const regionNames = new Intl.DisplayNames(lang, { type: "region" });
 
   function add(raw: string) {
-    const code = raw.trim().toUpperCase();
-    if (!/^[A-Z]{2}$/.test(code) || codes.includes(code)) return false;
-    setCodes([...codes, code]);
+    if (raw.trim() === "") return false;
+    const code = countryCode(raw, lang);
+    setNotFound(!code);
+    if (!code) return false;
+    if (!codes.includes(code)) setCodes([...codes, code]);
     return true;
   }
 
   return (
-    <div className="flex flex-col gap-2">
-      {codes.length > 0 && (
-        <ul className="flex flex-wrap gap-1.5">
-          {codes.map((code) => {
-            const label = regionNames.of(code) ?? code;
-            return (
-              <li
-                key={code}
-                className="inline-flex h-8 items-center gap-1 rounded-md bg-secondary pr-1 pl-2.5 text-sm"
+    <div>
+      <div
+        className={cn(
+          "flex min-h-7 flex-wrap items-center gap-1 px-0.5 py-0.5 focus-within:border-primary lg:gap-1.5",
+          notebookLine,
+        )}
+        aria-invalid={invalid || undefined}
+      >
+        {codes.map((code) => {
+          const label = regionNames.of(code) ?? code;
+          return (
+            <span key={code} className={cn(pickerChip, "gap-1 pr-1.5")}>
+              {label}
+              <button
+                type="button"
+                aria-label={interpolate(removeTemplate, { name: label })}
+                onClick={() => setCodes(codes.filter((c) => c !== code))}
+                className="grid size-4 place-items-center rounded-full outline-none hover:bg-black/10 focus-visible:ring-2 focus-visible:ring-ring"
               >
-                {label}
-                <span className="text-muted-foreground text-xs">{code}</span>
-                <button
-                  type="button"
-                  aria-label={interpolate(removeTemplate, { name: label })}
-                  onClick={() => setCodes(codes.filter((c) => c !== code))}
-                  className="grid size-6 place-items-center rounded text-muted-foreground hover:bg-background hover:text-foreground"
-                >
-                  <X className="size-3.5" aria-hidden />
-                </button>
-                <input type="hidden" name={name} value={code} />
-              </li>
-            );
-          })}
-        </ul>
+                <X className="size-2.5" strokeWidth={2.6} aria-hidden />
+              </button>
+              <input type="hidden" name={name} value={code} />
+            </span>
+          );
+        })}
+        <input
+          id={id}
+          data-field={name}
+          aria-label={addLabel}
+          aria-invalid={notFound || undefined}
+          onChange={() => setNotFound(false)}
+          placeholder={codes.length > 0 ? `+ ${addLabel}` : placeholder}
+          autoComplete="off"
+          className="h-6 min-w-24 flex-1 bg-transparent text-[13px] outline-none placeholder:text-[#a8a397] lg:text-sm"
+          onKeyDown={(event) => {
+            if (event.key !== "Enter") return;
+            event.preventDefault();
+            if (add(event.currentTarget.value)) event.currentTarget.value = "";
+          }}
+          onBlur={(event) => {
+            if (add(event.currentTarget.value)) event.currentTarget.value = "";
+          }}
+        />
+      </div>
+      {notFound && (
+        <p
+          role="alert"
+          className="text-[11px] text-destructive-foreground leading-7"
+        >
+          {notFoundLabel}
+        </p>
       )}
-      <Input
-        id={id}
-        placeholder={placeholder}
-        maxLength={2}
-        autoComplete="off"
-        onKeyDown={(event) => {
-          if (event.key !== "Enter") return;
-          event.preventDefault();
-          if (add(event.currentTarget.value)) event.currentTarget.value = "";
-        }}
-      />
     </div>
   );
 }

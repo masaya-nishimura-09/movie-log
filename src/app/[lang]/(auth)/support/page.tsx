@@ -15,11 +15,11 @@ export default async function SupportPage() {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col items-center gap-2 text-center">
-        <h1 className="font-bold text-2xl text-foreground">
+      <header className="flex flex-col">
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
           {dict.support.title}
         </h1>
-        <div className="text-balance text-[13px] text-foreground-sub leading-relaxed">
+        <div className="text-[13px] text-foreground-sub leading-7">
           <p>{phrases(dict.support.intro)}</p>
           <p>{phrases(dict.support.introRequest)}</p>
         </div>

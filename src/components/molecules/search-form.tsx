@@ -26,11 +26,11 @@ export function SearchForm({
     <form
       action={action}
       className={cn(
-        "flex h-10 items-center gap-2 rounded-full bg-field px-4 focus-within:ring-1 focus-within:ring-selected-border",
+        "flex h-10 items-center gap-2.5 rounded-full bg-secondary px-4 focus-within:ring-1 focus-within:ring-selected-border",
         className,
       )}
     >
-      <Search className="size-4.5 shrink-0 text-placeholder" aria-hidden />
+      <Search className="size-4 shrink-0 text-muted-foreground" aria-hidden />
       <input
         key={keyword}
         type="search"

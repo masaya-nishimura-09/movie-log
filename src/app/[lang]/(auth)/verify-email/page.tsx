@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { verifyEmailAction } from "@/actions/user/verify-email";
-import { Logo } from "@/components/atoms/logo";
 import { VerifyTokenForm } from "@/components/organisms/verify-token-form";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -25,9 +24,6 @@ export default async function VerifyEmailPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex justify-center">
-        <Logo name={dict.brand.name} className="h-18" />
-      </div>
       <VerifyTokenForm
         action={verifyEmailAction.bind(null, token)}
         hasToken={token !== ""}

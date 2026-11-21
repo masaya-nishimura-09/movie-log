@@ -2,22 +2,20 @@ import ja from "../../../src/i18n/dictionaries/ja.json";
 
 const filter = ja.recordFilter;
 const list = ja.recordList;
+const turner = ja.recordDetail;
 
 function cards() {
-  return cy.get("main ul > li > a");
+  return cy.get("main ol a:visible");
 }
 
 function cardTitle(card: HTMLElement) {
-  return card.querySelector("span[class*='line-clamp-']")?.textContent ?? "";
+  return card.querySelector("span.truncate")?.textContent ?? "";
 }
 
 function cardYear(card: HTMLElement) {
-  const meta = card.querySelector("span.truncate.min-w-0")?.textContent;
-  const placeholder = card.querySelector(".bg-header > span")?.textContent;
-  return Number((meta ?? placeholder ?? "").split(" · ")[0]);
+  const meta = card.querySelector("span[class*='lg:inline']")?.textContent;
+  return Number.parseInt(meta ?? "", 10) || 0;
 }
-
-const scorePrefix = ja.recordCard.score.replace("{score}", "");
 
 function cardWatchedAt(card: HTMLElement) {
   return card.querySelector("time")?.getAttribute("datetime") ?? "";
@@ -25,9 +23,9 @@ function cardWatchedAt(card: HTMLElement) {
 
 function cardScore(card: HTMLElement) {
   const label = card
-    .querySelector(`[aria-label^='${scorePrefix}']`)
+    .querySelector("[role=img][aria-label$='点']")
     ?.getAttribute("aria-label");
-  return Number(label?.replace(scorePrefix, ""));
+  return Number(label?.match(/(\d+)点$/)?.[1]);
 }
 
 function removeLabel(label: string) {
@@ -54,8 +52,8 @@ describe("記録の一覧", () => {
   it("件数と、鑑賞日が新しい順の一覧を表示する", () => {
     cy.visit("/ja/records");
     cy.contains("h1", list.heading).should("be.visible");
-    cy.contains(/^\d+件中 \d+件を表示$/).should("be.visible");
-    cards().should("have.length", 12);
+    cy.contains(/^全\d+本$/).should("be.visible");
+    cards().should("have.length", 8);
     cards().then((items) => {
       const dates = [...items].map(cardWatchedAt);
       expect(dates).to.deep.eq([...dates].sort().reverse());
@@ -64,8 +62,8 @@ describe("記録の一覧", () => {
 
   it("検索は、タイトルだけでなくノートの文字でも探す", () => {
     cy.visit(`/ja/records?q=${encodeURIComponent("観たきっかけ")}`);
-    cy.get("main ul > li > a").should("have.length.at.least", 1);
-    cy.contains("main ul > li > a", "勝手にしやがれ").should("exist");
+    cards().should("have.length.at.least", 1);
+    cy.contains("main ol a:visible", "勝手にしやがれ").should("exist");
   });
 
   it("ホームと記事の古い URL は、記録の一覧と記録の詳細に移る", () => {
@@ -133,36 +131,57 @@ describe("記録の一覧", () => {
     cy.location("search").should("eq", "");
   });
 
-  it("ページ送りで次のページと前のページに移れる", () => {
+  it("ページ送りのボタンと矢印キーで、次と前のページに移れる", () => {
     cy.visit("/ja/records");
-    cy.get(`a[aria-label="${ja.pagination.previous}"]`).should(
-      "have.attr",
-      "aria-disabled",
-      "true",
+    cy.get(`button[aria-label="${turner.prevPage}"]:visible`).should(
+      "be.disabled",
     );
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
     cards()
       .first()
       .then(([card]) => {
         const firstTitle = cardTitle(card);
-        cy.get(`a[aria-label="${ja.pagination.next}"]`).click();
+        cy.get(`a[aria-label="${turner.nextPage}"]:visible`).click();
         cy.location("search").should("eq", "?page=2");
-        cy.contains(/^2 \/ \d+$/).should("be.visible");
+        cy.contains(":visible", /^2 \/ \d+$/).should("be.visible");
         cards()
           .first()
           .then(([next]) => expect(cardTitle(next)).not.to.eq(firstTitle));
-        cy.get(`a[aria-label="${ja.pagination.previous}"]`).click();
+        cy.get(`a[aria-label="${turner.prevPage}"]:visible`).click();
         cy.location("search").should("eq", "");
-        cy.contains(/^1 \/ \d+$/).should("be.visible");
+        cy.get("body").type("{rightArrow}");
+        cy.location("search").should("eq", "?page=2");
+        cy.get("body").type("{leftArrow}");
+        cy.location("search").should("eq", "");
       });
   });
 
   it("最後のページでは次のページに進めない", () => {
     cy.visit("/ja/records?page=999");
-    cy.get(`a[aria-label="${ja.pagination.next}"]`).should(
-      "have.attr",
-      "aria-disabled",
-      "true",
+    cy.get(`button[aria-label="${turner.nextPage}"]:visible`).should(
+      "be.disabled",
     );
+  });
+
+  it("スマホでは1ページずつで、下のボタンとスワイプでめくる", () => {
+    cy.viewport(390, 844);
+    cy.visit("/ja/records");
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
+    cy.get(`a[aria-label="${turner.nextPage}"]:visible`).click();
+    cy.location("search").should("eq", "?page=2");
+    cy.get("main .touch-pan-y")
+      .trigger("pointerdown", { pointerType: "touch", clientX: 100 })
+      .trigger("pointerup", { pointerType: "touch", clientX: 300 });
+    cy.location("search").should("eq", "");
+  });
+
+  it("鑑賞日の順では月ごと、スコア順では星の数ごとに章を分ける", () => {
+    cy.visit("/ja/records");
+    cy.contains("main h2:visible", /^\d{4}年\d{1,2}月$/).should("be.visible");
+    cy.visit("/ja/records?sort=scoreDesc");
+    cy.get("main h2:visible [role=img]")
+      .first()
+      .should("have.attr", "aria-label", "5点中5点");
   });
 
   it("タイトルで検索すると、一致する記録だけを表示し、条件を外せる", () => {
@@ -172,8 +191,9 @@ describe("記録の一覧", () => {
     );
     cy.location("search").should("contain", "q=");
     cards().should("have.length", 1);
-    cy.contains("1件を表示 ・ 絞り込み 1件").should("be.visible");
-    cy.get(`a[aria-label='${removeLabel(`"${title}"`)}']`).click();
+    cy.contains(/^全\d+本中 1本$/).should("be.visible");
+    cy.contains("main", list.filtering).should("be.visible");
+    cy.get(`a[aria-label='${removeLabel(`"${title}"`)}']:visible`).click();
     cy.location("search").should("eq", "");
   });
 
@@ -182,14 +202,16 @@ describe("記録の一覧", () => {
     openFilter(filter.score).contains("a", /^4$/).click();
     cy.location("search").should("eq", "?score=4");
     cards().each(([card]) => expect(cardScore(card)).to.eq(4));
-    cy.contains("main button", `${filter.score} 4`).should("be.visible");
-    cy.get(`a[aria-label="${removeLabel(`${filter.score} 4`)}"]`).click();
+    cy.contains("main button", `${filter.score}：★4`).should("be.visible");
+    cy.get(
+      `a[aria-label="${removeLabel(`${filter.score} 4`)}"]:visible`,
+    ).click();
     cy.location("search").should("eq", "");
   });
 
   it("同じスコアをもう一度選ぶと、絞り込みが外れる", () => {
     cy.visit("/ja/records?score=4");
-    openFilter(`${filter.score} 4`).contains("a", /^4$/).click();
+    openFilter(`${filter.score}：★4`).contains("a", /^4$/).click();
     cy.location("search").should("eq", "");
   });
 
@@ -234,7 +256,6 @@ describe("記録の一覧", () => {
     cy.get("[role=dialog]").contains("a", ja.enums.genre.crime).click();
     cy.location("search").should("eq", "?genre=drama&genre=crime");
     cards().first().click();
-    cy.contains("[role=tab]", ja.recordDetail.tabMovie).click();
     cy.get("main").within(() => {
       cy.contains(ja.enums.genre.drama).should("exist");
       cy.contains(ja.enums.genre.crime).should("exist");
@@ -243,22 +264,23 @@ describe("記録の一覧", () => {
 
   it("すべて解除を押すと、並べ替えを残して条件をすべて外す", () => {
     cy.visit("/ja/records?sort=titleAsc&score=4&platform=netflix&q=E2E");
-    cy.contains("絞り込み 3件").should("be.visible");
-    cy.contains("a", filter.clearAll).click();
+    cy.contains(list.filtering).should("be.visible");
+    cy.contains("a:visible", filter.clearAll).click();
     cy.location("search").should("eq", "?sort=titleAsc");
   });
 
   it("一致する記録がないと、その旨と条件の解除を表示する", () => {
     cy.visit(`/ja/records?q=${encodeURIComponent("該当しないタイトル")}`);
     cy.contains(list.noMatch).should("be.visible");
-    cy.contains("a", list.clearFilters).click();
+    cy.contains(list.noMatchHint).should("be.visible");
+    cy.contains("a:visible", list.clearFilters).click();
     cy.location("search").should("eq", "");
-    cards().should("have.length", 12);
+    cards().should("have.length", 8);
   });
 
   it("URL の不正な条件は無視する", () => {
     cy.visit("/ja/records?score=9&platform=unknown&sort=unknown&page=0");
-    cards().should("have.length", 12);
-    cy.contains(/^1 \/ \d+$/).should("be.visible");
+    cards().should("have.length", 8);
+    cy.contains(":visible", /^1 \/ \d+$/).should("be.visible");
   });
 });

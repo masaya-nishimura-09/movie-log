@@ -23,6 +23,7 @@ export function AccountPasswordForm({
   return (
     <AccountFormCard
       title={dict.passwordTitle}
+      description={dict.passwordDescription}
       action={action}
       dict={dict}
       resetOnSuccess={["oldPassword", "newPassword"]}

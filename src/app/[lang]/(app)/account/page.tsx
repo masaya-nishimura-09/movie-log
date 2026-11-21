@@ -1,5 +1,6 @@
-import { Info } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
+import Link from "next/link";
 import { exportNotesAction } from "@/actions/record/export-notes";
 import { exportRecordsAction } from "@/actions/record/export-records";
 import { updateEmailAction } from "@/actions/user/update-email";
@@ -12,7 +13,6 @@ import { AccountEmailForm } from "@/components/organisms/account-email-form";
 import { AccountPasswordForm } from "@/components/organisms/account-password-form";
 import { AccountUsernameForm } from "@/components/organisms/account-username-form";
 import { ExportSection } from "@/components/organisms/export-section";
-import { PageTopBar } from "@/components/organisms/page-top-bar";
 import { WithdrawSection } from "@/components/organisms/withdraw-section";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 
@@ -29,47 +29,51 @@ export default async function AccountPage() {
   ]);
 
   return (
-    <>
-      <PageTopBar
-        backHref={`/${lang}/records`}
-        backLabel={dict.account.back}
-        title={dict.account.title}
+    <div className="app-container pb-14">
+      <div className="pt-3 pb-2 md:pt-4">
+        <Link
+          href={`/${lang}/records`}
+          className="-ml-1 inline-flex min-h-11 items-center gap-2 rounded-sm px-1 text-foreground text-sm outline-none hover:text-link focus-visible:ring-2 focus-visible:ring-ring"
+        >
+          <ArrowLeft className="size-4.5" aria-hidden />
+          {dict.common.toContents}
+        </Link>
+      </div>
+      <h1 className="font-bold font-display text-2xl leading-10 md:text-[28px]">
+        {dict.account.title}
+      </h1>
+      <p className="mt-1.5 mb-7 text-[13px] text-muted-foreground">
+        {phrases(dict.account.notice)}
+      </p>
+      <AccountUsernameForm
+        action={updateUsernameAction}
+        user={user}
+        dict={dict.account}
+        counterTemplate={dict.characterCount}
       />
-      <main className="flex w-full max-w-180 flex-col gap-4 px-4 pt-5 pb-8 md:px-10 md:pt-8">
-        <p className="flex gap-2.5 rounded-[14px] bg-mood px-4 py-3.5 text-[13px] text-foreground leading-relaxed">
-          <Info className="mt-0.5 size-4.5 shrink-0" aria-hidden />
-          {phrases(dict.account.notice)}
-        </p>
-        <AccountUsernameForm
-          action={updateUsernameAction}
-          user={user}
-          dict={dict.account}
-          counterTemplate={dict.characterCount}
-        />
-        <AccountEmailForm
-          action={updateEmailAction.bind(null, lang)}
-          user={user}
-          dict={dict.account}
-          passwordDict={dict.passwordInput}
-        />
-        <AccountPasswordForm
-          action={updatePasswordAction.bind(null, lang)}
-          dict={dict.account}
-          passwordDict={dict.passwordInput}
-        />
-        <ExportSection
-          lang={lang}
-          exportRecords={exportRecordsAction}
-          exportNotes={exportNotesAction}
-          dict={dict.account}
-          csvDict={{ recordForm: dict.recordForm, enums: dict.enums }}
-          releaseYearTemplate={dict.recordDetail.releaseYear}
-        />
-        <WithdrawSection
-          action={withdrawAction.bind(null, lang)}
-          dict={dict.account}
-        />
-      </main>
-    </>
+      <AccountEmailForm
+        action={updateEmailAction.bind(null, lang)}
+        user={user}
+        dict={dict.account}
+        passwordDict={dict.passwordInput}
+      />
+      <AccountPasswordForm
+        action={updatePasswordAction.bind(null, lang)}
+        dict={dict.account}
+        passwordDict={dict.passwordInput}
+      />
+      <ExportSection
+        lang={lang}
+        exportRecords={exportRecordsAction}
+        exportNotes={exportNotesAction}
+        dict={dict.account}
+        csvDict={{ recordForm: dict.recordForm, enums: dict.enums }}
+        releaseYearTemplate={dict.recordDetail.releaseYear}
+      />
+      <WithdrawSection
+        action={withdrawAction.bind(null, lang)}
+        dict={dict.account}
+      />
+    </div>
   );
 }

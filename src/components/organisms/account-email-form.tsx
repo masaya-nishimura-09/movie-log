@@ -30,6 +30,7 @@ export function AccountEmailForm({
   return (
     <AccountFormCard
       title={dict.emailTitle}
+      description={dict.emailDescription}
       action={action}
       dict={dict}
       resetOnSuccess={["email", "password"]}

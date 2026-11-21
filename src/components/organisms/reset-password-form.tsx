@@ -11,6 +11,7 @@ import { ResultMessage } from "@/components/molecules/result-message";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
+import { formStack } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 
 type ResetPasswordFormProps = {
@@ -35,7 +36,7 @@ export function ResetPasswordForm({
 
   if (state?.success) {
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-7">
         <ResultMessage
           icon="done"
           title={dict.doneTitle}
@@ -53,7 +54,7 @@ export function ResetPasswordForm({
 
   if (!hasToken || failure?.messageKey === "invalidToken") {
     return (
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-7">
         <ResultMessage
           icon="failed"
           title={dict.invalidTitle}
@@ -72,12 +73,14 @@ export function ResetPasswordForm({
   return (
     <>
       <div className="flex flex-col gap-1.5">
-        <h1 className="font-bold text-foreground text-xl">{dict.title}</h1>
+        <h1 className="font-bold font-display text-foreground text-lg leading-7">
+          {dict.title}
+        </h1>
         <p className="text-muted-foreground text-xs">
           {phrases(dict.description)}
         </p>
       </div>
-      <form onSubmit={submit} noValidate className="flex flex-col gap-5">
+      <form onSubmit={submit} noValidate className={formStack}>
         {failure && !failure.errors && (
           <FormAlert>
             {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}

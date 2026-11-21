@@ -3,6 +3,12 @@ import type { Locale } from "@/i18n/locales";
 export const dateStyles = {
   short: { month: "numeric", day: "numeric" },
   medium: { year: "numeric", month: "2-digit", day: "2-digit" },
+  mediumWeekday: {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    weekday: "short",
+  },
   longDate: { year: "numeric", month: "long", day: "numeric" },
   dateTime: {
     year: "numeric",

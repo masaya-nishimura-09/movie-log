@@ -46,7 +46,8 @@ describe("API の失敗", () => {
     cy.register().then(() => {
       cy.visit("/ja/account");
       cy.get("#username").clear().type("__error__");
-      cy.contains("form", ja.account.usernameTitle)
+      cy.contains("section h2", ja.account.usernameTitle)
+        .closest("section")
         .contains("button", ja.account.save)
         .click();
       cy.get("[role=alert]").should("have.text", ja.account.unexpectedError);
