@@ -78,7 +78,7 @@ export const movieResponseSchema = z
       countries: r.origin_country.filter((code) => /^[A-Z]{2}$/.test(code)),
       language: r.original_language || "und",
       credits: [
-        ...credits.filter((c) => c.creditRole !== "cast"),
+        ...credits.filter((c) => c.creditRole === "director"),
         ...cast.slice(0, maxCast),
       ],
       posterUrl: r.poster_url,

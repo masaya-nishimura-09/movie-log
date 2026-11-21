@@ -77,7 +77,6 @@ describe("movieResponseSchema", () => {
       language: "en",
       credits: [
         { personName: "Denis Villeneuve", creditRole: "director" },
-        { personName: "Eric Heisserer", creditRole: "writer" },
         { personName: "Cast 1", creditRole: "cast" },
         { personName: "Cast 2", creditRole: "cast" },
         { personName: "Cast 3", creditRole: "cast" },
