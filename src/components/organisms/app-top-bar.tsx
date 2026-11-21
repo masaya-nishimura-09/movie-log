@@ -41,7 +41,7 @@ export function AppTopBar({ lang, brandName, username, dict }: AppTopBarProps) {
 
   return (
     <header className="border-b">
-      <div className="mx-auto flex h-14 max-w-296 items-center gap-1 px-4 md:h-16 md:gap-5 md:px-8">
+      <div className="app-container flex h-14 items-center gap-1 md:h-16 md:gap-5">
         <Link
           href={`/${lang}/records`}
           className="flex shrink-0 items-center rounded-sm outline-none focus-visible:ring-2 focus-visible:ring-ring"

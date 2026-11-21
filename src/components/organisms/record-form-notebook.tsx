@@ -153,7 +153,7 @@ export function RecordFormNotebook({
   );
 
   const narrowFooter = (
-    <div className="flex flex-col gap-2 px-4 pt-2.5 pb-4.5 lg:hidden">
+    <div className="flex flex-col gap-2 pt-2.5 pb-4.5 lg:hidden">
       {message && (
         <p
           role="alert"

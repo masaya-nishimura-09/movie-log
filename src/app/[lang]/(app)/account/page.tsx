@@ -29,7 +29,7 @@ export default async function AccountPage() {
   ]);
 
   return (
-    <div className="mx-auto w-full max-w-296 px-4 pb-14 md:px-8">
+    <div className="app-container pb-14">
       <div className="pt-3 pb-2 md:pt-4">
         <Link
           href={`/${lang}/records`}

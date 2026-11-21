@@ -142,7 +142,7 @@ function SpreadRings() {
 }
 
 const singleFrame =
-  "relative pt-2.5 pr-5 pb-3 pl-10 drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)]";
+  "relative -mx-2 pt-2.5 pr-5 pb-3 pl-10 drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)]";
 const spreadFrame =
   "relative flex gap-1 rounded-[14px] bg-cover px-5 pt-3.5 pb-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]";
 
@@ -174,7 +174,7 @@ export function RingNotebook({
   return (
     <div
       className={cn(
-        "relative h-full max-lg:pt-2.5 max-lg:pr-5 max-lg:pb-3 max-lg:pl-10 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:gap-1 lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
+        "relative h-full max-lg:-mx-2 max-lg:pt-2.5 max-lg:pr-5 max-lg:pb-3 max-lg:pl-10 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:gap-1 lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
         className,
       )}
     >

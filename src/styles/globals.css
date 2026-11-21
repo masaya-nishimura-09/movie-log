@@ -280,6 +280,10 @@
   --sidebar-ring: var(--ring);
 }
 
+@utility app-container {
+  @apply mx-auto w-full max-w-296 px-4 md:px-8;
+}
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

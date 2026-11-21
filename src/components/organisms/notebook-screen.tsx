@@ -16,8 +16,8 @@ export function NotebookScreen({
   onPointerUp,
 }: NotebookScreenProps) {
   return (
-    <div className="mx-auto flex w-full max-w-296 flex-col max-lg:h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))] md:max-lg:max-w-2xl lg:px-8 lg:pb-6">
-      <div className="flex flex-wrap items-center gap-1.5 px-4 pt-1.5 pb-2.5 lg:gap-3 lg:px-0 lg:py-4">
+    <div className="app-container flex flex-col max-lg:h-[calc(100svh-var(--app-header-height)-env(safe-area-inset-bottom))] lg:pb-6">
+      <div className="flex flex-wrap items-center gap-1.5 pt-1.5 pb-2.5 lg:gap-3 lg:py-4">
         {toolbar}
       </div>
       <div
