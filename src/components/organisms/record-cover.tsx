@@ -84,7 +84,7 @@ export function RecordCoverHeader({ lang, record, dict }: RecordCoverProps) {
             {poster}
           </PosterViewer>
         )}
-        <MaskingTape className="hidden w-20 lg:block" />
+        <MaskingTape className="-top-2 h-4 w-14 lg:-top-2.5 lg:h-5.5 lg:w-20" />
       </figure>
       <div className="min-w-0 flex-1 basis-40 text-xs leading-7 lg:text-sm">
         <h1 className="break-words font-bold font-display text-[19px] leading-7 lg:text-[26px]">

@@ -64,7 +64,7 @@ export function PosterPicker({
             unoptimized={!url.startsWith("https://image.tmdb.org/")}
             className="object-cover shadow-[0_6px_14px_rgb(10_41_71/0.2)] lg:shadow-[0_10px_20px_rgb(10_41_71/0.2)]"
           />
-          <MaskingTape className="hidden w-20 lg:block" />
+          <MaskingTape className="-top-2 h-4 w-14 lg:-top-2.5 lg:h-5.5 lg:w-20" />
           <button
             type="button"
             aria-label={dict.posterRemove}
@@ -108,7 +108,7 @@ export function PosterPicker({
           <span className="relative hidden text-[10px] text-paper-muted lg:block">
             {dict.posterDrop}
           </span>
-          <MaskingTape className="hidden w-20 lg:block" />
+          <MaskingTape className="-top-2 h-4 w-14 lg:-top-2.5 lg:h-5.5 lg:w-20" />
           <input
             type="file"
             data-field={name}
