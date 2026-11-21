@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Noto_Sans_JP, Poppins, Zen_Maru_Gothic } from "next/font/google";
+import { headers } from "next/headers";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
@@ -23,12 +24,16 @@ const notoSansJP = Noto_Sans_JP({
   subsets: ["latin"],
 });
 
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f3e4c9" },
-    { media: "(prefers-color-scheme: dark)", color: "#0a2947" },
-  ],
-};
+export async function generateViewport(): Promise<Viewport> {
+  const userAgent = (await headers()).get("user-agent") ?? "";
+  return {
+    themeColor: [
+      { media: "(prefers-color-scheme: light)", color: "#f3e4c9" },
+      { media: "(prefers-color-scheme: dark)", color: "#0a2947" },
+    ],
+    ...(/iP(hone|od|ad)/.test(userAgent) ? { maximumScale: 1 } : {}),
+  };
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const [lang, dict] = await Promise.all([getLocale(), getDictionary()]);
