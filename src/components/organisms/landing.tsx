@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { buttonVariants } from "@/components/atoms/button";
 import { CoverSpine } from "@/components/atoms/cover-spine";
+import { CoverTexture } from "@/components/atoms/cover-texture";
 import { Logo } from "@/components/atoms/logo";
 import { MaskingTape } from "@/components/atoms/masking-tape";
 import { phrases } from "@/components/atoms/phrases";
@@ -23,8 +24,6 @@ type LandingProps = {
 };
 
 const featureIcons = [FileText, ListFilter, Search];
-
-const container = "mx-auto w-full max-w-296 px-5 md:px-8";
 
 function Eyebrow({
   children,
@@ -126,7 +125,12 @@ export function Landing({ lang, dict }: LandingProps) {
   return (
     <main className="flex flex-1 flex-col bg-background text-foreground">
       <header className="border-b">
-        <div className={cn(container, "flex h-14 items-center gap-2 md:h-17")}>
+        <div
+          className={cn(
+            "app-container",
+            "flex h-14 items-center gap-2 md:h-17",
+          )}
+        >
           <Logo name={dict.brand.name} className="h-8 md:h-10" />
           <div className="flex-1" />
           <Link
@@ -150,7 +154,7 @@ export function Landing({ lang, dict }: LandingProps) {
 
       <section
         className={cn(
-          container,
+          "app-container",
           "grid items-center gap-9 pt-10 pb-12 md:pt-18 md:pb-24 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14",
         )}
       >
@@ -209,7 +213,7 @@ export function Landing({ lang, dict }: LandingProps) {
       </section>
 
       <section className="border-t py-12 md:py-24">
-        <div className={container}>
+        <div className="app-container">
           <div className="max-w-160 md:mx-auto md:text-center">
             <Eyebrow>{l.contents.eyebrow}</Eyebrow>
             <h2 className={sectionTitle}>{phrases(l.contents.title)}</h2>
@@ -234,7 +238,7 @@ export function Landing({ lang, dict }: LandingProps) {
 
       <section
         className={cn(
-          container,
+          "app-container",
           "border-t py-12 md:border-t-0 md:pt-26 md:pb-24",
         )}
       >
@@ -279,7 +283,7 @@ export function Landing({ lang, dict }: LandingProps) {
 
       <section
         className={cn(
-          container,
+          "app-container",
           "grid items-center gap-6 border-t py-12 md:border-t-0 md:pb-26 lg:grid-cols-[minmax(0,7fr)_minmax(0,5fr)] lg:gap-14",
         )}
       >
@@ -301,7 +305,7 @@ export function Landing({ lang, dict }: LandingProps) {
       <section className="bg-(--navy) py-13 text-(--beige) md:py-26 dark:bg-[color-mix(in_oklab,var(--navy)_70%,black)]">
         <div
           className={cn(
-            container,
+            "app-container",
             "grid items-center gap-6 lg:grid-cols-[minmax(0,5fr)_minmax(0,7fr)] lg:gap-14",
           )}
         >
@@ -342,6 +346,7 @@ export function Landing({ lang, dict }: LandingProps) {
           )}
         >
           <CoverSpine />
+          <CoverTexture />
           <div className={cn("relative", onCover)}>
             <Logo name={dict.brand.name} className="mx-auto h-10.5 md:h-13" />
           </div>
@@ -372,7 +377,7 @@ export function Landing({ lang, dict }: LandingProps) {
       <footer className="border-t">
         <div
           className={cn(
-            container,
+            "app-container",
             "flex flex-col gap-4 pt-7 pb-9 md:flex-row md:flex-wrap md:items-center md:gap-6 md:pt-8 md:pb-10",
           )}
         >
