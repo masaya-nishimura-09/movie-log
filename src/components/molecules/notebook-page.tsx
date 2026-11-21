@@ -10,6 +10,7 @@ type NotebookPageProps = {
   footer?: ReactNode;
   children?: ReactNode;
   measure?: ReactNode;
+  overlay?: ReactNode;
   scrollRef?: Ref<HTMLDivElement>;
   className?: string;
 };
@@ -73,6 +74,7 @@ export function NotebookPage({
   footer,
   children,
   measure,
+  overlay,
   scrollRef,
   className,
 }: NotebookPageProps) {
@@ -119,6 +121,7 @@ export function NotebookPage({
           </div>
         )}
       </div>
+      {overlay}
       {footer && (
         <div
           className={cn(

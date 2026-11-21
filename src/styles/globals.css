@@ -14,6 +14,48 @@
       transform: translateX(calc(var(--page-shift, 0px) * var(--page-motion)));
     }
   }
+
+  --animate-flip-forward: flip-forward 450ms ease-in-out both;
+  --animate-flip-back: flip-back 450ms ease-in-out both;
+  --animate-flip-in: flip-in 450ms ease-out both;
+
+  @keyframes flip-forward {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(-180deg);
+    }
+  }
+
+  @keyframes flip-back {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(180deg);
+    }
+  }
+
+  @keyframes flip-in {
+    from {
+      transform: rotateY(-90deg);
+    }
+    to {
+      transform: rotateY(0deg);
+    }
+  }
+
+  --animate-flip-away: flip-away 450ms ease-in both;
+
+  @keyframes flip-away {
+    from {
+      transform: rotateY(0deg);
+    }
+    to {
+      transform: rotateY(-90deg);
+    }
+  }
 }
 
 @theme inline {

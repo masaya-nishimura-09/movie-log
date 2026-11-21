@@ -93,6 +93,8 @@ export function RecordNotebook({
   }));
   const [pageIndex, setPageIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
+  const [fadeIn, setFadeIn] = useState(true);
+  const [flip, setFlip] = useState<{ from: number; dir: 1 | -1 } | null>(null);
   const [openAttachment, setOpenAttachment] = useState(-1);
   const scrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
@@ -140,6 +142,11 @@ export function RecordNotebook({
   const turn = useCallback(
     (to: 1 | -1) => {
       setDirection(to);
+      const reduced = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      setFadeIn(reduced);
+      setFlip(reduced ? null : { from: start, dir: to });
       setPageIndex(start + to * step);
       scrollRef.current?.scrollTo({ top: 0 });
       rightScrollRef.current?.scrollTo({ top: 0 });
@@ -164,10 +171,14 @@ export function RecordNotebook({
       })
     : interpolate(dict.pagePosition, { page: start + 1, total });
 
-  const renderContent = (page: Page | undefined, index: number) => {
+  const renderContent = (
+    page: Page | undefined,
+    index: number,
+    still = false,
+  ) => {
     if (!page) return null;
     const style = { "--page-shift": `${direction * 12}px` } as CSSProperties;
-    const animation = "animate-page-in";
+    const animation = still || !fadeIn ? undefined : "animate-page-in";
     if (page.kind === "scrap") {
       return (
         <ScrapBoard
@@ -222,6 +233,50 @@ export function RecordNotebook({
     <span className="tabular-nums">{index + 1}</span>
   );
 
+  const face = (
+    side: "left" | "right" | "single",
+    index: number,
+    back = false,
+  ) => (
+    <div
+      className="absolute inset-0 [backface-visibility:hidden]"
+      style={back ? { transform: "rotateY(180deg)" } : undefined}
+    >
+      <NotebookPage
+        side={side}
+        className="size-full"
+        footer={pages[index] && pageNumber(index)}
+      >
+        {renderContent(pages[index], index, true)}
+      </NotebookPage>
+    </div>
+  );
+
+  const sheet = (
+    animation: string,
+    origin: "left" | "right",
+    front: ReactNode,
+    back: ReactNode,
+  ) => (
+    <div className="pointer-events-none absolute inset-0 z-5 [perspective:2000px]">
+      <div
+        className={cn(
+          "relative size-full [transform-style:preserve-3d]",
+          animation,
+        )}
+        style={{ transformOrigin: origin }}
+        onAnimationEnd={() => setFlip(null)}
+      >
+        {front}
+        {back}
+      </div>
+    </div>
+  );
+
+  const leftShown = flip?.dir === 1 ? flip.from : start;
+  const rightShown = flip?.dir === -1 ? flip.from + 1 : start + 1;
+  const singleShown = flip?.dir === -1 ? flip.from : start;
+
   const spread = (
     <RingNotebook variant="spread">
       <NotebookPage
@@ -231,20 +286,40 @@ export function RecordNotebook({
         measure={layout === "spread" ? measure : undefined}
         footer={
           <>
-            {pageNumber(start)}
-            {start === 0 && coverFooter}
+            {pageNumber(leftShown)}
+            {leftShown === 0 && coverFooter}
           </>
         }
+        overlay={
+          layout === "spread" &&
+          flip?.dir === -1 &&
+          sheet(
+            "animate-flip-back",
+            "right",
+            face("left", flip.from),
+            face("right", start + 1, true),
+          )
+        }
       >
-        {renderContent(pages[start], start)}
+        {renderContent(pages[leftShown], leftShown)}
       </NotebookPage>
       <NotebookPage
         side="right"
         label={right ? pageLabel(start + 1) : undefined}
         scrollRef={layout === "spread" ? rightScrollRef : undefined}
-        footer={right && pageNumber(start + 1)}
+        footer={pages[rightShown] && pageNumber(rightShown)}
+        overlay={
+          layout === "spread" &&
+          flip?.dir === 1 &&
+          sheet(
+            "animate-flip-forward",
+            "left",
+            face("right", flip.from + 1),
+            face("left", start, true),
+          )
+        }
       >
-        {renderContent(right, start + 1)}
+        {renderContent(pages[rightShown], rightShown)}
       </NotebookPage>
     </RingNotebook>
   );
@@ -256,9 +331,21 @@ export function RecordNotebook({
         label={pageLabel(start)}
         scrollRef={layout === "single" ? scrollRef : undefined}
         measure={layout === "single" ? measure : undefined}
-        footer={pageNumber(start)}
+        footer={pageNumber(singleShown)}
+        overlay={
+          layout === "single" &&
+          flip &&
+          (flip.dir === 1
+            ? sheet(
+                "animate-flip-away",
+                "left",
+                face("single", flip.from),
+                null,
+              )
+            : sheet("animate-flip-in", "left", face("single", start), null))
+        }
       >
-        {renderContent(pages[start], start)}
+        {renderContent(pages[singleShown], singleShown)}
       </NotebookPage>
     </RingNotebook>
   );
