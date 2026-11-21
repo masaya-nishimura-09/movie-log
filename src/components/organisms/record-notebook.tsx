@@ -233,46 +233,82 @@ export function RecordNotebook({
     <span className="tabular-nums">{index + 1}</span>
   );
 
-  const face = (
-    side: "left" | "right" | "single",
-    index: number,
-    back = false,
-  ) => (
+  const face = (content: ReactNode, reverse: boolean, back = false) => (
     <div
       className="absolute inset-0 [backface-visibility:hidden]"
       style={back ? { transform: "rotateY(180deg)" } : undefined}
     >
-      <NotebookPage
-        side={side}
-        className="size-full"
-        footer={pages[index] && pageNumber(index)}
-      >
-        {renderContent(pages[index], index, true)}
-      </NotebookPage>
+      {content}
+      <div
+        aria-hidden
+        className={cn(
+          "absolute inset-0 rounded-[3px] bg-[rgb(10_41_71)]",
+          back ? "animate-flip-shade-back" : "animate-flip-shade",
+          reverse && "[animation-direction:reverse]",
+        )}
+      />
     </div>
   );
 
-  const sheet = (
-    animation: string,
-    origin: "left" | "right",
-    front: ReactNode,
-    back: ReactNode,
-  ) => (
-    <div className="pointer-events-none absolute inset-0 z-5 [perspective:2000px]">
+  const pageFace = (side: "left" | "right" | "single", index: number) => (
+    <NotebookPage
+      side={side}
+      className="size-full"
+      footer={pages[index] && pageNumber(index)}
+    >
+      {renderContent(pages[index], index, true)}
+    </NotebookPage>
+  );
+
+  const blankFace = (
+    <div className="paper-theme absolute inset-0 rounded-[3px] bg-paper" />
+  );
+
+  const sheet = ({
+    animation,
+    origin,
+    hinge,
+    front,
+    back,
+    reverse = false,
+  }: {
+    animation: string;
+    origin: string;
+    hinge: "left" | "right";
+    front: ReactNode;
+    back: ReactNode;
+    reverse?: boolean;
+  }) => (
+    <div className="pointer-events-none absolute inset-0 z-5 [perspective:1600px]">
+      <div
+        aria-hidden
+        className={cn(
+          "absolute inset-0 animate-flip-cast",
+          hinge === "left"
+            ? "bg-[linear-gradient(to_right,rgb(10_41_71/0.28),transparent_55%)]"
+            : "bg-[linear-gradient(to_left,rgb(10_41_71/0.28),transparent_55%)]",
+        )}
+      />
       <div
         className={cn(
           "relative size-full [transform-style:preserve-3d]",
           animation,
+          reverse && "[animation-direction:reverse]",
         )}
         style={{ transformOrigin: origin }}
-        onAnimationEnd={() => setFlip(null)}
+        onAnimationEnd={(event) => {
+          if (event.target === event.currentTarget) setFlip(null);
+        }}
       >
-        {front}
-        {back}
+        {face(front, reverse)}
+        {face(back, reverse, true)}
       </div>
     </div>
   );
 
+  const singleRing = "-10.5px 50%";
+  const spreadRingFromRight = "-2px 50%";
+  const spreadRingFromLeft = "calc(100% + 2px) 50%";
   const leftShown = flip?.dir === 1 ? flip.from : start;
   const rightShown = flip?.dir === -1 ? flip.from + 1 : start + 1;
   const singleShown = flip?.dir === -1 ? flip.from : start;
@@ -293,12 +329,13 @@ export function RecordNotebook({
         overlay={
           layout === "spread" &&
           flip?.dir === -1 &&
-          sheet(
-            "animate-flip-back",
-            "right",
-            face("left", flip.from),
-            face("right", start + 1, true),
-          )
+          sheet({
+            animation: "animate-flip-back",
+            origin: spreadRingFromLeft,
+            hinge: "right",
+            front: pageFace("left", flip.from),
+            back: pageFace("right", start + 1),
+          })
         }
       >
         {renderContent(pages[leftShown], leftShown)}
@@ -311,12 +348,13 @@ export function RecordNotebook({
         overlay={
           layout === "spread" &&
           flip?.dir === 1 &&
-          sheet(
-            "animate-flip-forward",
-            "left",
-            face("right", flip.from + 1),
-            face("left", start, true),
-          )
+          sheet({
+            animation: "animate-flip-forward",
+            origin: spreadRingFromRight,
+            hinge: "left",
+            front: pageFace("right", flip.from + 1),
+            back: pageFace("left", start),
+          })
         }
       >
         {renderContent(pages[rightShown], rightShown)}
@@ -335,14 +373,14 @@ export function RecordNotebook({
         overlay={
           layout === "single" &&
           flip &&
-          (flip.dir === 1
-            ? sheet(
-                "animate-flip-away",
-                "left",
-                face("single", flip.from),
-                null,
-              )
-            : sheet("animate-flip-in", "left", face("single", start), null))
+          sheet({
+            animation: "animate-flip-forward",
+            origin: singleRing,
+            hinge: "left",
+            front: pageFace("single", flip.dir === 1 ? flip.from : start),
+            back: blankFace,
+            reverse: flip.dir === -1,
+          })
         }
       >
         {renderContent(pages[singleShown], singleShown)}
