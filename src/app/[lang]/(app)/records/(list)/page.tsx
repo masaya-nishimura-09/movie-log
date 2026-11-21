@@ -117,6 +117,7 @@ export default async function RecordsPage({
 
   return (
     <NotebookScreen
+      grow
       toolbar={
         <div
           inert={!hasRecords}
