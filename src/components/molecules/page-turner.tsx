@@ -28,7 +28,7 @@ function TurnButton({
 }) {
   if (typeof turn === "string") {
     return (
-      <Link href={turn} aria-label={label} className={arrow}>
+      <Link href={turn} prefetch aria-label={label} className={arrow}>
         {children}
       </Link>
     );

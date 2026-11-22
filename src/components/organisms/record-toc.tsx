@@ -5,11 +5,15 @@ import {
   type ReactNode,
   useCallback,
   useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
   useSyncExternalStore,
 } from "react";
 import { LocalDate } from "@/components/atoms/local-date";
 import { StarRating } from "@/components/atoms/star-rating";
 import { NotebookPage } from "@/components/molecules/notebook-page";
+import { SingleFlip, SpreadFlip } from "@/components/molecules/page-flip";
 import { TocChapterHeading } from "@/components/molecules/toc-chapter-heading";
 import { TocRow } from "@/components/molecules/toc-row";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
@@ -35,6 +39,7 @@ type RecordTocProps = {
   emptyContent: ReactNode;
   pageNumbers: [number, number];
   mobilePageNumber: number;
+  href: string;
   prevHref?: string;
   nextHref?: string;
   fromHref?: string;
@@ -43,6 +48,19 @@ type RecordTocProps = {
     "enums" | "recordCard" | "recordList" | "recordDetail"
   >;
 };
+
+type TocPage = { number: number; content: ReactNode };
+
+type Snapshot = {
+  href: string;
+  prevHref?: string;
+  nextHref?: string;
+  left: TocPage;
+  right: TocPage;
+  single: TocPage;
+};
+
+type Flip = { dir: 1 | -1; old: Snapshot };
 
 const headerSlots = 1.5;
 const filterBarSlots = 1;
@@ -111,6 +129,7 @@ export function RecordToc({
   emptyContent,
   pageNumbers,
   mobilePageNumber,
+  href,
   prevHref,
   nextHref,
   fromHref,
@@ -191,6 +210,66 @@ export function RecordToc({
     interpolate(dict.recordDetail.pageLabel, { page });
   const number = (page: number) => <span className="tabular-nums">{page}</span>;
 
+  const current: Snapshot = {
+    href,
+    prevHref,
+    nextHref,
+    left: {
+      number: pageNumbers[0],
+      content: (
+        <>
+          {header}
+          {filterBar}
+          {emptyContent ?? list(left)}
+        </>
+      ),
+    },
+    right: {
+      number: pageNumbers[1],
+      content: emptyContent === null && list(right),
+    },
+    single: {
+      number: mobilePageNumber,
+      content: (
+        <>
+          {header}
+          {filterBar}
+          {emptyContent ?? list(tocItems(shapes))}
+        </>
+      ),
+    },
+  };
+
+  const [flip, setFlip] = useState<Flip | null>(null);
+  const lastRef = useRef<Snapshot | null>(null);
+  useLayoutEffect(() => {
+    const last = lastRef.current;
+    if (!last || last.href === href) return;
+    const dir = last.nextHref === href ? 1 : last.prevHref === href ? -1 : null;
+    const reduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
+    setFlip(dir && !reduced ? { dir, old: last } : null);
+  }, [href]);
+  useLayoutEffect(() => {
+    lastRef.current = current;
+  });
+  const endFlip = () => setFlip(null);
+
+  const face = (side: "left" | "right" | "single", page: TocPage) => (
+    <NotebookPage
+      side={side}
+      className="size-full"
+      footer={number(page.number)}
+    >
+      {page.content}
+    </NotebookPage>
+  );
+
+  const leftShown = flip?.dir === 1 ? flip.old.left : current.left;
+  const rightShown = flip?.dir === -1 ? flip.old.right : current.right;
+  const singleShown = flip?.dir === -1 ? flip.old.single : current.single;
+
   return (
     <div
       className="h-full"
@@ -201,29 +280,57 @@ export function RecordToc({
         <NotebookPage
           side="left"
           label={pageLabel(pageNumbers[0])}
-          footer={number(pageNumbers[0])}
+          footer={number(leftShown.number)}
+          overlay={
+            flip?.dir === -1 && (
+              <SpreadFlip
+                dir={-1}
+                front={face("left", flip.old.left)}
+                back={face("right", current.right)}
+                onEnd={endFlip}
+              />
+            )
+          }
         >
-          {header}
-          {filterBar}
-          {emptyContent ?? list(left)}
+          {leftShown.content}
         </NotebookPage>
         <NotebookPage
           side="right"
           label={pageLabel(pageNumbers[1])}
-          footer={number(pageNumbers[1])}
+          footer={number(rightShown.number)}
+          overlay={
+            flip?.dir === 1 && (
+              <SpreadFlip
+                dir={1}
+                front={face("right", flip.old.right)}
+                back={face("left", current.left)}
+                onEnd={endFlip}
+              />
+            )
+          }
         >
-          {emptyContent === null && list(right)}
+          {rightShown.content}
         </NotebookPage>
       </RingNotebook>
       <RingNotebook variant="single" className="h-full lg:hidden">
         <NotebookPage
           side="single"
           label={pageLabel(mobilePageNumber)}
-          footer={number(mobilePageNumber)}
+          footer={number(singleShown.number)}
+          overlay={
+            flip && (
+              <SingleFlip
+                dir={flip.dir}
+                page={face(
+                  "single",
+                  flip.dir === 1 ? flip.old.single : current.single,
+                )}
+                onEnd={endFlip}
+              />
+            )
+          }
         >
-          {header}
-          {filterBar}
-          {emptyContent ?? list(tocItems(shapes))}
+          {singleShown.content}
         </NotebookPage>
       </RingNotebook>
     </div>

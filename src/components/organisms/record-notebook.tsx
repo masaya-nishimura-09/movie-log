@@ -10,6 +10,7 @@ import {
   useState,
 } from "react";
 import { NotebookPage } from "@/components/molecules/notebook-page";
+import { SingleFlip, SpreadFlip } from "@/components/molecules/page-flip";
 import { PageTurner } from "@/components/molecules/page-turner";
 import { ScrapBoard } from "@/components/molecules/scrap-board";
 import { AttachmentViewer } from "@/components/organisms/attachment-viewer";
@@ -233,23 +234,6 @@ export function RecordNotebook({
     <span className="tabular-nums">{index + 1}</span>
   );
 
-  const face = (content: ReactNode, reverse: boolean, back = false) => (
-    <div
-      className="absolute inset-0 [backface-visibility:hidden]"
-      style={back ? { transform: "rotateY(180deg)" } : undefined}
-    >
-      {content}
-      <div
-        aria-hidden
-        className={cn(
-          "absolute inset-0 rounded-[3px] bg-[rgb(10_41_71)]",
-          back ? "animate-flip-shade-back" : "animate-flip-shade",
-          reverse && "[animation-direction:reverse]",
-        )}
-      />
-    </div>
-  );
-
   const pageFace = (side: "left" | "right" | "single", index: number) => (
     <NotebookPage
       side={side}
@@ -260,55 +244,7 @@ export function RecordNotebook({
     </NotebookPage>
   );
 
-  const blankFace = (
-    <div className="paper-theme absolute inset-0 rounded-[3px] bg-paper" />
-  );
-
-  const sheet = ({
-    animation,
-    origin,
-    hinge,
-    front,
-    back,
-    reverse = false,
-  }: {
-    animation: string;
-    origin: string;
-    hinge: "left" | "right";
-    front: ReactNode;
-    back: ReactNode;
-    reverse?: boolean;
-  }) => (
-    <div className="pointer-events-none absolute inset-0 z-5 [perspective:1600px]">
-      <div
-        aria-hidden
-        className={cn(
-          "absolute inset-0 animate-flip-cast",
-          hinge === "left"
-            ? "bg-[linear-gradient(to_right,rgb(10_41_71/0.28),transparent_55%)]"
-            : "bg-[linear-gradient(to_left,rgb(10_41_71/0.28),transparent_55%)]",
-        )}
-      />
-      <div
-        className={cn(
-          "relative size-full [transform-style:preserve-3d]",
-          animation,
-          reverse && "[animation-direction:reverse]",
-        )}
-        style={{ transformOrigin: origin }}
-        onAnimationEnd={(event) => {
-          if (event.target === event.currentTarget) setFlip(null);
-        }}
-      >
-        {face(front, reverse)}
-        {face(back, reverse, true)}
-      </div>
-    </div>
-  );
-
-  const singleRing = "-10.5px 50%";
-  const spreadRingFromRight = "-2px 50%";
-  const spreadRingFromLeft = "calc(100% + 2px) 50%";
+  const endFlip = () => setFlip(null);
   const leftShown = flip?.dir === 1 ? flip.from : start;
   const rightShown = flip?.dir === -1 ? flip.from + 1 : start + 1;
   const singleShown = flip?.dir === -1 ? flip.from : start;
@@ -328,14 +264,14 @@ export function RecordNotebook({
         }
         overlay={
           layout === "spread" &&
-          flip?.dir === -1 &&
-          sheet({
-            animation: "animate-flip-back",
-            origin: spreadRingFromLeft,
-            hinge: "right",
-            front: pageFace("left", flip.from),
-            back: pageFace("right", start + 1),
-          })
+          flip?.dir === -1 && (
+            <SpreadFlip
+              dir={-1}
+              front={pageFace("left", flip.from)}
+              back={pageFace("right", start + 1)}
+              onEnd={endFlip}
+            />
+          )
         }
       >
         {renderContent(pages[leftShown], leftShown)}
@@ -347,14 +283,14 @@ export function RecordNotebook({
         footer={pages[rightShown] && pageNumber(rightShown)}
         overlay={
           layout === "spread" &&
-          flip?.dir === 1 &&
-          sheet({
-            animation: "animate-flip-forward",
-            origin: spreadRingFromRight,
-            hinge: "left",
-            front: pageFace("right", flip.from + 1),
-            back: pageFace("left", start),
-          })
+          flip?.dir === 1 && (
+            <SpreadFlip
+              dir={1}
+              front={pageFace("right", flip.from + 1)}
+              back={pageFace("left", start)}
+              onEnd={endFlip}
+            />
+          )
         }
       >
         {renderContent(pages[rightShown], rightShown)}
@@ -372,15 +308,13 @@ export function RecordNotebook({
         footer={pageNumber(singleShown)}
         overlay={
           layout === "single" &&
-          flip &&
-          sheet({
-            animation: "animate-flip-forward",
-            origin: singleRing,
-            hinge: "left",
-            front: pageFace("single", flip.dir === 1 ? flip.from : start),
-            back: blankFace,
-            reverse: flip.dir === -1,
-          })
+          flip && (
+            <SingleFlip
+              dir={flip.dir}
+              page={pageFace("single", flip.dir === 1 ? flip.from : start)}
+              onEnd={endFlip}
+            />
+          )
         }
       >
         {renderContent(pages[singleShown], singleShown)}

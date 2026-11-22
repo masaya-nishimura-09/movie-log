@@ -245,6 +245,7 @@ export default async function RecordsPage({
         emptyContent={empty}
         pageNumbers={[list.page * 2 - 1, list.page * 2]}
         mobilePageNumber={list.page}
+        href={pageHref(list.page)}
         prevHref={prevHref}
         nextHref={nextHref}
         fromHref={listHref === basePath ? undefined : listHref}
