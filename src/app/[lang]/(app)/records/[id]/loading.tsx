@@ -1,5 +1,5 @@
-import { DetailLoading } from "@/components/organisms/notebook-loading";
+import { NotebookLoading } from "@/components/organisms/notebook-loading";
 
 export default function Loading() {
-  return <DetailLoading />;
+  return <NotebookLoading />;
 }

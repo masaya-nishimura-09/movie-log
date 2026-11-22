@@ -7,6 +7,63 @@
 @theme {
   --breakpoint-3xl: 120rem;
   --animate-page-in: page-in 220ms ease-out;
+  --animate-ink-use: ink-use 20s cubic-bezier(0.2, 0.5, 0.3, 1) forwards;
+  --animate-ink-write: ink-write 2.4s linear infinite;
+  --animate-ink-pen: ink-pen 2.4s linear infinite;
+
+  @keyframes ink-use {
+    to {
+      transform: scaleY(0.12);
+    }
+  }
+
+  @keyframes ink-write {
+    0% {
+      clip-path: inset(0 100% 0 0);
+    }
+    75%,
+    90% {
+      clip-path: inset(0 0 0 0);
+      opacity: 1;
+    }
+    100% {
+      clip-path: inset(0 0 0 0);
+      opacity: 0;
+    }
+  }
+
+  @keyframes ink-pen {
+    0% {
+      transform: translate(0px, 40px);
+    }
+    10% {
+      transform: translate(17px, 34px);
+    }
+    20% {
+      transform: translate(37px, 44px);
+    }
+    30% {
+      transform: translate(57px, 36px);
+    }
+    40% {
+      transform: translate(77px, 44px);
+    }
+    50% {
+      transform: translate(97px, 36px);
+    }
+    60% {
+      transform: translate(117px, 44px);
+    }
+    75% {
+      transform: translate(166px, 46px);
+    }
+    90% {
+      transform: translate(172px, 32px);
+    }
+    100% {
+      transform: translate(0px, 40px);
+    }
+  }
 
   @keyframes page-in {
     from {
@@ -99,6 +156,7 @@
   --color-destructive-foreground: var(--destructive-foreground);
   --font-sans: var(--font-poppins), var(--font-noto-sans-jp), sans-serif;
   --font-display: var(--display-font);
+  --font-hand: var(--font-caveat), cursive;
   --color-outline: var(--outline);
   --color-link: var(--link);
   --color-paper: var(--paper);

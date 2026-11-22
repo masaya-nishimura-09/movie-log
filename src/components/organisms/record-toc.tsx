@@ -12,12 +12,13 @@ import {
 } from "react";
 import { LocalDate } from "@/components/atoms/local-date";
 import { StarRating } from "@/components/atoms/star-rating";
+import { LogoPage } from "@/components/molecules/logo-page";
 import { NotebookPage } from "@/components/molecules/notebook-page";
 import { SingleFlip, SpreadFlip } from "@/components/molecules/page-flip";
 import { PageTurner } from "@/components/molecules/page-turner";
 import { TocChapterHeading } from "@/components/molecules/toc-chapter-heading";
 import { TocRow } from "@/components/molecules/toc-row";
-import { TocPageLoading } from "@/components/organisms/notebook-loading";
+import { PageLoading } from "@/components/organisms/notebook-loading";
 import { NotebookScreen } from "@/components/organisms/notebook-screen";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
 import { usePageKeys } from "@/hooks/use-page-keys";
@@ -345,16 +346,10 @@ export function RecordToc({
   const rightShown = flip?.dir === -1 ? flip.old.right : current.right;
   const singleShown = flip?.dir === -1 ? flip.old.single : current.single;
   const ready = layout !== null && measured?.layout === layout;
-  const shown = (
-    tocPage: TocPage,
-    side: "left" | "right" | "single",
-    first: boolean,
-  ) =>
-    ready ? (
-      <div className="animate-page-in">{tocPage.content}</div>
-    ) : (
-      <TocPageLoading side={side} first={first} />
-    );
+  const shown = (tocPage: TocPage, side: "left" | "right" | "single") => {
+    if (ready) return <div className="animate-page-in">{tocPage.content}</div>;
+    return side === "left" ? null : <PageLoading />;
+  };
   const measure = (
     <div ref={headRef}>
       {header}
@@ -371,18 +366,22 @@ export function RecordToc({
         measure={layout === "spread" ? measure : undefined}
         footer={number(leftShown.number)}
         overlay={
-          layout === "spread" &&
-          flip?.dir === -1 && (
-            <SpreadFlip
-              dir={-1}
-              front={face("left", flip.old.left)}
-              back={face("right", current.right)}
-              onEnd={endFlip}
-            />
+          !ready ? (
+            <LogoPage className="absolute inset-0 z-5" />
+          ) : (
+            layout === "spread" &&
+            flip?.dir === -1 && (
+              <SpreadFlip
+                dir={-1}
+                front={face("left", flip.old.left)}
+                back={face("right", current.right)}
+                onEnd={endFlip}
+              />
+            )
           )
         }
       >
-        {shown(leftShown, "left", spreadStart === 0)}
+        {shown(leftShown, "left")}
       </NotebookPage>
       <NotebookPage
         side="right"
@@ -400,7 +399,7 @@ export function RecordToc({
           )
         }
       >
-        {shown(rightShown, "right", false)}
+        {shown(rightShown, "right")}
       </NotebookPage>
     </RingNotebook>
   );
@@ -427,7 +426,7 @@ export function RecordToc({
           )
         }
       >
-        {shown(singleShown, "single", singleStart === 0)}
+        {shown(singleShown, "single")}
       </NotebookPage>
     </RingNotebook>
   );

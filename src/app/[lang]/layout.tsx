@@ -1,5 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { Noto_Sans_JP, Poppins, Zen_Maru_Gothic } from "next/font/google";
+import {
+  Caveat,
+  Noto_Sans_JP,
+  Poppins,
+  Zen_Maru_Gothic,
+} from "next/font/google";
 import { headers } from "next/headers";
 import "@/styles/globals.css";
 import { Providers } from "@/app/providers";
@@ -17,6 +22,12 @@ const zenMaruGothic = Zen_Maru_Gothic({
   variable: "--font-zen-maru-gothic",
   subsets: ["latin"],
   weight: ["500", "700"],
+});
+
+const caveat = Caveat({
+  variable: "--font-caveat",
+  subsets: ["latin"],
+  weight: "600",
 });
 
 const notoSansJP = Noto_Sans_JP({
@@ -75,6 +86,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         "antialiased",
         notoSansJP.variable,
         poppins.variable,
+        caveat.variable,
         zenMaruGothic.variable,
       )}
     >
