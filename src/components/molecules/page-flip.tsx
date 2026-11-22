@@ -14,9 +14,9 @@ type SingleFlipProps = {
   onEnd: () => void;
 };
 
-const spreadRingFromRight = "-2px 50%";
-const spreadRingFromLeft = "calc(100% + 2px) 50%";
-const singleRing = "-10.5px 50%";
+const spreadRingFromRight = "-18px 50%";
+const spreadRingFromLeft = "calc(100% + 18px) 50%";
+const singleRing = "-18px 50%";
 const wrapDuration = 450;
 
 const shade = "absolute inset-0 rounded-[3px] bg-[rgb(10_41_71)]";
@@ -91,7 +91,7 @@ function wrap(name: string, forward: boolean): CSSProperties {
 export function SingleFlip({ dir, page, onEnd }: SingleFlipProps) {
   const forward = dir === 1;
   return (
-    <div className="pointer-events-none absolute inset-0 z-5 [clip-path:inset(-50%_-50%_-50%_-14px)] [perspective:1600px]">
+    <div className="pointer-events-none absolute inset-0 z-5 [clip-path:inset(-50%_-50%_-50%_-50px)] [perspective:1600px]">
       <div
         aria-hidden
         className={cn("absolute inset-0", castFromLeft)}
