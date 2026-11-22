@@ -4,6 +4,7 @@ import { cn } from "@/lib/style/cn";
 
 type RingNotebookProps = {
   variant: "spread" | "single" | "responsive";
+  mirrored?: boolean;
   children: ReactNode;
   className?: string;
 };
@@ -31,16 +32,24 @@ function Rings({
   );
 }
 
-function SingleCover() {
+function SingleCover({ mirrored = false }: { mirrored?: boolean }) {
   return (
     <>
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 right-2 left-6.5 rounded-[3px_14px_14px_3px] bg-cover shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),inset_4px_0_0_rgb(0_0_0/0.16)]"
+        className={cn(
+          "absolute inset-y-0 bg-cover shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15)]",
+          mirrored
+            ? "right-6.5 left-2 rounded-[14px_3px_3px_14px]"
+            : "right-2 left-6.5 rounded-[3px_14px_14px_3px] shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),inset_4px_0_0_rgb(0_0_0/0.16)]",
+        )}
       />
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-y-0 right-2 left-6.5 overflow-hidden"
+        className={cn(
+          "pointer-events-none absolute inset-y-0 overflow-hidden",
+          mirrored ? "right-6.5 left-2 -scale-x-100" : "right-2 left-6.5",
+        )}
       >
         <svg
           aria-hidden="true"
@@ -64,11 +73,12 @@ function SingleCover() {
   );
 }
 
-function SingleRings() {
+function SingleRings({ mirrored = false }: { mirrored?: boolean }) {
+  const side = mirrored ? "right-1.5 -scale-x-100" : "left-1.5";
   return (
     <>
-      <Rings variant="edge" className="top-17.5 left-1.5" />
-      <Rings variant="edge" className="bottom-17.5 left-1.5" />
+      <Rings variant="edge" className={cn("top-17.5", side)} />
+      <Rings variant="edge" className={cn("bottom-17.5", side)} />
     </>
   );
 }
@@ -148,6 +158,7 @@ const spreadFrame =
 
 export function RingNotebook({
   variant,
+  mirrored = false,
   children,
   className,
 }: RingNotebookProps) {
@@ -174,19 +185,20 @@ export function RingNotebook({
   return (
     <div
       className={cn(
-        "relative h-full max-lg:-mx-2 max-lg:pt-2.5 max-lg:pr-5 max-lg:pb-3 max-lg:pl-10 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:gap-1 lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
+        "relative h-full max-lg:-mx-2 max-lg:pt-2.5 max-lg:pb-3 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:gap-1 lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
+        mirrored ? "max-lg:pr-10 max-lg:pl-5" : "max-lg:pr-5 max-lg:pl-10",
         className,
       )}
     >
       <div className="contents lg:hidden">
-        <SingleCover />
+        <SingleCover mirrored={mirrored} />
       </div>
       <div className="hidden lg:contents">
         <SpreadCover />
       </div>
       {children}
       <div className="contents lg:hidden">
-        <SingleRings />
+        <SingleRings mirrored={mirrored} />
       </div>
       <div className="hidden lg:contents">
         <SpreadRings />
