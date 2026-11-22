@@ -31,7 +31,7 @@ export function CoverScreen({
       <div className="mb-6 lg:hidden">{logo}</div>
       <RingNotebook
         variant="responsive"
-        className="h-auto w-full max-w-110 lg:max-w-220"
+        className="h-auto max-w-110 max-lg:self-stretch lg:w-full lg:max-w-220"
       >
         <div className="paper-theme relative isolate z-2 hidden min-w-0 flex-1 basis-0 items-center justify-center rounded-[2px] bg-paper px-12 lg:flex">
           <CoverLining />

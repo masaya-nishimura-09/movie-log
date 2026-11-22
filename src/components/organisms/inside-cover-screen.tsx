@@ -74,7 +74,7 @@ export function InsideCoverScreen({
       <RingNotebook
         variant="responsive"
         mirrored
-        className="h-auto w-full max-w-110 lg:max-w-220"
+        className="h-auto max-w-110 max-lg:self-stretch lg:w-full lg:max-w-220"
       >
         <div className="relative isolate flex min-h-84 flex-col items-center overflow-hidden rounded-[3px] bg-cover px-7 pt-11 pb-6 text-[#f1e3c8] lg:min-h-140 lg:min-w-0 lg:flex-1 lg:basis-0 lg:justify-center lg:rounded-[2px] lg:px-12">
           <LeatherGrain />
