@@ -6,7 +6,7 @@ import {
   recordListResponseSchema,
 } from "@/schemas/record/list";
 
-const perPage = 8;
+const perPage = 100;
 
 const sortParams: Record<RecordSort, { field: string; order: string }> = {
   watchedAtDesc: { field: "watched_at", order: "desc" },
@@ -16,7 +16,7 @@ const sortParams: Record<RecordSort, { field: string; order: string }> = {
   titleAsc: { field: "title", order: "asc" },
 };
 
-function toParams(query: RecordQuery): URLSearchParams {
+function toParams(query: RecordQuery, page: number): URLSearchParams {
   const params = new URLSearchParams();
   if (query.score !== undefined) params.set("score", String(query.score));
   if (query.platform !== undefined) params.set("platform", query.platform);
@@ -25,25 +25,29 @@ function toParams(query: RecordQuery): URLSearchParams {
   if (query.keyword !== "") params.set("keyword", query.keyword);
   params.set("sort_field", sortParams[query.sort].field);
   params.set("sort_order", sortParams[query.sort].order);
-  params.set("page", String(query.page));
+  params.set("page", String(page));
   params.set("per_page", String(perPage));
   return params;
 }
 
-export async function getRecords(query: RecordQuery): Promise<RecordList> {
-  const list = await apiFetch(
-    `/records/?${toParams(query)}`,
+function fetchPage(query: RecordQuery, page: number) {
+  return apiFetch(
+    `/records/?${toParams(query, page)}`,
     recordListResponseSchema,
   );
-  const pageCount = Math.max(1, Math.ceil(list.filteredCount / perPage));
-  if (query.page > pageCount) {
-    return getRecords({ ...query, page: pageCount });
-  }
+}
+
+export async function getRecords(query: RecordQuery): Promise<RecordList> {
+  const first = await fetchPage(query, 1);
+  const pageCount = Math.ceil(first.filteredCount / perPage);
+  const rest = await Promise.all(
+    Array.from({ length: Math.max(0, pageCount - 1) }, (_, index) =>
+      fetchPage(query, index + 2),
+    ),
+  );
   return {
-    records: list.records,
-    totalCount: list.totalCount,
-    filteredCount: list.filteredCount,
-    page: query.page,
-    pageCount,
+    records: [first, ...rest].flatMap((list) => list.records),
+    totalCount: first.totalCount,
+    filteredCount: first.filteredCount,
   };
 }

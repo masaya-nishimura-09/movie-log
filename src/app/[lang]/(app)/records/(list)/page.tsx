@@ -7,11 +7,9 @@ import { buttonVariants } from "@/components/atoms/button";
 import { PenIllustration } from "@/components/atoms/pen-illustration";
 import { phrases } from "@/components/atoms/phrases";
 import { FilterButton } from "@/components/molecules/filter-button";
-import { PageTurner } from "@/components/molecules/page-turner";
 import { TocHeader } from "@/components/molecules/toc-header";
 import { ActiveFilterList } from "@/components/organisms/active-filter-list";
 import { FilterSheet } from "@/components/organisms/filter-sheet";
-import { NotebookScreen } from "@/components/organisms/notebook-screen";
 import {
   GenreOptions,
   MoodOptions,
@@ -62,15 +60,10 @@ export default async function RecordsPage({
     query.moodTags.length +
     query.genres.length +
     (query.keyword === "" ? 0 : 1);
-  const listHref = buildHref(basePath, values);
-  const pageHref = (page: number) =>
-    buildHref(basePath, {
-      ...values,
-      [recordQueryKeys.page]: page === 1 ? undefined : String(page),
-    });
-  const prevHref = list.page > 1 ? pageHref(list.page - 1) : undefined;
-  const nextHref =
-    list.page < list.pageCount ? pageHref(list.page + 1) : undefined;
+  const baseHref = buildHref(basePath, {
+    ...values,
+    [recordQueryKeys.page]: undefined,
+  });
   const hasRecords = list.totalCount > 0;
 
   const filterProps = { basePath, query, values, enums: dict.enums };
@@ -110,14 +103,12 @@ export default async function RecordsPage({
     </div>
   ) : null;
 
-  const turnerLabel = interpolate(dict.recordDetail.pagePosition, {
-    page: list.page,
-    total: list.pageCount,
-  });
-
   return (
-    <NotebookScreen
-      grow
+    <RecordToc
+      lang={lang}
+      records={list.records}
+      sort={query.sort}
+      initialTimeZone={timeZone}
       toolbar={
         <div
           inert={!hasRecords}
@@ -186,71 +177,41 @@ export default async function RecordsPage({
               />
             </FilterSheet>
           </div>
-          <PageTurner
-            label={turnerLabel}
-            prevLabel={dict.recordDetail.prevPage}
-            nextLabel={dict.recordDetail.nextPage}
-            prev={prevHref}
-            next={nextHref}
-            className="hidden lg:flex"
-          />
         </div>
       }
-      footer={
-        <PageTurner
-          label={turnerLabel}
-          prevLabel={dict.recordDetail.prevPage}
-          nextLabel={dict.recordDetail.nextPage}
-          prev={prevHref}
-          next={nextHref}
-          className="justify-center pt-2 pb-4.5 lg:hidden"
+      header={
+        <TocHeader
+          label={l.contents}
+          title={l.heading}
+          summary={
+            activeCount > 0
+              ? interpolate(l.filteredSummary, {
+                  total: list.totalCount,
+                  shown: list.filteredCount,
+                })
+              : interpolate(l.summary, { total: list.totalCount })
+          }
         />
       }
-    >
-      <RecordToc
-        lang={lang}
-        records={list.records}
-        sort={query.sort}
-        initialTimeZone={timeZone}
-        header={
-          <TocHeader
-            label={l.contents}
-            title={l.heading}
-            summary={
-              activeCount > 0
-                ? interpolate(l.filteredSummary, {
-                    total: list.totalCount,
-                    shown: list.filteredCount,
-                  })
-                : interpolate(l.summary, { total: list.totalCount })
-            }
+      filterBar={
+        activeCount > 0 && (
+          <ActiveFilterList
+            label={l.filtering}
+            count={interpolate(l.resultCount, {
+              count: list.filteredCount,
+            })}
+            basePath={basePath}
+            query={query}
+            values={values}
+            clearHref={clearHref}
+            dict={filterDict}
+            enums={dict.enums}
           />
-        }
-        filterBar={
-          activeCount > 0 && (
-            <ActiveFilterList
-              label={l.filtering}
-              count={interpolate(l.resultCount, {
-                count: list.filteredCount,
-              })}
-              basePath={basePath}
-              query={query}
-              values={values}
-              clearHref={clearHref}
-              dict={filterDict}
-              enums={dict.enums}
-            />
-          )
-        }
-        emptyContent={empty}
-        pageNumbers={[list.page * 2 - 1, list.page * 2]}
-        mobilePageNumber={list.page}
-        href={pageHref(list.page)}
-        prevHref={prevHref}
-        nextHref={nextHref}
-        fromHref={listHref === basePath ? undefined : listHref}
-        dict={dict}
-      />
-    </NotebookScreen>
+        )
+      }
+      emptyContent={empty}
+      baseHref={baseHref}
+      dict={dict}
+    />
   );
 }

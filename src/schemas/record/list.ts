@@ -65,8 +65,6 @@ const recordListSchema = z.object({
   records: z.array(recordSchema),
   totalCount: countSchema,
   filteredCount: countSchema,
-  page: z.number().int().min(1),
-  pageCount: z.number().int().min(1),
 });
 
 export type RecordList = z.infer<typeof recordListSchema>;

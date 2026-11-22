@@ -45,7 +45,7 @@ describe("getRecords", () => {
       ["sort_field", "watched_at"],
       ["sort_order", "desc"],
       ["page", "1"],
-      ["per_page", "8"],
+      ["per_page", "100"],
     ]);
   });
 
@@ -66,7 +66,7 @@ describe("getRecords", () => {
     expect(sent.getAll("mood_tags")).toEqual(["moving", "dark"]);
     expect(sent.getAll("genres")).toEqual(["drama"]);
     expect(sent.get("keyword")).toBe("Arrival");
-    expect(sent.get("page")).toBe("2");
+    expect(sent.get("page")).toBe("1");
   });
 
   it("converts each sort to a field and an order", async () => {
@@ -87,31 +87,33 @@ describe("getRecords", () => {
     }
   });
 
-  it("returns the list with the page count", async () => {
-    apiFetch.mockResolvedValue(list(25));
-    await expect(getRecords({ ...query, page: 2 })).resolves.toEqual({
+  it("returns every matching record across the API pages", async () => {
+    const record = (id: string) => ({ recordId: id });
+    apiFetch.mockImplementation(async (path: string) => {
+      const page = new URL(path, "http://api").searchParams.get("page");
+      return {
+        records:
+          page === "1" ? [record("a"), record("b")] : [record(`c${page}`)],
+        totalCount: 230,
+        filteredCount: 201,
+      };
+    });
+    const result = await getRecords(query);
+    expect(apiFetch).toHaveBeenCalledTimes(3);
+    expect(result).toEqual({
+      records: [record("a"), record("b"), record("c2"), record("c3")],
+      totalCount: 230,
+      filteredCount: 201,
+    });
+  });
+
+  it("asks only once when there are no records", async () => {
+    apiFetch.mockResolvedValue(list(0));
+    await expect(getRecords(query)).resolves.toEqual({
       records: [],
       totalCount: 30,
-      filteredCount: 25,
-      page: 2,
-      pageCount: 4,
+      filteredCount: 0,
     });
-  });
-
-  it("has one page even with no records", async () => {
-    apiFetch.mockResolvedValue(list(0));
-    await expect(getRecords(query)).resolves.toMatchObject({
-      page: 1,
-      pageCount: 1,
-    });
-  });
-
-  it("loads the last page when the page is past the end", async () => {
-    apiFetch.mockResolvedValue(list(13));
-    await expect(getRecords({ ...query, page: 9 })).resolves.toMatchObject({
-      page: 2,
-      pageCount: 2,
-    });
-    expect(params(1).get("page")).toBe("2");
+    expect(apiFetch).toHaveBeenCalledTimes(1);
   });
 });

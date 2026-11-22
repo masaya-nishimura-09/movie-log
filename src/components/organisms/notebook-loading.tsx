@@ -145,33 +145,55 @@ function LoadingScreen({
   );
 }
 
-export function ListLoading() {
+function TocPage({
+  first = false,
+  chapter = first,
+  rows,
+}: {
+  first?: boolean;
+  chapter?: boolean;
+  rows: string[];
+}) {
   return (
-    <LoadingScreen
-      left={
-        <>
-          <TocHeader />
-          <TocChapter />
-          {rowWidths.slice(0, 4).map((width, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: placeholders never reorder
-            <TocRow key={index} width={width} />
-          ))}
-        </>
-      }
-      right={rowWidths.slice(2, 6).map((width, index) => (
+    <>
+      {first && <TocHeader />}
+      {chapter && <TocChapter />}
+      {rows.map((width, index) => (
         // biome-ignore lint/suspicious/noArrayIndexKey: placeholders never reorder
         <TocRow key={index} width={width} />
       ))}
-      single={
-        <>
-          <TocHeader />
-          <TocChapter />
-          {rowWidths.map((width, index) => (
-            // biome-ignore lint/suspicious/noArrayIndexKey: placeholders never reorder
-            <TocRow key={index} width={width} />
-          ))}
-        </>
-      }
+    </>
+  );
+}
+
+export function TocPageLoading({
+  side,
+  first,
+}: {
+  side: "left" | "right" | "single";
+  first: boolean;
+}) {
+  return (
+    <Loading>
+      {side === "right" ? (
+        <TocPage rows={rowWidths.slice(2, 6)} />
+      ) : (
+        <TocPage
+          first={first}
+          chapter
+          rows={side === "single" ? rowWidths : rowWidths.slice(0, 4)}
+        />
+      )}
+    </Loading>
+  );
+}
+
+export function ListLoading() {
+  return (
+    <LoadingScreen
+      left={<TocPage first rows={rowWidths.slice(0, 4)} />}
+      right={<TocPage rows={rowWidths.slice(2, 6)} />}
+      single={<TocPage first rows={rowWidths} />}
     />
   );
 }
