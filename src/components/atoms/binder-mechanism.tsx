@@ -86,28 +86,39 @@ export function BinderMechanism({
   right = "page",
   ringsClassName = "top-19",
   bottomRingsClassName = "bottom-19",
+  part,
   className,
 }: {
+  part: "plate" | "rings";
   left?: Side;
   right?: Side;
   ringsClassName?: string;
   bottomRingsClassName?: string;
   className?: string;
 }) {
+  if (part === "plate") {
+    return (
+      <div
+        aria-hidden="true"
+        className={cn("pointer-events-none absolute z-1 w-21.5", className)}
+      >
+        <div className="absolute inset-y-3 left-7.25 w-7 rounded-[3px] bg-[linear-gradient(to_right,#7d5a2c,#e9cf98_12%,#f6e6c4_20%,#b08b52_30%,#c9a46a_50%,#b08b52_70%,#f0dcae_82%,#d4b277_90%,#7d5a2c)] shadow-[0_2px_4px_rgb(58_39_24/0.35)]">
+          <span className="absolute inset-x-2 inset-y-1 bg-[linear-gradient(to_right,#a07c46,#c4a066_50%,#a07c46)] shadow-[inset_1px_0_1px_rgb(58_39_24/0.35),inset_-1px_0_1px_rgb(58_39_24/0.35)]" />
+          <span className={cn(rivet, "top-3.5")} />
+          <span className={cn(rivet, "bottom-3.5")} />
+          <span className={cn(pin, "top-[calc(50%-30px)]")} />
+          <span className={cn(pin, "top-[calc(50%+22px)]")} />
+        </div>
+        <span className={cn(cap, "top-0")} />
+        <span className={cn(cap, "bottom-0 -scale-y-100")} />
+      </div>
+    );
+  }
   return (
     <div
       aria-hidden="true"
       className={cn("pointer-events-none absolute z-10 w-21.5", className)}
     >
-      <div className="absolute inset-y-3 left-7.25 w-7 rounded-[3px] bg-[linear-gradient(to_right,#7d5a2c,#e9cf98_12%,#f6e6c4_20%,#b08b52_30%,#c9a46a_50%,#b08b52_70%,#f0dcae_82%,#d4b277_90%,#7d5a2c)] shadow-[0_2px_4px_rgb(58_39_24/0.35)]">
-        <span className="absolute inset-x-2 inset-y-1 bg-[linear-gradient(to_right,#a07c46,#c4a066_50%,#a07c46)] shadow-[inset_1px_0_1px_rgb(58_39_24/0.35),inset_-1px_0_1px_rgb(58_39_24/0.35)]" />
-        <span className={cn(rivet, "top-3.5")} />
-        <span className={cn(rivet, "bottom-3.5")} />
-        <span className={cn(pin, "top-[calc(50%-30px)]")} />
-        <span className={cn(pin, "top-[calc(50%+22px)]")} />
-      </div>
-      <span className={cn(cap, "top-1")} />
-      <span className={cn(cap, "bottom-1 -scale-y-100")} />
       <RingGroup left={left} right={right} className={ringsClassName} />
       <RingGroup left={left} right={right} className={bottomRingsClassName} />
     </div>

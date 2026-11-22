@@ -84,7 +84,7 @@ export function NotebookPage({
     <section
       aria-label={label}
       className={cn(
-        "paper-theme relative flex min-w-0 flex-col bg-paper text-paper-ink",
+        "paper-theme relative z-2 flex min-w-0 flex-col bg-paper text-paper-ink",
         style.page,
         className,
       )}

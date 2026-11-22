@@ -76,7 +76,7 @@ export function InsideCoverScreen({
         mirrored
         className="h-auto w-full max-w-110 lg:max-w-220"
       >
-        <div className="relative isolate flex min-h-84 flex-col items-center overflow-hidden rounded-[3px] bg-cover px-7 pt-11 pb-6 text-[#f1e3c8] lg:min-h-140 lg:min-w-0 lg:flex-1 lg:basis-0 lg:justify-center lg:rounded-[2px] lg:px-12 lg:shadow-[inset_-6px_0_10px_rgb(0_0_0/0.18)]">
+        <div className="relative isolate flex min-h-84 flex-col items-center overflow-hidden rounded-[3px] bg-cover px-7 pt-11 pb-6 text-[#f1e3c8] lg:min-h-140 lg:min-w-0 lg:flex-1 lg:basis-0 lg:justify-center lg:rounded-[2px] lg:px-12">
           <LeatherGrain />
           <div className="relative flex flex-col items-center lg:hidden">
             <Wordmark homeHref={homeHref} brandName={brandName} foil />
@@ -87,7 +87,7 @@ export function InsideCoverScreen({
           <div className="relative w-full">{pocket}</div>
           <div className="relative mt-4.5 w-full text-center">{credits}</div>
         </div>
-        <div className="paper-theme relative hidden min-w-0 flex-1 basis-0 flex-col items-center justify-center rounded-[2px] bg-paper px-12 text-paper-ink lg:flex">
+        <div className="paper-theme relative z-2 hidden min-w-0 flex-1 basis-0 flex-col items-center justify-center rounded-[2px] bg-paper px-12 text-paper-ink lg:flex">
           <Wordmark homeHref={homeHref} brandName={brandName} foil={false} />
           <p className="mt-4.5 text-center text-[13px] text-paper-muted leading-7">
             {description}

@@ -14,9 +14,9 @@ type SingleFlipProps = {
   onEnd: () => void;
 };
 
-const spreadRingFromRight = "-18px 50%";
-const spreadRingFromLeft = "calc(100% + 18px) 50%";
-const singleRing = "-18px 50%";
+const spreadRingFromRight = "-10px 50%";
+const spreadRingFromLeft = "calc(100% + 10px) 50%";
+const singleRing = "-10px 50%";
 const wrapDuration = 450;
 
 const shade = "absolute inset-0 rounded-[3px] bg-[rgb(10_41_71)]";
