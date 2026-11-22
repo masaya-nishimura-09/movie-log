@@ -4,7 +4,6 @@ import { CoverLining } from "@/components/atoms/cover-lining";
 import { Logo } from "@/components/atoms/logo";
 import { RingNotebook } from "@/components/organisms/ring-notebook";
 import { cn } from "@/lib/style/cn";
-import { ruledLines } from "@/lib/style/paper";
 
 type CoverScreenProps = {
   homeHref: string;
@@ -28,7 +27,6 @@ export function CoverScreen({
 
   return (
     <main className="flex flex-1 flex-col items-center justify-center bg-background px-4 py-8 md:px-8 md:py-12">
-      <div className="mb-6 lg:hidden">{logo}</div>
       <RingNotebook
         variant="responsive"
         className="h-auto max-w-110 max-lg:self-stretch lg:w-full lg:max-w-220"
@@ -43,16 +41,8 @@ export function CoverScreen({
             "[&_:is(h1,h2,p,a,label,li,legend)]:leading-7 [&_[data-slot=form-field-label]]:pb-0",
           )}
         >
-          <div className="relative">
-            <span
-              aria-hidden
-              className={cn(
-                "pointer-events-none absolute -inset-x-6 -top-252 -bottom-252 -z-10 lg:-inset-x-12",
-                ruledLines,
-              )}
-            />
-            {children}
-          </div>
+          <div className="mb-8 flex justify-center lg:hidden">{logo}</div>
+          <div className="relative">{children}</div>
         </div>
       </RingNotebook>
     </main>
