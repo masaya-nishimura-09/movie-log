@@ -1,3 +1,4 @@
+import en from "../../../src/i18n/dictionaries/en.json";
 import ja from "../../../src/i18n/dictionaries/ja.json";
 import { demoAccount, emailChangeToken } from "../../support/commands";
 import { fill } from "../../support/text";
@@ -183,6 +184,21 @@ describe("アカウント設定", () => {
     cy.visit("/ja/account");
     cy.contains("a", ja.common.toContents).click();
     cy.location("pathname").should("eq", "/ja/records");
+  });
+
+  it("言語を English にすると、切り替えるあいだ Loading を出し、英語のアカウント設定に移る", () => {
+    cy.login();
+    cy.visit("/ja/account");
+    cy.intercept("POST", "/ja/account", (req) => {
+      req.on("response", (res) => {
+        res.setDelay(1000);
+      });
+    });
+    cy.contains("label", "English").click();
+    cy.contains("output", "Loading...").should("be.visible");
+    cy.location("pathname").should("eq", "/en/account");
+    cy.contains("h1", en.account.title).should("be.visible");
+    cy.contains("output", "Loading...").should("not.exist");
   });
 
   it("アカウントメニューからアカウント設定を開ける", () => {
