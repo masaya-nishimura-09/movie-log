@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
-import { BinderMechanism } from "@/components/atoms/binder-mechanism";
 import { cn } from "@/lib/style/cn";
+import { ruledLines } from "@/lib/style/paper";
 
 type RingNotebookProps = {
   variant: "spread" | "single" | "responsive";
@@ -46,13 +46,6 @@ function SingleCover({ mirrored = false }: { mirrored?: boolean }) {
           />
         </svg>
       </div>
-      <div
-        aria-hidden="true"
-        className={cn(
-          "absolute inset-y-0 w-5 bg-black/10",
-          mirrored ? "right-3.5" : "left-3.5",
-        )}
-      />
     </>
   );
 }
@@ -62,29 +55,28 @@ function NeighborPage({ mirrored = false }: { mirrored?: boolean }) {
     <div
       aria-hidden="true"
       className={cn(
-        "paper-theme absolute top-3.5 bottom-3.5 z-2 w-3.5 bg-paper",
-        mirrored
-          ? "right-0 shadow-[inset_3px_0_4px_rgb(0_0_0/0.08)]"
-          : "left-0 shadow-[inset_-3px_0_4px_rgb(0_0_0/0.08)]",
+        "paper-theme absolute top-3.5 bottom-3.5 z-2 w-3 bg-paper",
+        !mirrored && ruledLines,
+        mirrored ? "right-0" : "left-0",
       )}
     />
   );
 }
 
-function SingleBinder({
-  mirrored = false,
-  part,
-}: {
-  mirrored?: boolean;
-  part: "plate" | "rings";
-}) {
+const gutterShade =
+  "pointer-events-none absolute z-10 w-6 from-[rgb(58_39_24/0.28)] to-transparent";
+
+function SingleGutter({ mirrored = false }: { mirrored?: boolean }) {
   return (
-    <BinderMechanism
-      part={part}
-      left={mirrored ? "cover" : "page"}
-      className={cn("inset-y-0", mirrored ? "-right-4.75" : "-left-4.75")}
-      ringsClassName="top-17"
-      bottomRingsClassName="bottom-17"
+    <div
+      aria-hidden="true"
+      className={cn(
+        gutterShade,
+        "top-3.5 bottom-3.5",
+        mirrored
+          ? "right-3 w-px bg-[rgb(58_39_24/0.3)] from-transparent"
+          : "left-3 bg-linear-to-r shadow-[inset_1px_0_0_rgb(58_39_24/0.25)]",
+      )}
     />
   );
 }
@@ -140,36 +132,35 @@ function SpreadCover() {
           strokeLinecap="round"
         />
       </svg>
+    </>
+  );
+}
+
+function SpreadGutter() {
+  return (
+    <>
       <div
         aria-hidden="true"
-        className="absolute inset-y-0 left-[calc(50%-10px)] w-5 bg-black/10 shadow-[inset_1px_0_0_rgb(0_0_0/0.12),inset_-1px_0_0_rgb(0_0_0/0.12)]"
+        className={cn(
+          gutterShade,
+          "top-3.5 bottom-4 left-[calc(50%-24px)] bg-linear-to-l",
+        )}
+      />
+      <div
+        aria-hidden="true"
+        className={cn(
+          gutterShade,
+          "top-3.5 bottom-4 left-1/2 bg-linear-to-r shadow-[inset_1px_0_0_rgb(58_39_24/0.3)]",
+        )}
       />
     </>
   );
 }
 
-function SpreadBinder({
-  insideCover = false,
-  part,
-}: {
-  insideCover?: boolean;
-  part: "plate" | "rings";
-}) {
-  return (
-    <BinderMechanism
-      part={part}
-      left={insideCover ? "cover" : "page"}
-      className="inset-y-0 left-[calc(50%-43px)]"
-      ringsClassName="top-23"
-      bottomRingsClassName="bottom-23"
-    />
-  );
-}
-
 const singleFrame =
-  "relative -mr-2 -ml-4 pt-3.5 pr-5 pb-3.5 pl-8.5 drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)]";
+  "relative -mr-2 -ml-4 pt-3.5 pr-5 pb-3.5 pl-3 drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)]";
 const spreadFrame =
-  "relative isolate flex gap-5 rounded-[14px] bg-cover px-5 pt-3.5 pb-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]";
+  "relative isolate flex rounded-[14px] bg-cover px-5 pt-3.5 pb-4 shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]";
 
 export function RingNotebook({
   variant,
@@ -181,10 +172,9 @@ export function RingNotebook({
     return (
       <div className={cn(singleFrame, className)}>
         <SingleCover />
-        <SingleBinder part="plate" />
         <NeighborPage />
         {children}
-        <SingleBinder part="rings" />
+        <SingleGutter />
       </div>
     );
   }
@@ -193,9 +183,8 @@ export function RingNotebook({
     return (
       <div className={cn(spreadFrame, className)}>
         <SpreadCover />
-        <SpreadBinder part="plate" />
         {children}
-        <SpreadBinder part="rings" />
+        <SpreadGutter />
       </div>
     );
   }
@@ -203,10 +192,10 @@ export function RingNotebook({
   return (
     <div
       className={cn(
-        "relative isolate h-full max-lg:pt-3.5 max-lg:pb-3.5 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:gap-5 lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
+        "relative isolate h-full max-lg:pt-3.5 max-lg:pb-3.5 max-lg:drop-shadow-[0_12px_18px_rgb(10_41_71/0.14)] lg:flex lg:h-auto lg:rounded-[14px] lg:bg-cover lg:px-5 lg:pt-3.5 lg:pb-4 lg:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(10_41_71/0.16)] lg:dark:shadow-[inset_0_1px_0_rgb(255_255_255/0.12),inset_0_-2px_0_rgb(0_0_0/0.15),0_24px_48px_rgb(0_0_0/0.35)]",
         mirrored
-          ? "max-lg:-mr-4 max-lg:-ml-2 max-lg:pr-8.5 max-lg:pl-5"
-          : "max-lg:-mr-2 max-lg:-ml-4 max-lg:pr-5 max-lg:pl-8.5",
+          ? "max-lg:-mr-4 max-lg:-ml-2 max-lg:pr-3 max-lg:pl-5"
+          : "max-lg:-mr-2 max-lg:-ml-4 max-lg:pr-5 max-lg:pl-3",
         className,
       )}
     >
@@ -215,18 +204,16 @@ export function RingNotebook({
       </div>
       <div className="hidden lg:contents">
         <SpreadCover />
-        <SpreadBinder insideCover={mirrored} part="plate" />
       </div>
       <div className="contents lg:hidden">
-        <SingleBinder mirrored={mirrored} part="plate" />
         <NeighborPage mirrored={mirrored} />
       </div>
       {children}
       <div className="contents lg:hidden">
-        <SingleBinder mirrored={mirrored} part="rings" />
+        <SingleGutter mirrored={mirrored} />
       </div>
       <div className="hidden lg:contents">
-        <SpreadBinder insideCover={mirrored} part="rings" />
+        <SpreadGutter />
       </div>
     </div>
   );

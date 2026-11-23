@@ -14,9 +14,9 @@ type SingleFlipProps = {
   onEnd: () => void;
 };
 
-const spreadRingFromRight = "-10px 50%";
-const spreadRingFromLeft = "calc(100% + 10px) 50%";
-const singleRing = "-10px 50%";
+const spreadRingFromRight = "0 50%";
+const spreadRingFromLeft = "100% 50%";
+const singleRing = "0 50%";
 const wrapDuration = 450;
 
 const shade = "absolute inset-0 rounded-[3px] bg-[rgb(10_41_71)]";
@@ -54,7 +54,7 @@ export function SpreadFlip({ dir, front, back, onEnd }: SpreadFlipProps) {
     <div
       inert
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-5 [perspective:1600px]"
+      className="pointer-events-none absolute inset-0 z-11 [perspective:1600px]"
     >
       <div
         aria-hidden
@@ -98,7 +98,7 @@ export function SingleFlip({ dir, page, onEnd }: SingleFlipProps) {
     <div
       inert
       aria-hidden
-      className="pointer-events-none absolute inset-0 z-5 [clip-path:inset(-50%_-50%_-50%_-50px)] [perspective:1600px]"
+      className="pointer-events-none absolute inset-0 z-11 [clip-path:inset(-50%_-50%_-50%_-50px)] [perspective:1600px]"
     >
       <div
         aria-hidden
@@ -114,17 +114,6 @@ export function SingleFlip({ dir, page, onEnd }: SingleFlipProps) {
       >
         <div className="absolute inset-0 [backface-visibility:hidden]">
           {page}
-          <div
-            aria-hidden
-            className={shade}
-            style={wrap("flip-wrap-shade", forward)}
-          />
-        </div>
-        <div
-          className="absolute inset-0 [backface-visibility:hidden]"
-          style={{ transform: "rotateY(180deg)" }}
-        >
-          <div className="paper-theme absolute inset-0 rounded-[3px] bg-paper" />
           <div
             aria-hidden
             className={shade}
