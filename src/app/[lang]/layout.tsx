@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import {
   Caveat,
+  Klee_One,
   Noto_Sans_JP,
   Poppins,
   Zen_Maru_Gothic,
@@ -28,6 +29,13 @@ const caveat = Caveat({
   variable: "--font-caveat",
   subsets: ["latin"],
   weight: "600",
+});
+
+const kleeOne = Klee_One({
+  variable: "--font-klee-one",
+  subsets: ["latin"],
+  weight: ["400", "600"],
+  preload: false,
 });
 
 const notoSansJP = Noto_Sans_JP({
@@ -87,6 +95,7 @@ export default async function RootLayout({ children }: LayoutProps<"/[lang]">) {
         notoSansJP.variable,
         poppins.variable,
         caveat.variable,
+        kleeOne.variable,
         zenMaruGothic.variable,
       )}
     >

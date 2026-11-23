@@ -157,6 +157,7 @@
   --font-sans: var(--font-poppins), var(--font-noto-sans-jp), sans-serif;
   --font-display: var(--display-font);
   --font-hand: var(--font-caveat), cursive;
+  --font-pen: var(--font-klee-one), var(--font-noto-sans-jp), cursive;
   --color-outline: var(--outline);
   --color-link: var(--link);
   --color-paper: var(--paper);
@@ -408,6 +409,15 @@
   html:has(.shell),
   body:has(.shell) {
     background-color: #0a2947;
+  }
+}
+
+@keyframes ink-circle {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
   }
 }
 

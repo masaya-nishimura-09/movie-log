@@ -11,7 +11,8 @@ import { TurnstileWidget } from "@/components/molecules/turnstile-widget";
 import { useFormSubmit } from "@/hooks/use-form-submit";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import type { Locale } from "@/i18n/locales";
-import { formStack } from "@/lib/style/paper";
+import { cn } from "@/lib/style/cn";
+import { formStack, penInput } from "@/lib/style/paper";
 import { dictMessage } from "@/lib/text/dict-message";
 import {
   contactMessageMaxLength,
@@ -27,6 +28,7 @@ type ContactFormProps = {
   ) => Promise<ActionResult<null>>;
   dict: Dictionary["contact"];
   counterTemplate: string;
+  appearance?: "page" | "postcard";
 };
 
 export function ContactForm({
@@ -35,7 +37,9 @@ export function ContactForm({
   action,
   dict,
   counterTemplate,
+  appearance = "page",
 }: ContactFormProps) {
+  const postcard = appearance === "postcard";
   const { state, failure, pending, submit } = useFormSubmit(action);
 
   if (state?.success) {
@@ -53,15 +57,30 @@ export function ContactForm({
 
   return (
     <>
-      <header className="mb-7 flex flex-col">
-        <h1 className="font-bold font-display text-foreground text-lg leading-7">
-          {dict.title}
-        </h1>
-        <p className="text-[13px] text-foreground-sub leading-7">
-          {phrases(dict.intro)}
-        </p>
-      </header>
-      <form onSubmit={submit} noValidate className={formStack}>
+      {postcard ? (
+        <>
+          <h1 className="mt-4 text-center font-bold font-display text-lg leading-7">
+            {dict.title}
+          </h1>
+          <p className="mt-1 text-center text-[12px] text-paper-muted leading-5">
+            {phrases(dict.intro)}
+          </p>
+        </>
+      ) : (
+        <header className="mb-7 flex flex-col">
+          <h1 className="font-bold font-display text-foreground text-lg leading-7">
+            {dict.title}
+          </h1>
+          <p className="text-[13px] text-foreground-sub leading-7">
+            {phrases(dict.intro)}
+          </p>
+        </header>
+      )}
+      <form
+        onSubmit={submit}
+        noValidate
+        className={cn(formStack, postcard && cn("mt-5", penInput))}
+      >
         {failure && !failure.errors && (
           <FormAlert>
             {dictMessage(dict, failure.messageKey) ?? dict.unexpectedError}

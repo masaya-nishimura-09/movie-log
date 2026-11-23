@@ -41,7 +41,7 @@ export default async function SupportThanksPage({
   if (amount === null) redirect(`/${lang}/support`);
 
   return (
-    <div className="flex flex-col items-center gap-7 text-center">
+    <div className="paper-theme flex w-full max-w-sm flex-col items-center gap-7 rounded-md bg-paper px-6 py-10 text-center text-paper-ink shadow-[0_14px_30px_rgb(10_41_71/0.22)]">
       <div className="flex flex-col items-center">
         <CircleCheck className="my-2 size-10 text-link" aria-hidden />
         <h1 className="font-bold font-display text-foreground text-lg leading-7">
