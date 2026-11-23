@@ -17,6 +17,7 @@ import {
 import { RecordNotebook } from "@/components/organisms/record-notebook";
 import { getDictionary, getLocale } from "@/i18n/get-dictionary";
 import { hasText } from "@/lib/note/has-text";
+import { noteHeadings } from "@/lib/note/note-headings";
 import { movieInfoRows } from "@/lib/record/movie-info-rows";
 import { cn } from "@/lib/style/cn";
 import { fromKey, safeFromHref } from "@/lib/url/back-href";
@@ -76,6 +77,9 @@ export default async function RecordPage({
     <RecordNotebook
       coverBlocks={coverBlocks}
       noteBlocks={noteBlocks}
+      noteHeadings={
+        noteBlocks.length > 0 ? noteHeadings(record.note?.content ?? []) : []
+      }
       coverFooter={
         <span>
           {d.createdAt}{" "}

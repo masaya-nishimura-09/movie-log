@@ -20,6 +20,7 @@ import { usePageKeys } from "@/hooks/use-page-keys";
 import { useSwipe } from "@/hooks/use-swipe";
 import { useWideScreen } from "@/hooks/use-wide-screen";
 import type { Dictionary } from "@/i18n/get-dictionary";
+import type { NoteHeading } from "@/lib/note/note-headings";
 import { notebookProseStyles } from "@/lib/note/prose-styles";
 import { type BlockSize, paginate } from "@/lib/notebook/paginate";
 import { cn } from "@/lib/style/cn";
@@ -29,6 +30,7 @@ import type { Attachment } from "@/schemas/record/attachment";
 type RecordNotebookProps = {
   coverBlocks: ReactNode[];
   noteBlocks: ReactNode[];
+  noteHeadings: NoteHeading[];
   coverFooter: ReactNode;
   attachments: Attachment[];
   back: ReactNode;
@@ -78,6 +80,7 @@ function contentHeight(scroller: HTMLElement): number {
 export function RecordNotebook({
   coverBlocks,
   noteBlocks,
+  noteHeadings,
   coverFooter,
   attachments,
   back,
@@ -161,6 +164,19 @@ export function RecordNotebook({
     },
     [start, step],
   );
+  const [tocOpen, setTocOpen] = useState<"top" | "bottom" | null>(null);
+  const jump = (index: number) => {
+    setTocOpen(null);
+    if (index === start || (step === 2 && index - (index % 2) === start)) {
+      return;
+    }
+    setDirection(index > start ? 1 : -1);
+    setFadeIn(true);
+    setFlip(null);
+    setPageIndex(index);
+    scrollRef.current?.scrollTo({ top: 0 });
+    rightScrollRef.current?.scrollTo({ top: 0 });
+  };
   const goPrev = useCallback(() => hasPrev && turn(-1), [hasPrev, turn]);
   const goNext = useCallback(() => hasNext && turn(1), [hasNext, turn]);
 
@@ -329,13 +345,67 @@ export function RecordNotebook({
     </RingNotebook>
   );
 
-  const turner = (className: string) => (
+  const noteStart = pages.findIndex((page) => page.kind === "note");
+  const scrapIndex = pages.findIndex((page) => page.kind === "scrap");
+  const tocEntries = [
+    { key: "cover", label: dict.tocCover, index: 0, depth: 0 },
+    ...(noteStart >= 0 && noteHeadings[0]?.block !== 0
+      ? [{ key: "note", label: dict.tocNote, index: noteStart, depth: 0 }]
+      : []),
+    ...noteHeadings.map((heading) => ({
+      key: `h${heading.block}`,
+      label: heading.text,
+      index: pages.findIndex(
+        (page) => page.kind === "note" && page.blocks.includes(heading.block),
+      ),
+      depth: heading.level === 3 ? 1 : 0,
+    })),
+    ...(scrapIndex >= 0
+      ? [{ key: "scrap", label: dict.tocScrap, index: scrapIndex, depth: 0 }]
+      : []),
+  ].filter((entry) => entry.index >= 0);
+  const shownEnd = start + step - 1;
+
+  const tocMenu = (
+    <nav aria-label={dict.tocOpen}>
+      <ol className="flex max-h-80 flex-col overflow-y-auto">
+        {tocEntries.map((entry) => {
+          const current = entry.index >= start && entry.index <= shownEnd;
+          return (
+            <li key={entry.key}>
+              <button
+                type="button"
+                aria-current={current ? "page" : undefined}
+                onClick={() => jump(entry.index)}
+                className={cn(
+                  "flex w-full items-baseline gap-2 rounded-md px-2.5 py-2 text-left text-sm outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring aria-[current=page]:font-bold",
+                  entry.depth === 1 && "pl-6 text-[13px]",
+                )}
+              >
+                <span className="min-w-0 flex-1 truncate">{entry.label}</span>
+                <span className="shrink-0 text-muted-foreground text-xs tabular-nums">
+                  {entry.index + 1}
+                </span>
+              </button>
+            </li>
+          );
+        })}
+      </ol>
+    </nav>
+  );
+
+  const turner = (className: string, menuSide: "top" | "bottom") => (
     <PageTurner
       label={position}
       prevLabel={dict.prevPage}
       nextLabel={dict.nextPage}
       prev={hasPrev ? goPrev : undefined}
       next={hasNext ? goNext : undefined}
+      menu={layout !== null && tocEntries.length > 1 ? tocMenu : undefined}
+      menuLabel={dict.tocOpen}
+      menuOpen={tocOpen === menuSide}
+      onMenuOpenChange={(open) => setTocOpen(open ? menuSide : null)}
+      menuSide={menuSide}
       className={className}
     />
   );
@@ -346,12 +416,12 @@ export function RecordNotebook({
         <>
           {back}
           <div className="flex-1" />
-          {turner("hidden lg:flex")}
+          {turner("hidden lg:flex", "bottom")}
           <span aria-hidden className="hidden w-2 lg:block" />
           {actions}
         </>
       }
-      footer={turner("justify-center pt-2 pb-4.5 lg:hidden")}
+      footer={turner("justify-center pt-2 pb-4.5 lg:hidden", "top")}
       onPointerDown={swipe.onPointerDown}
       onPointerUp={swipe.onPointerUp}
     >

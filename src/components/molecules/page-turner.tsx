@@ -1,6 +1,11 @@
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import type { ReactNode } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/molecules/popover";
 import { cn } from "@/lib/style/cn";
 
 type Turn = (() => void) | string | undefined;
@@ -11,6 +16,11 @@ type PageTurnerProps = {
   nextLabel: string;
   prev: Turn;
   next: Turn;
+  menu?: ReactNode;
+  menuLabel?: string;
+  menuOpen?: boolean;
+  onMenuOpenChange?: (open: boolean) => void;
+  menuSide?: "top" | "bottom";
   className?: string;
 };
 
@@ -52,8 +62,18 @@ export function PageTurner({
   nextLabel,
   prev,
   next,
+  menu,
+  menuLabel,
+  menuOpen,
+  onMenuOpenChange,
+  menuSide = "bottom",
   className,
 }: PageTurnerProps) {
+  const position = (
+    <span aria-live="polite" className="min-w-14 text-center tabular-nums">
+      {label}
+    </span>
+  );
   return (
     <div
       className={cn(
@@ -64,9 +84,21 @@ export function PageTurner({
       <TurnButton turn={prev} label={prevLabel}>
         <ChevronLeft className="size-5 lg:size-4.5" aria-hidden />
       </TurnButton>
-      <span aria-live="polite" className="min-w-14 text-center tabular-nums">
-        {label}
-      </span>
+      {menu ? (
+        <Popover open={menuOpen} onOpenChange={onMenuOpenChange}>
+          <PopoverTrigger
+            aria-label={menuLabel}
+            className="flex h-9 items-center rounded-lg px-1 underline decoration-dotted underline-offset-4 outline-none hover:bg-secondary focus-visible:ring-2 focus-visible:ring-ring"
+          >
+            {position}
+          </PopoverTrigger>
+          <PopoverContent side={menuSide} className="w-64 p-1.5">
+            {menu}
+          </PopoverContent>
+        </Popover>
+      ) : (
+        position
+      )}
       <TurnButton turn={next} label={nextLabel}>
         <ChevronRight className="size-5 lg:size-4.5" aria-hidden />
       </TurnButton>
