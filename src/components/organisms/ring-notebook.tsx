@@ -5,6 +5,7 @@ import { ruledLines } from "@/lib/style/paper";
 type RingNotebookProps = {
   variant: "spread" | "single" | "responsive";
   mirrored?: boolean;
+  plain?: boolean;
   children: ReactNode;
   className?: string;
 };
@@ -50,13 +51,19 @@ function SingleCover({ mirrored = false }: { mirrored?: boolean }) {
   );
 }
 
-function NeighborPage({ mirrored = false }: { mirrored?: boolean }) {
+function NeighborPage({
+  mirrored = false,
+  plain = false,
+}: {
+  mirrored?: boolean;
+  plain?: boolean;
+}) {
   return (
     <div
       aria-hidden="true"
       className={cn(
         "paper-theme absolute top-3.5 bottom-3.5 z-2 w-3 bg-paper",
-        !mirrored && ruledLines,
+        !mirrored && !plain && ruledLines,
         mirrored ? "right-0" : "left-0",
       )}
     />
@@ -165,6 +172,7 @@ const spreadFrame =
 export function RingNotebook({
   variant,
   mirrored = false,
+  plain = false,
   children,
   className,
 }: RingNotebookProps) {
@@ -206,7 +214,7 @@ export function RingNotebook({
         <SpreadCover />
       </div>
       <div className="contents lg:hidden">
-        <NeighborPage mirrored={mirrored} />
+        <NeighborPage mirrored={mirrored} plain={plain} />
       </div>
       {children}
       <div className="contents lg:hidden">

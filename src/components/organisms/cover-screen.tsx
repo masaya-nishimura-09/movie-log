@@ -29,6 +29,7 @@ export function CoverScreen({
     <main className="flex flex-1 flex-col items-center justify-center bg-background px-4 py-8 md:px-8 md:py-12">
       <RingNotebook
         variant="responsive"
+        plain
         className="h-auto max-w-110 max-lg:self-stretch lg:w-full lg:max-w-220"
       >
         <div className="paper-theme relative isolate z-2 hidden min-w-0 flex-1 basis-0 items-center justify-center rounded-[2px] bg-paper px-12 lg:flex">
