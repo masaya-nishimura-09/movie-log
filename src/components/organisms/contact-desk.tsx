@@ -13,7 +13,7 @@ type ContactDeskProps = Omit<
 
 export function ContactDesk({ footer, ...form }: ContactDeskProps) {
   return (
-    <div className="flex w-full max-w-80 flex-col">
+    <div className="flex w-full max-w-80 flex-col lg:max-w-lg">
       <LetterPaper>
         <div className="flex justify-center pt-1">
           <BrandShape

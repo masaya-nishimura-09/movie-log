@@ -14,7 +14,7 @@ type SupportDeskProps = {
 
 export function SupportDesk({ action, dict, notes, footer }: SupportDeskProps) {
   return (
-    <div className="flex w-full max-w-80 flex-col">
+    <div className="flex w-full max-w-80 flex-col lg:max-w-lg">
       <div className="paper-theme relative z-1 rounded-md bg-paper px-5.5 pt-6 pb-5 text-center text-paper-ink shadow-[0_14px_30px_rgb(10_41_71/0.22)]">
         <div className="flex justify-center">
           <BrandShape

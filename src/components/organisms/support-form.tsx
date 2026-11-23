@@ -46,7 +46,7 @@ export function SupportForm({ action, dict }: SupportFormProps) {
           {[...supportPresetAmounts.map(String), customChoice].map((value) => (
             <label
               key={value}
-              className="group relative flex h-11.5 cursor-pointer items-center justify-center font-pen font-semibold text-[#1d3f66] text-[19px] has-focus-visible:rounded-md has-focus-visible:ring-2 has-focus-visible:ring-ring"
+              className="group relative flex h-11.5 cursor-pointer items-center justify-center font-bold font-display text-base text-paper-ink has-focus-visible:rounded-md has-focus-visible:ring-2 has-focus-visible:ring-ring"
             >
               <input
                 type="radio"
