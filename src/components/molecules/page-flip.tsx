@@ -51,7 +51,11 @@ function SpreadFace({
 
 export function SpreadFlip({ dir, front, back, onEnd }: SpreadFlipProps) {
   return (
-    <div className="pointer-events-none absolute inset-0 z-5 [perspective:1600px]">
+    <div
+      inert
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-5 [perspective:1600px]"
+    >
       <div
         aria-hidden
         className={cn(
@@ -91,7 +95,11 @@ function wrap(name: string, forward: boolean): CSSProperties {
 export function SingleFlip({ dir, page, onEnd }: SingleFlipProps) {
   const forward = dir === 1;
   return (
-    <div className="pointer-events-none absolute inset-0 z-5 [clip-path:inset(-50%_-50%_-50%_-50px)] [perspective:1600px]">
+    <div
+      inert
+      aria-hidden
+      className="pointer-events-none absolute inset-0 z-5 [clip-path:inset(-50%_-50%_-50%_-50px)] [perspective:1600px]"
+    >
       <div
         aria-hidden
         className={cn("absolute inset-0", castFromLeft)}

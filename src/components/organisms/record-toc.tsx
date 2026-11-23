@@ -174,11 +174,18 @@ export function RecordToc({
       );
     };
     run();
-    const observer = new ResizeObserver(run);
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(run);
+    });
     observer.observe(scroller);
     observer.observe(head);
     document.fonts.ready.then(run);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [layout]);
 
   const paginate = (target: Layout) => {

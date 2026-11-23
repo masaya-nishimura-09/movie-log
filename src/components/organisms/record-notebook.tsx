@@ -118,12 +118,19 @@ export function RecordNotebook({
       );
     };
     run();
-    const observer = new ResizeObserver(run);
+    let frame = 0;
+    const observer = new ResizeObserver(() => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(run);
+    });
     observer.observe(scroller);
     observer.observe(cover);
     observer.observe(note);
     document.fonts.ready.then(run);
-    return () => observer.disconnect();
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(frame);
+    };
   }, [layout]);
 
   const pages: Page[] = [
