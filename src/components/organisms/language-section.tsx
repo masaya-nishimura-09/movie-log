@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { AccountSection } from "@/components/molecules/account-section";
-import { InkLoading } from "@/components/molecules/ink-loading";
+import { NotebookLoading } from "@/components/organisms/notebook-loading";
 import type { Dictionary } from "@/i18n/get-dictionary";
 import { type Locale, locales } from "@/i18n/locales";
 
@@ -21,6 +21,7 @@ export function LanguageSection({ lang, action, dict }: LanguageSectionProps) {
   const [pending, startTransition] = useTransition();
 
   const change = (next: Locale) => {
+    window.scrollTo(0, 0);
     startTransition(() => action(next, pathname.slice(`/${lang}`.length)));
   };
 
@@ -49,10 +50,8 @@ export function LanguageSection({ lang, action, dict }: LanguageSectionProps) {
         ))}
       </fieldset>
       {pending && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-background px-4">
-          <div className="paper-theme rounded-[3px] bg-paper px-12 py-10 shadow-[0_24px_48px_rgb(10_41_71/0.16)] dark:shadow-[0_24px_48px_rgb(0_0_0/0.35)]">
-            <InkLoading />
-          </div>
+        <div className="fixed inset-x-0 top-(--app-header-height) bottom-0 z-40 overflow-hidden bg-background">
+          <NotebookLoading />
         </div>
       )}
     </AccountSection>
