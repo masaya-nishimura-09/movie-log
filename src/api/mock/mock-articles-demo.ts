@@ -110,7 +110,7 @@ export const demoArticles: MockArticle[] = [
       paragraph(
         t(
           "久世蓮は、ほとんど表情を変えない。その代わりに、鞄の持ち方が三度変わる。肩にかけ、両手で抱え、足元に置く。織部凪は、視線を落とす角度で感情を見せる。二人とも、見せようとしていないのに、見えてしまう。その加減が、観ていて心地よかった。",
-          "Ren Kuze hardly changes his expression. Instead, the way he holds his bag changes three times: over the shoulder, held in both arms, set at his feet. Nagi Orube shows her feelings through the angle at which she lowers her eyes. Neither seems to be trying to show anything, and yet it shows. I enjoyed how finely that was balanced.",
+          "Ren Kuze hardly changes his expression. Instead, the way he holds his bag changes three times: over the shoulder, held in both arms, set at his feet. Nagi Orube shows her feelings through the angle at which she lowers her eyes. Neither seems to be trying to show anything, and yet it shows.",
         ),
       ),
       blockquote(
@@ -123,13 +123,13 @@ export const demoArticles: MockArticle[] = [
       paragraph(
         t(
           "全部を褒めたいわけではない。六十八分ごろからの回想の場面は、説明が多すぎると感じた。言葉にしなくても伝わっていたことを、あとから台詞で確認されているようだった。",
-          "I do not want to praise everything. The flashback from around the sixty-eight-minute mark felt over-explained. It was as if something that had already come across without words was being confirmed afterward in dialogue.",
+          "I do not want to praise everything. The flashback from around the sixty-eight-minute mark felt over-explained. It repeats in dialogue what had already come across without words.",
         ),
       ),
       paragraph(
         t(
           "ただし、その回想は三分で終わる。長引かせないところに、水無瀬遥監督の抑えた手つきを感じた。回想の最後の台詞だけは、削ってもよかったと思う。",
-          "Still, the flashback ends in three minutes. In the fact that it is not stretched out, I felt the restrained hand of the director, Haruka Minase. I think only its last line could have been cut.",
+          "Still, the flashback ends in three minutes. Not stretching it out shows the restrained hand of the director, Haruka Minase. Only its last line could have been cut.",
         ),
       ),
       heading(t("似た映画との比較", "Compared with similar films")),
@@ -142,11 +142,11 @@ export const demoArticles: MockArticle[] = [
       bulletList(
         t(
           "船のない港: 待つ人の一日が、季節をまたいで続く。時間は長い",
-          "Harbour Without Ships: a waiting person's days continue across seasons. Time is long",
+          "Harbour Without Ships: seasons of waiting",
         ),
         t(
           "九番ホームの灯: 待つのは一晩だけ。時間は短いが、一分ごとに重い",
-          "The Lamp Under Platform Nine: only one night of waiting. Time is short, but each minute is heavy",
+          "The Lamp Under Platform Nine: a single night",
         ),
         t(
           "どちらも、待たれているものは映らない",
@@ -157,7 +157,7 @@ export const demoArticles: MockArticle[] = [
       paragraph(
         t(
           "台詞は少ないので、覚えているものを全部書いておく。",
-          "There is so little dialogue that I can write down everything I remember.",
+          "There is so little dialogue that I can list all of it.",
         ),
       ),
       bulletList(
@@ -175,22 +175,22 @@ export const demoArticles: MockArticle[] = [
       paragraph(
         t(
           "点数は四点にした。五点にしなかった理由は、回想の場面が説明しすぎだという印象を、二度目、三度目に観ても消せなかったからだ。逆に、三点にしなかった理由は、終電の八分間が、観終わって三日たっても、頭の中で何度も再生されるからだ。",
-          "I gave it four points. The reason it is not five is that I could not shake the impression that the flashback explains too much, even on the second and third viewings. The reason it is not three is that the eight minutes before the last train kept replaying in my head, even three days after I finished.",
+          "Four points. Not five: the flashback over-explains. Not three: the last-train scene stayed with me for days.",
         ),
       ),
       heading(t("次に観るときのメモ", "Notes for the next viewing")),
       orderedList(
         t(
           "冒頭の三十分は、時計の針だけを見る",
-          "In the first thirty minutes, watch only the hands of the clock",
+          "Watch only the clock in the first thirty minutes",
         ),
         t(
           "八分間の掲示板の数字と、二人の立つ位置を、秒ごとに記録する",
-          "Record the numbers on the board and the positions of the two people, second by second, through the eight minutes",
+          "Note the board and where the two stand, second by second",
         ),
         t(
           "回想の最後の台詞が、本当に不要かを確かめる",
-          "Check whether the last line of the flashback really is unnecessary",
+          "Check whether the flashback needs its last line",
         ),
       ),
     ),
