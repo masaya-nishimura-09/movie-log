@@ -149,7 +149,7 @@ export function RecordBasicsFields({
               labelWidth="sm"
               {...required}
             >
-              <div className="flex h-7 items-center gap-1.5">
+              <div className="flex flex-wrap items-center gap-x-1.5">
                 <DatePickerField
                   id="watchedAt"
                   name="watchedAt"
@@ -157,17 +157,19 @@ export function RecordBasicsFields({
                   onValueChange={setWatchedAt}
                   lang={lang}
                 />
-                {quickDates.map((quick) => (
-                  <button
-                    key={quick.label}
-                    type="button"
-                    onClick={() => setWatchedAt(quick.value)}
-                    aria-pressed={watchedAt === quick.value}
-                    className="h-6 whitespace-nowrap rounded-full px-2.5 text-paper-ink text-xs shadow-[inset_0_0_0_1px_rgb(10_41_71/0.2)] outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-(--navy) aria-pressed:text-(--beige) aria-pressed:shadow-none"
-                  >
-                    {quick.label}
-                  </button>
-                ))}
+                <div className="flex h-7 items-center gap-1.5">
+                  {quickDates.map((quick) => (
+                    <button
+                      key={quick.label}
+                      type="button"
+                      onClick={() => setWatchedAt(quick.value)}
+                      aria-pressed={watchedAt === quick.value}
+                      className="h-6 whitespace-nowrap rounded-full px-2.5 text-paper-ink text-xs shadow-[inset_0_0_0_1px_rgb(10_41_71/0.2)] outline-none focus-visible:ring-2 focus-visible:ring-ring aria-pressed:bg-(--navy) aria-pressed:text-(--beige) aria-pressed:shadow-none"
+                    >
+                      {quick.label}
+                    </button>
+                  ))}
+                </div>
               </div>
             </NotebookField>
             <NotebookField

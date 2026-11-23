@@ -702,7 +702,7 @@
     "creditsTitle": "Credits",
     "creditCount": "{count} people",
     "done": "Done",
-    "overviewPlaceholder": "Synopsis",
+    "overviewPlaceholder": "Enter a synopsis (up to 2,000 characters)",
     "scrap": "Scraps",
     "scrapCount": "{count} / {max} · JPEG, PNG, WebP up to 5 MB",
     "attachmentsDrop": "or drop it here",

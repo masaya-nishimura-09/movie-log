@@ -36,7 +36,7 @@ export function DatePickerField({
       <PopoverTrigger
         id={id}
         data-field={name}
-        className="h-7 rounded-sm px-0.5 text-[13px] text-paper-ink tabular-nums underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring lg:text-[15px]"
+        className="h-7 whitespace-nowrap rounded-sm px-0.5 text-[13px] text-paper-ink tabular-nums underline-offset-4 outline-none hover:underline focus-visible:ring-2 focus-visible:ring-ring lg:text-[15px]"
       >
         {selected &&
           new Intl.DateTimeFormat(lang, {

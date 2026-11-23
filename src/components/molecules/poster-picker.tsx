@@ -5,6 +5,7 @@ import Image from "next/image";
 import { type DragEvent, useState, useTransition } from "react";
 import type { ActionResult } from "@/actions/action-result";
 import { MaskingTape } from "@/components/atoms/masking-tape";
+import { phrases } from "@/components/atoms/phrases";
 import { cn } from "@/lib/style/cn";
 import { posterContentTypes } from "@/schemas/media/media";
 
@@ -103,7 +104,7 @@ export function PosterPicker({
             )}
           </span>
           <span className="relative font-bold text-paper-label text-xs">
-            {pending ? dict.uploadingPoster : dict.posterAdd}
+            {phrases(pending ? dict.uploadingPoster : dict.posterAdd)}
           </span>
           <span className="relative hidden text-paper-muted text-xs lg:block">
             {dict.posterDrop}
