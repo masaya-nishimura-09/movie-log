@@ -87,6 +87,30 @@
   --animate-flip-shade: flip-shade 450ms ease-in-out both;
   --animate-flip-shade-back: flip-shade-back 450ms ease-in-out both;
   --animate-flip-cast: flip-cast 450ms ease-in-out both;
+  --animate-flip-face-front: flip-face-front 450ms linear both;
+  --animate-flip-face-back: flip-face-back 450ms linear both;
+
+  @keyframes flip-face-front {
+    0%,
+    49.9% {
+      visibility: visible;
+    }
+    50%,
+    100% {
+      visibility: hidden;
+    }
+  }
+
+  @keyframes flip-face-back {
+    0%,
+    49.9% {
+      visibility: hidden;
+    }
+    50%,
+    100% {
+      visibility: visible;
+    }
+  }
 
   @keyframes flip-shade {
     from {

@@ -34,7 +34,10 @@ function SpreadFace({
 }) {
   return (
     <div
-      className="absolute inset-0 [backface-visibility:hidden]"
+      className={cn(
+        "absolute inset-0 [backface-visibility:hidden]",
+        back ? "animate-flip-face-back" : "animate-flip-face-front",
+      )}
       style={back ? { transform: "rotateY(180deg)" } : undefined}
     >
       {children}
