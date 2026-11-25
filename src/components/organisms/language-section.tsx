@@ -1,7 +1,7 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useTransition } from "react";
 import { ChoiceChip } from "@/components/atoms/choice-chip";
 import { AccountSection } from "@/components/molecules/account-section";
 import { NotebookLoading } from "@/components/organisms/notebook-loading";
@@ -19,6 +19,16 @@ type LanguageSectionProps = {
 export function LanguageSection({ lang, action, dict }: LanguageSectionProps) {
   const pathname = usePathname();
   const [pending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (!pending) return;
+    const root = document.documentElement;
+    const overflow = root.style.overflow;
+    root.style.overflow = "hidden";
+    return () => {
+      root.style.overflow = overflow;
+    };
+  }, [pending]);
 
   const change = (next: Locale) => {
     window.scrollTo(0, 0);
