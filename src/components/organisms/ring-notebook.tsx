@@ -139,6 +139,10 @@ function SpreadCover() {
           strokeLinecap="round"
         />
       </svg>
+      <div
+        aria-hidden="true"
+        className="absolute inset-y-0 left-[calc(50%-10px)] w-5 bg-black/10 shadow-[inset_1px_0_0_rgb(0_0_0/0.12),inset_-1px_0_0_rgb(0_0_0/0.12)]"
+      />
     </>
   );
 }
