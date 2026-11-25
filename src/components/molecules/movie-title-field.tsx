@@ -115,7 +115,7 @@ export function MovieTitleField({
         onBlur={close}
       />
       {open && (
-        <div className="absolute top-full right-0 z-20 lg:right-auto lg:left-0 mt-2 w-[min(17.5rem,calc(100vw-5rem))] rounded-xl bg-[#fffdf8] p-1.5 text-paper-ink shadow-[0_14px_32px_rgb(10_41_71/0.2),0_0_0_1px_rgb(10_41_71/0.06)]">
+        <div className="absolute top-full right-0 z-20 mt-2 w-[min(17.5rem,calc(100vw-5rem))] rounded-xl bg-[#fffdf8] p-1.5 text-paper-ink shadow-[0_14px_32px_rgb(10_41_71/0.2),0_0_0_1px_rgb(10_41_71/0.06)] lg:right-auto lg:left-0">
           <p className="px-2.5 pt-1.5 pb-1 text-paper-muted text-xs">
             {listLabel} ・{" "}
             {interpolate(countTemplate, { count: suggestions.length })}
