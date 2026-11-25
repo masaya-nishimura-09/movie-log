@@ -47,6 +47,13 @@ function SingleCover({ mirrored = false }: { mirrored?: boolean }) {
           />
         </svg>
       </div>
+      <div
+        aria-hidden="true"
+        className={cn(
+          "absolute inset-y-0 w-5 bg-black/10 shadow-[inset_1px_0_0_rgb(0_0_0/0.12),inset_-1px_0_0_rgb(0_0_0/0.12)]",
+          mirrored ? "right-0.5" : "left-0.5",
+        )}
+      />
     </>
   );
 }
