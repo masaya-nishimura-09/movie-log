@@ -7,7 +7,7 @@ import { RingNotebook } from "@/components/organisms/ring-notebook";
 export function PageLoading() {
   return (
     <div className="flex h-full min-h-60 items-center justify-center">
-      <InkLoading />
+      <InkLoading className="max-sm:scale-70 max-[22.5rem]:scale-60" />
     </div>
   );
 }
